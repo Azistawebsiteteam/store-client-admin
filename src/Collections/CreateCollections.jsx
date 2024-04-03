@@ -8,6 +8,9 @@ import CollectionForm from './CollectionForm'
 import '../Pages/Admin.css'
 
 const CreateCollections = () => {
+
+
+
     const [collectionData, setCollectionData] = useState({
         'title': '',
         'content': '',
