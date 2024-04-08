@@ -6,7 +6,6 @@ import Cookies from 'js-cookie';
 import axios from 'axios'
 import { v4 } from 'uuid'
 
-
 import TextEditor from './TextEditor'
 import Dropdown from 'react-bootstrap/Dropdown';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -24,6 +23,7 @@ import { productContext } from '../Context/ProductContext'
 
 
 import './Admin.css'
+import VariantEdit from './VariantEdit';
 
 
 
@@ -36,11 +36,9 @@ const AddProductForm = (props) => {
         content, setContent, images, setVariants, variantsThere, tracker, setTracker, setCollectionValue, collectionValue, setHandleLoc, handleLoc,
         setChintalLoc, setLocValues, locValues, setLocInputs, locInputs, setCorporateLoc, setIsShipping, isShipping, setVariant,
         setProductPrices, productPrices, setSkuInput, skuInput, setWeight, setProductCategory, productCategory, setTagValue, tagValue, setImages,
-        variantGroup, setSiteShow, modal2Show, modal1Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
+        variantGroup, setSiteShow, setVariantShow, modal2Show, modal1Show, modal3Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
         weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
     } = productProps
-
-    console.log(location)
 
 
     const [countriesList, setCountries] = useState()
@@ -49,7 +47,6 @@ const AddProductForm = (props) => {
 
     const [vendors, setVendors] = useState()
     const [collections, setCollections] = useState([])
-
 
     const baseUrl = process.env.REACT_APP_API_URL
     const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN
@@ -102,7 +99,7 @@ const AddProductForm = (props) => {
 
     const generateOptions = useCallback(() => {
         const result = [];
-        console.log(variantGroup)
+
         let mainOptionsobj = variants.find((v) => v.optionName === variantGroup)
         if (variants.length > 0 && variants[0].isDone === true && mainOptionsobj) {
             const mainOptions = mainOptionsobj.optionValue;
@@ -432,6 +429,9 @@ const AddProductForm = (props) => {
         // Navigate(`/variant-details/${id}`)
     }
 
+
+    console.log('sdfsfs', variantsDetails)
+
     return (
         <div className='container'>
             <div className='row'>
@@ -488,7 +488,7 @@ const AddProductForm = (props) => {
                                                                     <option value="size">Size</option>
                                                                     <option value="color">Color</option>
                                                                     <option value="material">Material</option>
-                                                                    <option value="style">Style</option>
+                                                                    <option value="flavour">Flavour</option>
                                                                     <option value="quantity">Quantity</option>
                                                                 </select></div>}
                                                         </div>
@@ -576,10 +576,15 @@ const AddProductForm = (props) => {
                                                                     : <FaRegFileImage className='variantImgFile' />
                                                                 }
 
-                                                                {location.pathname === "/addProduct" ? <span>{va.value}</span> : <Link to={`/variant-details/${goVariantsPage(variant.main.value, va.value)}`}> <span>{va.value}</span></Link>}
+                                                                {location.pathname === "/addProduct" ? <Button variant="light" onClick={() => setVariantShow(true)}><span>{va.value}</span></Button> : <Link to={`/variant-details/${goVariantsPage(variant.main.value, va.value)}`}> <span>{va.value}</span></Link>}
+
+                                                                <VariantEdit props={va.value} show={modal3Show}
+                                                                    onHide={() => setVariantShow(false)}
+                                                                />
                                                                 <input type='file' id='variantImage' className='variantImgInput'
                                                                     onChange={(e) => handleVariantsImage(e, variant.id, '', va.id)} />
                                                             </div>
+
                                                             <div>
                                                                 <input type="text" id='amount' placeholder="₹ 0.0" onChange={(e) => handleVariantsOutput(e, variant.id, '', va.id)} value={va.amount} />
                                                             </div>

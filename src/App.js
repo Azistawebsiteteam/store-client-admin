@@ -27,6 +27,10 @@ import UpdateProduct from './Pages/UpdateProduct';
 import 'bootstrap/dist/css/bootstrap.css';
 import './Pages/Admin.css';
 import VariantDetails from './Pages/VariantDetails';
+import VariantEdit from './Pages/VariantEdit';
+import Orders from './Pages/Orders';
+import Inventory from './Pages/Inventory';
+import NotFound from './Pages/NotFound';
 
 
 
@@ -53,6 +57,10 @@ function App() {
         <Route path='/slidersListing' element={<ProtectedRoute ><SlidersListing /></ProtectedRoute>} />
         <Route path='/update-product/:id' element={<ProtectedRoute ><UpdateProduct /></ProtectedRoute>} />
         <Route path='/variant-details/:id' element={<ProtectedRoute><VariantDetails /></ProtectedRoute>} />
+        <Route path="/variantEdit/:id" element={<ProtectedRoute><VariantEdit /></ProtectedRoute>} />
+        <Route path="/orders" element={<Orders />} />
+        <Route path="/inventory" element={<Inventory />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );

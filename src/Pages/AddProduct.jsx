@@ -19,6 +19,7 @@ const AddProduct = () => {
     })
     const [modal1Show, setStoreShow] = useState(false);
     const [modal2Show, setSiteShow] = useState(false);
+    const [modal3Show, setVariantShow] = useState(false);
     const [tracker, setTracker] = useState(false)
     const [chintalLoc, setChintalLoc] = useState(true)
     const [corporateLoc, setCorporateLoc] = useState(true)
@@ -168,7 +169,7 @@ const AddProduct = () => {
         content, setContent, images, setVariants, variantsThere, tracker, setTracker, setCollectionValue, setHandleLoc, handleLoc,
         setChintalLoc, setLocValues, locValues, setLocInputs, locInputs, setCorporateLoc, setIsShipping, isShipping, setVariant,
         setProductPrices, productPrices, setSkuInput, skuInput, setWeight, setProductCategory, productCategory, setTagValue, setImages,
-        variantGroup, setSiteShow, modal2Show, modal1Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
+        variantGroup, setSiteShow, modal2Show, modal1Show, setStoreShow, setVariantShow, modal3Show, productStatus, setProductStatus, originCountry, setOriginCountry,
         weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
     }
 

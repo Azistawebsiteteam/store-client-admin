@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { FaHome } from "react-icons/fa";
 import { FaFirstOrder } from "react-icons/fa6";
@@ -7,12 +7,13 @@ import { MdInventory } from "react-icons/md";
 import { FaProductHunt } from "react-icons/fa";
 import { MdCollectionsBookmark } from "react-icons/md";
 import { GiKnightBanner } from "react-icons/gi";
+import { productContext } from '../Context/ProductContext'
+import { useContext } from 'react';
 
 const AdminSideBar = () => {
-    const [activeTab, setActiveTab] = useState('tab6')
+    const { activeTab, setActiveTab } = useContext(productContext)
 
     const handleTabClick = (tabId) => {
-        console.log('Clicked on tab:', tabId);
         setActiveTab((prevTab) => (prevTab === tabId ? prevTab : tabId))
     }
 

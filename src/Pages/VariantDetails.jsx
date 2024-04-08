@@ -6,14 +6,29 @@ import Cookies from 'js-cookie';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { productContext } from '../Context/ProductContext'
+import swalErr from './ErrorHandler'
+import Swal from 'sweetalert2';
 
 const VariantDetails = () => {
-    const [weight, setWeight] = useState('0')
-    const [weightUnit, setWeightUnit] = useState('kg')
     const [isPhysical, setIsPhysical] = useState(false)
+    const [selectedVariantDetails, SetSelectedVariantDetails] = useState({})
+    const [shippingDetails, setShippingDetails] = useState({
+        weight: '',
+        weightUnit: ''
+    })
+    const [inventory, setInventory] = useState({
+        sku: '',
+        barcode: '',
+        hscode: ''
+    })
     const [variantImg, setVariantImg] = useState('')
 
-    const [selectedVariantDetails, SetSelectedVariantDetails] = useState({})
+    const [prices, setPrices] = useState({
+        price: '',
+        costperitem: '',
+        comparePrice: '',
+        isTaxable: ''
+    })
 
     const baseUrl = process.env.REACT_APP_API_URL
     const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN
@@ -27,18 +42,40 @@ const VariantDetails = () => {
 
     useEffect(() => {
         const apiCallback = async () => {
-            const variantDetailsUrl = `${baseUrl}/product/variants/`
-            const headers = {
-                Authorization: `Bearer ${token}`
-            }
             try {
+                const variantDetailsUrl = `${baseUrl}/product/variants/`
+                const headers = {
+                    Authorization: `Bearer ${token}`
+                }
+                swalErr.onLoading()
                 const response = await axios.post(variantDetailsUrl, { variantId: id }, { headers })
-
+                console.log(response)
                 if (response.status === 200) {
-                    SetSelectedVariantDetails(response.data.variant)
+                    Swal.close()
+                    const selectedVariantDetails = response.data.variant
+                    setVariantImg((selectedVariantDetails.variant_image)[1])
+                    SetSelectedVariantDetails(selectedVariantDetails)
+                    setPrices({
+                        price: selectedVariantDetails.offer_price,
+                        costperitem: selectedVariantDetails.actual_price,
+                        comparePrice: selectedVariantDetails.actual_price,
+                        isTaxable: selectedVariantDetails.variant_taxable
+                    })
+                    setInventory({
+                        sku: selectedVariantDetails.variant_sku,
+                        barcode: selectedVariantDetails.variant_barcode,
+                        hscode: selectedVariantDetails.variant_HS_code
+                    })
+                    setShippingDetails({
+                        weight: selectedVariantDetails.variant_weight,
+                        weightUnit: selectedVariantDetails.variant_weight_unit
+                    })
+                    console.log(selectedVariantDetails.variant_weight, selectedVariantDetails.variant_weight !== null)
+                    setIsPhysical(selectedVariantDetails.variant_weight !== null)
                 }
             } catch (error) {
                 console.log(error)
+                Swal.close()
             }
         };
         apiCallback();
@@ -52,7 +89,73 @@ const VariantDetails = () => {
         setVariantImg(e.target.files[0])
     }
 
-    console.log('jbj', variantImg)
+    const updatePrice = (e) => {
+        setPrices({ ...prices, [e.target.id]: e.target.value })
+    }
+
+    const handleInventory = (e) => {
+        setInventory({ ...inventory, [e.target.id]: e.target.value })
+    }
+
+    const handleShippingQty = (e) => {
+        setShippingDetails({ ...shippingDetails, [e.target.id]: e.target.value })
+    }
+
+    const onUpdateVariants = async () => {
+        try {
+            const url = `http://192.168.213.137:5018/api/v1/product/update/variant`
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+            swalErr.onLoading()
+            const formdata = new FormData()
+            formdata.append('variantImage', variantImg)
+            formdata.append('offerPrice', prices.price)
+            formdata.append('amount', prices.comparePrice)
+            formdata.append('isTaxable', prices.isTaxable)
+            formdata.append('value', "[]")
+            formdata.append('barCode', inventory.barcode)
+            formdata.append('shCode', inventory.hscode)
+            formdata.append('skuCode', inventory.sku)
+            formdata.append('variantWeight', shippingDetails.weight)
+            formdata.append('variantWeightUnit', shippingDetails.weightUnit)
+            formdata.append('variantId', id)
+            formdata.append('quantity', 100)
+            formdata.append('inventoryId', 10)
+            formdata.append('inventoryPolicy', 'na')
+            formdata.append('variantService', 'na')
+            formdata.append('shippingRequired', isPhysical)
+
+            await axios.put(url, formdata, { headers })
+            Swal.close()
+        } catch (e) {
+            Swal.close()
+            console.log(e)
+        }
+    }
+
+    const deleteVariant = async () => {
+        try {
+            const url = `http://192.168.213.137:5018/api/v1/product/delete/variant`
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+
+            swalErr.onLoading()
+            axios.delete(url, {
+                headers, data: {
+                    variantId: id
+                }
+            });
+            // navigate(-1)
+            Swal.close()
+        } catch (error) {
+            Swal.close()
+            console.log(error)
+        }
+    }
+
+    console.log(selectedVariantDetails)
 
     return (
         <div className='adminSec'>
@@ -91,7 +194,7 @@ const VariantDetails = () => {
                                 {variantsData.map((v, i) => (
                                     <div className="mb-3">
                                         <label htmlFor="optionName" className="col-form-label">{v.UOM}</label>
-                                        <input type="text" className="form-control" id="optionValue" value={`${selectedVariantDetails['option' + (i + 1)]}`} />
+                                        <input type="text" className="form-control" id="optionValue" value={`${selectedVariantDetails['option' + (i + 1)]}`} disabled />
                                     </div>
                                 ))}
                                 <div className='variantImgCont d-flex flex-column'>
@@ -99,11 +202,11 @@ const VariantDetails = () => {
                                         (variantImg instanceof Blob ?
                                             <img src={URL.createObjectURL(variantImg)} className="vImg" alt="" />
                                             : null) :
-                                        <img className="vImg" src={productDetails.image_src} alt="yu" />
+                                        <img className="vImg" src={variantImg} alt="yu" />
                                     }
                                     <div className=''>
                                         <label htmlFor="chooseImg">Change</label>
-                                        <input type='file' id="chooseImg" onChange={updateVariantImg} className='variantImgInput2' />
+                                        <input type='file' id="chooseImg" onChange={updateVariantImg} className='variantImgInput2' disabled />
                                     </div>
                                 </div>
                             </div>
@@ -112,15 +215,15 @@ const VariantDetails = () => {
                                 <div className='row'>
                                     <div className="col">
                                         <label htmlFor="price" className="col-form-label">Price</label>
-                                        <input type="text" className="form-control" id="price" value={selectedVariantDetails.offer_price || 0} />
+                                        <input type="text" className="form-control" id="price" value={prices.price ?? 0} onChange={updatePrice} />
                                     </div>
                                     <div className="col">
-                                        <label htmlFor="costperitem" className="col-form-label">Compare-at-=price</label>
-                                        <input type="text" className="form-control" id="costperitem" value={selectedVariantDetails.actual_price} />
+                                        <label htmlFor="costperitem" className="col-form-label">Compare-at-price</label>
+                                        <input type="text" className="form-control" id="comparePrice" value={prices.comparePrice} onChange={updatePrice} />
                                     </div>
                                 </div>
                                 <div className="form-check">
-                                    <input className="form-check-input" type="checkbox" checked={selectedVariantDetails.variant_taxable} id="isTaxable" />
+                                    <input className="form-check-input" type="checkbox" checked={prices.isTaxable} id="isTaxable" onChange={updatePrice} />
                                     <label className="form-check-label" htmlFor="isTaxable">
                                         Charge tax on this variant
                                     </label>
@@ -128,7 +231,7 @@ const VariantDetails = () => {
                                 <div className='row'>
                                     <div className="col">
                                         <label htmlFor="price" className="col-form-label">Cost per item</label>
-                                        <input type="text" className="form-control" id="price" />
+                                        <input type="text" className="form-control" id="costperitem" value={prices.costperitem} onChange={updatePrice} />
                                     </div>
                                 </div>
                             </div>
@@ -137,29 +240,29 @@ const VariantDetails = () => {
                                 <div className="row">
                                     <div className="col-sm-6">
                                         <label htmlFor="sku" className="col-form-label">SKU (Stock Keeping Unit)</label>
-                                        <input type="text" value={selectedVariantDetails.variant_sku} className="form-control" id="sku" placeholder="" />
+                                        <input type="text" value={inventory.sku} className="form-control" id="sku" placeholder="" onChange={handleInventory} />
                                     </div>
                                     <div className="col-sm-6">
                                         <label htmlFor="barcode" className="col-form-label">Barcode (ISBN, UPC, GTIN, etc.)</label>
-                                        <input type="text" value={selectedVariantDetails.variant_barcode} className="form-control" id="barcode" placeholder="" />
+                                        <input type="text" value={inventory.barcode} className="form-control" id="barcode" placeholder="" onChange={handleInventory} />
                                     </div>
                                     <div className="col-sm-6">
                                         <label htmlFor="hsCode" className="col-form-label">Harmonized System (HS) code</label>
-                                        <input type="text" value={selectedVariantDetails.variant_HS_code} className="form-control" id="hsCode" placeholder="" />
+                                        <input type="text" value={inventory.hscode} className="form-control" id="hsCode" placeholder="" onChange={handleInventory} />
                                     </div>
                                 </div>
                             </div>
                             <div className='bgStyle'>
                                 <h6>Shipping</h6>
                                 <div className="form-check">
-                                    <input className="form-check-input" onClick={isPhysicalProduct} type="checkbox" id="physicalProduct" />
+                                    <input className="form-check-input" checked={isPhysical} onClick={isPhysicalProduct} type="checkbox" id="physicalProduct" />
                                     <label className="form-check-label" htmlFor="physicalProduct">
                                         This is a physical product
                                     </label>
                                     <div className='shippingCont'>
                                         {isPhysical && <div className='d-flex'>
-                                            <input type='text' placeholder='0.0' value={selectedVariantDetails.variant_weight} onChange={(e) => setWeight(e.target.value)} />
-                                            <select className="" aria-label="Default select example" value={selectedVariantDetails.variant_weight_unit} onChange={(e) => setWeightUnit(e.target.value)}>
+                                            <input type='text' placeholder='0.0' value={shippingDetails.weight} onChange={handleShippingQty} />
+                                            <select className="" aria-label="Default select example" value={shippingDetails.weightUnit} onChange={handleShippingQty}>
                                                 <option value='kg'>Kg</option>
                                                 <option value="lb">lb</option>
                                                 <option value="oz">oz</option>
@@ -182,15 +285,15 @@ const VariantDetails = () => {
                             </div>
                             <div className='row'>
                                 <div className='d-flex justify-content-end mt-4'>
-                                    <button className='dltBtn' style={{ marginRight: '10px' }}>Delete variant</button>
-                                    <button className='saveBtn'>Save</button>
+                                    <button className='dltBtn' onClick={deleteVariant} style={{ marginRight: '10px' }}>Delete variant</button>
+                                    <button className='saveBtn' onClick={onUpdateVariants}>Save</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 

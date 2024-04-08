@@ -151,16 +151,16 @@ const UpdateProduct = () => {
     const setVariantsUpdateDetails = (v) => {
         setVariantsGroup(v[0].UOM)
         v.forEach((each) => {
-
             setVariant(prevVariants => [...prevVariants, {
                 id: v4(), optionName: each.UOM,
-                optionValue: each.values,
+                optionValue: [...each.values, ''],
                 isDone: true
             }])
         })
     }
 
     const { setProductDetails, setVariantsData, setVariantDetails } = useContext(productContext)
+
 
 
 
@@ -175,7 +175,9 @@ const UpdateProduct = () => {
 
                 const response = await axios.post(url, { productId: id }, { headers })
                 const { productDetails, variants, avalaibleVariants } = response.data
+
                 Swal.close()
+
                 setProductUpdateDetails(productDetails)
                 setVariantsUpdateDetails(variants)
                 setProductDetails(productDetails)

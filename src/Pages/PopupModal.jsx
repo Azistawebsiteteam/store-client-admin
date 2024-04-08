@@ -1,5 +1,5 @@
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import './Admin.css'
 
 function popupModal(props) {
     return (
@@ -22,8 +22,8 @@ function popupModal(props) {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={props.onHide}>Schedule publishing</Button>
-                <Button onClick={props.onHide}>Close</Button>
+                <button className="cancelBtn" onClick={props.onHide}>Cancel</button>
+                <button className="saveBtn" onClick={props.onHide}>Schedule publishing</button>
             </Modal.Footer>
         </Modal>
     );
