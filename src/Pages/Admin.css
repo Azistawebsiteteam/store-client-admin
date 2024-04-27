@@ -187,7 +187,6 @@
 .variantImgInput2 {
     position: absolute;
     opacity: 0;
-    left: 5px;
     width: 90px;
 }
 .variantImgFile{
@@ -273,6 +272,9 @@
 }
 .btnCont{
     text-align: right;
+    background-color: #f1f2f4;
+    padding-bottom: 30px;
+    padding-right: 30px;
 }
 .collectionTopbar{
     display: flex;
@@ -467,4 +469,90 @@
     color: #363337;
     margin-bottom: 15px;
   }
-  
+
+  /* Discounts page */ 
+
+    .discountTabsCont{
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-around;
+    }
+    li.discountTab {
+        list-style-type: none;
+        text-align: center;
+        background-color: #eef8ff;
+        margin: 0 6px;
+        border-radius: 16px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; 
+        cursor: pointer;
+    }
+    .activeDiscount{
+        background-color: #bed8ec !important;
+    }
+  .methodBtn{
+    background-color: transparent;
+    border: none;
+    width: 50%;
+  }
+  .methodBtnCont {
+    border-radius: 4px ;
+    width: 50%;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border: 1px solid #c9c6c6;
+    margin-bottom: 4px;
+    }
+   .active{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+   }
+   .brandThumbnail{
+    width: 12%;
+   }
+   .icons{
+    cursor: pointer;
+    margin-right: 8px;
+   }
+   tr.item {
+    vertical-align: middle;
+    }
+    .generateCodeBtn{
+        background-color: transparent;
+        border: none;
+        color: blue;
+    }
+    .summaryTxt {
+        font-size: 12px;
+        font-weight: 700;
+    }
+    svg.copyIcon {
+        font-size: 15px;
+        margin-left: 4px;
+        cursor: pointer;
+    }
+    .singleVariantImg{
+        position: relative;
+    }
+    .discountBlock{
+        position: relative;
+    }
+    .percentageSign{
+        position: absolute;
+        top: 12px;
+        right: 4px;
+        color: gray;
+    }
+    .rupeeSign{
+        position: absolute;
+        top: 12px;
+        left: 2px;
+        color: gray;
+    }
+    .amtInpt{
+        padding-left: 18px !important;
+    }
+    .chip{
+        text-wrap: wrap !important;
+    }

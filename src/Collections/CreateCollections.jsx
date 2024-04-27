@@ -53,6 +53,7 @@ const CreateCollections = () => {
                 urlHandle,
                 collectionImg
             } = collectionData
+
             const metaDetails = {
                 metaTitle,
                 metaDescription,

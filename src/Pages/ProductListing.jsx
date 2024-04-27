@@ -40,10 +40,10 @@ const ProductListing = () => {
                     <div className='row'>
                         <div className='productsTopbar'>
                             <h3>Products</h3>
-                            <Link to="/addProduct">Add Products</Link>
+                            <Link to="/product/create">Add Products</Link>
                         </div>
                         <div className='col-sm-12'>
-                            <table class="table">
+                            <table className="table">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -61,7 +61,7 @@ const ProductListing = () => {
                                     {productsList.map(p => (
                                         <tr key={p.product_id}>
                                             <th className='col-1'><img src={p.image_src} alt='product' className='productThumbnail' /></th>
-                                            <td className='col-2'><Link className="productLink" to={`/update-product/${p.product_id}`}>{p.product_title}</Link></td>
+                                            <td className='col-2'><Link className="productLink" to={`/product/update/${p.product_id}`}>{p.product_title}</Link></td>
                                             <td><a target="__blank" href={p.url_handle}><IoMdEye /></a></td>
                                             <td>{p.status === 1 ? 'Active' : 'Draft'}</td>
                                             <td>{p.total_variants === 0 || null ? `${p.chintal_quantity + p.corporate_office_quantity} in stock` : `${p.total_variant_quantity} in stock for ${p.total_variants} variants`}</td>

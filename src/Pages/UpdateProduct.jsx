@@ -48,6 +48,7 @@ const UpdateProduct = () => {
 
     const [variantsDetails, setVariantsDetials] = useState([])
     const [variantGroup, setVariantsGroup] = useState("")
+    console.log(variantsDetails, 'sdfsdfsefs')
     const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
     const [skuInput, setSkuInput] = useState(
         {
@@ -71,30 +72,27 @@ const UpdateProduct = () => {
         urlHandle: `${window.location.origin}/productItem`
     })
 
-
-
-
     const baseUrl = process.env.REACT_APP_API_URL
+    const localUrl = process.env.REACT_APP_LOCAL_URL
     const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN
     const token = Cookies.get(jwtToken)
     const params = useParams()
     const { id } = params
 
-    const setProductUpdateDetails = (p) => {
-        console.log(p)
-        console.log(JSON.parse(p.variant_store_order).length)
+    const setProductUpdateDetails = (productDetails) => {
+
         const {
-            chintal_quantity
-            , collections
-            , compare_at_price
-            , corporate_office_quantity
-            , cost_per_item
-            , is_taxable
-            , out_of_stock_sale
-            , price
-            , price_india
-            , product_category
-            ,
+            chintal_quantity,
+            collections,
+            compare_at_price,
+            corporate_office_quantity,
+            cost_per_item,
+            inventroy_id,
+            origin_country,
+            is_taxable,
+            out_of_stock_sale,
+            price,
+            product_category,
             product_images,
             product_info,
             product_title,
@@ -107,14 +105,21 @@ const UpdateProduct = () => {
             status,
             tags,
             type,
-            variant_store_order
-        } = p
+            variant_store_order,
+            vendor_id
+        } = productDetails
+        setOriginCountry(origin_country)
         setTitle(product_title)
         setContent(product_info)
         setLocInputs({
-            inventoryIds: ['1', '2'],
+            inventoryIds: [inventroy_id],
             coc: chintal_quantity,
             coh: corporate_office_quantity
+        })
+        setProductCategory({
+            category: product_category,
+            productType: type,
+            vendor: vendor_id
         })
         setProductPrices({
             price: price,
@@ -161,9 +166,6 @@ const UpdateProduct = () => {
 
     const { setProductDetails, setVariantsData, setVariantDetails } = useContext(productContext)
 
-
-
-
     useEffect(() => {
         const getDetails = async () => {
             try {
@@ -175,7 +177,7 @@ const UpdateProduct = () => {
 
                 const response = await axios.post(url, { productId: id }, { headers })
                 const { productDetails, variants, avalaibleVariants } = response.data
-
+                console.log(avalaibleVariants, "sdfsdfsdfds")
                 Swal.close()
 
                 setProductUpdateDetails(productDetails)
@@ -183,9 +185,6 @@ const UpdateProduct = () => {
                 setProductDetails(productDetails)
                 setVariantsData(variants)
                 setVariantDetails(avalaibleVariants)
-
-                console.log(variants)
-                console.log(avalaibleVariants)
 
             } catch (error) {
                 Swal.close()
@@ -198,7 +197,7 @@ const UpdateProduct = () => {
 
     const onSubmitProductDetails = async () => {
         try {
-            const url = `${baseUrl}/product/add-store`
+            const url = `${localUrl}/product/update-store`
             const headers = {
                 Authorization: `Bearer ${token}`,
                 'Content-type': 'multipart/form-data'
@@ -262,7 +261,7 @@ const UpdateProduct = () => {
             formdata.append('variantsThere', variantsThere)
 
             const response = await axios.post(url, formdata, { headers })
-            console.log(response)
+
             Swal.close();
             Swal.fire({
                 position: "center",
@@ -282,7 +281,6 @@ const UpdateProduct = () => {
         }
     }
 
-    console.log(variantsDetails)
 
     const productProps = {
         title, error, setError, setTitle, setMetaDetails,
@@ -291,7 +289,7 @@ const UpdateProduct = () => {
         setChintalLoc, setLocValues, locValues, setLocInputs, locInputs, setCorporateLoc, setIsShipping, isShipping, setVariant,
         setProductPrices, productPrices, setSkuInput, skuInput, setWeight, setProductCategory, productCategory, setTagValue, tagValue, setImages,
         variantGroup, setSiteShow, modal2Show, modal1Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
-        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc,
+        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
     }
 
     return (

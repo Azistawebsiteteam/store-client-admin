@@ -116,7 +116,7 @@ const SlidersListing = () => {
                         <div className='col-sm-12'>
                             <div className='d-flex justify-content-between mb-4'>
                                 <h3>List of sliders</h3>
-                                <Link to='/sliderCreate'>Create slider</Link>
+                                <Link to='/slider/create'>Create slider</Link>
                             </div>
                         </div>
                         <div className='col-sm-12'>

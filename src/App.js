@@ -21,7 +21,7 @@ import UpdateCollection from './Collections/UpdateCollection';
 import SlidersListing from './Pages/SlidersListing';
 import ProductListing from './Pages/ProductListing';
 import UpdateProduct from './Pages/UpdateProduct';
-
+import Brands from './Pages/Brands';
 
 
 import 'bootstrap/dist/css/bootstrap.css';
@@ -31,6 +31,10 @@ import VariantEdit from './Pages/VariantEdit';
 import Orders from './Pages/Orders';
 import Inventory from './Pages/Inventory';
 import NotFound from './Pages/NotFound';
+import Discounts from './Discounts/Discounts';
+import CreateDiscount from './Discounts/CreateDiscount';
+import CreateBrand from './Pages/CreateBrand';
+import EditBrand from './Pages/EditBrand';
 
 
 
@@ -46,20 +50,25 @@ function App() {
       <Routes>
         <Route path='/' element={<ProtectedRoute ><Home /></ProtectedRoute>} />
         <Route path="/adminLoginPage" element={<AdminLoginPage />} />
-        <Route path="/addProduct" element={<ProtectedRoute ><AddProduct /></ProtectedRoute>} />
-        <Route path='/productListing' element={<ProtectedRoute ><ProductListing /></ProtectedRoute>} />
+        <Route path="/product/create" element={<ProtectedRoute ><AddProduct /></ProtectedRoute>} />
+        <Route path='/products' element={<ProtectedRoute ><ProductListing /></ProtectedRoute>} />
         <Route path='/adminSidebar' element={<ProtectedRoute ><AdminSideBar /></ProtectedRoute>} />
-        <Route path='/sliderCreate' element={<ProtectedRoute ><AddSlider /></ProtectedRoute>} />
+        <Route path='/slider/create' element={<ProtectedRoute ><AddSlider /></ProtectedRoute>} />
         <Route path='/collections' element={<ProtectedRoute ><Collections /></ProtectedRoute>} />
-        <Route path='/createCollections' element={<ProtectedRoute ><CreateCollections /></ProtectedRoute>} />
+        <Route path='/collections/create' element={<ProtectedRoute ><CreateCollections /></ProtectedRoute>} />
         <Route path='/manageAccount' element={<ProtectedRoute ><ManageAccount /></ProtectedRoute>} />
-        <Route path='/updateCollection/:id' element={<ProtectedRoute ><UpdateCollection /></ProtectedRoute>} />
-        <Route path='/slidersListing' element={<ProtectedRoute ><SlidersListing /></ProtectedRoute>} />
-        <Route path='/update-product/:id' element={<ProtectedRoute ><UpdateProduct /></ProtectedRoute>} />
+        <Route path='/collection/update/:id' element={<ProtectedRoute ><UpdateCollection /></ProtectedRoute>} />
+        <Route path='/slider' element={<ProtectedRoute ><SlidersListing /></ProtectedRoute>} />
+        <Route path='/product/update/:id' element={<ProtectedRoute ><UpdateProduct /></ProtectedRoute>} />
         <Route path='/variant-details/:id' element={<ProtectedRoute><VariantDetails /></ProtectedRoute>} />
         <Route path="/variantEdit/:id" element={<ProtectedRoute><VariantEdit /></ProtectedRoute>} />
         <Route path="/orders" element={<Orders />} />
         <Route path="/inventory" element={<Inventory />} />
+        <Route path='/discount' element={<ProtectedRoute><Discounts /></ProtectedRoute>} />
+        <Route path="/discount/create" element={<ProtectedRoute><CreateDiscount /></ProtectedRoute>} />
+        <Route path="/brands" element={<ProtectedRoute><Brands /></ProtectedRoute>} />
+        <Route path="/brands/create" element={<ProtectedRoute><CreateBrand /></ProtectedRoute>} />
+        <Route path="/edit-brand/:id" element={<ProtectedRoute><EditBrand /></ProtectedRoute>} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

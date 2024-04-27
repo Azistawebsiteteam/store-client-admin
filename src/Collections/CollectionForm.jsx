@@ -42,9 +42,6 @@ const CollectionForm = (props) => {
         setCollectionData({ ...collectionData, collectionImg: collectionImg });
     }
 
-    console.log(typeof collectionImg)
-    console.log(typeof collectionImg === 'string')
-
 
     return (
         <div className='adminSec'>
@@ -67,21 +64,6 @@ const CollectionForm = (props) => {
                                             <TextEditor id="content" content={content} setContent={setContent} />
                                         </div>
                                     </div>
-                                    { /*<div className='bgStyle'>
-                                    <h6>Collection type</h6>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
-                                        <label className="form-check-label" htmlFor="exampleRadios1">
-                                            Manual<br />Add products to this collection one by one. Learn more about manual collections.
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" />
-                                        <label className="form-check-label" htmlFor="exampleRadios1">
-                                            Automated<br />Existing and future products that match the conditions you set will automatically be added to this collection. Learn more about automated collections.
-                                        </label>
-                                    </div>
-                                </div> */}
                                     <div className='bgStyle'>
                                         <h6>Search engine listing</h6>
                                         <p>Add a title and description to see how this product might appear in a search engine listing</p>
@@ -99,7 +81,6 @@ const CollectionForm = (props) => {
                                             <label className="heading" htmlFor='urlHandle'>URL handle</label>
                                             <input type="text" className="form-control" id="urlHandle" value={urlHandle} onChange={handleMetaDetails} />
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -175,7 +156,6 @@ const CollectionForm = (props) => {
                             </div>
                         </div>
                         <hr style={{ color: "grey" }} />
-
                     </div>
                 </div>
             </div>

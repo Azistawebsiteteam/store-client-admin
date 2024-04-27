@@ -13,20 +13,14 @@ import { FaBusinessTime } from "react-icons/fa6";
 import PopupModal from './PopupModal'
 import Button from 'react-bootstrap/Button';
 import Multiselect from 'multiselect-react-dropdown';
-
-
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 import { FaRegFileImage } from "react-icons/fa";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import { productContext } from '../Context/ProductContext'
 
-
 import './Admin.css'
 import VariantEdit from './VariantEdit';
-
-
-
 
 const AddProductForm = (props) => {
     const location = useLocation()
@@ -36,7 +30,7 @@ const AddProductForm = (props) => {
         content, setContent, images, setVariants, variantsThere, tracker, setTracker, setCollectionValue, collectionValue, setHandleLoc, handleLoc,
         setChintalLoc, setLocValues, locValues, setLocInputs, locInputs, setCorporateLoc, setIsShipping, isShipping, setVariant,
         setProductPrices, productPrices, setSkuInput, skuInput, setWeight, setProductCategory, productCategory, setTagValue, tagValue, setImages,
-        variantGroup, setSiteShow, setVariantShow, modal2Show, modal1Show, modal3Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
+        variantGroup, setSiteShow, setVariantShow, modal2Show, modal1Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
         weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
     } = productProps
 
@@ -44,13 +38,25 @@ const AddProductForm = (props) => {
     const [countriesList, setCountries] = useState()
     const [categoryItems, setCategoryItems] = useState([])
     const [tags, setTags] = useState([])
+    const [modalVariantId, setModalVariantId] = useState(null)
+    const [brands, setBrands] = useState([])
 
     const [vendors, setVendors] = useState()
     const [collections, setCollections] = useState([])
+    const [selectedCollection, setSelectedColletions] = useState([])
+    const [selectedTag, setSelectedTag] = useState([])
 
     const baseUrl = process.env.REACT_APP_API_URL
     const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN
     const token = Cookies.get(jwtToken)
+
+
+    const handleVariantClick = (variantId) => {
+        setModalVariantId(variantId);
+    };
+    const handleModalClose = () => {
+        setModalVariantId(null);
+    };
 
 
     useEffect(() => {
@@ -59,17 +65,19 @@ const AddProductForm = (props) => {
             const tagsUrl = `${baseUrl}/tags/data`
             const vendorUrl = `${baseUrl}/vendors/details`
             const collectionsUrl = `${baseUrl}/collections/data`
+            const brandsUrl = `${baseUrl}/brands/data`
             const headers = {
                 Authorization: `Bearer ${token}`
             }
             const countriesUrl = `https://countriesnow.space/api/v0.1/countries/capital`
             try {
-                const [categoryList, tagsList, vendorsList, countriesList, collectionsList] = await Promise.all([
+                const [categoryList, tagsList, vendorsList, countriesList, collectionsList, brandsList] = await Promise.all([
                     axios.get(categoryUrl),
                     axios.get(tagsUrl),
                     axios.get(vendorUrl, { headers }),
                     axios.get(countriesUrl),
-                    axios.get(collectionsUrl)
+                    axios.get(collectionsUrl),
+                    axios.get(brandsUrl)
                 ]);
 
                 if (categoryList.status === 200) {
@@ -87,12 +95,22 @@ const AddProductForm = (props) => {
                 if (collectionsList.status === 200) {
                     setCollections(collectionsList.data)
                 }
+                if (brandsList.status === 200) {
+                    setBrands(brandsList.data)
+                }
             } catch (error) {
                 console.log(error)
             }
         };
         apiCallback();
     }, [baseUrl, token])
+
+    useEffect(() => {
+        const selectedCollections = collections.filter(collection => collectionValue.includes(collection.collection_url_title))
+        setSelectedColletions(selectedCollections)
+        const selectedTags = tags.filter(tag => tagValue.includes(tag.azst_tag_name))
+        setSelectedTag(selectedTags)
+    }, [collectionValue, tagValue])
 
 
     const { variantDetails } = useContext(productContext)
@@ -153,13 +171,8 @@ const AddProductForm = (props) => {
         setTracker(!tracker)
     }
 
-    const tagsDisplayOptions = tags.map(({ azst_tag_id, azst_tag_name }) => ({
-        label: azst_tag_name,
-        value: azst_tag_id,
-    }));
-
     const onSelectCollection = (selectedItem) => {
-
+        setSelectedColletions(selectedItem)
         setCollectionValue(selectedItem.map(each => each.collection_url_title));
     }
 
@@ -303,8 +316,8 @@ const AddProductForm = (props) => {
     }
 
     const onSelectTag = (selectedItem) => {
-
-        setTagValue(selectedItem.map(each => { return (each.label) }))
+        setSelectedTag(selectedItem)
+        setTagValue(selectedItem.map(each => each.azst_tag_name))
     }
 
     const onChangeImages = (e) => {
@@ -411,6 +424,30 @@ const AddProductForm = (props) => {
         )
     }
 
+    const handleVariantsvalues = (values, maniId, subId) => {
+        setVariantsDetials(
+            variantsDetails.map(eachVariant => {
+                if (eachVariant.id === maniId) {
+                    // Use map to return the updated sub-variants
+                    const updatedSubVariants = eachVariant.sub.map(subV => {
+                        if (subV.id === subId) {
+                            return {
+                                ...subV, ...values
+                            };
+                        }
+                        return subV;
+                    });
+                    // Return the updated eachVariant with the updated sub-variants
+                    return {
+                        ...eachVariant,
+                        sub: updatedSubVariants
+                    };
+                }
+                return eachVariant
+            })
+        )
+    }
+
     const toggleSubVariantsVisibility = (variantId) => {
         setSubVariantsVisibility(prevState => ({
             ...prevState,
@@ -425,12 +462,8 @@ const AddProductForm = (props) => {
         // if (!availableVariants) return 0
         const id = variantDetails.find(variant => variant.option1 === opt1 && variant.option2 === option2 && variant.option3 === option3).id
         return id
-        // console.log(id)
-        // Navigate(`/variant-details/${id}`)
+
     }
-
-
-    console.log('sdfsfs', variantsDetails)
 
     return (
         <div className='container'>
@@ -454,9 +487,9 @@ const AddProductForm = (props) => {
                                 <form className='imagesForm'>
                                     <div className="col-md-12">
                                         <input type="file" multiple onChange={onChangeImages} />
-                                        {Array.from(images).map(item => {
+                                        {Array.from(images).map((item, i) => {
                                             return (
-                                                <span>
+                                                <span key={i}>
                                                     {typeof item === 'string' ? <img src={item} width={150} height={150} alt="" />
                                                         : <img src={item ? URL.createObjectURL(item) : null} width={150} height={150} alt="" />}
                                                 </span>
@@ -495,7 +528,7 @@ const AddProductForm = (props) => {
                                                         <div className='d-flex'>
                                                             {varient.isDone ?
                                                                 varient.optionValue.map((value, i) => (
-                                                                    value !== '' ? <span className='valueCont'>{value}</span> : null
+                                                                    value !== '' ? <span key={i} className='valueCont'>{value}</span> : null
                                                                 ))
                                                                 : <div className='d-flex flex-column'>
                                                                     <label htmlFor='optionValue'>Option Value</label>
@@ -576,11 +609,13 @@ const AddProductForm = (props) => {
                                                                     : <FaRegFileImage className='variantImgFile' />
                                                                 }
 
-                                                                {location.pathname === "/addProduct" ? <Button variant="light" onClick={() => setVariantShow(true)}><span>{va.value}</span></Button> : <Link to={`/variant-details/${goVariantsPage(variant.main.value, va.value)}`}> <span>{va.value}</span></Link>}
+                                                                {location.pathname === "/addProduct" ? <Button variant="light" onClick={() => setVariantShow(true)}><span onClick={() => handleVariantClick(va.id)}>{va.value}</span></Button> : <Link to={`/variant-details/${goVariantsPage(variant.main.value, va.value)}`}> <span>{va.value}</span></Link>}
 
-                                                                <VariantEdit props={va.value} show={modal3Show}
-                                                                    onHide={() => setVariantShow(false)}
-                                                                />
+
+                                                                {modalVariantId === va.id && (<VariantEdit mainId={variant.id} subId={va.id} handlevariantsvalues={handleVariantsvalues}
+                                                                    show={modalVariantId === va.id}
+                                                                    onHide={handleModalClose} />)}
+
                                                                 <input type='file' id='variantImage' className='variantImgInput'
                                                                     onChange={(e) => handleVariantsImage(e, variant.id, '', va.id)} />
                                                             </div>
@@ -638,7 +673,7 @@ const AddProductForm = (props) => {
                                                         </button>
                                                     </div>
                                                     {/* <div className='modal'> */}
-                                                    <div className="modal fade" id="editLoc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div className="modal fade" id="editLoc" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                         <div className="modal-dialog">
                                                             <div className="modal-content">
                                                                 <div className="modal-header">
@@ -849,21 +884,30 @@ const AddProductForm = (props) => {
                                         <label htmlFor="">Collections</label>
                                         <Multiselect
                                             displayValue='azst_collection_name'
-                                            onRemove={(each) => { console.log(each) }}
+                                            onRemove={onSelectCollection}
                                             onSelect={onSelectCollection}
-                                            selectedValues={collectionValue}
+                                            selectedValues={selectedCollection}
                                             options={collections}
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="">Tags</label>
                                         <Multiselect
-                                            displayValue='label'
-                                            onRemove={(each) => { console.log(each) }}
-                                            selectedValues={tagValue}
+                                            displayValue='azst_tag_name'
+                                            onRemove={onSelectTag}
+                                            selectedValues={selectedTag}
                                             onSelect={onSelectTag}
-                                            options={tagsDisplayOptions}
+                                            options={tags}
                                         />
+                                    </div>
+                                    <div className="form-group">
+                                        <label htmlFor="category">Brand</label>
+                                        <select className="form-control" value={brands.azst_brand_id} onChange={handleProductCategorization} id="brand">
+                                            <option>Search</option>
+                                            {brands.map((item, i) => (
+                                                <option key={i} value={item.azst_brand_id}>{item.azst_brand_name}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                 </form>
                             </div>
@@ -871,7 +915,7 @@ const AddProductForm = (props) => {
                     </div>
                 </div>
             </div>
-        </div >
+        </div>
     )
 }
 

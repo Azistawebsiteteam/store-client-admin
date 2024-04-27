@@ -21,13 +21,13 @@ const VariantDetails = () => {
         barcode: '',
         hscode: ''
     })
-    const [variantImg, setVariantImg] = useState('')
+    const [variantImg, setVariantImg] = useState([])
 
     const [prices, setPrices] = useState({
         price: '',
         costperitem: '',
         comparePrice: '',
-        isTaxable: ''
+        isTaxable: false
     })
 
     const baseUrl = process.env.REACT_APP_API_URL
@@ -103,13 +103,13 @@ const VariantDetails = () => {
 
     const onUpdateVariants = async () => {
         try {
-            const url = `http://192.168.213.137:5018/api/v1/product/update/variant`
+            const url = `${baseUrl}/product/update/variant`
             const headers = {
                 Authorization: `Bearer ${token}`
             }
             swalErr.onLoading()
             const formdata = new FormData()
-            formdata.append('variantImage', variantImg)
+            formdata.append('variantImage', JSON.stringify([variantImg]))
             formdata.append('offerPrice', prices.price)
             formdata.append('amount', prices.comparePrice)
             formdata.append('isTaxable', prices.isTaxable)
@@ -126,7 +126,10 @@ const VariantDetails = () => {
             formdata.append('variantService', 'na')
             formdata.append('shippingRequired', isPhysical)
 
-            await axios.put(url, formdata, { headers })
+            const response = await axios.put(url, formdata, { headers })
+            if (response.status === 200) {
+                navigate(-1)
+            }
             Swal.close()
         } catch (e) {
             Swal.close()
@@ -136,7 +139,7 @@ const VariantDetails = () => {
 
     const deleteVariant = async () => {
         try {
-            const url = `http://192.168.213.137:5018/api/v1/product/delete/variant`
+            const url = `${baseUrl}/product/delete/variant`
             const headers = {
                 Authorization: `Bearer ${token}`
             }
@@ -204,9 +207,9 @@ const VariantDetails = () => {
                                             : null) :
                                         <img className="vImg" src={variantImg} alt="yu" />
                                     }
-                                    <div className=''>
+                                    <div className='singleVariantImg'>
                                         <label htmlFor="chooseImg">Change</label>
-                                        <input type='file' id="chooseImg" onChange={updateVariantImg} className='variantImgInput2' disabled />
+                                        <input type='file' id="chooseImg" onChange={updateVariantImg} className='variantImgInput2' />
                                     </div>
                                 </div>
                             </div>

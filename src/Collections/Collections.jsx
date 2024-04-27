@@ -39,7 +39,7 @@ const Collections = () => {
             <div className='commonSec'>
                 <div className='collectionTopbar'>
                     <h3>Collections</h3>
-                    <Link to="/createCollections">Create collection</Link>
+                    <Link to="/collections/create">Create collection</Link>
                 </div>
                 <div className='collectionsDisplay'>
                     <div className='row'>
@@ -58,7 +58,7 @@ const Collections = () => {
                     </div>
                     {collectionData.map((eachCollection, id) => (
                         <div className='collectionsCont'>
-                            <Link className='link' key={eachCollection.azst_collection_id} to={`/UpdateCollection/${eachCollection.azst_collection_id}`}>
+                            <Link className='link' key={eachCollection.azst_collection_id} to={`/collection/update/${eachCollection.azst_collection_id}`}>
                                 <div className='row'>
                                     <div className='d-flex align-items-center'>
                                         <div className="col-sm-3">

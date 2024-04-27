@@ -7,47 +7,54 @@ import { MdInventory } from "react-icons/md";
 import { FaProductHunt } from "react-icons/fa";
 import { MdCollectionsBookmark } from "react-icons/md";
 import { GiKnightBanner } from "react-icons/gi";
-import { productContext } from '../Context/ProductContext'
+import { productContext } from '../Context/ProductContext';
 import { useContext } from 'react';
+import { BiSolidDiscount } from "react-icons/bi";
+import { SiBrandfolder } from "react-icons/si";
 
 const AdminSideBar = () => {
-    const { activeTab, setActiveTab } = useContext(productContext)
-
-    const handleTabClick = (tabId) => {
-        setActiveTab((prevTab) => (prevTab === tabId ? prevTab : tabId))
-    }
-
+    const { activeTab } = useContext(productContext)
     return (
         <div className='sidebarCont'>
             <ul className='sideBarItems'>
-                <Link className='link' to="/" onClick={() => handleTabClick('tab1')}>
-                    <li className={activeTab === 'tab1' ? 'activeTab' : 'linkItem'}>
+                <Link className='link' to="/" >
+                    <li className={activeTab === '/' ? 'activeTab' : 'linkItem'}>
                         <FaHome /> Home
                     </li>
                 </Link>
-                <Link className='link' to="/orders" onClick={() => handleTabClick('tab2')}>
-                    <li className={activeTab === 'tab2' ? 'activeTab' : 'linkItem'}>
+                <Link className='link' to="/orders" >
+                    <li className={activeTab.startsWith('/orders') ? 'activeTab' : 'linkItem'}>
                         <FaFirstOrder /> Orders
                     </li>
                 </Link>
-                <Link className='link' to="/inventory" onClick={() => handleTabClick('tab3')}>
-                    <li className={activeTab === 'tab3' ? 'activeTab' : 'linkItem'}>
+                <Link className='link' to="/inventory" >
+                    <li className={activeTab === '/inventory' ? 'activeTab' : 'linkItem'}>
                         <MdInventory /> Inventory
                     </li>
                 </Link>
-                <Link className='link' to='/productListing' onClick={() => handleTabClick('tab4')}>
-                    <li className={activeTab === 'tab4' ? 'activeTab' : 'linkItem'}>
+                <Link className='link' to='/products' >
+                    <li className={activeTab.startsWith('/product') ? 'activeTab' : 'linkItem'}>
                         <FaProductHunt /> Products
                     </li>
                 </Link>
-                <Link className='link' to="/Collections" onClick={() => handleTabClick('tab5')}>
-                    <li className={activeTab === 'tab5' ? 'activeTab' : 'linkItem'}>
+                <Link className='link' to="/collections" >
+                    <li className={activeTab.startsWith('/collections') ? 'activeTab' : 'linkItem'}>
                         <MdCollectionsBookmark /> Collections
                     </li>
                 </Link>
-                <Link className='link' to="/slidersListing" onClick={() => handleTabClick('tab6')}>
-                    <li className={activeTab === 'tab6' ? 'activeTab' : 'linkItem'}>
-                        <GiKnightBanner /> Create Slider
+                <Link className='link' to="/slider" >
+                    <li className={activeTab.startsWith('/slider') ? 'activeTab' : 'linkItem'}>
+                        <GiKnightBanner />Slider
+                    </li>
+                </Link>
+                <Link className='link' to="/discount">
+                    <li className={activeTab.startsWith("/discount") ? 'activeTab' : 'linkItem'}>
+                        <BiSolidDiscount /> Discounts
+                    </li>
+                </Link>
+                <Link className='link' to="/brands" >
+                    <li className={activeTab.startsWith('/brands') ? 'activeTab' : 'linkItem'}>
+                        <SiBrandfolder /> Brands
                     </li>
                 </Link>
             </ul>

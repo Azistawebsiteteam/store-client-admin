@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Cookies from 'js-cookie'
 import axios from 'axios'
 import Swal from "sweetalert2"
@@ -62,7 +62,8 @@ const AddProduct = () => {
     const [productCategory, setProductCategory] = useState({
         category: '',
         productType: '',
-        vendor: ''
+        vendor: '',
+        brand: ''
     })
     const [tagValue, setTagValue] = useState([])
     const [collectionValue, setCollectionValue] = useState([])
@@ -143,7 +144,7 @@ const AddProduct = () => {
             formdata.append('variantsThere', variantsThere)
 
             const response = await axios.post(url, formdata, { headers })
-            console.log(response)
+
             Swal.close();
             Swal.fire({
                 position: "center",
@@ -157,9 +158,9 @@ const AddProduct = () => {
             Swal.fire({
                 icon: "error",
                 title: "Oops...",
-                text: error.message,
+                text: error.response.data.message,
             });
-            console.log(error)
+
         }
     }
 
@@ -176,14 +177,12 @@ const AddProduct = () => {
     return (
         <div className='adminSec'>
             <AdminSideBar />
-
             <div className='commonSec'>
                 <div className='addProductSection'>
                     <div className='container'>
                         <div className='row'>
                             <div className='col-12'>
                                 <h3>Add Product</h3>
-
                             </div>
                             <AddProductForm productProps={productProps} />
                             <div className='col-12'>
@@ -195,7 +194,6 @@ const AddProduct = () => {
                     </div>
                 </div>
             </div>
-
         </div>
     )
 }
