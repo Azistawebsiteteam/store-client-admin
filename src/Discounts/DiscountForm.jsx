@@ -238,7 +238,7 @@ const DiscountForm = (props) => {
     }
 
     const handleMaxUses = (e) => {
-        setMaxUses({ ...maxUses, [e.target.id]: e.target.checked })
+        setMaxUses(e.target.checked)
     }
 
     const handleMaxUsesCount = (e) => {
@@ -514,7 +514,7 @@ const DiscountForm = (props) => {
                                         All customers
                                     </label>
                                 </div>
-                                <div className="form-check">
+                                {/* <div className="form-check">
                                     <input className="form-check-input" onChange={customerEligibility} type="radio" name="customerEligibility" id="specificCustomerSegments" value="specificCustomerSegments" />
                                     <label className="form-check-label" htmlFor="specificCustomerSegments">
                                         Specific customer segments
@@ -529,7 +529,7 @@ const DiscountForm = (props) => {
                                             placeholder='Search customer segments'
                                         />
                                     </div>}
-                                </div>
+                                </div> */}
                                 <div className="form-check">
                                     <input className="form-check-input" onChange={customerEligibility} type="radio" name="customerEligibility" id="specificCustomer" value="specificCustomer" />
                                     <label className="form-check-label" htmlFor="specificCustomer">
@@ -566,7 +566,7 @@ const DiscountForm = (props) => {
                                 </label>
                             </div>
                         </div>
-                        <div className='bgStyle'>
+                        {/* <div className='bgStyle'>
                             <div className=''>
                                 <h6>Combinations</h6>
                                 <p>This product discount can be combined with:</p>
@@ -598,7 +598,7 @@ const DiscountForm = (props) => {
                                     <p>No shipping discounts are set to combine. To let customers use more than one discount, set up at least one shipping discount that combines with product discounts.</p>
                                 }
                             </div>
-                        </div>
+                        </div> */}
                         <div className='bgStyle'>
                             <h6>Active dates</h6>
                             <form className="row g-3">

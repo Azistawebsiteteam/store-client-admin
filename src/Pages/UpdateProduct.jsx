@@ -48,7 +48,6 @@ const UpdateProduct = () => {
 
     const [variantsDetails, setVariantsDetials] = useState([])
     const [variantGroup, setVariantsGroup] = useState("")
-    console.log(variantsDetails, 'sdfsdfsefs')
     const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
     const [skuInput, setSkuInput] = useState(
         {
@@ -177,7 +176,6 @@ const UpdateProduct = () => {
 
                 const response = await axios.post(url, { productId: id }, { headers })
                 const { productDetails, variants, avalaibleVariants } = response.data
-                console.log(avalaibleVariants, "sdfsdfsdfds")
                 Swal.close()
 
                 setProductUpdateDetails(productDetails)
@@ -185,7 +183,7 @@ const UpdateProduct = () => {
                 setProductDetails(productDetails)
                 setVariantsData(variants)
                 setVariantDetails(avalaibleVariants)
-
+                console.log('variants', avalaibleVariants)
             } catch (error) {
                 Swal.close()
                 console.log(error)

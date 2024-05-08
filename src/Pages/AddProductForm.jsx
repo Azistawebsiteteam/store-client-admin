@@ -34,7 +34,6 @@ const AddProductForm = (props) => {
         weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
     } = productProps
 
-
     const [countriesList, setCountries] = useState()
     const [categoryItems, setCategoryItems] = useState([])
     const [tags, setTags] = useState([])
@@ -45,7 +44,6 @@ const AddProductForm = (props) => {
     const [collections, setCollections] = useState([])
     const [selectedCollection, setSelectedColletions] = useState([])
     const [selectedTag, setSelectedTag] = useState([])
-
     const baseUrl = process.env.REACT_APP_API_URL
     const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN
     const token = Cookies.get(jwtToken)
@@ -117,17 +115,14 @@ const AddProductForm = (props) => {
 
     const generateOptions = useCallback(() => {
         const result = [];
-
         let mainOptionsobj = variants.find((v) => v.optionName === variantGroup)
         if (variants.length > 0 && variants[0].isDone === true && mainOptionsobj) {
             const mainOptions = mainOptionsobj.optionValue;
             const subOptions = variants.filter((v) => v.optionName !== variantGroup);
-
             mainOptions.forEach((mainOption) => {
                 if (mainOption !== '') {
                     const main = { value: mainOption, variantImage: "", amount: 0, quantity: 0 };
                     const sub = [];
-
                     const recursiveGenerateSubOptions = (currentIndex, subVariant) => {
                         if (currentIndex === subOptions.length) {
                             const variants = subVariant.join('-')
@@ -151,7 +146,6 @@ const AddProductForm = (props) => {
                 }
             });
         }
-
         return result;
     }, [variants, variantGroup]); // Dependencies htmlFor useCallback
 
@@ -163,7 +157,6 @@ const AddProductForm = (props) => {
         if (variants.length <= 1) {
             setVariantsGroup(variants[0]?.optionName || "")
         }
-
     }, [generateOptions, variants, variantGroup])
 
 
@@ -232,11 +225,13 @@ const AddProductForm = (props) => {
     }
 
     const handleVariantChange = (e, id) => {
-        const newVariants = [...variants];
-        const variantIndex = newVariants.findIndex((v) => v.id === id);
-        newVariants[variantIndex].optionName = e.target.value;
-
-        setVariants(newVariants);
+        const variantExist = variants.find(v => v.optionName === e.target.value)
+        if (!variantExist) {
+            const newVariants = [...variants];
+            const variantIndex = newVariants.findIndex((v) => v.id === id);
+            newVariants[variantIndex].optionName = e.target.value;
+            setVariants(newVariants);
+        }
     }
 
     const onChangeVariantValue = (e, id, i) => {
@@ -275,7 +270,7 @@ const AddProductForm = (props) => {
         const count = variants.length
         if (count < 3) {
             setVariant(prevVariants => [...prevVariants, {
-                id: v4(), optionName: "size",
+                id: v4(), optionName: '',
                 optionValue: [''],
                 isDone: false
             }])
@@ -363,18 +358,14 @@ const AddProductForm = (props) => {
         } else {
             setError('')
         }
-
         setTitle(e.target.value)
         setMetaDetails({ ...metaDetails, urlHandle: `${window.location.origin}/productItem/${(e.target.value).replace(/ /g, '-')}` })
-
     }
-
 
     const onchangeVariantGroupBy = (e) => {
         setVariantsGroup(e.target.value)
         setVariantsDetials(generateOptions())
     }
-
 
     const handleMetaDetails = (e) => {
         setMetaDetails({ ...metaDetails, [e.target.id]: e.target.value })
@@ -393,7 +384,6 @@ const AddProductForm = (props) => {
                         // Use map to return the updated sub-variants
                         const updatedSubVariants = eachVariant.sub.map(subV => {
                             if (subV.id === subId) {
-
                                 return {
                                     ...subV,
                                     [id]: value
@@ -462,9 +452,8 @@ const AddProductForm = (props) => {
         // if (!availableVariants) return 0
         const id = variantDetails.find(variant => variant.option1 === opt1 && variant.option2 === option2 && variant.option3 === option3).id
         return id
-
     }
-
+    console.log(variants)
     return (
         <div className='container'>
             <div className='row'>
@@ -515,15 +504,18 @@ const AddProductForm = (props) => {
                                                 <div className='d-flex justify-content-between'>
                                                     <div className='variantsDisplay'>
                                                         <div className='d-flex'>
-                                                            {varient.isDone ? <strong>{varient.optionName}</strong> : <div className='d-flex flex-column'>
-                                                                <label htmlFor='optionName'>Option Name</label>
-                                                                <select id="optionName" className="your-select-className" aria-label="Default select example" value={varient.optionName} onChange={(e) => handleVariantChange(e, varient.id)}>
-                                                                    <option value="size">Size</option>
-                                                                    <option value="color">Color</option>
-                                                                    <option value="material">Material</option>
-                                                                    <option value="flavour">Flavour</option>
-                                                                    <option value="quantity">Quantity</option>
-                                                                </select></div>}
+                                                            {varient.isDone ? <strong>{varient.optionName}</strong> :
+                                                                <div className='d-flex flex-column'>
+                                                                    <label htmlFor='optionName'>Option Name</label>
+                                                                    <select id="optionName" className="your-select-className" aria-label="Default select example" value={varient.optionName} onChange={(e) => handleVariantChange(e, varient.id)}>
+                                                                        <option value="">Select</option>
+                                                                        <option value="size">Size</option>
+                                                                        <option value="color">Color</option>
+                                                                        <option value="material">Material</option>
+                                                                        <option value="flavour">Flavour</option>
+                                                                        <option value="quantity">Quantity</option>
+                                                                    </select>
+                                                                </div>}
                                                         </div>
                                                         <div className='d-flex'>
                                                             {varient.isDone ?
@@ -537,7 +529,6 @@ const AddProductForm = (props) => {
                                                                             <input id="optionValue" type="text" value={value} autoComplete='off' placeholder='Add Another Option' onChange={(e) => onChangeVariantValue(e, varient.id, i)} />
                                                                             {varient.optionValue.length - 1 !== i && <button className="variantDltBtn" onClick={(e) => deleteInput(e, varient.id, i)}><RiDeleteBin6Line /></button>}
                                                                         </div>))}
-                                                                    {/* <button className="addBtn" onClick={(e) => addOptionValue(e, varient.id)}><FaPlus /></button> */}
                                                                 </div>}
                                                         </div>
                                                     </div>

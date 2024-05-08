@@ -35,6 +35,7 @@ import Discounts from './Discounts/Discounts';
 import CreateDiscount from './Discounts/CreateDiscount';
 import CreateBrand from './Pages/CreateBrand';
 import EditBrand from './Pages/EditBrand';
+import VariantsComponent from './Pages/VariantsComponent';
 
 
 
@@ -69,6 +70,7 @@ function App() {
         <Route path="/brands" element={<ProtectedRoute><Brands /></ProtectedRoute>} />
         <Route path="/brands/create" element={<ProtectedRoute><CreateBrand /></ProtectedRoute>} />
         <Route path="/edit-brand/:id" element={<ProtectedRoute><EditBrand /></ProtectedRoute>} />
+        <Route path='/variantsNew' element={<VariantsComponent />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

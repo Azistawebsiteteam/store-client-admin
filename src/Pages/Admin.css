@@ -556,3 +556,7 @@
     .chip{
         text-wrap: wrap !important;
     }
+
+    .newVariant{
+        margin-top: 12%;
+    }
