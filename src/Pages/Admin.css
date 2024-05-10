@@ -1,3 +1,12 @@
+
+.color-toast.swal2-icon-warning {
+  background-color: rgb(227, 36, 36, 0.9) !important;
+}
+
+.jodit-workplace{
+    max-height: 300px !important;
+}
+
 .ql-editor{
     min-height: 200px;
 }
@@ -559,4 +568,45 @@
 
     .newVariant{
         margin-top: 12%;
+    }
+    .imgController{
+        display: flex;
+        justify-content: space-between;
+    }
+    .imgagesCont {
+        display: flex;
+        margin: 20px 0;
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+    .imgCont {
+        position: relative;
+    }
+    .selectImg{
+        display: none;
+    }
+    .imgCont:hover{
+        .selectImg {
+            display: block;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: 18px;
+            height: 18px;
+        }
+    }
+
+    .enableall{
+        display: block;
+        position: absolute;
+        left: 10px;
+        top: 10px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .dltImgBtn{
+        font-size: 24px;
+        color: #ec2e2e;
+        cursor: pointer;
     }

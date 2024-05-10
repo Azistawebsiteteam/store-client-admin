@@ -73,14 +73,14 @@ const AddProduct = () => {
         urlHandle: `${window.location.origin}/productItem`
     })
 
-
     const baseUrl = process.env.REACT_APP_API_URL
     const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN
     const token = Cookies.get(jwtToken)
+    const localUrl = process.env.REACT_APP_LOCAL_URL
 
     const onSubmitProductDetails = async () => {
         try {
-            const url = `${baseUrl}/product/add-store`
+            const url = `${localUrl}/product/add-store`
             const headers = {
                 Authorization: `Bearer ${token}`,
                 'Content-type': 'multipart/form-data'
@@ -136,6 +136,7 @@ const AddProduct = () => {
             formdata.append('category', productCategory.category)
             formdata.append('productType', productCategory.productType)
             formdata.append('vendor', productCategory.vendor)
+            formdata.append('brand', productCategory.brand)
             formdata.append('collections', JSON.stringify(collectionValue))
             formdata.append('tags', JSON.stringify(tagValue))
             formdata.append('metaTitle', metaDetails.metaTitle)
@@ -164,6 +165,15 @@ const AddProduct = () => {
         }
     }
 
+    const deleteImg = async (imgFile, setFun) => {
+        console.log(imgFile)
+        console.log(images)
+        const filteredImgs = images.filter((img, i) => !imgFile.includes(i))
+        setImages(filteredImgs)
+        setFun([])
+        console.log('file', filteredImgs)
+    }
+
     const productProps = {
         title, error, setError, setTitle, setMetaDetails,
         metaDetails, setVariantsGroup, setVariantsDetials, variantsDetails, variants, setSubVariantsVisibility, subVariantsVisibility,
@@ -171,7 +181,8 @@ const AddProduct = () => {
         setChintalLoc, setLocValues, locValues, setLocInputs, locInputs, setCorporateLoc, setIsShipping, isShipping, setVariant,
         setProductPrices, productPrices, setSkuInput, skuInput, setWeight, setProductCategory, productCategory, setTagValue, setImages,
         variantGroup, setSiteShow, modal2Show, modal1Show, setStoreShow, setVariantShow, modal3Show, productStatus, setProductStatus, originCountry, setOriginCountry,
-        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
+        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc, collectionValue, tagValue, deleteImg
+
     }
 
     return (

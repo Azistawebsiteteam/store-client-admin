@@ -18,6 +18,8 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegFileImage } from "react-icons/fa";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import { productContext } from '../Context/ProductContext'
+import { MdDelete } from "react-icons/md";
+import { showToast } from './ErrorHandler'
 
 import './Admin.css'
 import VariantEdit from './VariantEdit';
@@ -31,15 +33,15 @@ const AddProductForm = (props) => {
         setChintalLoc, setLocValues, locValues, setLocInputs, locInputs, setCorporateLoc, setIsShipping, isShipping, setVariant,
         setProductPrices, productPrices, setSkuInput, skuInput, setWeight, setProductCategory, productCategory, setTagValue, tagValue, setImages,
         variantGroup, setSiteShow, setVariantShow, modal2Show, modal1Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
-        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
+        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc, deleteImg
     } = productProps
 
-    const [countriesList, setCountries] = useState()
+    const [imgFile, setImgFile] = useState([])
+    const [countriesList, setCountries] = useState([])
     const [categoryItems, setCategoryItems] = useState([])
     const [tags, setTags] = useState([])
     const [modalVariantId, setModalVariantId] = useState(null)
     const [brands, setBrands] = useState([])
-
     const [vendors, setVendors] = useState()
     const [collections, setCollections] = useState([])
     const [selectedCollection, setSelectedColletions] = useState([])
@@ -47,6 +49,8 @@ const AddProductForm = (props) => {
     const baseUrl = process.env.REACT_APP_API_URL
     const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN
     const token = Cookies.get(jwtToken)
+    //const localUrl = process.env.REACT_APP_LOCAL_URL
+
 
 
     const handleVariantClick = (variantId) => {
@@ -85,8 +89,9 @@ const AddProductForm = (props) => {
                     setTags(tagsList.data)
                 }
                 if (countriesList.status === 200) {
-                    setCountries(countriesList.data)
+                    setCountries(countriesList.data.data)
                 }
+
                 if (vendorsList.status === 200) {
                     setVendors(vendorsList.data)
                 }
@@ -96,6 +101,7 @@ const AddProductForm = (props) => {
                 if (brandsList.status === 200) {
                     setBrands(brandsList.data)
                 }
+
             } catch (error) {
                 console.log(error)
             }
@@ -113,24 +119,108 @@ const AddProductForm = (props) => {
 
     const { variantDetails } = useContext(productContext)
 
+    // const generateOptions = useCallback(() => {
+    //     const result = [];
+    //     const mainOptionsObj = variants.find((v) => v.optionName === variantGroup);
+
+    //     if (variants.length > 0 && mainOptionsObj && mainOptionsObj.isDone) {
+    //         const mainOptions = mainOptionsObj.optionValue;
+    //         const remainingVariants = variants.filter((v) => v.optionName !== variantGroup);
+    //         console.log(remainingVariants)
+
+    //         mainOptions.forEach((mainOption) => {
+    //             if (mainOption !== '') {
+    //                 const subAvail = variantDetails.filter(v => v.option1 === mainOption || v.option2 === mainOption || v.option3 === mainOption);
+    //                 console.log('subAvail', subAvail)
+    //                 const main = { id: v4(), value: mainOption, variantImage: subAvail[0]?.variant_image[0], amount: 0, quantity: subAvail.reduce((acc, v) => acc + parseInt(v.variant_quantity || 0), 0), shCode: '', barcode: '', skuCode: '', isTaxable: false, shippingRequired: false, inventoryId: 0, inventoryPolicy: '', variantService: '' };
+    //                 const sub = [];
+
+    //                 const recursiveGenerateSubOptions = (currentIndex, subVariant) => {
+    //                     if (currentIndex === remainingVariants.length) {
+    //                         const subV = subAvail.find(v => {
+
+    //                             console.log(v.option1, v.option2, v.option3, subVariant)
+    //                             return ((v.option1 && subVariant.includes(v.option1)) || (v.option2 && subVariant.includes(v.option2)) ||
+    //                                 (v.option3 && subVariant.includes(v.option3)))
+    //                         }
+
+    //                         );
+
+    //                         console.log(subV)
+
+    //                         if (subV) {
+    //                             //const variants = [subVariant.includes(subV.option1) ? subV.option1 : null, subVariant.includes(subV.option2) ? subV.option2 : null, subVariant.includes(subV.option3) ? subV.option3 : null].join('-').replace(/^-*|-*$/g, '')
+    //                             const variants = subVariant.join('-').replace(/^-*|-*$/g, '')
+    //                             sub.push({ id: v4(), variantId: subV.id, value: variants, variantImage: subV.variant_image[1], amount: subV.offer_price, quantity: subV.variant_quantity, shCode: subV.variant_HS_code, barcode: subV.variant_barcode, skuCode: subV.variant_sku, isTaxable: subV.variant_taxable, shippingRequired: subV.variant_requires_shipping, inventoryId: subV.variant_inventory_tracker, inventoryPolicy: subV.variant_fulfillment_service, variantService: subV.variant_fulfillment_service });
+    //                         } else {
+    //                             console.log('dkndnkjd', subVariant)
+    //                             const variants = subVariant.join('-')
+    //                             sub.push({ id: v4(), variantId: 0, value: variants, variantImage: "", amount: 0, quantity: 0, shCode: '', barcode: '', skuCode: '', isTaxable: false, shippingRequired: false, inventoryId: 0, inventoryPolicy: '', variantService: '' });
+    //                         }
+
+    //                         return;
+    //                     }
+
+    //                     remainingVariants[currentIndex].optionValue.forEach((subValue) => {
+    //                         if (subValue === "") return;
+    //                         recursiveGenerateSubOptions(currentIndex + 1, [
+    //                             ...subVariant,
+    //                             subValue,
+    //                         ]);
+    //                     });
+    //                 };
+
+    //                 if (remainingVariants.length > 0) {
+    //                     recursiveGenerateSubOptions(0, []);
+    //                 }
+
+    //                 result.push({ id: v4(), main, sub });
+    //             }
+    //         });
+    //     }
+    //     return result;
+    // }, [variants, variantGroup]);
+
     const generateOptions = useCallback(() => {
         const result = [];
-        let mainOptionsobj = variants.find((v) => v.optionName === variantGroup)
-        if (variants.length > 0 && variants[0].isDone === true && mainOptionsobj) {
-            const mainOptions = mainOptionsobj.optionValue;
-            const subOptions = variants.filter((v) => v.optionName !== variantGroup);
+        const mainOptionsObj = variants.find((v) => v.optionName === variantGroup);
+        console.log(mainOptionsObj, 'mainOptionsObj')
+        if (variants.length > 0 && mainOptionsObj && mainOptionsObj.isDone) {
+            const mainOptions = mainOptionsObj.optionValue;
+            const remainingVariants = variants.filter((v) => v.optionName !== variantGroup);
+
             mainOptions.forEach((mainOption) => {
                 if (mainOption !== '') {
-                    const main = { value: mainOption, variantImage: "", amount: 0, quantity: 0 };
+                    const subAvail = variantDetails.filter(v => v.option1 === mainOption || v.option2 === mainOption || v.option3 === mainOption);
+                    const main = { id: v4(), value: mainOption, variantImage: subAvail[0]?.variant_image[0], amount: 0, quantity: subAvail.reduce((acc, v) => acc + parseInt(v.variant_quantity || 0), 0), shCode: '', barcode: '', skuCode: '', isTaxable: false, shippingRequired: false, inventoryId: 0, inventoryPolicy: '', variantService: '' };
                     const sub = [];
+
                     const recursiveGenerateSubOptions = (currentIndex, subVariant) => {
-                        if (currentIndex === subOptions.length) {
-                            const variants = subVariant.join('-')
-                            sub.push({ id: v4(), value: variants, variantImage: "", amount: 0, quantity: 0 });
+                        if (currentIndex === remainingVariants.length) {
+                            const subV = subAvail.find(v => {
+                                // Check if subVariant includes all options of subV
+                                return (
+                                    (v.option1 && subVariant.includes(v.option1))
+                                    ||
+                                    (v.option2 && subVariant.includes(v.option2)) ||
+                                    (v.option3 && subVariant.includes(v.option3))
+                                );
+                            });
+
+                            if (subV) {
+                                const variants = subVariant.join('-').replace(/^-*|-*$/g, '');
+                                sub.push({ id: v4(), variantId: subV.id, value: variants, variantImage: subV.variant_image[1], amount: subV.offer_price, quantity: subV.variant_quantity, shCode: subV.variant_HS_code, barcode: subV.variant_barcode, skuCode: subV.variant_sku, isTaxable: subV.variant_taxable, shippingRequired: subV.variant_requires_shipping, inventoryId: subV.variant_inventory_tracker, inventoryPolicy: subV.variant_fulfillment_service, variantService: subV.variant_fulfillment_service });
+                            } else {
+                                console.log('nodbjd', subVariant)
+                                const variants = subVariant.join('-');
+                                console.log('suvb', variants)
+                                sub.push({ id: v4(), variantId: 0, value: variants, variantImage: "", amount: 0, quantity: 0, shCode: '', barcode: '', skuCode: '', isTaxable: false, shippingRequired: false, inventoryId: 0, inventoryPolicy: '', variantService: '' });
+                            }
+
                             return;
                         }
 
-                        subOptions[currentIndex].optionValue.forEach((subValue) => {
+                        remainingVariants[currentIndex].optionValue.forEach((subValue) => {
                             if (subValue === "") return;
                             recursiveGenerateSubOptions(currentIndex + 1, [
                                 ...subVariant,
@@ -138,7 +228,8 @@ const AddProductForm = (props) => {
                             ]);
                         });
                     };
-                    if (subOptions.length > 0) {
+
+                    if (remainingVariants.length > 0) {
                         recursiveGenerateSubOptions(0, []);
                     }
 
@@ -147,19 +238,20 @@ const AddProductForm = (props) => {
             });
         }
         return result;
-    }, [variants, variantGroup]); // Dependencies htmlFor useCallback
+    }, [variants, variantGroup]);
 
 
 
     useEffect(() => {
         const variantsData = generateOptions()
         setVariantsDetials(variantsData)
+
         if (variants.length <= 1) {
             setVariantsGroup(variants[0]?.optionName || "")
         }
     }, [generateOptions, variants, variantGroup])
 
-
+    console.log('modifiedvariants', variantDetails)
     const trackQty = () => {
         setTracker(!tracker)
     }
@@ -226,6 +318,9 @@ const AddProductForm = (props) => {
 
     const handleVariantChange = (e, id) => {
         const variantExist = variants.find(v => v.optionName === e.target.value)
+        if (variantExist) {
+            showToast(`${e.target.value} already selected Please Edit`)
+        }
         if (!variantExist) {
             const newVariants = [...variants];
             const variantIndex = newVariants.findIndex((v) => v.id === id);
@@ -270,7 +365,8 @@ const AddProductForm = (props) => {
         const count = variants.length
         if (count < 3) {
             setVariant(prevVariants => [...prevVariants, {
-                id: v4(), optionName: '',
+                id: v4(),
+                optionName: '',
                 optionValue: [''],
                 isDone: false
             }])
@@ -305,6 +401,9 @@ const AddProductForm = (props) => {
     const handleWeight = (e) => {
         setWeight(e.target.value)
     }
+    const handleWeightUnit = (e) => {
+        setWeightUnit(e.target.value)
+    }
 
     const handleProductCategorization = (e) => {
         setProductCategory({ ...productCategory, [e.target.id]: e.target.value })
@@ -317,9 +416,8 @@ const AddProductForm = (props) => {
 
     const onChangeImages = (e) => {
         const newFiles = Array.from(e.target.files);
-        setImages(newFiles)
+        setImages([...newFiles, ...images])
     }
-
     const handleVariantsImage = (e, vid, type, subId) => {
         setVariantsDetials(
             variantsDetails.map(eachVariant => {
@@ -332,7 +430,6 @@ const AddProductForm = (props) => {
                         // Use map to return the updated sub-variants
                         const updatedSubVariants = eachVariant.sub.map(subV => {
                             if (subV.id === subId) {
-
                                 return {
                                     ...subV,
                                     variantImage: e.target.files[0]
@@ -391,9 +488,8 @@ const AddProductForm = (props) => {
                             }
                             return subV;
                         });
-
                         const variantAmounts = updatedSubVariants.map(vari => parseInt(vari.amount));
-                        const mqinQuantity = updatedSubVariants.map(vari => parseInt(vari.quantity)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
+                        const mainQuantity = updatedSubVariants.map(vari => parseInt(vari.quantity)).reduce((accumulator, currentValue) => accumulator + currentValue, 0)
 
                         let updatedMainAmount;
                         if (variantAmounts.length > 1) {
@@ -401,18 +497,17 @@ const AddProductForm = (props) => {
                         } else {
                             updatedMainAmount = variantAmounts[0];
                         }
-
                         // Return the updated eachVariant with the updated sub-variants
                         return {
                             ...eachVariant,
-                            main: { ...eachVariant.main, amount: updatedMainAmount, quantity: mqinQuantity },
+                            main: { ...eachVariant.main, amount: updatedMainAmount, quantity: mainQuantity },
                             sub: updatedSubVariants
                         };
                     }
                 } return eachVariant
             })
-        )
-    }
+        );
+    };
 
     const handleVariantsvalues = (values, maniId, subId) => {
         setVariantsDetials(
@@ -445,15 +540,56 @@ const AddProductForm = (props) => {
         }));
     };
 
-    const goVariantsPage = (opt1, v) => {
-        const options = v.split('-')
-        const option2 = options[0]
-        const option3 = options[1] || null
-        // if (!availableVariants) return 0
-        const id = variantDetails.find(variant => variant.option1 === opt1 && variant.option2 === option2 && variant.option3 === option3).id
-        return id
+    // const goVariantsPage = (opt1, v) => {
+    //     const options = v.split('-')
+    //     const option2 = options[0]
+    //     const option3 = options[1] || null
+    //     // if (!availableVariants) return 0
+    //     const variant = variantDetails.find(variant => variant.option1 === opt1 && variant.option2 === option2 && variant.option3 === option3)
+    //     if (variant) {
+    //         return variant.id
+    //     } else {
+    //         return ''
+    //     }
+    // }
+
+    const selectImg = (e, id) => {
+        if (e.target.checked) {
+            setImgFile(prev => [...prev, id])
+        } else {
+            let selected = imgFile.filter(each => each !== id)
+            setImgFile(selected)
+        }
     }
-    console.log(variants)
+    const onDeleteImgs = (e) => {
+        e.preventDefault()
+        deleteImg(imgFile, setImgFile)
+    }
+
+    const renderVariantImage = (variantImage) => {
+        if (variantImage) {
+            if (typeof variantImage === 'string') {
+                return <img src={variantImage} className="vImg" alt="variantImage" />;
+            } else if (variantImage instanceof Blob) {
+                return <img src={URL.createObjectURL(variantImage)} className="vImg" alt="" />;
+            }
+        }
+        return <FaRegFileImage className='variantImgFile' />;
+    };
+
+    const renderVariantButton = (va) => (
+        <Button variant="light" onClick={() => setVariantShow(true)}>
+            <span onClick={() => handleVariantClick(va.id)}>{va.value}</span>
+        </Button>
+    );
+
+    const renderVariantLink = (va) => (
+        <Link to={`/variant-details/${va.variantId}`}>
+            <span>{va.value}</span>
+        </Link>
+    );
+
+
     return (
         <div className='container'>
             <div className='row'>
@@ -475,15 +611,21 @@ const AddProductForm = (props) => {
                             <div className='bgStyle'>
                                 <form className='imagesForm'>
                                     <div className="col-md-12">
-                                        <input type="file" multiple onChange={onChangeImages} />
-                                        {Array.from(images).map((item, i) => {
-                                            return (
-                                                <span key={i}>
+                                        <div className='imgController'>
+                                            <input type="file" multiple onChange={onChangeImages} />
+                                            {imgFile.length > 0 && <MdDelete className="dltImgBtn" onClick={onDeleteImgs} />}
+                                        </div>
+                                        <div className='imgagesCont'>
+                                            {Array.from(images).map((item, i) =>
+                                            (
+                                                <div className="imgCont" key={i}>
+                                                    <input className={imgFile.length > 0 ? "enableall" : "selectImg"} type='checkbox' checked={imgFile.includes(i)} onClick={(e) => selectImg(e, i)} />
                                                     {typeof item === 'string' ? <img src={item} width={150} height={150} alt="" />
                                                         : <img src={item ? URL.createObjectURL(item) : null} width={150} height={150} alt="" />}
-                                                </span>
+                                                </div>
                                             )
-                                        })}
+                                            )}
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -565,13 +707,13 @@ const AddProductForm = (props) => {
                                         <div className='variantsOutputTopbar'>
                                             <span>Variant</span><span>Price</span><span>Available</span>
                                         </div>
-                                        {variantsDetails.map((variant) => (
+                                        {variantsDetails.map(variant => (
                                             <div key={variant.id}>
                                                 <div className='variantsOutputValbar' >
                                                     <div className='variantImgCont'>
-                                                        {variant.main.variantImage && variant.main.variantImage instanceof Blob ?
-                                                            <img src={URL.createObjectURL(variant.main.variantImage)} alt="" className='vImg' /> :
-                                                            <FaRegFileImage className='variantImgFile' />}
+                                                        {variant.main.variantImage ? (typeof variant.main.variantImage === 'string' ? (<img src={variant.main.variantImage} className='vImg' alt='varaintImage' />) : (variant.main.variantImage instanceof Blob ?
+                                                            <img src={URL.createObjectURL(variant.main.variantImage)} alt="" className='vImg' /> : <FaRegFileImage className='variantImgFile' />))
+                                                            : <FaRegFileImage className='variantImgFile' />}
                                                         <input type='file' id="variantImage" className='variantImgInput' onChange={(e) => handleVariantsImage(e, variant.id, 'main', 0)} />
                                                         <div className='d-flex flex-column'>
                                                             <span>{variant.main.value}</span> {variant.sub.length > 0 && <div><span>{variant.sub.length} Variants</span>
@@ -589,33 +731,43 @@ const AddProductForm = (props) => {
                                                     variant.sub.map((va, subIndex) => (
                                                         <div className='subVariantsOutputValbar' key={va.id}>
                                                             <div className='variantImgCont'>
-                                                                {(va.variantImage || variant.main.variantImage) ?
-                                                                    ((va.variantImage ?
-                                                                        (va.variantImage instanceof Blob ?
-                                                                            <img src={URL.createObjectURL(va.variantImage)} className="vImg" alt="" />
-                                                                            : null)
-                                                                        : (variant.main.variantImage instanceof Blob ?
-                                                                            <img src={URL.createObjectURL(variant.main.variantImage)} className="vImg" alt="" />
-                                                                            : null)))
-                                                                    : <FaRegFileImage className='variantImgFile' />
-                                                                }
-
-                                                                {location.pathname === "/addProduct" ? <Button variant="light" onClick={() => setVariantShow(true)}><span onClick={() => handleVariantClick(va.id)}>{va.value}</span></Button> : <Link to={`/variant-details/${goVariantsPage(variant.main.value, va.value)}`}> <span>{va.value}</span></Link>}
-
-
-                                                                {modalVariantId === va.id && (<VariantEdit mainId={variant.id} subId={va.id} handlevariantsvalues={handleVariantsvalues}
-                                                                    show={modalVariantId === va.id}
-                                                                    onHide={handleModalClose} />)}
-
-                                                                <input type='file' id='variantImage' className='variantImgInput'
-                                                                    onChange={(e) => handleVariantsImage(e, variant.id, '', va.id)} />
-                                                            </div>
-
-                                                            <div>
-                                                                <input type="text" id='amount' placeholder="₹ 0.0" onChange={(e) => handleVariantsOutput(e, variant.id, '', va.id)} value={va.amount} />
+                                                                {renderVariantImage(va.variantImage || variant.main.variantImage)}
+                                                                {location.pathname === "/product/create" ? renderVariantButton(va) : (
+                                                                    va.variantId !== 0 ? renderVariantLink(va) : renderVariantButton(va))}
+                                                                )
+                                                                {/* {renderVariantButton(va)} */}
+                                                                {modalVariantId === va.id && (
+                                                                    <VariantEdit
+                                                                        mainId={variant.id}
+                                                                        subId={va.id}
+                                                                        handlevariantsvalues={handleVariantsvalues}
+                                                                        show={modalVariantId === va.id}
+                                                                        onHide={handleModalClose}
+                                                                    />
+                                                                )}
+                                                                <input
+                                                                    type='file'
+                                                                    id='variantImage'
+                                                                    className='variantImgInput'
+                                                                    onChange={(e) => handleVariantsImage(e, variant.id, '', va.id)}
+                                                                />
                                                             </div>
                                                             <div>
-                                                                <input type="text" id='quantity' onChange={(e) => handleVariantsOutput(e, variant.id, '', va.id)} value={va.quantity} />
+                                                                <input
+                                                                    type="text"
+                                                                    id='amount'
+                                                                    placeholder="₹ 0.0"
+                                                                    onChange={(e) => handleVariantsOutput(e, variant.id, '', va.id)}
+                                                                    value={va.amount}
+                                                                />
+                                                            </div>
+                                                            <div>
+                                                                <input
+                                                                    type="text"
+                                                                    id='quantity'
+                                                                    onChange={(e) => handleVariantsOutput(e, variant.id, '', va.id)}
+                                                                    value={va.quantity}
+                                                                />
                                                             </div>
                                                         </div>
                                                     ))
@@ -748,7 +900,7 @@ const AddProductForm = (props) => {
                                             {isShipping ? <div className='shippingCont'>
                                                 <div className='d-flex'>
                                                     <input type='text' placeholder='0.0' value={weight} onChange={handleWeight} />
-                                                    <select className="" aria-label="Default select example" value={weightUnit} onChange={(e) => setWeightUnit(e.target.value)}>
+                                                    <select className="" aria-label="Default select example" value={weightUnit} onChange={handleWeightUnit}>
                                                         <option value='kg'>Kg</option>
                                                         <option value="lb">lb</option>
                                                         <option value="oz">oz</option>
@@ -758,7 +910,7 @@ const AddProductForm = (props) => {
                                                 <label htmlFor='countrySelect'>Country/Region of origin</label>
                                                 <select id="countrySelect" value={originCountry} onChange={(e) => setOriginCountry(e.target.value)} className="form-select" aria-label="Default select example">
                                                     <option value="">Select</option>
-                                                    {countriesList.data.map(eachObj => (
+                                                    {countriesList.map(eachObj => (
                                                         <option value={eachObj.iso2} key={eachObj.iso3}>
                                                             {eachObj.name}
                                                         </option>
@@ -893,10 +1045,10 @@ const AddProductForm = (props) => {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="category">Brand</label>
-                                        <select className="form-control" value={brands.azst_brand_id} onChange={handleProductCategorization} id="brand">
-                                            <option>Search</option>
+                                        <select className="form-control" value={productCategory.brand} onChange={handleProductCategorization} id="brand">
+                                            <option value=''>Search</option>
                                             {brands.map((item, i) => (
-                                                <option key={i} value={item.azst_brand_id}>{item.azst_brand_name}</option>
+                                                <option key={i} value={item.azst_brands_id}>{item.azst_brand_name}</option>
                                             ))}
                                         </select>
                                     </div>
@@ -905,8 +1057,8 @@ const AddProductForm = (props) => {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     )
 }
 

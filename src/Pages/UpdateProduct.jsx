@@ -61,7 +61,8 @@ const UpdateProduct = () => {
     const [productCategory, setProductCategory] = useState({
         category: '',
         productType: '',
-        vendor: ''
+        vendor: '',
+        brand: ''
     })
     const [tagValue, setTagValue] = useState([])
     const [collectionValue, setCollectionValue] = useState([])
@@ -105,8 +106,10 @@ const UpdateProduct = () => {
             tags,
             type,
             variant_store_order,
-            vendor_id
+            vendor_id,
+            brand_id
         } = productDetails
+
         setOriginCountry(origin_country)
         setTitle(product_title)
         setContent(product_info)
@@ -118,7 +121,9 @@ const UpdateProduct = () => {
         setProductCategory({
             category: product_category,
             productType: type,
-            vendor: vendor_id
+            vendor: vendor_id,
+            brand: brand_id
+
         })
         setProductPrices({
             price: price,
@@ -136,7 +141,9 @@ const UpdateProduct = () => {
         )
         setCollectionValue(JSON.parse(collections))
         setProductStatus(status)
-        setWeight(product_weight)
+        setWeight(product_weight.split('-')[0])
+        setWeightUnit(product_weight.split('-')[1])
+        setIsShipping(product_weight.split('-').length > 0)
         setSkuInput({
             SKU: sku_code,
             barcode: sku_bar_code
@@ -175,22 +182,20 @@ const UpdateProduct = () => {
                 swalErr.onLoading()
 
                 const response = await axios.post(url, { productId: id }, { headers })
+                console.log(response)
                 const { productDetails, variants, avalaibleVariants } = response.data
                 Swal.close()
-
                 setProductUpdateDetails(productDetails)
                 setVariantsUpdateDetails(variants)
                 setProductDetails(productDetails)
                 setVariantsData(variants)
                 setVariantDetails(avalaibleVariants)
-                console.log('variants', avalaibleVariants)
             } catch (error) {
                 Swal.close()
-                console.log(error)
             }
         };
         getDetails();
-    }, [id, baseUrl, token])
+    }, [id, baseUrl, token, setProductDetails, setVariantsData, setVariantDetails])
 
 
     const onSubmitProductDetails = async () => {
@@ -226,37 +231,44 @@ const UpdateProduct = () => {
                 formdata.append(`productImages`, file)
             })
 
-            variantsDetails.forEach(variant => {
-                formdata.append('variantImage', variant.main.variantImage);
-                variant.sub.forEach(subVariant => {
-                    formdata.append('variantImage', subVariant.variantImage);
-                })
-            })
-            formdata.append('variants', JSON.stringify(variantsDetails))
+
+            formdata.append('productId', id)
             formdata.append('productTitle', title)
             formdata.append('productInfo', content)
-            formdata.append('variantsOrder', JSON.stringify(proVariants))
-            formdata.append('productPrice', productPrices.price)
-            formdata.append('productComparePrice', productPrices.comparePrice)
-            formdata.append('productIsTaxable', productPrices.isTaxable)
-            formdata.append('productCostPerItem', productPrices.costPerItem)
-            // formdata.append('quantityTracker', tracker)
-            formdata.append('inventoryInfo', JSON.stringify(locInputs))
-            formdata.append('cwos', handleLoc.cwos)
-            formdata.append('skuCode', skuInput.SKU)
-            formdata.append('skuBarcode', skuInput.barcode)
-            formdata.append('productWeight', weight + " " + weightUnit)
-            formdata.append('originCountry', originCountry)
+            formdata.append('variantsThere', variantsThere)
+            formdata.append('metaTitle', metaDetails.metaTitle)
+            formdata.append('metaDescription', metaDetails.metaDescription)
+            formdata.append('urlHandle', metaDetails.urlHandle)
             formdata.append('productActiveStatus', productStatus)
             formdata.append('category', productCategory.category)
             formdata.append('productType', productCategory.productType)
             formdata.append('vendor', productCategory.vendor)
+            formdata.append('brand', productCategory.brand)
             formdata.append('collections', JSON.stringify(collectionValue))
             formdata.append('tags', JSON.stringify(tagValue))
-            formdata.append('metaTitle', metaDetails.metaTitle)
-            formdata.append('metaDescription', metaDetails.metaDescription)
-            formdata.append('urlHandle', metaDetails.urlHandle)
-            formdata.append('variantsThere', variantsThere)
+
+            if (variantsThere) {
+                variantsDetails.forEach(variant => {
+                    formdata.append('variantImage', variant.main.variantImage);
+                    variant.sub.forEach(subVariant => {
+                        formdata.append('variantImage', subVariant.variantImage);
+                    })
+                })
+                formdata.append('variantsOrder', JSON.stringify(proVariants))
+                formdata.append('variants', JSON.stringify(variantsDetails))
+            } else {
+                formdata.append('productPrice', productPrices.price)
+                formdata.append('productComparePrice', productPrices.comparePrice)
+                formdata.append('productIsTaxable', productPrices.isTaxable)
+                formdata.append('productCostPerItem', productPrices.costPerItem)
+                // formdata.append('quantityTracker', tracker)
+                formdata.append('inventoryInfo', JSON.stringify(locInputs))
+                formdata.append('cwos', handleLoc.cwos)
+                formdata.append('skuCode', skuInput.SKU)
+                formdata.append('skuBarcode', skuInput.barcode)
+                formdata.append('productWeight', weight !== '' ? (weight + "-" + weightUnit) : "")
+                formdata.append('originCountry', originCountry)
+            }
 
             const response = await axios.post(url, formdata, { headers })
 
@@ -279,15 +291,32 @@ const UpdateProduct = () => {
         }
     }
 
+    const deleteImg = async (imgFile, setFun) => {
+        try {
+            const url = `${baseUrl}/product/delete/images`
+            const headers = {
+                Authorization: `Bearer ${token}`
+            }
+            const body = {
+                productId: id, deleteImgs: imgFile
+            }
+            const response = await axios.patch(url, body, { headers })
+            setImages(response.data.updatedImgs)
+            setFun([])
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const productProps = {
+        proid: id,
         title, error, setError, setTitle, setMetaDetails,
         metaDetails, setVariantsGroup, setVariantsDetials, variantsDetails, variants, setSubVariantsVisibility, subVariantsVisibility,
         content, setContent, images, setVariants, variantsThere, tracker, setTracker, setCollectionValue, collectionValue, setHandleLoc, handleLoc,
         setChintalLoc, setLocValues, locValues, setLocInputs, locInputs, setCorporateLoc, setIsShipping, isShipping, setVariant,
         setProductPrices, productPrices, setSkuInput, skuInput, setWeight, setProductCategory, productCategory, setTagValue, tagValue, setImages,
         variantGroup, setSiteShow, modal2Show, modal1Show, setStoreShow, productStatus, setProductStatus, originCountry, setOriginCountry,
-        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc
+        weight, weightUnit, setWeightUnit, setIsSKU, isSKU, chintalLoc, corporateLoc, deleteImg
     }
 
     return (
