@@ -27,6 +27,7 @@ const ProductListing = () => {
                 Swal.close();
                 setProductsList(response.data.products)
             } catch (error) {
+                Swal.close();
                 console.log(error)
             };
         }; productDetails();
