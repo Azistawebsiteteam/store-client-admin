@@ -1,14 +1,17 @@
 import { useEffect } from "react";
+import { useContext } from "react";
 import { createContext, React, useState } from "react";
 import { useLocation } from "react-router-dom";
-export const productContext = createContext();
 
-const ProductContext = (props) => {
+const ProductContext = createContext();
+
+const ProductContextProvider = (props) => {
   const { children } = props;
   const location = useLocation();
   const [productDetails, setProductDetails] = useState({});
   const [variantsData, setVariantsData] = useState([]);
   const [variantDetails, setVariantDetails] = useState([]);
+  const [dropdownItems, setDropdownItems] = useState(false);
   const [activeTab, setActiveTab] = useState(location.pathname);
 
   useEffect(() => {
@@ -16,7 +19,7 @@ const ProductContext = (props) => {
   }, [location.pathname]);
 
   return (
-    <productContext.Provider
+    <ProductContext.Provider
       value={{
         productDetails,
         setProductDetails,
@@ -26,11 +29,17 @@ const ProductContext = (props) => {
         setVariantDetails,
         activeTab,
         setActiveTab,
+        dropdownItems,
+        setDropdownItems,
       }}
     >
       {children}
-    </productContext.Provider>
+    </ProductContext.Provider>
   );
 };
 
-export default ProductContext;
+export default ProductContextProvider;
+
+export const ProductState = () => {
+  return useContext(ProductContext);
+};

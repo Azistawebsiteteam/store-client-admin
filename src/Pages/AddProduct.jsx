@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 import AddProductForm from "./AddProductForm";
 import AdminSideBar from "./AdminSideBar";
@@ -63,6 +63,7 @@ const AddProduct = () => {
     vendor: "",
     brand: "0",
   });
+  console.log(productCategory.category, "balaji");
   const [tagValue, setTagValue] = useState([]);
   const [collectionValue, setCollectionValue] = useState([]);
   const [metaDetails, setMetaDetails] = useState({
@@ -75,6 +76,8 @@ const AddProduct = () => {
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
   const localUrl = process.env.REACT_APP_LOCAL_URL;
+
+  const navigate = useNavigate();
 
   //   const onSubmitProductDetails = async () => {
   //     try {
@@ -189,6 +192,7 @@ const AddProduct = () => {
       images.forEach((file, i) => {
         formdata.append(`productImages`, file);
       });
+
       formdata.append("productTitle", title);
       formdata.append("productInfo", content);
       formdata.append("productActiveStatus", productStatus);
@@ -226,11 +230,11 @@ const AddProduct = () => {
       }
 
       await axios.post(url, formdata, { headers });
-
-      Swal.close();
+      SwalErr.onLoadingClose();
       SwalErr.onSuccess();
+      navigate("/products");
     } catch (error) {
-      Swal.close();
+      SwalErr.onLoadingClose();
       console.log(error);
       SwalErr.onError(error);
     }
@@ -246,6 +250,8 @@ const AddProduct = () => {
   };
 
   const productProps = {
+    categoryItems,
+    setCategoryItems,
     title,
     error,
     setError,

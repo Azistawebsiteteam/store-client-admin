@@ -1,15 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { v4 } from "uuid";
 import AddProductForm from "./AddProductForm";
 import AdminSideBar from "./AdminSideBar";
 import { useParams } from "react-router-dom";
 import swalErr from "./ErrorHandler";
-import { productContext } from "../Context/ProductContext";
+import { ProductState } from "../Context/ProductContext";
 
 const UpdateProduct = () => {
   const [title, setTitle] = useState("");
@@ -44,7 +44,7 @@ const UpdateProduct = () => {
 
   const [variants, setVariant] = useState([]);
   // const [isArrowDown, setIsArrowDown] = useState(false);
-
+  const [categoryItems, setCategoryItems] = useState([]);
   const [variantsDetails, setVariantsDetials] = useState([]);
   const [variantGroup, setVariantsGroup] = useState("");
   const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
@@ -117,6 +117,7 @@ const UpdateProduct = () => {
       coc: chintal_quantity,
       coh: corporate_office_quantity,
     });
+
     setProductCategory({
       category: product_category,
       productType: type,
@@ -173,7 +174,7 @@ const UpdateProduct = () => {
   };
 
   const { setProductDetails, setVariantsData, setVariantDetails } =
-    useContext(productContext);
+    ProductState();
 
   useEffect(() => {
     const getDetails = async () => {
@@ -185,9 +186,9 @@ const UpdateProduct = () => {
         swalErr.onLoading();
 
         const response = await axios.post(url, { productId: id }, { headers });
-        console.log("variants", response);
+
         const { productDetails, variants, avalaibleVariants } = response.data;
-        Swal.close();
+        swalErr.onLoadingClose();
         setProductUpdateDetails(productDetails);
         if (avalaibleVariants.length > 0) {
           setVariantsUpdateDetails(variants);
@@ -200,7 +201,7 @@ const UpdateProduct = () => {
         console.log(variants, "variants");
       } catch (error) {
         console.log(error);
-        Swal.close();
+        swalErr.onLoadingClose();
         swalErr.onError(error);
       }
     };
@@ -212,11 +213,13 @@ const UpdateProduct = () => {
     setProductDetails,
     setVariantsData,
     setVariantDetails,
+    setProductDetails,
   ]);
 
   const onSubmitProductDetails = async () => {
     try {
-      const url = `${localUrl}/product/update-store`;
+      const url = `${baseUrl}/product/update-store`;
+      console.log(url);
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",
@@ -227,14 +230,7 @@ const UpdateProduct = () => {
       } else {
         setError("");
       }
-      Swal.fire({
-        title: "Loading",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
-      });
+      swalErr.onLoading();
       const formdata = new FormData();
       const proVariants = [];
       variants.forEach((varaint) => {
@@ -252,7 +248,7 @@ const UpdateProduct = () => {
           formdata.append(`productImages`, file);
         }
       });
-      swalErr.onLoading();
+
       formdata.append("productId", id);
       formdata.append("productTitle", title);
       formdata.append("productInfo", content);
@@ -296,11 +292,10 @@ const UpdateProduct = () => {
       }
 
       const response = await axios.post(url, formdata, { headers });
-
-      Swal.close();
+      swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {
-      Swal.close();
+      swalErr.onLoadingClose();
       swalErr.onError(error);
     }
   };
@@ -325,6 +320,8 @@ const UpdateProduct = () => {
 
   const productProps = {
     proid: id,
+    categoryItems,
+    setCategoryItems,
     title,
     error,
     setError,

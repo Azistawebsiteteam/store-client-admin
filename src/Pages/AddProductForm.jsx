@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -17,7 +17,7 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 import { FaRegFileImage } from "react-icons/fa";
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
-import { productContext } from "../Context/ProductContext";
+import { ProductState } from "../Context/ProductContext";
 import { MdDelete } from "react-icons/md";
 import { showToast } from "./ErrorHandler";
 
@@ -28,6 +28,8 @@ const AddProductForm = (props) => {
   const location = useLocation();
   const { productProps } = props;
   const {
+    categoryItems,
+    setCategoryItems,
     title,
     error,
     setError,
@@ -78,8 +80,8 @@ const AddProductForm = (props) => {
     setStoreShow,
     productStatus,
     setProductStatus,
-    originCountry,
-    setOriginCountry,
+    // originCountry,
+    // setOriginCountry,
     weight,
     weightUnit,
     setWeightUnit,
@@ -91,8 +93,9 @@ const AddProductForm = (props) => {
   } = productProps;
 
   const [imgFile, setImgFile] = useState([]);
-  const [countriesList, setCountries] = useState([]);
-  const [categoryItems, setCategoryItems] = useState([]);
+  // const [countriesList, setCountries] = useState([]);
+
+  const [subCategories, setSubCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [modalVariantId, setModalVariantId] = useState(null);
   const [brands, setBrands] = useState([]);
@@ -100,6 +103,7 @@ const AddProductForm = (props) => {
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedColletions] = useState([]);
   const [selectedTag, setSelectedTag] = useState([]);
+
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
@@ -122,20 +126,20 @@ const AddProductForm = (props) => {
       const headers = {
         Authorization: `Bearer ${token}`,
       };
-      const countriesUrl = `https://countriesnow.space/api/v0.1/countries/capital`;
+      // const countriesUrl = `https://countriesnow.space/api/v0.1/countries/capital`;
       try {
         const [
           categoryList,
           tagsList,
           vendorsList,
-          countriesList,
+          // countriesList,
           collectionsList,
           brandsList,
         ] = await Promise.all([
           axios.get(categoryUrl),
           axios.get(tagsUrl),
           axios.get(vendorUrl, { headers }),
-          axios.get(countriesUrl),
+          // axios.get(countriesUrl),
           axios.get(collectionsUrl),
           axios.get(brandsUrl),
         ]);
@@ -146,9 +150,9 @@ const AddProductForm = (props) => {
         if (tagsList.status === 200) {
           setTags(tagsList.data);
         }
-        if (countriesList.status === 200) {
-          setCountries(countriesList.data.data);
-        }
+        // if (countriesList.status === 200) {
+        //   setCountries(countriesList.data.data);
+        // }
 
         if (vendorsList.status === 200) {
           setVendors(vendorsList.data);
@@ -177,7 +181,7 @@ const AddProductForm = (props) => {
     setSelectedTag(selectedTags);
   }, [collectionValue, tagValue, collections, tags]);
 
-  const { variantDetails } = useContext(productContext);
+  const { variantDetails } = ProductState();
 
   // const generateOptions = useCallback(() => {
   //     const result = [];
@@ -244,7 +248,7 @@ const AddProductForm = (props) => {
   const generateOptions = useCallback(() => {
     const result = [];
     const mainOptionsObj = variants.find((v) => v.optionName === variantGroup);
-    console.log(mainOptionsObj, "mainOptionsObj");
+
     if (variants.length > 0 && mainOptionsObj && mainOptionsObj.isDone) {
       const mainOptions = mainOptionsObj.optionValue;
       const remainingVariants = variants.filter(
@@ -259,13 +263,12 @@ const AddProductForm = (props) => {
               v.option2 === mainOption ||
               v.option3 === mainOption
           );
-          console.log(subAvail, "subAvail");
+
           let offer_price_array = [];
           subAvail.map((eachArr) =>
             offer_price_array.push(parseInt(eachArr.offer_price))
           );
-          console.log(offer_price_array, "offerPrice");
-          // console.log("checkin sub avail", subAvail, subAvail.length);
+
           let main = {};
           if (subAvail.length > 1) {
             main = {
@@ -405,7 +408,26 @@ const AddProductForm = (props) => {
     }
   }, [generateOptions, variants, variantGroup]);
 
-  console.log("modifiedvariants", variantDetails);
+  useEffect(() => {
+    console.log("getting");
+    const getProductType = async () => {
+      const url = `${baseUrl}/category/sub-categories`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      const response = await axios.post(
+        url,
+        { categoryId: productCategory.category },
+        { headers }
+      );
+      if (response.status === 200) {
+        setSubCategories(response.data);
+      }
+    };
+    getProductType();
+  }, [productCategory.category]);
+
   const trackQty = () => {
     setTracker(!tracker);
   };
@@ -580,6 +602,8 @@ const AddProductForm = (props) => {
     setProductCategory({ ...productCategory, [e.target.id]: e.target.value });
   };
 
+  console.log(productCategory);
+
   const onSelectTag = (selectedItem) => {
     setSelectedTag(selectedItem);
     setTagValue(selectedItem.map((each) => each.azst_tag_name));
@@ -590,7 +614,6 @@ const AddProductForm = (props) => {
     setImages([...newFiles, ...images]);
   };
 
-  console.log("form product imgs ", images);
   const handleVariantsImage = (e, vid, type, subId) => {
     setVariantsDetials(
       variantsDetails.map((eachVariant) => {
@@ -761,7 +784,6 @@ const AddProductForm = (props) => {
     e.preventDefault();
     deleteImg(imgFile, setImgFile);
   };
-
   const renderVariantImage = (variantImage) => {
     if (variantImage) {
       if (typeof variantImage === "string") {
@@ -791,7 +813,6 @@ const AddProductForm = (props) => {
     </Link>
   );
 
-  console.log("newupdate", variantsDetails);
   return (
     <div className="container">
       <div className="row">
@@ -1475,10 +1496,10 @@ const AddProductForm = (props) => {
                               <option value="g">g</option>
                             </select>
                           </div>
-                          <label htmlFor="countrySelect">
+                          {/* <label htmlFor="countrySelect">
                             Country/Region of origin
-                          </label>
-                          <select
+                          </label> */}
+                          {/* <select
                             id="countrySelect"
                             value={originCountry}
                             onChange={(e) => setOriginCountry(e.target.value)}
@@ -1491,7 +1512,7 @@ const AddProductForm = (props) => {
                                 {eachObj.name}
                               </option>
                             ))}
-                          </select>
+                          </select> */}
                         </div>
                       ) : (
                         ""
@@ -1650,7 +1671,7 @@ const AddProductForm = (props) => {
                     >
                       <option>Search</option>
                       {categoryItems.map((item, i) => (
-                        <option key={i} value={item.id}>
+                        <option key={i} value={item.azst_category_id}>
                           {item.azst_category_name}
                         </option>
                       ))}
@@ -1664,11 +1685,12 @@ const AddProductForm = (props) => {
                       value={productCategory.productType}
                       onChange={handleProductCategorization}
                     >
-                      <option value="">Add custom category</option>
-                      <option value="beverages">Beverages</option>
-                      <option value="cookies">Cookies</option>
-                      <option value="cosmetics">Cosmetics</option>
-                      <option value="mouthwash">Mouthwash</option>
+                      <option value="">select</option>
+                      {subCategories.map((item) => (
+                        <option key={item.azst_sub_category_id}>
+                          {item.azst_sub_category_name}
+                        </option>
+                      ))}
                     </select>
                   </div>
                   <div className="form-group">

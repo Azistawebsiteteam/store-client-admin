@@ -12,7 +12,6 @@ import "./Admin.css";
 const AdminNavbar = () => {
   const adminData = JSON.parse(localStorage.getItem("adminDetails"));
   const profilePic = adminData?.azst_admin_details_profile_photo || "";
-
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   let token = Cookies.get(adminToken);
 

@@ -1,0 +1,19 @@
+.order{
+    cursor: pointer;
+}
+.status{
+    background-color: #c0c1c0;
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 25px;
+    margin: 2px;
+}
+.ordersPlaced{
+    border: 1px dotted lightgray;
+    padding: 4px;
+    display: flex;
+    flex-direction: column;
+}
+img.cartImg {
+    width: 50px;
+}

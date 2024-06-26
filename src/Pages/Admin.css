@@ -215,7 +215,7 @@
 .variantImgInput{
     position: absolute;
     opacity: 0;
-    left: -20px;
+    left: 16px;
     width: 68px;
 }
 .vImg{
@@ -609,4 +609,37 @@
         font-size: 24px;
         color: #ec2e2e;
         cursor: pointer;
+    }
+
+    /* announcementBarSec */
+
+    .announcementBarSec{
+        width: fit-content;
+    }
+    .spacing{
+        margin: 10px 0;
+    }
+
+    button#drobdownBtn {
+        border: none;
+        padding: 6px 14px;
+    }
+    .childElements {
+        padding: 0 14px;
+    }
+
+    /* inventoryPage */
+
+    .inventoryDropdownBtn{
+        border-style: none !important;
+        font-weight: 600 !important;
+        font-size: 26px !important;
+    }
+    svg.downArr {
+        font-size: 20px;
+    }
+    input.inventoryInput {
+        width: 70%;
+        border-radius: 8px;
+        border: 1px solid darkslategray;
     }

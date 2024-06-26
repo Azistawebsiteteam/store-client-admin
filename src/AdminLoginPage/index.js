@@ -21,7 +21,7 @@ const AdminLoginPage = () => {
   useEffect(() => {
     const jwt = Cookies.get(jwt_token);
     if (jwt) {
-      navigate("/addProduct");
+      navigate("/");
     }
   });
 
@@ -36,8 +36,7 @@ const AdminLoginPage = () => {
   const onSubmitSuccess = (userDetails, jwtToken) => {
     localStorage.setItem("adminDetails", JSON.stringify(userDetails));
     Cookies.set(jwt_token, jwtToken);
-    window.location.replace("/addProduct");
-    // navigate('/addProduct', { replace: true })
+    window.location.replace("/");
   };
 
   const handleLoginSubmit = async (e) => {

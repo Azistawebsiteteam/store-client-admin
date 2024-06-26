@@ -12,6 +12,8 @@ const onLoading = () => {
   });
 };
 
+const onLoadingClose = () => Swal.close();
+
 const onSuccess = () => {
   return Swal.fire({
     position: "center",
@@ -62,4 +64,4 @@ export const showToast = (message) => {
   });
 };
 
-export default { onError, onSuccess, onLoading };
+export default { onError, onSuccess, onLoading, onLoadingClose };

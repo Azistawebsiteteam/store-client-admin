@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect, useState } from "react";
 import AdminSideBar from "./AdminSideBar";
 import { TiArrowLeft } from "react-icons/ti";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { productContext } from "../Context/ProductContext";
+import { ProductState } from "../Context/ProductContext";
 import swalErr from "./ErrorHandler";
 import Swal from "sweetalert2";
 
@@ -38,8 +39,7 @@ const VariantDetails = () => {
   const { id } = params;
   const navigate = useNavigate();
 
-  const { productDetails, variantsData, variantDetails } =
-    useContext(productContext);
+  const { productDetails, variantsData, variantDetails } = ProductState();
 
   useEffect(() => {
     const apiCallback = async () => {

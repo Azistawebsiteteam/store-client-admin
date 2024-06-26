@@ -6,30 +6,37 @@ import ProtectedRoute from "./protectRoute";
 import AdminLoginPage from "./AdminLoginPage";
 import AddProduct from "./Pages/AddProduct";
 import AdminSideBar from "./Pages/AdminSideBar";
-import AddSlider from "./Pages/AddSlider";
+import AddSlider from "./Banners/AddSlider";
 import AdminNavbar from "./Pages/AdminNavbar";
 import Collections from "./Collections/Collections";
 import ManageAccount from "./Pages/ManageAccount";
 import CreateCollections from "./Collections/CreateCollections";
 import UpdateCollection from "./Collections/UpdateCollection";
-import SlidersListing from "./Pages/SlidersListing";
+import SlidersListing from "./Banners/SlidersListing";
 import ProductListing from "./Pages/ProductListing";
 import UpdateProduct from "./Pages/UpdateProduct";
 import Brands from "./Pages/Brands";
 import VariantDetails from "./Pages/VariantDetails";
 import VariantEdit from "./Pages/VariantEdit";
-import Orders from "./Pages/Orders";
 import Inventory from "./Pages/Inventory";
 import NotFound from "./Pages/NotFound";
 import Discounts from "./Discounts/Discounts";
 import CreateDiscount from "./Discounts/CreateDiscount";
 import CreateBrand from "./Pages/CreateBrand";
 import EditBrand from "./Pages/EditBrand";
-import Dummy from "./Pages/Dummy";
-
 import VariantsComponent from "./Pages/VariantsComponent";
+import ReviewList from "./Pages/ReviewList";
+import EditSlider from "./Banners/EditSlider";
+import CreateAnnouncement from "./AnnouncementBar/CreateAnnouncement";
+import Announcements from "./AnnouncementBar/Announcements";
+import Dummy from "./Pages/Dummy";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Pages/Admin.css";
+import EditAnnouncement from "./AnnouncementBar/EditAnnouncement";
+import CustomersListing from "./Customers/CustomersListing";
+import Customers from "./Customers/Customers";
+import OrdersListing from "./Orders/OrdersListing";
+import OrderDetails from "./Orders/OrderDetails";
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -120,6 +127,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/edit/slider/:id" element={<EditSlider />} />
         <Route
           path="/product/update/:id"
           element={
@@ -144,7 +152,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/orders" element={<Orders />} />
         <Route path="/inventory" element={<Inventory />} />
         <Route
           path="/discount"
@@ -187,8 +194,15 @@ function App() {
           }
         />
         <Route path="/variantsNew" element={<VariantsComponent />} />
+        <Route path="/review-list" element={<ReviewList />} />
+        <Route path="/announcement/create" element={<CreateAnnouncement />} />
+        <Route path="/announcements" element={<Announcements />} />
+        <Route path="/announcement/edit/:id" element={<EditAnnouncement />} />
+        <Route path="/customers" element={<CustomersListing />} />
         <Route path="/dummy" element={<Dummy />} />
-
+        <Route path="/customer/:id" element={<Customers />} />
+        <Route path="/orders" element={<OrdersListing />} />
+        <Route path="/orders/:id" element={<OrderDetails />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
