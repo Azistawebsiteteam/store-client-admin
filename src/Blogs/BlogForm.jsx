@@ -1,9 +1,130 @@
 import React, { useState } from "react";
 import { FaUpload } from "react-icons/fa6";
 import AdminSideBar from "../Pages/AdminSideBar";
-import TextEditor from "../Pages/TextEditor";
-
 import "../Pages/Admin.css";
+
+const BlogForm = () => {
+  const [blogImg, setBlogImg] = useState([]);
+  const [error, setError] = useState("");
+  const [blogData,setBlogData] = useState({
+    date:'',
+    tag:'',
+    title:'',
+    description:'',
+    blogImg:''
+  })
+
+  const handleBlogInput = (e) => {
+    if (e.target.type=== 'file'){
+        const blogImg = e.target.files[0];
+        setBlogData({ ...blogData, blogImg: blogImg });
+    }else{
+    setBlogData({...blogData,[e.target.id]: e.target.value})
+}
+  }
+
+  return (
+    <div className="adminSec">
+      <AdminSideBar />
+      <div className="commonSec">
+        <div className="container">
+          <div className="row">
+            <h3>Create Blogs</h3>
+            <div className="col-sm-12">
+              <div className="bgStyle">
+                <div className="form-group">
+                  <label className="heading" htmlFor="date">
+                    Blog Date
+                  </label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="date"
+                    value={date}
+                    onChange={handleBlogInput}
+                  />
+                  <span className="errorValue">{error}</span>
+                </div>
+                <div className="form-group">
+                  <label className="heading" htmlFor="tag">
+                    Blog Tag
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="tag"
+                    value={tag}
+                    onChange={handleBlogInput}
+                  />
+                  <span className="errorValue">{error}</span>
+                </div>
+                <div className="form-group mt-2">
+                  <label className="heading" htmlFor="title">
+                    Blog Title
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    value={title}
+                    onChange={handleBlogInput}
+                  />
+                </div>
+                <div className="form-group mt-2">
+                <div className="drop-zone">
+                    {blogImg ? (
+                      typeof blogImg === "string" ? (
+                        <img
+                          className="blogThumbnail"
+                          src={blogImg}
+                          width={200}
+                          height={180}
+                          alt=""
+                        />
+                      ) : (
+                        <img
+                          className="blogThumbnail"
+                          src={URL.createObjectURL(collectionImg)}
+                          width={200}
+                          height={180}
+                          alt=""
+                        />
+                      )
+                    ) : (
+                      <span className="dropZoneOverlay">
+                        <FaUpload /> Drop file here or click to upload
+                      </span>
+                    )}
+                    <input
+                      type="file"
+                      className="FileUpload"
+                      id="collectionImage"
+                      onChange={handleBlogInput}
+                    />
+                  </div>
+                </div>
+                <div className="form-group mt-2">
+                  <label className="description" htmlFor="description">
+                    Blog Description
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="description"
+                    value={description}
+                    onChange={handleBlogInput}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BlogForm;
 
 const CollectionForm = (props) => {
   const { collectionData, setCollectionData } = props;
@@ -15,8 +136,6 @@ const CollectionForm = (props) => {
     urlHandle,
     collectionImg,
   } = collectionData;
-
-  const [error, setError] = useState("");
 
   const handleCollectionsTitle = (e) => {
     if (e.target.value.length === 0) {
@@ -70,17 +189,7 @@ const CollectionForm = (props) => {
                       />
                       <span className="errorValue">{error}</span>
                     </div>
-                    <div className="form-group mt-2">
-                      <label className="heading" htmlFor="content">
-                        Description
-                      </label>
-                      <TextEditor
-                        id="content"
-                        content={content}
-                        setContent={setContent}
-                      />
-                    </div>
-                  </div>
+                    
                   <div className="bgStyle">
                     <h6>Search engine listing</h6>
                     <p>
@@ -189,11 +298,11 @@ const CollectionForm = (props) => {
                 <div className="form-group">
                   <h6>Image</h6>
                   <div className="drop-zone">
-                    {collectionImg ? (
-                      typeof collectionImg === "string" ? (
+                    {blogImg ? (
+                      typeof blogImg === "string" ? (
                         <img
-                          className="CollectionsThumbnail"
-                          src={collectionImg}
+                          className="blogThumbnail"
+                          src={blogImg}
                           width={200}
                           height={180}
                           alt=""
@@ -215,14 +324,10 @@ const CollectionForm = (props) => {
                     <input
                       type="file"
                       className="FileUpload"
-                      id="collectionImage"
-                      onChange={onChangeCollectionImage}
+                      id="blogImg"
+                      onChange={onChangeBlogImage}
                     />
                   </div>
-                  <small>
-                    <strong>Note:- </strong>Kindly use an image with dimensions
-                    310 x 380 pixels for better appeal.
-                  </small>
                 </div>
               </div>
             </div>
@@ -233,5 +338,3 @@ const CollectionForm = (props) => {
     </div>
   );
 };
-
-export default CollectionForm;

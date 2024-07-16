@@ -215,7 +215,7 @@
 .variantImgInput{
     position: absolute;
     opacity: 0;
-    left: 16px;
+    left: -8px;
     width: 68px;
 }
 .vImg{
@@ -481,27 +481,8 @@
 
   /* Discounts page */ 
 
-    .discountTabsCont{
-        margin-top: 30px;
-        display: flex;
-        justify-content: space-around;
-    }
-    li.discountTab {
-        list-style-type: none;
-        text-align: center;
-        background-color: #eef8ff;
-        margin: 0 6px;
-        border-radius: 16px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px; 
-        cursor: pointer;
-    }
-    .activeDiscount{
-        background-color: #bed8ec !important;
-    }
+  
+   
   .methodBtn{
     background-color: transparent;
     border: none;
@@ -544,9 +525,9 @@
     .singleVariantImg{
         position: relative;
     }
-    .discountBlock{
+    /* .discountBlock{
         position: relative;
-    }
+    } */
     .percentageSign{
         position: absolute;
         top: 12px;
@@ -560,7 +541,8 @@
         color: gray;
     }
     .amtInpt{
-        padding-left: 18px !important;
+        margin: 6px;
+        width: 20%;
     }
     .chip{
         text-wrap: wrap !important;

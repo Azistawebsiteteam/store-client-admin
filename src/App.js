@@ -18,7 +18,7 @@ import UpdateProduct from "./Pages/UpdateProduct";
 import Brands from "./Pages/Brands";
 import VariantDetails from "./Pages/VariantDetails";
 import VariantEdit from "./Pages/VariantEdit";
-import Inventory from "./Pages/Inventory";
+import Inventory from "./Inventory/Inventory";
 import NotFound from "./Pages/NotFound";
 import Discounts from "./Discounts/Discounts";
 import CreateDiscount from "./Discounts/CreateDiscount";
@@ -30,13 +30,20 @@ import EditSlider from "./Banners/EditSlider";
 import CreateAnnouncement from "./AnnouncementBar/CreateAnnouncement";
 import Announcements from "./AnnouncementBar/Announcements";
 import Dummy from "./Pages/Dummy";
-import "bootstrap/dist/css/bootstrap.css";
-import "./Pages/Admin.css";
 import EditAnnouncement from "./AnnouncementBar/EditAnnouncement";
 import CustomersListing from "./Customers/CustomersListing";
 import Customers from "./Customers/Customers";
 import OrdersListing from "./Orders/OrdersListing";
 import OrderDetails from "./Orders/OrderDetails";
+import BlogsListing from "./Blogs/BlogsListing";
+import BlogsCreate from "./Blogs/BlogsCreate";
+import BlogsEdit from "./Blogs/BlogEdit";
+import Categories from "./Categories/Categories";
+import CategoriesCreate from "./Categories/CategoriesCreate";
+import CategoriesEdit from "./Categories/CategoryEdit";
+
+import "bootstrap/dist/css/bootstrap.css";
+import "./Pages/Admin.css";
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -203,6 +210,12 @@ function App() {
         <Route path="/customer/:id" element={<Customers />} />
         <Route path="/orders" element={<OrdersListing />} />
         <Route path="/orders/:id" element={<OrderDetails />} />
+        <Route path="/blogs" element={<BlogsListing />} />
+        <Route path="/blogs/create" element={<BlogsCreate />} />
+        <Route path="/blogs/edit" element={<BlogsEdit />} />
+        <Route path="/Categories" element={<Categories />} />
+        <Route path="/category/create" element={<CategoriesCreate />} />
+        <Route path="/edit-category/:id" element={<CategoriesEdit />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

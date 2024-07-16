@@ -12,15 +12,16 @@ import "../Pages/Admin.css";
 
 const DiscountForm = (props) => {
   const { selectedDiscount } = props;
-  const [code, setRandomCode] = useState("");
+  // const [code, setRandomCode] = useState("");
   const [method, setMethodTab] = useState("discountCode");
   console.log(method, "method");
-  const [autoCode, setAutoCode] = useState("");
+  const [disCode, setDisCode] = useState("");
   const [amtOfPrdctsDscntVal, setAmtOfPrdctsDscntVal] = useState("percentage");
-  const [amtOfOrdersDscntVal, setAmtOfOrderssDscntVal] = useState("percentage");
   const [discountVal, setDiscountVal] = useState();
   const [productsList, setProductsList] = useState([]);
   const [selectedListItem, setSelectedListItem] = useState([]);
+  const [selectedCustomers, setSelectedCustomers] = useState([]);
+  console.log(selectedCustomers, "selectedCustomers");
   const [customerSpendsSelectedListItem, setCustomerSpendsSelectedListItem] =
     useState([]);
   const [customerGetsSelectedListItem, setCustomerGetsSelectedListItem] =
@@ -28,24 +29,24 @@ const DiscountForm = (props) => {
 
   const [collectionsList, setCollectionsList] = useState([]);
   const [discountAppliedValue, setDiscountAppliedValue] =
-    useState("collections");
-  const [applyDiscoun, setApplyDiscount] = useState(false);
-  const [minPurReq, setMinPurReq] = useState("");
+    useState("collection");
+  // const [applyDiscoun, setApplyDiscount] = useState(false);
+  const [purReq, setPurReq] = useState("");
   const [custEligibility, setCustEligibility] = useState("");
-  const [minPurInputVal, setMinPurInputVal] = useState({
+  const [purInputVal, setPurInputVal] = useState({
     minAmountField: "",
+    maxAmountField: "",
     minQuantityField: "",
+    maxQuantityField: "",
   });
-  const [maxDisUses, setMaxDisUses] = useState({
-    mutipleTimeDiscntUses: "",
-    oneTimeUser: "",
-  });
+  const [maxDisUses, setMaxDisUses] = useState("");
   const [usageLimit, setUsageLimit] = useState("");
-  const [combinations, setCombinations] = useState({
-    productDiscounts: "",
-    orderDiscounts: "",
-    shippingDiscounts: "",
-  });
+
+  // const [combinations, setCombinations] = useState({
+  //   productDiscounts: "",
+  //   orderDiscounts: "",
+  //   shippingDiscounts: "",
+  // });
   const [endDate, setEndDate] = useState(false);
   const [startTimings, setStartTimings] = useState({
     startDate: "",
@@ -71,11 +72,14 @@ const DiscountForm = (props) => {
   });
   const [maxUses, setMaxUses] = useState();
   const [maxUsesInput, setMaxUsesInput] = useState("");
-  const [shippingRatesForCountries, setShippingRatesForCountries] =
-    useState("radios1");
-  const [excludeShippingRate, setExcludeShippingRate] = useState(false);
-  console.log(shippingRatesForCountries);
+
+  const [customersList, setCustomersList] = useState([]);
+  const [disTitle, setDisTitle] = useState("");
+
+  console.log(customersList, "customersList");
+  console.log(collectionsList, "collectionsList");
   const baseUrl = process.env.REACT_APP_API_URL;
+  const localUrl = process.env.REACT_APP_LOCAL_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
 
@@ -84,15 +88,20 @@ const DiscountForm = (props) => {
       try {
         const productsUrl = `${baseUrl}/product/all-products`;
         const collectionsUrl = `${baseUrl}/collections/data`;
+        const customersUrl = `${baseUrl}/users/get/all`;
         const headers = {
           Authorization: `Bearer ${token} `,
         };
-        const [productsData, collectionsData] = await Promise.all([
-          axios.post(productsUrl, {}, { headers }),
-          axios.get(collectionsUrl, { headers }),
-        ]);
+        const [productsData, collectionsData, customersData] =
+          await Promise.all([
+            axios.post(productsUrl, {}, { headers }),
+            axios.get(collectionsUrl, { headers }),
+            axios.post(customersUrl, { isActive: true }, { headers }),
+          ]);
         setProductsList(productsData.data.products);
         setCollectionsList(collectionsData.data);
+        setCustomersList(customersData.data);
+        console.log(customersData, "customersData");
       } catch (error) {
         console.log(error);
       }
@@ -100,29 +109,41 @@ const DiscountForm = (props) => {
     productDetails();
   }, [token, baseUrl]);
 
+  console.log(purInputVal, "purInputVal");
+
   const handleSubmitButton = async () => {
     try {
-      const url = `${baseUrl}/discounts`;
+      const url = `${localUrl}/discount/create`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
       const body = {
-        selectedDiscount: selectedDiscount,
+        title: disTitle,
         method: method,
-        dicountCode: method === "Automatic" ? autoCode : code,
+        code: disCode,
 
-        dicountVal: discountVal,
-        appliesTo: selectedListItem,
-        applyDiscoun: applyDiscoun,
-
-        Combinations: combinations,
-        minPurReq:
-          minPurReq +
-          `${
-            minPurReq === "minAmount"
-              ? minPurInputVal.minAmountField
-              : minPurInputVal.minQuantityField
-          }`,
+        mode: amtOfPrdctsDscntVal,
+        value: discountVal,
+        applyMode: discountAppliedValue,
+        applyId: JSON.stringify(
+          selectedListItem.map((eachCust) => eachCust.azst_customer_id)
+        ),
+        prcMode: purReq,
+        prcValue: purInputVal?.minAmountField
+          ? purInputVal.minAmountField
+          : purInputVal.minQuantityField,
+        maxApplyValue: purInputVal?.maxAmountField
+          ? purInputVal.maxAmountField
+          : purInputVal.maxQuantityField,
+        elgCustomers:
+          custEligibility === "specificCustomer"
+            ? JSON.stringify(
+                selectedCustomers.map((eachCust) => eachCust.azst_customer_id)
+              )
+            : "All",
+        usgCount: maxDisUses === "mutipleTimeDiscntUses" ? usageLimit : 1,
+        startTime: `${startTimings.startDate} ${startTimings.startTime}`,
+        endTime: `${endTimings.endDate} ${endTimings.endTime}`,
       };
 
       const response = await axios.post(url, body, { headers });
@@ -131,41 +152,32 @@ const DiscountForm = (props) => {
       console.log(error);
     }
   };
-  console.log(minPurReq, "minPurReq");
+  console.log(selectedListItem, "selectedListItem");
+
   const generateRandomCode = () => {
     let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZ";
     let randomcode = "";
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0; i < 10; i++) {
       let index = Math.ceil(Math.random() * (chars.length - 1));
       randomcode += chars[index];
     }
-    setRandomCode(randomcode);
+    setDisCode(randomcode);
   };
 
   const navigate = useNavigate();
 
   const handleMethodTab = (tab) => {
     setMethodTab(tab);
-    if (tab === "discountCode") {
-      setAutoCode("");
-    } else {
-      setRandomCode("");
-    }
+    setDisCode("");
   };
-  const handleCodeInput = (e) => {
-    setRandomCode(e.target.value);
-  };
-  const handleAutoCode = (e) => {
-    setAutoCode(e.target.value);
+  const handleDisCode = (e) => {
+    setDisCode(e.target.value);
   };
   const copyTxt = () => {
-    navigator.clipboard.writeText(code);
+    navigator.clipboard.writeText(disCode);
   };
   const handleAmountOfProductsDiscounts = (e) => {
     setAmtOfPrdctsDscntVal(e.target.value);
-  };
-  const handleAmountOfOrdersDiscounts = (e) => {
-    setAmtOfOrderssDscntVal(e.target.value);
   };
 
   const handleDiscountBlock = (e) => {
@@ -174,6 +186,10 @@ const DiscountForm = (props) => {
 
   const onSelectedValue = (selectedItem) => {
     setSelectedListItem(selectedItem);
+  };
+
+  const onSelectedCustomer = (selectedItem) => {
+    setSelectedCustomers(selectedItem);
   };
 
   const onSelectedCustomerSpendsValue = (selectedItem) => {
@@ -185,16 +201,18 @@ const DiscountForm = (props) => {
   const handleDiscountAppliedTo = (e) => {
     setDiscountAppliedValue(e.target.value);
   };
-  const handleApplyDiscount = (e) => {
-    setApplyDiscount({ ...applyDiscoun, [e.target.id]: e.target.checked });
+  // const handleApplyDiscount = (e) => {
+  //   setApplyDiscount(!applyDiscoun);
+  // };
+
+  const handlePurReq = (e) => {
+    setPurReq(e.target.value);
   };
 
-  const handleMinPurReq = (e) => {
-    setMinPurReq(e.target.value);
-  };
+  console.log(purReq);
 
-  const handleMinPurReqInput = (e) => {
-    setMinPurInputVal({ ...minPurInputVal, [e.target.id]: e.target.value });
+  const handlePurReqInput = (e) => {
+    setPurInputVal({ ...purInputVal, [e.target.id]: e.target.value });
   };
 
   const customerEligibility = (e) => {
@@ -202,16 +220,16 @@ const DiscountForm = (props) => {
   };
 
   const handleMaxDisUses = (e) => {
-    setMaxDisUses({ ...maxDisUses, [e.target.id]: e.target.checked });
+    setMaxDisUses(e.target.id);
   };
-
+  console.log(maxDisUses, "maxDisUses");
   const handleUsageLimit = (e) => {
     setUsageLimit(e.target.value);
   };
 
-  const handleCombination = (e) => {
-    setCombinations({ ...combinations, [e.target.id]: e.target.checked });
-  };
+  // const handleCombination = (e) => {
+  //   setCombinations({ ...combinations, [e.target.id]: e.target.checked });
+  // };
 
   const handleEndDate = (e) => {
     setEndDate(e.target.checked);
@@ -257,12 +275,6 @@ const DiscountForm = (props) => {
     setMaxUsesInput(e.target.value);
   };
 
-  const handleShippingRatesForCountries = (e) => {
-    setShippingRatesForCountries(e.target.id);
-  };
-  const handleExcludeShippingRate = (e) => {
-    setExcludeShippingRate(e.target.checked);
-  };
   return (
     <div>
       <div className="col-sm-12">
@@ -274,15 +286,20 @@ const DiscountForm = (props) => {
         <div className="row">
           <div className="col-md-8">
             <div className="bgStyle">
+              <div className="mb-2">
+                <h6 className="">Discount Title</h6>
+                <input
+                  type="text"
+                  onChange={(e) => setDisTitle(e.target.value)}
+                  value={disTitle}
+                  className="form-control"
+                  min={3}
+                  max={100}
+                />
+              </div>
               <div className="d-flex justify-content-between">
                 <h6>{selectedDiscount}</h6>
-                <h6>
-                  {(selectedDiscount === "Amount of products" ||
-                    selectedDiscount === "Buy X get Y") &&
-                    "Product discount"}
-                  {selectedDiscount === "Amount of Orders" && "Order discount"}
-                  {selectedDiscount === "Free shipping" && "Shipping discount"}
-                </h6>
+                <h6>Product discount</h6>
               </div>
               <div className="">
                 <label htmlFor="" className="form-label">
@@ -317,8 +334,8 @@ const DiscountForm = (props) => {
                     type="text"
                     className="form-control"
                     id="title"
-                    value={autoCode}
-                    onChange={handleAutoCode}
+                    value={disCode}
+                    onChange={handleDisCode}
                   />
                   <span>
                     Customers will see this in their cart and at checkout.
@@ -340,15 +357,15 @@ const DiscountForm = (props) => {
                   </div>
                   <input
                     type="text"
-                    value={code}
-                    onChange={handleCodeInput}
+                    value={disCode}
+                    onChange={handleDisCode}
                     className="form-control"
-                    id=""
                   />
                   <span>Customers must enter this code at checkout.</span>
                 </div>
               )}
             </div>
+
             {selectedDiscount === "Buy X get Y" ? (
               <div className="bgStyle">
                 <div className="">
@@ -612,62 +629,6 @@ const DiscountForm = (props) => {
             ) : (
               ""
             )}
-            {selectedDiscount === "Free shipping" ? (
-              <div className="bgStyle">
-                <h6>Countries</h6>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    onChange={handleShippingRatesForCountries}
-                    type="radio"
-                    name="countries"
-                    id="radios1"
-                  />
-                  <label className="form-check-label" htmlFor="radios1">
-                    All countries
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    onChange={handleShippingRatesForCountries}
-                    type="radio"
-                    name="countries"
-                    id="radios2"
-                  />
-                  <label className="form-check-label" htmlFor="radios2">
-                    India
-                  </label>
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    onChange={handleShippingRatesForCountries}
-                    type="radio"
-                    name="countries"
-                    id="radios3"
-                  />
-                  <label className="form-check-label" htmlFor="radios3">
-                    Rest of world
-                  </label>
-                </div>
-                <h6>Shipping rates</h6>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    checked={excludeShippingRate}
-                    onChange={handleExcludeShippingRate}
-                    type="checkbox"
-                    id="shippingRates"
-                  />
-                  <label class="form-check-label" htmlFor="shippingRates">
-                    Exclude shipping rates over a certain amount
-                  </label>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
             {selectedDiscount === "Amount of products" ? (
               <div className="bgStyle">
                 <h6>Discount Value</h6>
@@ -715,8 +676,8 @@ const DiscountForm = (props) => {
                   onChange={handleDiscountAppliedTo}
                   aria-label="Default select example"
                 >
-                  <option value="collections">Specific collections</option>
-                  <option value="products">Specific Products</option>
+                  <option value="collection">Specific collections</option>
+                  <option value="product">Specific Products</option>
                 </select>
 
                 <div className="mt-3 mb-3">
@@ -741,80 +702,21 @@ const DiscountForm = (props) => {
                     }
                   />
                 </div>
-                <div className="mb-3 form-check">
-                  <input
-                    type="checkbox"
-                    checked={applyDiscoun}
-                    className="form-check-input"
-                    id="applydiscount"
-                    onChange={handleApplyDiscount}
-                  />
-                  <label className="form-check-label" htmlFor="applydiscount">
-                    Only apply discount once per order
-                  </label>
-                  <p>
-                    If not selected, the amount will be taken off each eligible
-                    item in an order.
-                  </p>
-                </div>
               </div>
             ) : (
               ""
             )}
-            {selectedDiscount === "Amount of Orders" ? (
-              <div className="bgStyle">
-                <h6>Discount Value</h6>
-                <div className="row">
-                  <div className="col-md-8">
-                    <select
-                      className="form-select"
-                      value={amtOfOrdersDscntVal}
-                      onChange={handleAmountOfOrdersDiscounts}
-                      aria-label="Default select example"
-                    >
-                      <option value="percentage">Percentage</option>
-                      <option value="fixed Amount">Fixed Amount</option>
-                    </select>
-                  </div>
-                  <div className="col-md-4">
-                    {amtOfOrdersDscntVal === "percentage" ? (
-                      <div className="discountBlock">
-                        <input
-                          type="text"
-                          value={discountVal}
-                          onChange={handleDiscountBlock}
-                          className="form-control amtInpt"
-                        />
-                        <LiaPercentSolid className="percentageSign" />
-                      </div>
-                    ) : (
-                      <div className="discountBlock">
-                        <input
-                          value={discountVal}
-                          type="text"
-                          className="form-control amtInpt"
-                          onChange={handleDiscountBlock}
-                          placeholder="0.00"
-                        />
-                        <MdCurrencyRupee className="rupeeSign" />
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              ""
-            )}
+
             {selectedDiscount !== "Buy X get Y" ? (
               <div className="bgStyle">
                 <div className="">
                   <h6>Minimum purchase requirements</h6>
                   <div className="form-check">
                     <input
-                      onChange={handleMinPurReq}
+                      onChange={handlePurReq}
                       className="form-check-input"
                       type="radio"
-                      name="minPurReq"
+                      name="purReq"
                       id="noMinReq"
                       value="noMinReq"
                     />
@@ -824,30 +726,34 @@ const DiscountForm = (props) => {
                   </div>
                   <div className="form-check">
                     <input
-                      onChange={handleMinPurReq}
+                      onChange={handlePurReq}
                       className="form-check-input"
                       type="radio"
-                      name="minPurReq"
+                      name="purReq"
                       id="minAmount"
                       value="minAmount"
                     />
                     <label className="form-check-label" htmlFor="minAmount">
-                      Minimum purchase amount (₹)
+                      Purchase amount (₹)
                     </label>
-                    {minPurReq === "minAmount" && (
+                    {purReq === "minAmount" && (
                       <div className="">
-                        <div className="discountBlock">
+                        <div className="d-md-flex">
                           <input
                             className="amtInpt"
                             type="text"
-                            onChange={handleMinPurReqInput}
-                            value={minPurInputVal.minAmountField}
+                            onChange={handlePurReqInput}
+                            value={purInputVal.minAmountField}
                             id="minAmountField"
-                            placeholder="0.00"
+                            placeholder="Min amount"
                           />
-                          <MdCurrencyRupee
-                            style={{ top: "8px" }}
-                            className="rupeeSign"
+                          <input
+                            className="amtInpt"
+                            type="text"
+                            onChange={handlePurReqInput}
+                            value={purInputVal.maxAmountField}
+                            id="maxAmountField"
+                            placeholder="Max amount"
                           />
                         </div>
                         <p>Applies only to selected products.</p>
@@ -856,24 +762,36 @@ const DiscountForm = (props) => {
                   </div>
                   <div className="form-check">
                     <input
-                      onChange={handleMinPurReq}
+                      onChange={handlePurReq}
                       className="form-check-input"
                       type="radio"
-                      name="minPurReq"
+                      name="purReq"
                       id="minQuantity"
                       value="minQuantity"
                     />
                     <label className="form-check-label" htmlFor="minQuantity">
-                      Minimum quantity of items
+                      Quantity of items
                     </label>
-                    {minPurReq === "minQuantity" && (
+                    {purReq === "minQuantity" && (
                       <div className="">
-                        <input
-                          type="text"
-                          onChange={handleMinPurReqInput}
-                          value={minPurInputVal.minQuantityField}
-                          id="minQuantityField"
-                        />
+                        <div className="d-md-flex">
+                          <input
+                            type="text"
+                            onChange={handlePurReqInput}
+                            value={purInputVal.minQuantityField}
+                            id="minQuantityField"
+                            className="amtInpt"
+                            placeholder="Min quantity"
+                          />
+                          <input
+                            type="text"
+                            onChange={handlePurReqInput}
+                            value={purInputVal.maxQuantityField}
+                            id="maxQuantityField"
+                            className="amtInpt"
+                            placeholder="Max quantity"
+                          />
+                        </div>
                         <p>Applies only to selected products.</p>
                       </div>
                     )}
@@ -933,19 +851,11 @@ const DiscountForm = (props) => {
                   {custEligibility === "specificCustomer" && (
                     <div className="mt-2">
                       <Multiselect
-                        displayValue={
-                          discountAppliedValue === "products"
-                            ? "product_title"
-                            : "azst_collection_name"
-                        }
-                        onRemove={onSelectedValue}
-                        selectedValues={selectedListItem}
-                        onSelect={onSelectedValue}
-                        options={
-                          discountAppliedValue === "products"
-                            ? productsList
-                            : collectionsList
-                        }
+                        displayValue={"azst_customer_lname"}
+                        onRemove={onSelectedCustomer}
+                        selectedValues={selectedCustomers}
+                        onSelect={onSelectedCustomer}
+                        options={customersList}
                         placeholder="Search customers"
                       />
                     </div>
@@ -960,10 +870,10 @@ const DiscountForm = (props) => {
               <div className="form-check">
                 <input
                   className="form-check-input"
-                  type="checkbox"
-                  value=""
+                  type="radio"
                   onChange={handleMaxDisUses}
                   id="mutipleTimeDiscntUses"
+                  name="discountUses"
                 />
                 <label
                   className="form-check-label"
@@ -971,9 +881,9 @@ const DiscountForm = (props) => {
                 >
                   Limit number of times this discount can be used in total
                 </label>
-                {maxDisUses.mutipleTimeDiscntUses && (
+                {maxDisUses === "mutipleTimeDiscntUses" && (
                   <input
-                    className="form-input d-block"
+                    className="form-input amtInpt d-block"
                     type="number"
                     id="usageLimit"
                     value={usageLimit}
@@ -984,82 +894,18 @@ const DiscountForm = (props) => {
               <div className="form-check">
                 <input
                   className="form-check-input"
-                  type="checkbox"
+                  type="radio"
                   value=""
                   id="oneTimeUser"
                   onChange={handleMaxDisUses}
+                  name="discountUses"
                 />
                 <label className="form-check-label" htmlFor="oneTimeUser">
                   Limit to one use per customer
                 </label>
               </div>
             </div>
-            <div className="bgStyle">
-              <div className="">
-                <h6>Combinations</h6>
-                <p>This product discount can be combined with:</p>
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="productDiscounts"
-                  checked={combinations.productDiscounts}
-                  onChange={handleCombination}
-                />
-                <label className="form-check-label" htmlFor="productDiscounts">
-                  Product discounts
-                </label>
-                {combinations.productDiscounts && (
-                  <p>
-                    No product discounts are set to combine. To let customers
-                    use more than one discount, set up at least one product
-                    discount that combines with product discounts.
-                  </p>
-                )}
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="orderDiscounts"
-                  checked={combinations.orderDiscounts}
-                  onChange={handleCombination}
-                />
-                <label className="form-check-label" htmlFor="orderDiscounts">
-                  Order discounts
-                </label>
-                {combinations.orderDiscounts && (
-                  <p>
-                    No order discounts are set to combine. To let customers use
-                    more than one discount, set up at least one order discount
-                    that combines with product discounts.
-                  </p>
-                )}
-              </div>
-              <div className="form-check">
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  value=""
-                  id="shippingDiscounts"
-                  checked={combinations.shippingDiscounts}
-                  onChange={handleCombination}
-                />
-                <label className="form-check-label" htmlFor="shippingDiscounts">
-                  Shipping discounts
-                </label>
-                {combinations.shippingDiscounts && (
-                  <p>
-                    No shipping discounts are set to combine. To let customers
-                    use more than one discount, set up at least one shipping
-                    discount that combines with product discounts.
-                  </p>
-                )}
-              </div>
-            </div>
+
             <div className="bgStyle">
               <h6>Active dates</h6>
               <form className="row g-3">
@@ -1100,50 +946,52 @@ const DiscountForm = (props) => {
                   Set end date
                 </label>
               </div>
-              <form className="row g-3">
-                <div className="col-md-6">
-                  <label htmlFor="endDate" className="form-label">
-                    End date
-                  </label>
-                  <input
-                    type="date"
-                    className="form-control"
-                    id="endDate"
-                    value={endTimings.endDate}
-                    onChange={handleEndTimings}
-                  />
-                </div>
-                <div className="col-md-6">
-                  <label htmlFor="endTime" className="form-label">
-                    End time (IST)
-                  </label>
-                  <input
-                    type="time"
-                    className="form-control"
-                    id="endTime"
-                    value={endTimings.startDate}
-                    onChange={handleEndTimings}
-                  />
-                </div>
-              </form>
+              {endDate && (
+                <form className="row g-3">
+                  <div className="col-md-6">
+                    <label htmlFor="endDate" className="form-label">
+                      End date
+                    </label>
+                    <input
+                      type="date"
+                      className="form-control"
+                      id="endDate"
+                      value={endTimings.endDate}
+                      onChange={handleEndTimings}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <label htmlFor="endTime" className="form-label">
+                      End time (IST)
+                    </label>
+                    <input
+                      type="time"
+                      className="form-control"
+                      id="endTime"
+                      value={endTimings.startDate}
+                      onChange={handleEndTimings}
+                    />
+                  </div>
+                </form>
+              )}
             </div>
           </div>
           <div className="col-md-4">
             <div className="bgStyle">
               <h6>Summary</h6>
               {method === "discountCode" ? (
-                code.length === 0 ? (
+                disCode.length === 0 ? (
                   <p className="summaryTxt">No discount code yet</p>
                 ) : (
                   <p className="summaryTxt">
-                    {code}
+                    {disCode}
                     <FaRegCopy className="copyIcon" onClick={copyTxt} />
                   </p>
                 )
-              ) : autoCode.length === 0 ? (
+              ) : disCode.length === 0 ? (
                 <p className="summaryTxt">No title yet</p>
               ) : (
-                <p className="summaryTxt">{autoCode}</p>
+                <p className="summaryTxt">{disCode}</p>
               )}
               <h6>Type and method</h6>
               <ul>
@@ -1151,12 +999,12 @@ const DiscountForm = (props) => {
                 <li>{method}</li>
               </ul>
               <h6>Details</h6>
-              {(code.length === 0) & (autoCode.length === 0) ? (
+              {(disCode.length === 0) & (disCode.length === 0) ? (
                 <p>Can’t combine with other discounts</p>
               ) : (
                 ""
               )}
-              {(code.length !== 0) & (autoCode.length === 0) ? (
+              {(disCode.length !== 0) & (disCode.length === 0) ? (
                 <ul>
                   <li>For Online Store</li>
                   <li>All customers</li>
@@ -1167,7 +1015,7 @@ const DiscountForm = (props) => {
               ) : (
                 ""
               )}
-              {(code.length === 0) & (autoCode.length !== 0) ? (
+              {(disCode.length === 0) & (disCode.length !== 0) ? (
                 <ul>
                   <li>For Online Store</li>
                   <li>Can’t combine with other discounts</li>

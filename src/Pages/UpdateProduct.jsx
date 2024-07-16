@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-unused-vars */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { v4 } from "uuid";
@@ -12,80 +11,61 @@ import swalErr from "./ErrorHandler";
 import { ProductState } from "../Context/ProductContext";
 
 const UpdateProduct = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [locInputs, setLocInputs] = useState({
-    inventoryIds: ["1", "2"],
-    coc: 0,
-    coh: 0,
+  const [productData, setProductData] = useState({
+    title: "",
+    content: "",
+    locInputs: [],
+    modal1Show: false,
+    modal2Show: false,
+    tracker: false,
+    locValues: false,
+    isShipping: false,
+    variantsThere: false,
+    isSKU: false,
+    error: false,
+    handleLoc: { cwos: false },
+    productPrices: {
+      price: 0,
+      comparePrice: 0,
+      isTaxable: false,
+      costPerItem: 0,
+    },
+    images: [],
+    categoryItems: [],
+    variantsDetails: [],
+    skuInput: { SKU: "", barcode: "" },
+    weight: "0",
+    weightUnit: "kg",
+    originCountry: "",
+    productStatus: "0",
+    productCategory: { category: "", productType: "", vendor: "", brand: "" },
+    tagValue: [],
+    collectionValue: [],
+    metaDetails: {
+      metaTitle: "",
+      metaDescription: "",
+      urlHandle: `${window.location.origin}/productItem`,
+    },
+    modal3Show: false,
   });
-  const [modal1Show, setStoreShow] = useState(false);
-  const [modal2Show, setSiteShow] = useState(false);
-  const [tracker, setTracker] = useState(false);
-  const [chintalLoc, setChintalLoc] = useState(true);
-  const [corporateLoc, setCorporateLoc] = useState(true);
-  const [locValues, setLocValues] = useState(false);
-  const [isShipping, setIsShipping] = useState(false);
-  const [variantsThere, setVariants] = useState(false);
-  const [isSKU, setIsSKU] = useState(false);
-  const [error, setError] = useState(false);
-  const [handleLoc, setHandleLoc] = useState({
-    cwos: false,
-  });
-  const [productPrices, setProductPrices] = useState({
-    price: 0,
-    comparePrice: 0,
-    isTaxable: false,
-    costPerItem: 0,
-  });
-
-  const [images, setImages] = useState([]);
-  console.log(images, "xffsdfsf");
-
   const [variants, setVariant] = useState([]);
-  // const [isArrowDown, setIsArrowDown] = useState(false);
-  const [categoryItems, setCategoryItems] = useState([]);
-  const [variantsDetails, setVariantsDetials] = useState([]);
   const [variantGroup, setVariantsGroup] = useState("");
+  const [inventoryIdInfo, setInventoryId] = useState([]);
   const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
-  const [skuInput, setSkuInput] = useState({
-    SKU: "",
-    barcode: "",
-  });
-  const [weight, setWeight] = useState("0");
-  const [weightUnit, setWeightUnit] = useState("kg");
-  const [originCountry, setOriginCountry] = useState("");
-  const [productStatus, setProductStatus] = useState("0");
-  const [productCategory, setProductCategory] = useState({
-    category: "",
-    productType: "",
-    vendor: "",
-    brand: "",
-  });
-  const [tagValue, setTagValue] = useState([]);
-  const [collectionValue, setCollectionValue] = useState([]);
-  const [metaDetails, setMetaDetails] = useState({
-    metaTitle: "",
-    metaDescription: "",
-    urlHandle: `${window.location.origin}/productItem`,
-  });
-  const [modal3Show, setVariantShow] = useState(false);
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const localUrl = process.env.REACT_APP_LOCAL_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
-  const params = useParams();
-  const { id } = params;
+  const { id } = useParams();
+  const { setProductDetails, setVariantsData, setVariantDetails } =
+    ProductState();
 
   const setProductUpdateDetails = (productDetails) => {
     const {
-      chintal_quantity,
       collections,
       compare_at_price,
-      corporate_office_quantity,
       cost_per_item,
-      inventroy_id,
       origin_country,
       is_taxable,
       out_of_stock_sale,
@@ -106,56 +86,49 @@ const UpdateProduct = () => {
       variant_store_order,
       vendor_id,
       brand_id,
+      product_qtys,
     } = productDetails;
 
-    setImages(product_images);
-    setOriginCountry(origin_country);
-    setTitle(product_title);
-    setContent(product_info);
-    setLocInputs({
-      inventoryIds: [inventroy_id],
-      coc: chintal_quantity,
-      coh: corporate_office_quantity,
-    });
+    setProductData((prevData) => ({
+      ...prevData,
 
-    setProductCategory({
-      category: product_category,
-      productType: type,
-      vendor: vendor_id,
-      brand: brand_id,
-    });
-    setProductPrices({
-      price: price,
-      comparePrice: compare_at_price,
-      isTaxable: is_taxable,
-      costPerItem: cost_per_item,
-    });
-    setMetaDetails({
-      metaTitle: seo_title,
-      metaDescription: seo_description,
-      urlHandle: url_handle,
-    });
-    setTagValue(JSON.parse(tags));
-    setCollectionValue(JSON.parse(collections));
-    setProductStatus(status);
-    setWeight(product_weight ? product_weight.split("-")[0] : 0);
-    setWeightUnit(product_weight ? product_weight.split("-")[1] : "kg");
-    setIsShipping(product_weight?.split("-").length > 0);
-    if (sku_code || sku_bar_code) {
-      setIsSKU(true);
-    }
-    setSkuInput({
-      SKU: sku_code,
-      barcode: sku_bar_code,
-    });
-    setHandleLoc({ cwos: out_of_stock_sale });
-    if (JSON.parse(variant_store_order)?.length > 0) {
-      setVariants(true);
-      setTracker(false);
-    } else {
-      setVariants(false);
-      setTracker(true);
-    }
+      images: product_images,
+      originCountry: origin_country,
+      title: product_title,
+      content: product_info,
+      locInputs: product_qtys.map((inv) => ({
+        inventoryId: inv.inventory_id,
+        qty: inv.product_qty,
+      })),
+      productCategory: {
+        category: product_category,
+        productType: type,
+        vendor: vendor_id,
+        brand: brand_id,
+      },
+      productPrices: {
+        price,
+        comparePrice: compare_at_price,
+        isTaxable: is_taxable,
+        costPerItem: cost_per_item,
+      },
+      metaDetails: {
+        metaTitle: seo_title,
+        metaDescription: seo_description,
+        urlHandle: url_handle,
+      },
+      tagValue: JSON.parse(tags),
+      collectionValue: JSON.parse(collections),
+      productStatus: status,
+      weight: product_weight ? product_weight.split("-")[0] : "0",
+      weightUnit: product_weight ? product_weight.split("-")[1] : "kg",
+      isShipping: product_weight?.split("-").length > 0,
+      isSKU: !!(sku_code || sku_bar_code),
+      skuInput: { SKU: sku_code, barcode: sku_bar_code },
+      handleLoc: { cwos: out_of_stock_sale },
+      variantsThere: JSON.parse(variant_store_order)?.length > 0,
+      tracker: !JSON.parse(variant_store_order)?.length > 0,
+    }));
   };
 
   const setVariantsUpdateDetails = (v) => {
@@ -173,125 +146,130 @@ const UpdateProduct = () => {
     });
   };
 
-  const { setProductDetails, setVariantsData, setVariantDetails } =
-    ProductState();
+  const getDetails = async () => {
+    try {
+      const url = `${localUrl}/product/get/details`;
+      const headers = { Authorization: `Bearer ${token}` };
+      swalErr.onLoading();
+      const body = { productId: id, inventoryIds: inventoryIdInfo };
+
+      const response = await axios.post(url, body, { headers });
+
+      const { productDetails, variants, availableVariants } = response.data;
+
+      swalErr.onLoadingClose();
+      setProductUpdateDetails(productDetails);
+      if (availableVariants.length > 0) {
+        setVariantsUpdateDetails(variants);
+      }
+
+      setProductDetails(productDetails);
+      setVariantsData(variants);
+      setVariantDetails(availableVariants);
+    } catch (error) {
+      swalErr.onLoadingClose();
+      swalErr.onError(error);
+    }
+  };
 
   useEffect(() => {
-    const getDetails = async () => {
-      try {
-        const url = `${baseUrl}/product/get/details`;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-        swalErr.onLoading();
-
-        const response = await axios.post(url, { productId: id }, { headers });
-
-        const { productDetails, variants, avalaibleVariants } = response.data;
-        swalErr.onLoadingClose();
-        setProductUpdateDetails(productDetails);
-        if (avalaibleVariants.length > 0) {
-          setVariantsUpdateDetails(variants);
-        }
-
-        setProductDetails(productDetails);
-        setVariantsData(variants);
-        setVariantDetails(avalaibleVariants);
-        console.log(avalaibleVariants, "avalaibleVariants");
-        console.log(variants, "variants");
-      } catch (error) {
-        console.log(error);
-        swalErr.onLoadingClose();
-        swalErr.onError(error);
-      }
-    };
     getDetails();
-  }, [
-    id,
-    baseUrl,
-    token,
-    setProductDetails,
-    setVariantsData,
-    setVariantDetails,
-    setProductDetails,
-  ]);
+  }, [id, localUrl, token, inventoryIdInfo]);
 
   const onSubmitProductDetails = async () => {
     try {
-      const url = `${baseUrl}/product/update-store`;
-      console.log(url);
+      if (!productData.title) {
+        setProductData((prevData) => ({
+          ...prevData,
+          error: "Title can’t be blank",
+        }));
+        return;
+      } else {
+        setProductData((prevData) => ({ ...prevData, error: "" }));
+      }
+
+      const url = `${localUrl}/product/update-store`;
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",
       };
-      if (title === "") {
-        setError("Title can’t be blank");
-        return;
-      } else {
-        setError("");
-      }
       swalErr.onLoading();
+
       const formdata = new FormData();
-      const proVariants = [];
-      variants.forEach((varaint) => {
-        if (!proVariants.includes(varaint.optionName)) {
-          proVariants.push(varaint.optionName);
-        }
-      });
+      const proVariants = [
+        ...new Set(variants.map((variant) => variant.optionName)),
+      ];
+      const oldImages = productData.images.filter((e) => typeof e === "string");
 
-      const oldImges = images.filter((e) => typeof e === "string");
-
-      images.forEach((file, i) => {
-        if (oldImges.length === 1 && typeof file === "string") {
-          formdata.append(`productImages`, JSON.stringify([file]));
+      productData.images.forEach((file) => {
+        if (oldImages.length === 1 && typeof file === "string") {
+          formdata.append("productImages", JSON.stringify([file]));
         } else {
-          formdata.append(`productImages`, file);
+          formdata.append("productImages", file);
         }
       });
-
       formdata.append("productId", id);
-      formdata.append("productTitle", title);
-      formdata.append("productInfo", content);
-      formdata.append("variantsThere", variantsThere);
-      formdata.append("metaTitle", metaDetails.metaTitle);
-      formdata.append("metaDescription", metaDetails.metaDescription);
-      formdata.append("urlHandle", metaDetails.urlHandle);
-      formdata.append("productActiveStatus", productStatus);
-      formdata.append("category", productCategory.category);
-      formdata.append("productType", productCategory.productType);
-      formdata.append("vendor", productCategory.vendor);
-      formdata.append("brand", productCategory.brand);
-      formdata.append("collections", JSON.stringify(collectionValue));
-      formdata.append("tags", JSON.stringify(tagValue));
+      formdata.append("productTitle", productData.title);
+      formdata.append("productInfo", productData.content);
+      formdata.append("variantsThere", productData.variantsThere);
+      formdata.append("metaTitle", productData.metaDetails.metaTitle);
+      formdata.append(
+        "metaDescription",
+        productData.metaDetails.metaDescription
+      );
+      formdata.append("urlHandle", productData.metaDetails.urlHandle);
+      formdata.append("productActiveStatus", productData.productStatus);
+      formdata.append("category", productData.productCategory.category);
+      formdata.append("productType", productData.productCategory.productType);
+      formdata.append("vendor", productData.productCategory.vendor);
+      formdata.append("brand", productData.productCategory.brand);
+      formdata.append(
+        "collections",
+        JSON.stringify(productData.collectionValue)
+      );
+      formdata.append("tags", JSON.stringify(productData.tagValue));
 
-      if (variantsThere) {
-        console.log("variantsDetails", variantsDetails);
-        variantsDetails.forEach((variant) => {
+      if (productData.variantsThere) {
+        productData.variantsDetails.forEach((variant) => {
           formdata.append("variantImage", variant.main.variantImage);
-          variant.sub.forEach((subVariant) => {
-            formdata.append("variantImage", subVariant.variantImage);
-          });
+          variant.sub.forEach((subVariant) =>
+            formdata.append("variantImage", subVariant.variantImage)
+          );
         });
         formdata.append("variantsOrder", JSON.stringify(proVariants));
-        formdata.append("variants", JSON.stringify(variantsDetails));
+        formdata.append(
+          "variants",
+          JSON.stringify(productData.variantsDetails)
+        );
+        formdata.append("vInventoryInfo", JSON.stringify(inventoryIdInfo));
       } else {
-        formdata.append("productPrice", productPrices.price);
-        formdata.append("productComparePrice", productPrices.comparePrice);
-        formdata.append("productIsTaxable", productPrices.isTaxable);
-        formdata.append("productCostPerItem", productPrices.costPerItem);
-        // formdata.append('quantityTracker', tracker)
-        formdata.append("inventoryInfo", JSON.stringify(locInputs));
-        formdata.append("cwos", handleLoc.cwos);
-        formdata.append("skuCode", skuInput.SKU);
-        formdata.append("skuBarcode", skuInput.barcode);
+        formdata.append("productPrice", productData.productPrices.price);
+        formdata.append(
+          "productComparePrice",
+          productData.productPrices.comparePrice
+        );
+        formdata.append(
+          "productIsTaxable",
+          productData.productPrices.isTaxable
+        );
+        formdata.append(
+          "productCostPerItem",
+          productData.productPrices.costPerItem
+        );
+        formdata.append("inventoryInfo", JSON.stringify(productData.locInputs));
+        formdata.append("cwos", productData.handleLoc.cwos);
+        formdata.append("skuCode", productData.skuInput.SKU);
+        formdata.append("skuBarcode", productData.skuInput.barcode);
         formdata.append(
           "productWeight",
-          weight !== "" ? weight + "-" + weightUnit : ""
+          productData.weight !== ""
+            ? productData.weight + "-" + productData.weightUnit
+            : ""
         );
-        formdata.append("originCountry", originCountry);
+        formdata.append("originCountry", productData.originCountry);
       }
 
-      const response = await axios.post(url, formdata, { headers });
+      await axios.post(url, formdata, { headers });
       swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {
@@ -303,85 +281,115 @@ const UpdateProduct = () => {
   const deleteImg = async (imgFile, setFun) => {
     try {
       const url = `${baseUrl}/product/delete/images`;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      const body = {
-        productId: id,
-        deleteImgs: imgFile,
-      };
+      const headers = { Authorization: `Bearer ${token}` };
+      const body = { productId: id, deleteImgs: imgFile };
       const response = await axios.patch(url, body, { headers });
-      setImages(response.data.updatedImgs);
+      setProductData((prevData) => ({
+        ...prevData,
+        images: response.data.updatedImgs,
+      }));
       setFun([]);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const productProps = {
     proid: id,
-    categoryItems,
-    setCategoryItems,
-    title,
-    error,
-    setError,
-    setTitle,
-    setMetaDetails,
-    metaDetails,
-    setVariantsGroup,
-    setVariantsDetials,
-    variantsDetails,
-    variants,
-    setSubVariantsVisibility,
+    categoryItems: productData.categoryItems,
+    setCategoryItems: (items) =>
+      setProductData((prevData) => ({ ...prevData, categoryItems: items })),
+    title: productData.title,
+    error: productData.error,
+    setError: (error) => setProductData((prevData) => ({ ...prevData, error })),
+    setTitle: (title) => setProductData((prevData) => ({ ...prevData, title })),
+    setMetaDetails: (metaDetails) =>
+      setProductData((prevData) => ({ ...prevData, metaDetails })),
+    metaDetails: productData.metaDetails,
+
+    setVariantsDetials: (details) =>
+      setProductData((prevData) => ({ ...prevData, variantsDetails: details })),
+    variantsDetails: productData.variantsDetails,
+
     subVariantsVisibility,
-    content,
-    setContent,
-    images,
-    setVariants,
-    variantsThere,
-    tracker,
-    setTracker,
-    setCollectionValue,
-    collectionValue,
-    setHandleLoc,
-    handleLoc,
-    setChintalLoc,
-    setLocValues,
-    locValues,
-    setLocInputs,
-    locInputs,
-    setCorporateLoc,
-    setIsShipping,
-    isShipping,
+    setSubVariantsVisibility,
+    content: productData.content,
+    setContent: (content) =>
+      setProductData((prevData) => ({ ...prevData, content })),
+    images: productData.images,
+    setVariants: (variants) =>
+      setProductData((prevData) => ({ ...prevData, variants })),
+    variantsThere: productData.variantsThere,
+    tracker: productData.tracker,
+    setTracker: (tracker) =>
+      setProductData((prevData) => ({ ...prevData, tracker })),
+    setCollectionValue: (value) =>
+      setProductData((prevData) => ({ ...prevData, collectionValue: value })),
+    collectionValue: productData.collectionValue,
+    setHandleLoc: (loc) =>
+      setProductData((prevData) => ({ ...prevData, handleLoc: loc })),
+    handleLoc: productData.handleLoc,
+    setChintalLoc: (loc) =>
+      setProductData((prevData) => ({ ...prevData, chintalLoc: loc })),
+    setLocValues: (values) =>
+      setProductData((prevData) => ({ ...prevData, locValues: values })),
+    locValues: productData.locValues,
+    setLocInputs: (inputs) =>
+      setProductData((prevData) => ({ ...prevData, locInputs: inputs })),
+    locInputs: productData.locInputs,
+    setCorporateLoc: (loc) =>
+      setProductData((prevData) => ({ ...prevData, corporateLoc: loc })),
+    setIsShipping: (isShipping) =>
+      setProductData((prevData) => ({ ...prevData, isShipping })),
+    isShipping: productData.isShipping,
+
     setVariant,
-    setProductPrices,
-    productPrices,
-    setSkuInput,
-    skuInput,
-    setWeight,
-    setProductCategory,
-    productCategory,
-    setTagValue,
-    tagValue,
-    setImages,
-    variantGroup,
-    setSiteShow,
-    modal2Show,
-    modal1Show,
-    setStoreShow,
-    productStatus,
-    setProductStatus,
-    originCountry,
-    setOriginCountry,
-    weight,
-    weightUnit,
-    setWeightUnit,
-    setIsSKU,
-    isSKU,
-    chintalLoc,
-    corporateLoc,
+    setProductPrices: (prices) =>
+      setProductData((prevData) => ({ ...prevData, productPrices: prices })),
+    productPrices: productData.productPrices,
+    setSkuInput: (input) =>
+      setProductData((prevData) => ({ ...prevData, skuInput: input })),
+    skuInput: productData.skuInput,
+    setWeight: (weight) =>
+      setProductData((prevData) => ({ ...prevData, weight })),
+    setProductCategory: (category) =>
+      setProductData((prevData) => ({
+        ...prevData,
+        productCategory: category,
+      })),
+    productCategory: productData.productCategory,
+    setTagValue: (tags) =>
+      setProductData((prevData) => ({ ...prevData, tagValue: tags })),
+    tagValue: productData.tagValue,
+    setImages: (images) =>
+      setProductData((prevData) => ({ ...prevData, images })),
+
+    setSiteShow: (show) =>
+      setProductData((prevData) => ({ ...prevData, modal2Show: show })),
+    modal2Show: productData.modal2Show,
+    modal1Show: productData.modal1Show,
+    setStoreShow: (show) =>
+      setProductData((prevData) => ({ ...prevData, modal1Show: show })),
+    productStatus: productData.productStatus,
+    setProductStatus: (status) =>
+      setProductData((prevData) => ({ ...prevData, productStatus: status })),
+    originCountry: productData.originCountry,
+    setOriginCountry: (country) =>
+      setProductData((prevData) => ({ ...prevData, originCountry: country })),
+    weight: productData.weight,
+    weightUnit: productData.weightUnit,
+    setWeightUnit: (unit) =>
+      setProductData((prevData) => ({ ...prevData, weightUnit: unit })),
+    setIsSKU: (isSKU) => setProductData((prevData) => ({ ...prevData, isSKU })),
+    isSKU: productData.isSKU,
+    chintalLoc: productData.chintalLoc,
+    corporateLoc: productData.corporateLoc,
     deleteImg,
-    setVariantShow,
+    setVariantShow: (show) =>
+      setProductData((prevData) => ({ ...prevData, modal3Show: show })),
+    inventoryIdInfo,
+    setInventoryId,
+    variants,
+    variantGroup,
+    setVariantsGroup,
   };
 
   return (
@@ -392,7 +400,7 @@ const UpdateProduct = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h3>{title}</h3>
+                <h3>{productData.title}</h3>
               </div>
               <AddProductForm productProps={productProps} />
               <div className="col-12">

@@ -53,12 +53,8 @@ const AddProductForm = (props) => {
     collectionValue,
     setHandleLoc,
     handleLoc,
-    setChintalLoc,
-    setLocValues,
-    locValues,
     setLocInputs,
     locInputs,
-    setCorporateLoc,
     setIsShipping,
     isShipping,
     setVariant,
@@ -80,16 +76,15 @@ const AddProductForm = (props) => {
     setStoreShow,
     productStatus,
     setProductStatus,
-    // originCountry,
-    // setOriginCountry,
     weight,
     weightUnit,
     setWeightUnit,
     setIsSKU,
     isSKU,
-    chintalLoc,
-    corporateLoc,
     deleteImg,
+    inventoryIdInfo,
+    setInventoryId,
+    getDetails,
   } = productProps;
 
   const [imgFile, setImgFile] = useState([]);
@@ -103,11 +98,12 @@ const AddProductForm = (props) => {
   const [collections, setCollections] = useState([]);
   const [selectedCollection, setSelectedColletions] = useState([]);
   const [selectedTag, setSelectedTag] = useState([]);
+  const [inventoryLocs, setInventoryLocs] = useState([]);
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
-  //const localUrl = process.env.REACT_APP_LOCAL_URL
+  const localUrl = process.env.REACT_APP_LOCAL_URL;
 
   const handleVariantClick = (variantId) => {
     setModalVariantId(variantId);
@@ -123,6 +119,7 @@ const AddProductForm = (props) => {
       const vendorUrl = `${baseUrl}/vendors/details`;
       const collectionsUrl = `${baseUrl}/collections/data`;
       const brandsUrl = `${baseUrl}/brands/data`;
+      const locationsUrl = `${localUrl}/inventory`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
@@ -132,17 +129,22 @@ const AddProductForm = (props) => {
           categoryList,
           tagsList,
           vendorsList,
-          // countriesList,
+          locationsResponse,
           collectionsList,
           brandsList,
         ] = await Promise.all([
           axios.get(categoryUrl),
           axios.get(tagsUrl),
           axios.get(vendorUrl, { headers }),
-          // axios.get(countriesUrl),
+          axios.get(locationsUrl),
           axios.get(collectionsUrl),
           axios.get(brandsUrl),
         ]);
+
+        if (locationsResponse.status === 200) {
+          setInventoryLocs(locationsResponse.data);
+          setInventoryId(locationsResponse.data.map((inv) => inv.inventory_id));
+        }
 
         if (categoryList.status === 200) {
           setCategoryItems(categoryList.data);
@@ -150,9 +152,6 @@ const AddProductForm = (props) => {
         if (tagsList.status === 200) {
           setTags(tagsList.data);
         }
-        // if (countriesList.status === 200) {
-        //   setCountries(countriesList.data.data);
-        // }
 
         if (vendorsList.status === 200) {
           setVendors(vendorsList.data);
@@ -182,68 +181,6 @@ const AddProductForm = (props) => {
   }, [collectionValue, tagValue, collections, tags]);
 
   const { variantDetails } = ProductState();
-
-  // const generateOptions = useCallback(() => {
-  //     const result = [];
-  //     const mainOptionsObj = variants.find((v) => v.optionName === variantGroup);
-
-  //     if (variants.length > 0 && mainOptionsObj && mainOptionsObj.isDone) {
-  //         const mainOptions = mainOptionsObj.optionValue;
-  //         const remainingVariants = variants.filter((v) => v.optionName !== variantGroup);
-  //         console.log(remainingVariants)
-
-  //         mainOptions.forEach((mainOption) => {
-  //             if (mainOption !== '') {
-  //                 const subAvail = variantDetails.filter(v => v.option1 === mainOption || v.option2 === mainOption || v.option3 === mainOption);
-  //                 console.log('subAvail', subAvail)
-  //                 const main = { id: v4(), value: mainOption, variantImage: subAvail[0]?.variant_image[0], offer_price: 0, quantity: subAvail.reduce((acc, v) => acc + parseInt(v.variant_quantity || 0), 0), hsCode: '', barcode: '', skuCode: '', isTaxable: false, shippingRequired: false, inventoryId: 0, inventoryPolicy: '', variantService: '' };
-  //                 const sub = [];
-
-  //                 const recursiveGenerateSubOptions = (currentIndex, subVariant) => {
-  //                     if (currentIndex === remainingVariants.length) {
-  //                         const subV = subAvail.find(v => {
-
-  //                             console.log(v.option1, v.option2, v.option3, subVariant)
-  //                             return ((v.option1 && subVariant.includes(v.option1)) || (v.option2 && subVariant.includes(v.option2)) ||
-  //                                 (v.option3 && subVariant.includes(v.option3)))
-  //                         }
-
-  //                         );
-
-  //                         console.log(subV)
-
-  //                         if (subV) {
-  //                             //const variants = [subVariant.includes(subV.option1) ? subV.option1 : null, subVariant.includes(subV.option2) ? subV.option2 : null, subVariant.includes(subV.option3) ? subV.option3 : null].join('-').replace(/^-*|-*$/g, '')
-  //                             const variants = subVariant.join('-').replace(/^-*|-*$/g, '')
-  //                             sub.push({ id: v4(), variantId: subV.id, value: variants, variantImage: subV.variant_image[1], offer_price: subV.offer_price, quantity: subV.variant_quantity, hsCode: subV.variant_HS_code, barcode: subV.variant_barcode, skuCode: subV.variant_sku, isTaxable: subV.variant_taxable, shippingRequired: subV.variant_requires_shipping, inventoryId: subV.variant_inventory_tracker, inventoryPolicy: subV.variant_fulfillment_service, variantService: subV.variant_fulfillment_service });
-  //                         } else {
-  //                             console.log('dkndnkjd', subVariant)
-  //                             const variants = subVariant.join('-')
-  //                             sub.push({ id: v4(), variantId: 0, value: variants, variantImage: "", offer_price: 0, quantity: 0, hsCode: '', barcode: '', skuCode: '', isTaxable: false, shippingRequired: false, inventoryId: 0, inventoryPolicy: '', variantService: '' });
-  //                         }
-
-  //                         return;
-  //                     }
-
-  //                     remainingVariants[currentIndex].optionValue.forEach((subValue) => {
-  //                         if (subValue === "") return;
-  //                         recursiveGenerateSubOptions(currentIndex + 1, [
-  //                             ...subVariant,
-  //                             subValue,
-  //                         ]);
-  //                     });
-  //                 };
-
-  //                 if (remainingVariants.length > 0) {
-  //                     recursiveGenerateSubOptions(0, []);
-  //                 }
-
-  //                 result.push({ id: v4(), main, sub });
-  //             }
-  //         });
-  //     }
-  //     return result;
-  // }, [variants, variantGroup]);
 
   const generateOptions = useCallback(() => {
     const result = [];
@@ -281,7 +218,7 @@ const AddProductForm = (props) => {
               )}`,
               comparePrice: 0,
               quantity: subAvail.reduce(
-                (acc, v) => acc + parseInt(v.variant_quantity || 0),
+                (acc, v) => acc + parseInt(v.variant_qty || 0),
                 0
               ),
 
@@ -305,7 +242,7 @@ const AddProductForm = (props) => {
               offer_price: offer_price || 0,
               comparePrice: comparePrice || 0,
               quantity: subAvail.reduce(
-                (acc, v) => acc + parseInt(v.variant_quantity || 0),
+                (acc, v) => acc + parseInt(v.variant_qty || 0),
                 0
               ),
               hsCode: "",
@@ -344,7 +281,7 @@ const AddProductForm = (props) => {
                   variantImage: subV.variant_image[1] || "",
                   offer_price: subV.offer_price,
                   comparePrice: subV.compare_at_price,
-                  quantity: subV.variant_quantity,
+                  quantity: subV.variant_qty,
                   hsCode: subV.variant_HS_code,
                   barcode: subV.variant_barcode,
                   skuCode: subV.variant_sku,
@@ -409,7 +346,6 @@ const AddProductForm = (props) => {
   }, [generateOptions, variants, variantGroup]);
 
   useEffect(() => {
-    console.log("getting");
     const getProductType = async () => {
       const url = `${baseUrl}/category/sub-categories`;
       const headers = {
@@ -441,56 +377,30 @@ const AddProductForm = (props) => {
     setHandleLoc({ ...handleLoc, [e.target.id]: e.target.checked });
   };
 
-  const handleChintalLoc = (e) => {
-    setChintalLoc(e.target.checked);
-    if (e.target.checked) {
-      setLocValues(e.target.checked);
-      setLocInputs({
-        ...locInputs,
-        coc: "",
-        inventoryIds: [...locInputs.inventoryIds, "1"],
-      });
-    } else {
-      setLocValues(e.target.checked);
-      const updatedIds = locInputs.inventoryIds.filter((inv) => inv !== "1");
-      setLocInputs({
-        ...locInputs,
-        inventoryIds: updatedIds,
-      });
-      delete locInputs.coc;
-    }
-  };
-
   const handleCorporateLoc = (e) => {
-    setCorporateLoc(e.target.checked);
     if (e.target.checked) {
-      setLocValues(e.target.checked);
-      setLocInputs({
-        ...locInputs,
-        coh: "",
-        inventoryIds: [...locInputs.inventoryIds, "2"],
-      });
+      setLocInputs([...locInputs, { inventoryId: e.target.id, qty: 0 }]);
     } else {
-      setLocValues(e.target.checked);
-      const updatedIds = locInputs.inventoryIds.filter((inv) => inv !== "2");
-      setLocInputs({
-        ...locInputs,
-        inventoryIds: updatedIds,
-      });
-      delete locInputs.coh;
+      const updatedIds = locInputs.filter(
+        (inv) => inv.inventoryId !== e.target.id
+      );
+      setLocInputs(updatedIds);
     }
   };
 
-  const handleLocValues = (e) => {
-    e.preventDefault();
-    const selectState = !locValues;
-    setLocValues(!locValues);
-    setChintalLoc(selectState);
-    setCorporateLoc(selectState);
-    if (selectState) {
-      setLocInputs({ coc: "", coh: "", inventoryIds: ["1", "2"] });
-    } else {
-      setLocInputs({});
+  const handleLocationInputs = (e) => {
+    const { id, value } = e.target;
+    const newValue = parseInt(value, 10);
+    if (!isNaN(newValue) && newValue >= 0) {
+      const updatedQuantities = locInputs.map((inv) => {
+        if (inv.inventoryId === id) {
+          return { ...inv, qty: parseInt(value) };
+        } else {
+          return inv;
+        }
+      });
+
+      setLocInputs(updatedQuantities);
     }
   };
 
@@ -583,10 +493,6 @@ const AddProductForm = (props) => {
     }
   };
 
-  const handleLocationInputs = (e) => {
-    setLocInputs({ ...locInputs, [e.target.id]: e.target.value });
-  };
-
   const handleSkuInput = (e) => {
     setSkuInput({ ...skuInput, [e.target.id]: e.target.value });
   };
@@ -601,8 +507,6 @@ const AddProductForm = (props) => {
   const handleProductCategorization = (e) => {
     setProductCategory({ ...productCategory, [e.target.id]: e.target.value });
   };
-
-  console.log(productCategory);
 
   const onSelectTag = (selectedItem) => {
     setSelectedTag(selectedItem);
@@ -753,24 +657,12 @@ const AddProductForm = (props) => {
   };
 
   const toggleSubVariantsVisibility = (variantId) => {
+    console.log(variantId, "viva");
     setSubVariantsVisibility((prevState) => ({
       ...prevState,
       [variantId]: !prevState[variantId],
     }));
   };
-
-  // const goVariantsPage = (opt1, v) => {
-  //     const options = v.split('-')
-  //     const option2 = options[0]
-  //     const option3 = options[1] || null
-  //     // if (!availableVariants) return 0
-  //     const variant = variantDetails.find(variant => variant.option1 === opt1 && variant.option2 === option2 && variant.option3 === option3)
-  //     if (variant) {
-  //         return variant.id
-  //     } else {
-  //         return ''
-  //     }
-  // }
 
   const selectImg = (e, id) => {
     if (e.target.checked) {
@@ -812,6 +704,25 @@ const AddProductForm = (props) => {
       <span>{va.value}</span>
     </Link>
   );
+
+  const onChangeInventory = (e) => {
+    const values = e.target.value;
+
+    // If the value contains a comma, split it into an array of inventory IDs
+    if (values.includes(",")) {
+      // Remove any extra spaces from the individual IDs after the split
+      const inventoryIds = values
+        .split(",")
+        .map((id) => id.trim())
+        .filter((id) => id !== "");
+      return setInventoryId(inventoryIds);
+    }
+
+    // If the value doesn't contain a comma, set it as a single-item array
+    setInventoryId([values.trim()]);
+  };
+
+  console.log(inventoryIdInfo, "variantsDetails");
 
   return (
     <div className="container">
@@ -1008,7 +919,7 @@ const AddProductForm = (props) => {
                   {variantsDetails.length > 0 && (
                     <>
                       <div className="variantsOutput">
-                        {variants.length > 1 && (
+                        {variants.length > 0 && (
                           <div className="d-flex align-items-center">
                             Group By
                             <select
@@ -1027,23 +938,29 @@ const AddProductForm = (props) => {
                           </div>
                         )}
                         <div>
-                          <Dropdown>
-                            <Dropdown.Toggle variant="" id="dropdown-basic">
-                              All Locations <IoMdArrowDropdown />
-                            </Dropdown.Toggle>
-
-                            <Dropdown.Menu>
-                              <Dropdown.Item value="All Locations">
-                                All Locations
-                              </Dropdown.Item>
-                              <Dropdown.Item value="Chintal">
-                                Chintal, Hyderabad Warehouse
-                              </Dropdown.Item>
-                              <Dropdown.Item value="Corporate Office Hyderabad">
-                                Corporate Office Hyderabad
-                              </Dropdown.Item>
-                            </Dropdown.Menu>
-                          </Dropdown>
+                          <select
+                            className="form-select"
+                            aria-label="Default select example"
+                            onChange={onChangeInventory}
+                            value={inventoryIdInfo}
+                          >
+                            <option
+                              selected
+                              value={inventoryLocs.map(
+                                (inv) => `${inv.inventory_id}`
+                              )}
+                            >
+                              All Locations
+                            </option>
+                            {inventoryLocs.map((inv) => (
+                              <option
+                                key={inv.inventory_id}
+                                value={inv.inventory_id}
+                              >
+                                {inv.inventory_name}
+                              </option>
+                            ))}
+                          </select>
                         </div>
                       </div>
                       <div className="variantsOutputTopbar">
@@ -1295,110 +1212,40 @@ const AddProductForm = (props) => {
                         </label>
                       </div>
                       {tracker ? (
-                        <div className="">
-                          <div className="d-flex justify-content-between align-items-center">
-                            <p>Quantity</p>
-                            <button
-                              type="button"
-                              className="btn"
-                              data-bs-toggle="modal"
-                              data-bs-target="#editLoc"
-                            >
-                              Edit Location
-                            </button>
-                          </div>
-                          {/* <div className='modal'> */}
-                          <div
-                            className="modal fade"
-                            id="editLoc"
-                            tabIndex="-1"
-                            aria-labelledby="exampleModalLabel"
-                            aria-hidden="true"
-                          >
-                            <div className="modal-dialog">
-                              <div className="modal-content">
-                                <div className="modal-header">
-                                  <h5
-                                    className="modal-title"
-                                    id="exampleModalLabel"
-                                  >
-                                    Edit locations
-                                  </h5>
-                                  <button
-                                    type="button"
-                                    className="btn-close"
-                                    data-bs-dismiss="modal"
-                                    aria-label="Close"
-                                  ></button>
-                                </div>
-                                <div className="modal-body">
-                                  <p>
-                                    Select locations that stock the selected
-                                    variants.
-                                  </p>
-                                  <button
-                                    className="d-block"
-                                    onClick={(e) => handleLocValues(e)}
-                                  >
-                                    {locValues && (chintalLoc || corporateLoc)
-                                      ? "Deselect All"
-                                      : "Select All"}
-                                  </button>
-                                  <label>
-                                    <input
-                                      type="checkbox"
-                                      checked={chintalLoc}
-                                      onChange={handleChintalLoc} // Handle onChange to prevent warning
-                                    />
-                                    Chintal, Hyderabad Warehouse
-                                  </label>
-                                  <label>
-                                    <input
-                                      type="checkbox"
-                                      checked={corporateLoc}
-                                      onChange={handleCorporateLoc} // Handle onChange to prevent warning
-                                    />
-                                    Corporate Office Hyderabad
-                                  </label>
-                                </div>
-                                <div className="modal-footer">
-                                  <button
-                                    type="button"
-                                    className="btn btn-secondary"
-                                    data-bs-dismiss="modal"
-                                  >
-                                    Done
-                                  </button>
-                                  {/* <button type="button" className="btn btn-primary">Done</button> */}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          {/* </div> */}
-
+                        <div className="uy">
                           <div className="form-check">
-                            {chintalLoc && (
-                              <div>
-                                <span>Chintal, Hyderabad Warehouse</span>
-                                <input
-                                  type="number"
-                                  id="coc"
-                                  value={locInputs.coc}
-                                  onChange={handleLocationInputs}
-                                />
+                            {inventoryLocs.map((inve) => (
+                              <div className="d-flex" key={inve.inventory_id}>
+                                <label>
+                                  <input
+                                    id={inve.inventory_id}
+                                    type="checkbox"
+                                    checked={locInputs.find(
+                                      (loc) =>
+                                        loc.inventoryId === inve.inventory_id
+                                    )}
+                                    onChange={handleCorporateLoc} // Handle onChange to prevent warning
+                                  />
+                                  {inve.inventory_name}
+                                </label>
+                                {locInputs.find(
+                                  (loc) => loc.inventoryId === inve.inventory_id
+                                ) && (
+                                  <input
+                                    className="ms-2"
+                                    type="number"
+                                    id={inve.inventory_id}
+                                    value={
+                                      locInputs.find(
+                                        (loc) =>
+                                          loc.inventoryId === inve.inventory_id
+                                      ).qty ?? 0
+                                    }
+                                    onChange={handleLocationInputs}
+                                  />
+                                )}
                               </div>
-                            )}
-                            {corporateLoc && (
-                              <div>
-                                <span>Corporate Office Hyderabad</span>
-                                <input
-                                  type="number"
-                                  id="coh"
-                                  value={locInputs.coh}
-                                  onChange={handleLocationInputs}
-                                />
-                              </div>
-                            )}
+                            ))}
                             <input
                               className="form-check-input"
                               type="checkbox"

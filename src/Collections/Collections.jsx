@@ -92,7 +92,9 @@ const Collections = () => {
                       </h6>
                     </div>
                     <div className="col-sm-3">
-                      <span className="collectionCount">9</span>
+                      <span className="collectionCount">
+                        {eachCollection.no_products}
+                      </span>
                     </div>
                     <div className="col-sm-3">
                       <p className="productCondition">Testing</p>

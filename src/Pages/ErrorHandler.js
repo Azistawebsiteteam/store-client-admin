@@ -45,7 +45,6 @@ const onError = (error) => {
 };
 
 export const showToast = (message) => {
-  console.log(message);
   const Toast = Swal.mixin({
     toast: true,
     position: "top",

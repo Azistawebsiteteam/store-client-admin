@@ -14,6 +14,8 @@ import { MdRateReview } from "react-icons/md";
 import { TfiAnnouncement } from "react-icons/tfi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { IoIosPerson } from "react-icons/io";
+import { SiBlogger } from "react-icons/si";
+import { BiSolidCategoryAlt } from "react-icons/bi";
 
 const AdminSideBar = () => {
   const { activeTab, dropdownItems, setDropdownItems } = ProductState();
@@ -80,7 +82,15 @@ const AdminSideBar = () => {
                 Slider
               </li>
             </Link>
-
+            <Link className="link" to="/categories">
+              <li
+                className={
+                  activeTab.startsWith("/categories") ? "activeTab" : "linkItem"
+                }
+              >
+                <BiSolidCategoryAlt /> Categories
+              </li>
+            </Link>
             <Link className="link" to="/brands">
               <li
                 className={
@@ -100,6 +110,15 @@ const AdminSideBar = () => {
                 }
               >
                 <TfiAnnouncement /> Announcement Bar
+              </li>
+            </Link>
+            <Link className="link" to="/blogs">
+              <li
+                className={
+                  activeTab.startsWith("/blogs") ? "activeTab" : "linkItem"
+                }
+              >
+                <SiBlogger /> Blogs
               </li>
             </Link>
           </div>

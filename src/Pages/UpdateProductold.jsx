@@ -1,21 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-
+import { v4 } from "uuid";
 import AddProductForm from "./AddProductForm";
 import AdminSideBar from "./AdminSideBar";
-import SwalErr from "./ErrorHandler";
+import { useParams } from "react-router-dom";
+import swalErr from "./ErrorHandler";
+import { ProductState } from "../Context/ProductContext";
 
-const AddProduct = () => {
+const UpdateProduct = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [locInputs, setLocInputs] = useState([]);
   const [modal1Show, setStoreShow] = useState(false);
   const [modal2Show, setSiteShow] = useState(false);
-  const [modal3Show, setVariantShow] = useState(false);
   const [tracker, setTracker] = useState(false);
   const [chintalLoc, setChintalLoc] = useState(true);
   const [corporateLoc, setCorporateLoc] = useState(true);
@@ -33,15 +34,12 @@ const AddProduct = () => {
     isTaxable: false,
     costPerItem: 0,
   });
-  const [countriesList, setCountries] = useState();
-  const [categoryItems, setCategoryItems] = useState([]);
-  const [tags, setTags] = useState([]);
+
   const [images, setImages] = useState([]);
-  const [vendors, setVendors] = useState();
-  const [collections, setCollections] = useState([]);
+
   const [variants, setVariant] = useState([]);
   // const [isArrowDown, setIsArrowDown] = useState(false);
-
+  const [categoryItems, setCategoryItems] = useState([]);
   const [variantsDetails, setVariantsDetials] = useState([]);
   const [variantGroup, setVariantsGroup] = useState("");
   const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
@@ -57,10 +55,8 @@ const AddProduct = () => {
     category: "",
     productType: "",
     vendor: "",
-    brand: "0",
+    brand: "",
   });
-
-  console.log(productCategory.category, "balaji");
   const [tagValue, setTagValue] = useState([]);
   const [collectionValue, setCollectionValue] = useState([]);
   const [metaDetails, setMetaDetails] = useState({
@@ -68,131 +64,198 @@ const AddProduct = () => {
     metaDescription: "",
     urlHandle: `${window.location.origin}/productItem`,
   });
+  const [modal3Show, setVariantShow] = useState(false);
   const [inventoryIdInfo, setInventoryId] = useState([]);
 
   const baseUrl = process.env.REACT_APP_API_URL;
+  const localUrl = process.env.REACT_APP_LOCAL_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
-  const localUrl = process.env.REACT_APP_LOCAL_URL;
+  const params = useParams();
+  const { id } = params;
 
-  const navigate = useNavigate();
+  const setProductUpdateDetails = (productDetails) => {
+    const {
+      collections,
+      compare_at_price,
+      cost_per_item,
+      origin_country,
+      is_taxable,
+      out_of_stock_sale,
+      price,
+      product_category,
+      product_images,
+      product_info,
+      product_title,
+      product_weight,
+      seo_description,
+      seo_title,
+      url_handle,
+      sku_bar_code,
+      sku_code,
+      status,
+      tags,
+      type,
+      variant_store_order,
+      vendor_id,
+      brand_id,
+      vInventoryInfo,
+      product_qtys,
+    } = productDetails;
 
-  //   const onSubmitProductDetails = async () => {
-  //     try {
-  //       const url = `${localUrl}/product/add-store`;
-  //       const headers = {
-  //         Authorization: `Bearer ${token}`,
-  //         "Content-type": "multipart/form-data",
-  //       };
-  //       if (title === "") {
-  //         setError("Title can’t be blank");
-  //         return;
-  //       } else {
-  //         setError("");
-  //       }
-  //       Swal.fire({
-  //         title: "Loading",
-  //         allowOutsideClick: false,
-  //         allowEscapeKey: false,
-  //         didOpen: () => {
-  //           Swal.showLoading();
-  //         },
-  //       });
-  //       const formdata = new FormData();
-  //       const proVariants = [];
-  //       variants.forEach((varaint) => {
-  //         if (!proVariants.includes(varaint.optionName)) {
-  //           proVariants.push(varaint.optionName);
-  //         }
-  //       });
+    setInventoryId(vInventoryInfo);
+    setImages(product_images);
+    setOriginCountry(origin_country);
+    setTitle(product_title);
+    setContent(product_info);
+    setLocInputs(
+      product_qtys.map((inv) => ({
+        inventoryId: inv.inventory_id,
+        qty: inv.product_qty,
+      }))
+    );
 
-  //       images.forEach((file, i) => {
-  //         formdata.append(`productImages`, file);
-  //       });
-  //       formdata.append("productTitle", title);
-  //       formdata.append("productInfo", content);
-  //       formdata.append("productActiveStatus", productStatus);
-  //       formdata.append("category", productCategory.category);
-  //       formdata.append("productType", productCategory.productType);
-  //       formdata.append("vendor", productCategory.vendor);
-  //       formdata.append("brand", productCategory.brand);
-  //       formdata.append("collections", JSON.stringify(collectionValue));
-  //       formdata.append("tags", JSON.stringify(tagValue));
-  //       formdata.append("metaTitle", metaDetails.metaTitle);
-  //       formdata.append("metaDescription", metaDetails.metaDescription);
-  //       formdata.append("urlHandle", metaDetails.urlHandle);
-  //       formdata.append("variantsThere", variantsThere);
+    setProductCategory({
+      category: product_category,
+      productType: type,
+      vendor: vendor_id,
+      brand: brand_id,
+    });
+    setProductPrices({
+      price: price,
+      comparePrice: compare_at_price,
+      isTaxable: is_taxable,
+      costPerItem: cost_per_item,
+    });
+    setMetaDetails({
+      metaTitle: seo_title,
+      metaDescription: seo_description,
+      urlHandle: url_handle,
+    });
+    setTagValue(JSON.parse(tags));
+    setCollectionValue(JSON.parse(collections));
+    setProductStatus(status);
+    setWeight(product_weight ? product_weight.split("-")[0] : 0);
+    setWeightUnit(product_weight ? product_weight.split("-")[1] : "kg");
+    setIsShipping(product_weight?.split("-").length > 0);
+    if (sku_code || sku_bar_code) {
+      setIsSKU(true);
+    }
+    setSkuInput({
+      SKU: sku_code,
+      barcode: sku_bar_code,
+    });
+    setHandleLoc({ cwos: out_of_stock_sale });
+    if (JSON.parse(variant_store_order)?.length > 0) {
+      setVariants(true);
+      setTracker(false);
+    } else {
+      setVariants(false);
+      setTracker(true);
+    }
+  };
 
-  //       if (variantsThere) {
-  //         variantsDetails.forEach((variant) => {
-  //           formdata.append("variantImage", variant.main.variantImage);
-  //           variant.sub.forEach((subVariant) => {
-  //             formdata.append("variantImage", subVariant.variantImage);
-  //           });
-  //         });
-  //         formdata.append("variantsOrder", JSON.stringify(proVariants));
-  //         formdata.append("variants", JSON.stringify(variantsDetails));
-  //       } else {
-  //         formdata.append("productPrice", productPrices.price);
-  //         formdata.append("productComparePrice", productPrices.comparePrice);
-  //         formdata.append("productIsTaxable", productPrices.isTaxable);
-  //         formdata.append("productCostPerItem", productPrices.costPerItem);
-  //         formdata.append("inventoryInfo", JSON.stringify(locInputs));
-  //         formdata.append("cwos", handleLoc.cwos);
-  //         formdata.append("skuCode", skuInput.SKU);
-  //         formdata.append("skuBarcode", skuInput.barcode);
-  //         formdata.append("productWeight", weight + " " + weightUnit);
-  //         formdata.append("originCountry", originCountry);
-  //       }
+  const setVariantsUpdateDetails = (v) => {
+    setVariantsGroup(v[0].UOM);
+    v.forEach((each) => {
+      setVariant((prevVariants) => [
+        ...prevVariants,
+        {
+          id: v4(),
+          optionName: each.UOM,
+          optionValue: [...each.values, ""],
+          isDone: true,
+        },
+      ]);
+    });
+  };
 
-  //       await axios.post(url, formdata, { headers });
+  const { setProductDetails, setVariantsData, setVariantDetails } =
+    ProductState();
 
-  //       Swal.close();
-  //       Swal.fire({
-  //         position: "center",
-  //         icon: "success",
-  //         title: "Your work has been saved",
-  //         showConfirmButton: false,
-  //         timer: 2000,
-  //       });
-  //     } catch (error) {
-  //       Swal.close();
-  //       console.log(error);
-  //       onError(error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getDetails = async () => {
+      try {
+        const url = `${localUrl}/product/get/details`;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+        swalErr.onLoading();
+
+        const response = await axios.post(
+          url,
+          { productId: id, inventoryIds: inventoryIdInfo },
+          { headers }
+        );
+
+        const { productDetails, variants, availableVariants } = response.data;
+
+        swalErr.onLoadingClose();
+        setProductUpdateDetails(productDetails);
+        if (availableVariants.length > 0) {
+          setVariantsUpdateDetails(variants);
+        }
+
+        setProductDetails(productDetails);
+        setVariantsData(variants);
+        setVariantDetails(availableVariants);
+      } catch (error) {
+        swalErr.onLoadingClose();
+        swalErr.onError(error);
+      }
+    };
+    getDetails();
+  }, [
+    id,
+    baseUrl,
+    token,
+    setProductDetails,
+    setVariantsData,
+    setVariantDetails,
+    setProductDetails,
+    inventoryIdInfo,
+  ]);
 
   const onSubmitProductDetails = async () => {
     try {
-      const url = `${localUrl}/product/add-store`;
+      const url = `${localUrl}/product/update-store`;
+
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",
       };
-
       if (title === "") {
         setError("Title can’t be blank");
         return;
       } else {
         setError("");
       }
-
-      SwalErr.onLoading();
-
+      swalErr.onLoading();
       const formdata = new FormData();
       const proVariants = [];
-      variants.forEach((variant) => {
-        if (!proVariants.includes(variant.optionName)) {
-          proVariants.push(variant.optionName);
+      variants.forEach((varaint) => {
+        if (!proVariants.includes(varaint.optionName)) {
+          proVariants.push(varaint.optionName);
         }
       });
 
+      const oldImges = images.filter((e) => typeof e === "string");
+
       images.forEach((file, i) => {
-        formdata.append(`productImages`, file);
+        if (oldImges.length === 1 && typeof file === "string") {
+          formdata.append(`productImages`, JSON.stringify([file]));
+        } else {
+          formdata.append(`productImages`, file);
+        }
       });
 
+      formdata.append("productId", id);
       formdata.append("productTitle", title);
       formdata.append("productInfo", content);
+      formdata.append("variantsThere", variantsThere);
+      formdata.append("metaTitle", metaDetails.metaTitle);
+      formdata.append("metaDescription", metaDetails.metaDescription);
+      formdata.append("urlHandle", metaDetails.urlHandle);
       formdata.append("productActiveStatus", productStatus);
       formdata.append("category", productCategory.category);
       formdata.append("productType", productCategory.productType);
@@ -200,10 +263,6 @@ const AddProduct = () => {
       formdata.append("brand", productCategory.brand);
       formdata.append("collections", JSON.stringify(collectionValue));
       formdata.append("tags", JSON.stringify(tagValue));
-      formdata.append("metaTitle", metaDetails.metaTitle);
-      formdata.append("metaDescription", metaDetails.metaDescription);
-      formdata.append("urlHandle", metaDetails.urlHandle);
-      formdata.append("variantsThere", variantsThere);
 
       if (variantsThere) {
         variantsDetails.forEach((variant) => {
@@ -220,35 +279,45 @@ const AddProduct = () => {
         formdata.append("productComparePrice", productPrices.comparePrice);
         formdata.append("productIsTaxable", productPrices.isTaxable);
         formdata.append("productCostPerItem", productPrices.costPerItem);
+        // formdata.append('quantityTracker', tracker)
         formdata.append("inventoryInfo", JSON.stringify(locInputs));
         formdata.append("cwos", handleLoc.cwos);
         formdata.append("skuCode", skuInput.SKU);
         formdata.append("skuBarcode", skuInput.barcode);
-        formdata.append("productWeight", weight + " " + weightUnit);
+        formdata.append(
+          "productWeight",
+          weight !== "" ? weight + "-" + weightUnit : ""
+        );
         formdata.append("originCountry", originCountry);
       }
-      console.log(JSON.stringify(inventoryIdInfo));
-      await axios.post(url, formdata, { headers });
-      SwalErr.onLoadingClose();
-      SwalErr.onSuccess();
-      navigate("/products");
+
+      const response = await axios.post(url, formdata, { headers });
+      swalErr.onLoadingClose();
+      swalErr.onSuccess();
     } catch (error) {
-      SwalErr.onLoadingClose();
-      console.log(error);
-      SwalErr.onError(error);
+      swalErr.onLoadingClose();
+      swalErr.onError(error);
     }
   };
 
   const deleteImg = async (imgFile, setFun) => {
-    console.log(imgFile);
-    console.log(images);
-    const filteredImgs = images.filter((img, i) => !imgFile.includes(i));
-    setImages(filteredImgs);
-    setFun([]);
-    console.log("file", filteredImgs);
+    try {
+      const url = `${baseUrl}/product/delete/images`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      const body = {
+        productId: id,
+        deleteImgs: imgFile,
+      };
+      const response = await axios.patch(url, body, { headers });
+      setImages(response.data.updatedImgs);
+      setFun([]);
+    } catch (error) {}
   };
-  console.log(inventoryIdInfo, "bhbhbvhj");
+
   const productProps = {
+    proid: id,
     categoryItems,
     setCategoryItems,
     title,
@@ -271,6 +340,7 @@ const AddProduct = () => {
     tracker,
     setTracker,
     setCollectionValue,
+    collectionValue,
     setHandleLoc,
     handleLoc,
     setChintalLoc,
@@ -290,14 +360,13 @@ const AddProduct = () => {
     setProductCategory,
     productCategory,
     setTagValue,
+    tagValue,
     setImages,
     variantGroup,
     setSiteShow,
     modal2Show,
     modal1Show,
     setStoreShow,
-    setVariantShow,
-    modal3Show,
     productStatus,
     setProductStatus,
     originCountry,
@@ -309,9 +378,8 @@ const AddProduct = () => {
     isSKU,
     chintalLoc,
     corporateLoc,
-    collectionValue,
-    tagValue,
     deleteImg,
+    setVariantShow,
     inventoryIdInfo,
     setInventoryId,
   };
@@ -324,7 +392,7 @@ const AddProduct = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h3>Add Product</h3>
+                <h3>{title}</h3>
               </div>
               <AddProductForm productProps={productProps} />
               <div className="col-12">
@@ -342,4 +410,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;
