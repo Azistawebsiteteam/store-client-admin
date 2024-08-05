@@ -58,7 +58,7 @@ const Announcements = () => {
           <Link to="/announcement/create">Create Announcement</Link>
         </div>
         <div className="announcements">
-          <table class="table">
+          <table className="table">
             <thead>
               <tr>
                 <th scope="col">S.no</th>

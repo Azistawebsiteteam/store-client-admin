@@ -13,6 +13,7 @@ import { ProductState } from "../Context/ProductContext";
 const UpdateProduct = () => {
   const [productData, setProductData] = useState({
     title: "",
+    mainTitle: "",
     content: "",
     locInputs: [],
     modal1Show: false,
@@ -74,6 +75,7 @@ const UpdateProduct = () => {
       product_images,
       product_info,
       product_title,
+      product_main_title,
       product_weight,
       seo_description,
       seo_title,
@@ -88,6 +90,7 @@ const UpdateProduct = () => {
       brand_id,
       product_qtys,
     } = productDetails;
+    console.log(productDetails, "productDetails");
 
     setProductData((prevData) => ({
       ...prevData,
@@ -95,6 +98,7 @@ const UpdateProduct = () => {
       images: product_images,
       originCountry: origin_country,
       title: product_title,
+      mainTitle: product_main_title,
       content: product_info,
       locInputs: product_qtys.map((inv) => ({
         inventoryId: inv.inventory_id,
@@ -148,7 +152,7 @@ const UpdateProduct = () => {
 
   const getDetails = async () => {
     try {
-      const url = `${localUrl}/product/get/details`;
+      const url = `${baseUrl}/product/get/details`;
       const headers = { Authorization: `Bearer ${token}` };
       swalErr.onLoading();
       const body = { productId: id, inventoryIds: inventoryIdInfo };
@@ -174,7 +178,7 @@ const UpdateProduct = () => {
 
   useEffect(() => {
     getDetails();
-  }, [id, localUrl, token, inventoryIdInfo]);
+  }, [id, baseUrl, token, inventoryIdInfo]);
 
   const onSubmitProductDetails = async () => {
     try {
@@ -188,7 +192,7 @@ const UpdateProduct = () => {
         setProductData((prevData) => ({ ...prevData, error: "" }));
       }
 
-      const url = `${localUrl}/product/update-store`;
+      const url = `${baseUrl}/product/update-store`;
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",
@@ -210,6 +214,7 @@ const UpdateProduct = () => {
       });
       formdata.append("productId", id);
       formdata.append("productTitle", productData.title);
+      formdata.append("productMainTitle", productData.title);
       formdata.append("productInfo", productData.content);
       formdata.append("variantsThere", productData.variantsThere);
       formdata.append("metaTitle", productData.metaDetails.metaTitle);
@@ -298,9 +303,15 @@ const UpdateProduct = () => {
     setCategoryItems: (items) =>
       setProductData((prevData) => ({ ...prevData, categoryItems: items })),
     title: productData.title,
+    mainTitle: productData.mainTitle,
     error: productData.error,
+    mainError: productData.mainError,
     setError: (error) => setProductData((prevData) => ({ ...prevData, error })),
+    setMainError: (mainError) =>
+      setProductData((prevData) => ({ ...prevData, mainError })),
     setTitle: (title) => setProductData((prevData) => ({ ...prevData, title })),
+    setMainTitle: (mainTitle) =>
+      setProductData((prevData) => ({ ...prevData, mainTitle })),
     setMetaDetails: (metaDetails) =>
       setProductData((prevData) => ({ ...prevData, metaDetails })),
     metaDetails: productData.metaDetails,

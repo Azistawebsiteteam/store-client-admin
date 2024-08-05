@@ -6,6 +6,7 @@ import SliderForm from "./SliderForm";
 
 const AddSlider = () => {
   const [imgDetails, setImgDetails] = useState({
+    bannerType: "",
     title: "",
     description: "",
     startTime: "",
@@ -39,7 +40,7 @@ const AddSlider = () => {
       };
 
       const formdata = new FormData();
-
+      formdata.append("bannerType", imgDetails.bannerType);
       formdata.append("title", imgDetails.title);
       formdata.append("description", imgDetails.description);
       formdata.append("altText", imgDetails.altText);

@@ -7,7 +7,6 @@ import { MdDelete } from "react-icons/md";
 import { MdModeEditOutline } from "react-icons/md";
 import { Link } from "react-router-dom";
 import swalHandle from "./ErrorHandler";
-import Swal from "sweetalert2";
 
 const Brands = () => {
   const [brands, setBrands] = useState([]);
@@ -26,11 +25,11 @@ const Brands = () => {
       const brandsList = await axios.get(brandsUrl, headers);
 
       if (brandsList.status === 200) {
-        Swal.close();
+        swalHandle.onLoadingClose();
         setBrands(brandsList.data);
       }
     } catch (error) {
-      Swal.close();
+      swalHandle.onLoadingClose();
       swalHandle.onError();
       console.log(error);
     }
@@ -54,11 +53,11 @@ const Brands = () => {
       if (response.status === 200) {
         console.log(response);
         swalHandle.onSuccess();
-        Swal.close();
+        swalHandle.onLoadingClose();
       }
       apiCallback();
     } catch (error) {
-      Swal.close();
+      swalHandle.onLoadingClose();
       swalHandle.onError();
       console.log(error);
     }

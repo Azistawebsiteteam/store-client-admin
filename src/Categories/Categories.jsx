@@ -1,13 +1,13 @@
-import React from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
-import { useState, useEffect, useCallback } from "react";
-import { MdDelete } from "react-icons/md";
-import { MdModeEditOutline } from "react-icons/md";
-import swalHandle from "../Pages/ErrorHandler";
-import Swal from "sweetalert2";
-import Cookies from "js-cookie";
-import AdminSideBar from "../Pages/AdminSideBar";
+import React from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { MdDelete } from 'react-icons/md';
+import { MdModeEditOutline } from 'react-icons/md';
+import swalHandle from '../Pages/ErrorHandler';
+import Swal from 'sweetalert2';
+import Cookies from 'js-cookie';
+import AdminSideBar from '../Pages/AdminSideBar';
 
 const Categories = () => {
   const [categories, setCategories] = useState();
@@ -56,35 +56,33 @@ const Categories = () => {
     }
   };
 
-  console.log(categories);
-
   return (
-    <div className="adminSec">
+    <div className='adminSec'>
       <div>
         <AdminSideBar />
       </div>
-      <div className="commonSec">
-        <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
+      <div className='commonSec'>
+        <div className='col-12 mt-2 mb-2 d-flex justify-content-between'>
           <h4>Categories</h4>
-          <Link to="/category/create">Create category</Link>
+          <Link to='/category/create'>Create category</Link>
         </div>
-        <div className="col-sm-12">
-          <table className="table">
+        <div className='col-sm-12'>
+          <table className='table'>
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Category Image</th>
-                <th scope="col">Category Name</th>
-                <th scope="col">Actions</th>
+                <th scope='col'>#</th>
+                <th scope='col'>Category Image</th>
+                <th scope='col'>Category Name</th>
+                <th scope='col'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {categories?.map((each, i) => (
-                <tr className="item" key={i}>
+                <tr className='item' key={i}>
                   <td>{i + 1}</td>
                   <td>
                     <img
-                      className="brandThumbnail"
+                      className='brandThumbnail'
                       src={each.azst_category_img}
                       alt={each.azst_category_name}
                     />
@@ -92,11 +90,11 @@ const Categories = () => {
                   <td>{each.azst_category_name}</td>
                   <td>
                     <MdDelete
-                      className="icons"
+                      className='icons'
                       onClick={() => deleteBrand(each.azst_category_id)}
-                    />{" "}
+                    />{' '}
                     <Link to={`/edit-category/${each.azst_category_id}`}>
-                      <MdModeEditOutline className="icons" />
+                      <MdModeEditOutline className='icons' />
                     </Link>
                   </td>
                 </tr>

@@ -5,6 +5,7 @@ import { FaUpload } from "react-icons/fa";
 
 const SliderForm = (props) => {
   const { setImgDetails, imgDetails, setimgValue, imgValue } = props;
+
   const handleImgDetails = (e) => {
     if (e.target.name === "publish") {
       if (e.target.value === "1") {
@@ -45,6 +46,20 @@ const SliderForm = (props) => {
               <div className="row">
                 <div className="col-sm-12">
                   <div className="bgStyle">
+                    <label className="heading" htmlFor="bannerType">
+                      Banner Type
+                    </label>
+                    <select
+                      id="bannerType"
+                      class="form-select"
+                      aria-label="Default select example"
+                      value={imgDetails.bannerType}
+                      onChange={handleImgDetails}
+                    >
+                      <option selected>Select Banner type</option>
+                      <option value="slider">Slider Banner</option>
+                      <option value="product">Product Banner</option>
+                    </select>
                     <div className="form-group">
                       <label className="heading" htmlFor="title">
                         Title

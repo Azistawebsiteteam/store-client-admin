@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { FaUpload } from "react-icons/fa6";
 import AdminSideBar from "../Pages/AdminSideBar";
-import TextEditor from "../Pages/TextEditor";
 
 import "../Pages/Admin.css";
 
@@ -36,8 +35,8 @@ const CollectionForm = (props) => {
   const handleMetaDetails = (e) => {
     setCollectionData({ ...collectionData, [e.target.id]: e.target.value });
   };
-  const setContent = (content) => {
-    setCollectionData({ ...collectionData, content });
+  const setCollectionContent = (e) => {
+    setCollectionData({ ...collectionData, content: e.target.value });
   };
 
   const onChangeCollectionImage = (e) => {
@@ -70,15 +69,18 @@ const CollectionForm = (props) => {
                       />
                       <span className="errorValue">{error}</span>
                     </div>
-                    <div className="form-group mt-2">
+                    <div className="form-group d-flex flex-column mt-2">
                       <label className="heading" htmlFor="content">
                         Description
                       </label>
-                      <TextEditor
+                      <textarea
                         id="content"
-                        content={content}
-                        setContent={setContent}
-                      />
+                        value={content}
+                        onChange={setCollectionContent}
+                        cols={50}
+                        rows={4}
+                        className="form-control"
+                      ></textarea>
                     </div>
                   </div>
                   <div className="bgStyle">

@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 
 const EditSlider = () => {
   const [bannerDetails, setBannerDetails] = useState({
+    bannerType: "",
     title: "",
     description: "",
     startTime: "",
@@ -40,6 +41,7 @@ const EditSlider = () => {
           const banner = response.data.banner_details;
 
           setBannerDetails({
+            bannerType: banner.azst_banner_type,
             title: banner.azst_banner_title,
             description: banner.azst_banner_description,
             startTime: banner.azst_start_time,
@@ -79,6 +81,7 @@ const EditSlider = () => {
       const formdata = new FormData();
 
       formdata.append("bannerId", id);
+      formdata.append("bannerType", bannerDetails.bannerType);
       formdata.append("title", bannerDetails.title);
       formdata.append("description", bannerDetails.description);
       formdata.append("altText", bannerDetails.altText);

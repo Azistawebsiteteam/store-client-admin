@@ -1,4 +1,4 @@
-*{
+* {
   padding: 0;
   box-sizing: border-box;
 }
@@ -14,4 +14,39 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+/* CustomSwal.css */
+.color-toast {
+  width: 90%;
+  margin: 0px;
+  padding: 0px;
+  height: 10% !important;
+  color: #d4edda !important; /* Light green background */
+  background: #f92d26 !important; /* Dark green text */
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+  background-color: #28d20a;
+  color: #fff;
+}
+
+div:where(.swal2-container) button:where(.swal2-styled).swal2-cancel {
+  background-color: #f8f4f5;
+  color: #f00f0f;
+}
+
+.swal-custom-content {
+  padding: 15px;
+  text-align: center;
+}
+
+.swal-custom-confirm-button,
+.swal-custom-cancel-button {
+  margin: 5px;
+}
+
+/* Optional: if you need to further control the width and height */
+.swal2-toast {
+  padding: 0rem !important;
 }

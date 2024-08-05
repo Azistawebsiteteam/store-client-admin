@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -7,22 +6,23 @@ import AdminSideBar from "../Pages/AdminSideBar";
 import swalHandle from "../Pages/ErrorHandler";
 import BannersForm from "./BannersForm";
 
-const SlidersListing = () => {
+const ProductBannerListing = () => {
   const baseUrl = process.env.REACT_APP_API_URL;
-  let token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
+  const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
+  let token = Cookies.get(adminToken);
 
-  const [sliders, setSliders] = useState([]);
+  const [banners, setBanners] = useState([]);
 
   const sliderDetails = async () => {
     try {
-      const url = `${baseUrl}/banners`;
+      const url = `${baseUrl}/banners/product/all`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
       swalHandle.onLoading();
       const response = await axios.get(url, { headers });
       Swal.close();
-      setSliders(response.data);
+      setBanners(response.data);
     } catch (error) {
       swalHandle.onError(error);
     }
@@ -32,14 +32,15 @@ const SlidersListing = () => {
     sliderDetails();
   }, [token, baseUrl]);
 
+  console.log(banners);
   return (
     <div className="adminSec">
       <AdminSideBar />
       <div className="commonSec">
         <BannersForm
-          sliders={sliders}
-          mainTitle={"List of Slider Banners"}
-          linkTitle={"Slider"}
+          sliders={banners}
+          mainTitle={"List of Product Banners"}
+          linkTitle={"Product banner"}
           sliderDetails={sliderDetails}
         />
       </div>
@@ -47,4 +48,4 @@ const SlidersListing = () => {
   );
 };
 
-export default SlidersListing;
+export default ProductBannerListing;

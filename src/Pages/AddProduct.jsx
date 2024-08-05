@@ -1,17 +1,18 @@
 /* eslint-disable no-unused-vars */
 
-import React, { useState } from "react";
-import Cookies from "js-cookie";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-import AddProductForm from "./AddProductForm";
-import AdminSideBar from "./AdminSideBar";
-import SwalErr from "./ErrorHandler";
+import AddProductForm from './AddProductForm';
+import AdminSideBar from './AdminSideBar';
+import SwalErr from './ErrorHandler';
 
 const AddProduct = () => {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [mainTitle, setMainTitle] = useState('');
+  const [content, setContent] = useState('');
   const [locInputs, setLocInputs] = useState([]);
   const [modal1Show, setStoreShow] = useState(false);
   const [modal2Show, setSiteShow] = useState(false);
@@ -24,6 +25,7 @@ const AddProduct = () => {
   const [variantsThere, setVariants] = useState(false);
   const [isSKU, setIsSKU] = useState(false);
   const [error, setError] = useState(false);
+  const [mainError, setMainError] = useState(false);
   const [handleLoc, setHandleLoc] = useState({
     cwos: false,
   });
@@ -43,29 +45,28 @@ const AddProduct = () => {
   // const [isArrowDown, setIsArrowDown] = useState(false);
 
   const [variantsDetails, setVariantsDetials] = useState([]);
-  const [variantGroup, setVariantsGroup] = useState("");
+  const [variantGroup, setVariantsGroup] = useState('');
   const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
   const [skuInput, setSkuInput] = useState({
-    SKU: "",
-    barcode: "",
+    SKU: '',
+    barcode: '',
   });
-  const [weight, setWeight] = useState("0");
-  const [weightUnit, setWeightUnit] = useState("kg");
-  const [originCountry, setOriginCountry] = useState("");
-  const [productStatus, setProductStatus] = useState("0");
+  const [weight, setWeight] = useState('0');
+  const [weightUnit, setWeightUnit] = useState('kg');
+  const [originCountry, setOriginCountry] = useState('');
+  const [productStatus, setProductStatus] = useState('0');
   const [productCategory, setProductCategory] = useState({
-    category: "",
-    productType: "",
-    vendor: "",
-    brand: "0",
+    category: '',
+    productType: '',
+    vendor: '',
+    brand: '0',
   });
 
-  console.log(productCategory.category, "balaji");
   const [tagValue, setTagValue] = useState([]);
   const [collectionValue, setCollectionValue] = useState([]);
   const [metaDetails, setMetaDetails] = useState({
-    metaTitle: "",
-    metaDescription: "",
+    metaTitle: '',
+    metaDescription: '',
     urlHandle: `${window.location.origin}/productItem`,
   });
   const [inventoryIdInfo, setInventoryId] = useState([]);
@@ -164,17 +165,24 @@ const AddProduct = () => {
 
   const onSubmitProductDetails = async () => {
     try {
-      const url = `${localUrl}/product/add-store`;
+      const url = `http://192.168.215.90:5018/api/v1/product/add-store`;
       const headers = {
         Authorization: `Bearer ${token}`,
-        "Content-type": "multipart/form-data",
+        'Content-type': 'multipart/form-data',
       };
 
-      if (title === "") {
-        setError("Title can’t be blank");
+      if (mainTitle === '') {
+        setMainError('Main Title can’t be blank');
         return;
       } else {
-        setError("");
+        setMainError('');
+      }
+
+      if (title === '') {
+        setError('Title can’t be blank');
+        return;
+      } else {
+        setError('');
       }
 
       SwalErr.onLoading();
@@ -190,48 +198,47 @@ const AddProduct = () => {
       images.forEach((file, i) => {
         formdata.append(`productImages`, file);
       });
-
-      formdata.append("productTitle", title);
-      formdata.append("productInfo", content);
-      formdata.append("productActiveStatus", productStatus);
-      formdata.append("category", productCategory.category);
-      formdata.append("productType", productCategory.productType);
-      formdata.append("vendor", productCategory.vendor);
-      formdata.append("brand", productCategory.brand);
-      formdata.append("collections", JSON.stringify(collectionValue));
-      formdata.append("tags", JSON.stringify(tagValue));
-      formdata.append("metaTitle", metaDetails.metaTitle);
-      formdata.append("metaDescription", metaDetails.metaDescription);
-      formdata.append("urlHandle", metaDetails.urlHandle);
-      formdata.append("variantsThere", variantsThere);
+      formdata.append('productMainTitle', mainTitle);
+      formdata.append('productTitle', title);
+      formdata.append('productInfo', content);
+      formdata.append('productActiveStatus', productStatus);
+      formdata.append('category', productCategory.category);
+      formdata.append('productType', productCategory.productType);
+      formdata.append('vendor', productCategory.vendor);
+      formdata.append('brand', productCategory.brand);
+      formdata.append('collections', JSON.stringify(collectionValue));
+      formdata.append('tags', JSON.stringify(tagValue));
+      formdata.append('metaTitle', metaDetails.metaTitle);
+      formdata.append('metaDescription', metaDetails.metaDescription);
+      formdata.append('urlHandle', metaDetails.urlHandle);
+      formdata.append('variantsThere', variantsThere);
 
       if (variantsThere) {
         variantsDetails.forEach((variant) => {
-          formdata.append("variantImage", variant.main.variantImage);
+          formdata.append('variantImage', variant.main.variantImage);
           variant.sub.forEach((subVariant) => {
-            formdata.append("variantImage", subVariant.variantImage);
+            formdata.append('variantImage', subVariant.variantImage);
           });
         });
-        formdata.append("variantsOrder", JSON.stringify(proVariants));
-        formdata.append("variants", JSON.stringify(variantsDetails));
-        formdata.append("vInventoryInfo", JSON.stringify(inventoryIdInfo));
+        formdata.append('variantsOrder', JSON.stringify(proVariants));
+        formdata.append('variants', JSON.stringify(variantsDetails));
+        formdata.append('vInventoryInfo', JSON.stringify(inventoryIdInfo));
       } else {
-        formdata.append("productPrice", productPrices.price);
-        formdata.append("productComparePrice", productPrices.comparePrice);
-        formdata.append("productIsTaxable", productPrices.isTaxable);
-        formdata.append("productCostPerItem", productPrices.costPerItem);
-        formdata.append("inventoryInfo", JSON.stringify(locInputs));
-        formdata.append("cwos", handleLoc.cwos);
-        formdata.append("skuCode", skuInput.SKU);
-        formdata.append("skuBarcode", skuInput.barcode);
-        formdata.append("productWeight", weight + " " + weightUnit);
-        formdata.append("originCountry", originCountry);
+        formdata.append('productPrice', productPrices.price);
+        formdata.append('productComparePrice', productPrices.comparePrice);
+        formdata.append('productIsTaxable', productPrices.isTaxable);
+        formdata.append('productCostPerItem', productPrices.costPerItem);
+        formdata.append('inventoryInfo', JSON.stringify(locInputs));
+        formdata.append('cwos', handleLoc.cwos);
+        formdata.append('skuCode', skuInput.SKU);
+        formdata.append('skuBarcode', skuInput.barcode);
+        formdata.append('productWeight', weight + ' ' + weightUnit);
+        formdata.append('originCountry', originCountry);
       }
-      console.log(JSON.stringify(inventoryIdInfo));
       await axios.post(url, formdata, { headers });
       SwalErr.onLoadingClose();
       SwalErr.onSuccess();
-      navigate("/products");
+      navigate('/products');
     } catch (error) {
       SwalErr.onLoadingClose();
       console.log(error);
@@ -240,21 +247,21 @@ const AddProduct = () => {
   };
 
   const deleteImg = async (imgFile, setFun) => {
-    console.log(imgFile);
-    console.log(images);
     const filteredImgs = images.filter((img, i) => !imgFile.includes(i));
     setImages(filteredImgs);
     setFun([]);
-    console.log("file", filteredImgs);
   };
-  console.log(inventoryIdInfo, "bhbhbvhj");
   const productProps = {
     categoryItems,
     setCategoryItems,
     title,
+    mainTitle,
     error,
+    mainError,
     setError,
+    setMainError,
     setTitle,
+    setMainTitle,
     setMetaDetails,
     metaDetails,
     setVariantsGroup,
@@ -317,19 +324,19 @@ const AddProduct = () => {
   };
 
   return (
-    <div className="adminSec">
+    <div className='adminSec'>
       <AdminSideBar />
-      <div className="commonSec">
-        <div className="addProductSection">
-          <div className="container">
-            <div className="row">
-              <div className="col-12">
+      <div className='commonSec'>
+        <div className='addProductSection'>
+          <div className='container'>
+            <div className='row'>
+              <div className='col-12'>
                 <h3>Add Product</h3>
               </div>
               <AddProductForm productProps={productProps} />
-              <div className="col-12">
-                <div className="btnCont">
-                  <button onClick={onSubmitProductDetails} className="adminBtn">
+              <div className='col-12'>
+                <div className='btnCont'>
+                  <button onClick={onSubmitProductDetails} className='adminBtn'>
                     Save
                   </button>
                 </div>

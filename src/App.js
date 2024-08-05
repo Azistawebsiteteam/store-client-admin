@@ -1,49 +1,56 @@
-import { Routes, Route } from "react-router-dom";
-import Cookies from "js-cookie";
+import { Routes, Route } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
-import Home from "./Pages/Home";
-import ProtectedRoute from "./protectRoute";
-import AdminLoginPage from "./AdminLoginPage";
-import AddProduct from "./Pages/AddProduct";
-import AdminSideBar from "./Pages/AdminSideBar";
-import AddSlider from "./Banners/AddSlider";
-import AdminNavbar from "./Pages/AdminNavbar";
-import Collections from "./Collections/Collections";
-import ManageAccount from "./Pages/ManageAccount";
-import CreateCollections from "./Collections/CreateCollections";
-import UpdateCollection from "./Collections/UpdateCollection";
-import SlidersListing from "./Banners/SlidersListing";
-import ProductListing from "./Pages/ProductListing";
-import UpdateProduct from "./Pages/UpdateProduct";
-import Brands from "./Pages/Brands";
-import VariantDetails from "./Pages/VariantDetails";
-import VariantEdit from "./Pages/VariantEdit";
-import Inventory from "./Inventory/Inventory";
-import NotFound from "./Pages/NotFound";
-import Discounts from "./Discounts/Discounts";
-import CreateDiscount from "./Discounts/CreateDiscount";
-import CreateBrand from "./Pages/CreateBrand";
-import EditBrand from "./Pages/EditBrand";
-import VariantsComponent from "./Pages/VariantsComponent";
-import ReviewList from "./Pages/ReviewList";
-import EditSlider from "./Banners/EditSlider";
-import CreateAnnouncement from "./AnnouncementBar/CreateAnnouncement";
-import Announcements from "./AnnouncementBar/Announcements";
-import Dummy from "./Pages/Dummy";
-import EditAnnouncement from "./AnnouncementBar/EditAnnouncement";
-import CustomersListing from "./Customers/CustomersListing";
-import Customers from "./Customers/Customers";
-import OrdersListing from "./Orders/OrdersListing";
-import OrderDetails from "./Orders/OrderDetails";
-import BlogsListing from "./Blogs/BlogsListing";
-import BlogsCreate from "./Blogs/BlogsCreate";
-import BlogsEdit from "./Blogs/BlogEdit";
-import Categories from "./Categories/Categories";
-import CategoriesCreate from "./Categories/CategoriesCreate";
-import CategoriesEdit from "./Categories/CategoryEdit";
+import Home from './Pages/Home';
+import ProtectedRoute from './protectRoute';
+import AdminLoginPage from './AdminLoginPage';
+import AddProduct from './Pages/AddProduct';
+import AdminSideBar from './Pages/AdminSideBar';
+import AddSlider from './Banners/AddSlider';
+import AdminNavbar from './Pages/AdminNavbar';
+import Collections from './Collections/Collections';
+import ManageAccount from './Pages/ManageAccount';
+import CreateCollections from './Collections/CreateCollections';
+import UpdateCollection from './Collections/UpdateCollection';
+import SlidersListing from './Banners/SlidersListing';
+import ProductListing from './Pages/ProductListing';
+import UpdateProduct from './Pages/UpdateProduct';
+import Brands from './Pages/Brands';
+import VariantDetails from './Pages/VariantDetails';
+import VariantEdit from './Pages/VariantEdit';
+import Inventory from './Inventory/Inventory';
+import NotFound from './Pages/NotFound';
+import Discounts from './Discounts/Discounts';
+import CreateDiscount from './Discounts/CreateDiscount';
+import CreateBrand from './Pages/CreateBrand';
+import EditBrand from './Pages/EditBrand';
+import VariantsComponent from './Pages/VariantsComponent';
+import ReviewList from './Pages/ReviewList';
+import EditSlider from './Banners/EditSlider';
+import CreateAnnouncement from './AnnouncementBar/CreateAnnouncement';
+import Announcements from './AnnouncementBar/Announcements';
+import Dummy from './Pages/Dummy';
+import EditAnnouncement from './AnnouncementBar/EditAnnouncement';
+import CustomersListing from './Customers/CustomersListing';
+import Customers from './Customers/Customers';
+import OrdersListing from './Orders/OrdersListing';
+import OrderDetails from './Orders/OrderDetails';
+import BlogsListing from './Blogs/BlogsListing';
+import BlogsCreate from './Blogs/BlogsCreate';
+import BlogsEdit from './Blogs/BlogEdit';
+import Categories from './Categories/Categories';
+import CategoriesCreate from './Categories/CategoriesCreate';
+import CategoriesEdit from './Categories/CategoryEdit';
+import FaqList from './Faqs/FaqList';
 
-import "bootstrap/dist/css/bootstrap.css";
-import "./Pages/Admin.css";
+import 'bootstrap/dist/css/bootstrap.css';
+import './Pages/Admin.css';
+import ProductBannerListing from './Banners/ProductBannerListing';
+
+import FaqCreate from './Faqs/FaqCreate';
+import FaqEdit from './Faqs/FaqEdit';
+import ProductInfo from './Pages/ProductInfo';
+import FeaturesT from './Components/FeaturesT';
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -53,17 +60,18 @@ function App() {
     <>
       {admJwt && <AdminNavbar />}
       <Routes>
+        <Route path='/features' element={<FeaturesT />} />
         <Route
-          path="/"
+          path='/'
           element={
             <ProtectedRoute>
               <Home />
             </ProtectedRoute>
           }
         />
-        <Route path="/adminLoginPage" element={<AdminLoginPage />} />
+        <Route path='/adminLoginPage' element={<AdminLoginPage />} />
         <Route
-          path="/product/create"
+          path='/product/create'
           element={
             <ProtectedRoute>
               <AddProduct />
@@ -71,7 +79,7 @@ function App() {
           }
         />
         <Route
-          path="/products"
+          path='/products'
           element={
             <ProtectedRoute>
               <ProductListing />
@@ -79,7 +87,7 @@ function App() {
           }
         />
         <Route
-          path="/adminSidebar"
+          path='/adminSidebar'
           element={
             <ProtectedRoute>
               <AdminSideBar />
@@ -87,7 +95,7 @@ function App() {
           }
         />
         <Route
-          path="/slider/create"
+          path='/slider/create'
           element={
             <ProtectedRoute>
               <AddSlider />
@@ -95,7 +103,7 @@ function App() {
           }
         />
         <Route
-          path="/collections"
+          path='/collections'
           element={
             <ProtectedRoute>
               <Collections />
@@ -103,7 +111,7 @@ function App() {
           }
         />
         <Route
-          path="/collections/create"
+          path='/collections/create'
           element={
             <ProtectedRoute>
               <CreateCollections />
@@ -111,7 +119,7 @@ function App() {
           }
         />
         <Route
-          path="/manageAccount"
+          path='/manageAccount'
           element={
             <ProtectedRoute>
               <ManageAccount />
@@ -119,7 +127,7 @@ function App() {
           }
         />
         <Route
-          path="/collection/update/:id"
+          path='/collection/update/:id'
           element={
             <ProtectedRoute>
               <UpdateCollection />
@@ -127,16 +135,24 @@ function App() {
           }
         />
         <Route
-          path="/slider"
+          path='/slider'
           element={
             <ProtectedRoute>
               <SlidersListing />
             </ProtectedRoute>
           }
         />
-        <Route path="/edit/slider/:id" element={<EditSlider />} />
         <Route
-          path="/product/update/:id"
+          path='/product-banners'
+          element={
+            <ProtectedRoute>
+              <ProductBannerListing />
+            </ProtectedRoute>
+          }
+        />
+        <Route path='/edit/slider/:id' element={<EditSlider />} />
+        <Route
+          path='/product/update/:id'
           element={
             <ProtectedRoute>
               <UpdateProduct />
@@ -144,7 +160,15 @@ function App() {
           }
         />
         <Route
-          path="/variant-details/:id"
+          path='/product/info/:id'
+          element={
+            <ProtectedRoute>
+              <ProductInfo />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/variant-details/:id'
           element={
             <ProtectedRoute>
               <VariantDetails />
@@ -152,16 +176,16 @@ function App() {
           }
         />
         <Route
-          path="/variantEdit/:id"
+          path='/variantEdit/:id'
           element={
             <ProtectedRoute>
               <VariantEdit />
             </ProtectedRoute>
           }
         />
-        <Route path="/inventory" element={<Inventory />} />
+        <Route path='/inventory' element={<Inventory />} />
         <Route
-          path="/discount"
+          path='/discount'
           element={
             <ProtectedRoute>
               <Discounts />
@@ -169,7 +193,7 @@ function App() {
           }
         />
         <Route
-          path="/discount/create"
+          path='/discount/create'
           element={
             <ProtectedRoute>
               <CreateDiscount />
@@ -177,7 +201,7 @@ function App() {
           }
         />
         <Route
-          path="/brands"
+          path='/brands'
           element={
             <ProtectedRoute>
               <Brands />
@@ -185,7 +209,7 @@ function App() {
           }
         />
         <Route
-          path="/brands/create"
+          path='/brands/create'
           element={
             <ProtectedRoute>
               <CreateBrand />
@@ -193,30 +217,35 @@ function App() {
           }
         />
         <Route
-          path="/edit-brand/:id"
+          path='/edit-brand/:id'
           element={
             <ProtectedRoute>
               <EditBrand />
             </ProtectedRoute>
           }
         />
-        <Route path="/variantsNew" element={<VariantsComponent />} />
-        <Route path="/review-list" element={<ReviewList />} />
-        <Route path="/announcement/create" element={<CreateAnnouncement />} />
-        <Route path="/announcements" element={<Announcements />} />
-        <Route path="/announcement/edit/:id" element={<EditAnnouncement />} />
-        <Route path="/customers" element={<CustomersListing />} />
-        <Route path="/dummy" element={<Dummy />} />
-        <Route path="/customer/:id" element={<Customers />} />
-        <Route path="/orders" element={<OrdersListing />} />
-        <Route path="/orders/:id" element={<OrderDetails />} />
-        <Route path="/blogs" element={<BlogsListing />} />
-        <Route path="/blogs/create" element={<BlogsCreate />} />
-        <Route path="/blogs/edit" element={<BlogsEdit />} />
-        <Route path="/Categories" element={<Categories />} />
-        <Route path="/category/create" element={<CategoriesCreate />} />
-        <Route path="/edit-category/:id" element={<CategoriesEdit />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path='/variantsNew' element={<VariantsComponent />} />
+        <Route path='/review-list' element={<ReviewList />} />
+        <Route path='/announcement/create' element={<CreateAnnouncement />} />
+        <Route path='/announcements' element={<Announcements />} />
+        <Route path='/announcement/edit/:id' element={<EditAnnouncement />} />
+        <Route path='/customers' element={<CustomersListing />} />
+        <Route path='/dummy' element={<Dummy />} />
+        <Route path='/customer/:id' element={<Customers />} />
+        <Route path='/orders' element={<OrdersListing />} />
+        <Route path='/orders/:id' element={<OrderDetails />} />
+        <Route path='/blogs' element={<BlogsListing />} />
+        <Route path='/blogs/create' element={<BlogsCreate />} />
+        <Route path='/blogs/edit/:id' element={<BlogsEdit />} />
+        <Route path='/faqs' element={<FaqList />} />
+        <Route path='/faqs/create' element={<FaqCreate />} />
+        <Route path='/edit-faq/:id' element={<FaqEdit />} />
+
+        <Route path='/Categories' element={<Categories />} />
+        <Route path='/category/create' element={<CategoriesCreate />} />
+        <Route path='/edit-category/:id' element={<CategoriesEdit />} />
+
+        <Route path='*' element={<NotFound />} />
       </Routes>
     </>
   );

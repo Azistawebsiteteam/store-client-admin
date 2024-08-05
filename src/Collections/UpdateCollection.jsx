@@ -74,6 +74,7 @@ const UpdateCollection = () => {
         urlHandle,
         collectionImg,
       } = collectionData;
+
       const metaDetails = {
         metaTitle,
         metaDescription,
@@ -94,7 +95,7 @@ const UpdateCollection = () => {
       swalErr.onError(error);
     }
   };
-
+  console.log(collectionData, "sdsds");
   return (
     <div>
       <CollectionForm
