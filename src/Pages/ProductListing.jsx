@@ -57,6 +57,7 @@ const ProductListing = () => {
                     <th scope='col'>Markets</th>
                     <th scope='col'>Category</th>
                     <th scope='col'>Vendor</th>
+                    <th scope='col'>Actons</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -91,9 +92,11 @@ const ProductListing = () => {
                       <td>Indian Market</td>
                       <td>{p.product_category}</td>
                       <td>{p.azst_vendor_name}</td>
-                      <Link to={`/product/info/${p.product_id}`}>
-                        <input type='button' value='Add Info' />
-                      </Link>
+                      <td>
+                        <Link to={`/product/info/${p.product_id}`}>
+                          <input type='button' value='Add Info' />
+                        </Link>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

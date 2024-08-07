@@ -51,6 +51,7 @@ import FaqCreate from './Faqs/FaqCreate';
 import FaqEdit from './Faqs/FaqEdit';
 import ProductInfo from './Pages/ProductInfo';
 import FeaturesT from './Components/FeaturesT';
+import Cart from './Pages/Cart';
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -61,6 +62,7 @@ function App() {
       {admJwt && <AdminNavbar />}
       <Routes>
         <Route path='/features' element={<FeaturesT />} />
+        <Route path='/cart' element={<Cart />} />
         <Route
           path='/'
           element={

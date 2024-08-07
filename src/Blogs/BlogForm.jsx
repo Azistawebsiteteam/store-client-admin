@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import { FaUpload } from 'react-icons/fa';
+import { FaUpload } from "react-icons/fa";
 
-import '../Pages/Admin.css';
-import TextEditor from '../Pages/TextEditor';
+import "../Pages/Admin.css";
+import TextEditor from "../Pages/TextEditor";
 //import { ProductState } from '../Context/ProductContext';
 
 const BlogForm = (props) => {
@@ -16,7 +16,8 @@ const BlogForm = (props) => {
   };
 
   const handleBannerImg = (e) => {
-    setInputValues({ ...inputVlaues, blogImg: e.target.files[0] });
+    console.log(e.target.id, "handleBannerImg");
+    setInputValues({ ...inputVlaues, [e.target.id]: e.target.files[0] });
   };
 
   const setContent = (content) => {
@@ -28,57 +29,58 @@ const BlogForm = (props) => {
   };
 
   return (
-    <div className='row faq-bgStyle'>
-      <div className='col-12 col-md-8'>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-sm-12 col-md-6'>
-              <label className='heading' htmlFor='type'>
+    <div className="row faq-bgStyle">
+      <div className="col-12 col-md-8">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12 col-md-6">
+              <label className="heading" htmlFor="type">
                 Blog Type
               </label>
               <input
-                type='text'
-                className='form-control'
-                id='type'
+                type="text"
+                className="form-control"
+                id="type"
                 value={inputVlaues.type}
                 onChange={handleinputVlaues}
-                placeholder='Enter Blog Type'
+                placeholder="Enter Blog Type"
               />
             </div>
 
-            <div className='col-sm-12 col-md-6 form-group'>
-              <label className='heading' htmlFor='title'>
+            <div className="col-sm-12 col-md-6 form-group">
+              <label className="heading" htmlFor="title">
                 Title
               </label>
               <input
-                type='text'
-                className='form-control'
-                id='title'
-                maxLength='50'
+                type="text"
+                className="form-control"
+                id="title"
+                maxLength="50"
                 value={inputVlaues.title}
                 onChange={handleinputVlaues}
               />
-              <p className='infoTxt'>
+              <p className="infoTxt">
                 {inputVlaues.title.length} of 50 characters used
               </p>
             </div>
-            <div className='col-sm-12 form-group'>
-              <label className='heading' htmlFor='description'>
+            <div className="col-sm-12 form-group">
+              <label className="heading" htmlFor="description">
                 Short Description
               </label>
               <textarea
-                id='description'
-                className='form-control'
-                cols='60'
-                rows='2'
-                maxLength='200'
+                id="description"
+                className="form-control"
+                cols="60"
+                rows="2"
+                maxLength="200"
                 onChange={handleinputVlaues}
-                value={inputVlaues.description}></textarea>
-              <p className='infoTxt'>
+                value={inputVlaues.description}
+              ></textarea>
+              <p className="infoTxt">
                 {inputVlaues.description.length} of 200 characters used
               </p>
             </div>
-            <div className='col-sm-12 form-group'>
+            <div className="col-sm-12 form-group">
               <TextEditor
                 content={inputVlaues.content}
                 setContent={setContent}
@@ -87,7 +89,7 @@ const BlogForm = (props) => {
           </div>
         </div>
       </div>
-      <div className='col-12 col-md-4'>
+      <div className="col-12 col-md-4">
         {/* <div className='col-12 '>
           <label className='heading' htmlFor='productId'>
             Select Product
@@ -106,47 +108,83 @@ const BlogForm = (props) => {
             ))}
           </select>
         </div> */}
-        <div className='col-12'>
-          <label className='heading' htmlFor='product'>
+        <div className="col-12">
+          <label className="heading" htmlFor="product">
             Product (or) Brand Name
           </label>
           <input
-            type='text'
-            className='form-control'
-            id='product'
+            type="text"
+            className="form-control"
+            id="product"
             value={inputVlaues.product}
             onChange={handleinputVlaues}
-            placeholder='Enter Product Name'
+            placeholder="Enter Product Name"
           />
         </div>
-        <div className='form-group mt-2'>
-          <label className='heading'>Blog Image</label>
-          <div className='drop-zone'>
-            {inputVlaues.blogImg ? (
-              typeof inputVlaues.blogImg === 'string' ? (
-                <img src={inputVlaues.blogImg} alt='Banner' className='bImg' />
+        <div className="form-group mt-2">
+          <label className="heading">Blog Thumbnail</label>
+          <div className="drop-zone">
+            {inputVlaues.blogThumbnailImg ? (
+              typeof inputVlaues.blogThumbnailImg === "string" ? (
+                <img
+                  src={inputVlaues.blogThumbnailImg}
+                  alt="thumbnail"
+                  className="bImg"
+                />
               ) : (
                 <img
-                  src={URL.createObjectURL(inputVlaues.blogImg)}
-                  alt='Banner'
-                  className='bImg'
+                  src={URL.createObjectURL(inputVlaues.blogThumbnailImg)}
+                  alt="thumbnail"
+                  className="bImg"
                 />
               )
             ) : (
-              <span className='dropZoneOverlay'>
+              <span className="dropZoneOverlay">
                 <FaUpload /> Drop file here or click to upload
               </span>
             )}
             <input
-              type='file'
-              className='FileUpload'
-              id='webBanner'
+              type="file"
+              className="FileUpload"
+              id="blogThumbnailImg"
               onChange={handleBannerImg}
             />
           </div>
+          <small>
+            <strong>Note:-</strong> Image dimensions must be in 855*982 pixels
+          </small>
         </div>
-        <div className='mt-3 text-center'>
-          <button className='btn btn-primary' onClick={onSubmitBlog}>
+        <div className="form-group mt-2">
+          <label className="heading">Blog Image</label>
+          <div className="drop-zone">
+            {inputVlaues.blogImg ? (
+              typeof inputVlaues.blogImg === "string" ? (
+                <img src={inputVlaues.blogImg} alt="Banner" className="bImg" />
+              ) : (
+                <img
+                  src={URL.createObjectURL(inputVlaues.blogImg)}
+                  alt="Banner"
+                  className="bImg"
+                />
+              )
+            ) : (
+              <span className="dropZoneOverlay">
+                <FaUpload /> Drop file here or click to upload
+              </span>
+            )}
+            <input
+              type="file"
+              className="FileUpload"
+              id="blogImg"
+              onChange={handleBannerImg}
+            />
+          </div>
+          <small>
+            <strong>Note:-</strong> Image dimensions must be in 1220*550 pixels
+          </small>
+        </div>
+        <div className="mt-3 text-center">
+          <button className="btn btn-primary" onClick={onSubmitBlog}>
             {buttonText}
           </button>
         </div>

@@ -1,21 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useNavigate, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate, useParams } from "react-router-dom";
 
-import AdminSideBar from '../Pages/AdminSideBar';
-import BlogForm from './BlogForm';
-import swalHandle from '../Pages/ErrorHandler';
-import BackBtn from '../Components/BackBtn';
+import AdminSideBar from "../Pages/AdminSideBar";
+import BlogForm from "./BlogForm";
+import swalHandle from "../Pages/ErrorHandler";
+import BackBtn from "../Components/BackBtn";
 
 const BlogEdit = () => {
   const [inputVlaues, setInputValues] = useState({
-    title: '',
-    description: '',
-    content: '',
-    product: '',
-    type: '',
-    blogImg: '',
+    title: "",
+    description: "",
+    content: "",
+    product: "",
+    type: "",
+    blogImg: "",
+    blogThumbnailImg: "",
   });
   const { id } = useParams();
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const BlogEdit = () => {
         azst_blg_type,
         azst_blg_img,
         azst_blg_description,
+        azst_blg_thumbnail_img,
       } = data;
 
       setInputValues({
@@ -49,6 +51,7 @@ const BlogEdit = () => {
         product: azst_blg_product,
         type: azst_blg_type,
         blogImg: azst_blg_img,
+        blogThumbnailImg: azst_blg_thumbnail_img,
       });
 
       swalHandle.onLoadingClose();
@@ -70,19 +73,20 @@ const BlogEdit = () => {
         Authorization: `Bearer ${token}`,
       };
       const formdata = new FormData();
-      formdata.append('id', id);
-      formdata.append('blogImg', inputVlaues.blogImg);
-      formdata.append('type', inputVlaues.type);
-      formdata.append('title', inputVlaues.title);
-      formdata.append('description', inputVlaues.description);
-      formdata.append('content', inputVlaues.content);
-      formdata.append('product', inputVlaues.product);
+      formdata.append("id", id);
+      formdata.append("blogImg", inputVlaues.blogImg);
+      formdata.append("blogThumbnailImg", inputVlaues.blogThumbnailImg);
+      formdata.append("type", inputVlaues.type);
+      formdata.append("title", inputVlaues.title);
+      formdata.append("description", inputVlaues.description);
+      formdata.append("content", inputVlaues.content);
+      formdata.append("product", inputVlaues.product);
       swalHandle.onLoading();
       await axios.put(url, formdata, { headers });
       swalHandle.onLoadingClose();
       swalHandle.onSuccess();
       setTimeout(() => {
-        navigate('/blogs');
+        navigate("/blogs");
       }, 2000);
     } catch (error) {
       swalHandle.onLoadingClose();
@@ -91,14 +95,14 @@ const BlogEdit = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <AdminSideBar />
-      <div className='commonSec'>
-        <div className='d-flex align-items-center'>
+      <div className="commonSec">
+        <div className="d-flex align-items-center">
           <BackBtn /> <h3>Update Blog</h3>
         </div>
         <BlogForm
-          buttonText={'Update'}
+          buttonText={"Update"}
           inputVlaues={inputVlaues}
           setInputValues={setInputValues}
           handleSubmit={handleSubmit}
