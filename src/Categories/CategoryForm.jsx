@@ -1,8 +1,19 @@
 import React from "react";
 import { FaUpload } from "react-icons/fa";
+import { v4 } from "uuid";
+import { AddIcon, RemoveIcon } from "../Components/Icons";
 
 const CategoryForm = (props) => {
-  const { categoryImg, setCategoryImg, categoryData, setCategoryData } = props;
+  const {
+    categoryImg,
+    setCategoryImg,
+    subCategories,
+    setSubCategories,
+    categoryData,
+    setCategoryData,
+    deletedSubCats,
+    setDeletedSubCats,
+  } = props;
 
   const handleCategoryImage = (e) => {
     const image = e.target.files[0];
@@ -11,6 +22,39 @@ const CategoryForm = (props) => {
 
   const handleBrandInput = (e) => {
     setCategoryData({ ...categoryData, [e.target.id]: e.target.value });
+  };
+
+  const addSubCategories = () => {
+    setSubCategories([
+      ...subCategories,
+      {
+        id: v4(),
+        subCategoryName: "",
+      },
+    ]);
+  };
+
+  const removeCategory = (id) => {
+    if (setDeletedSubCats) {
+      setDeletedSubCats([...deletedSubCats, id]);
+    }
+    const updateCategories = subCategories.filter(
+      (subCategory) => subCategory.id !== id
+    );
+    setSubCategories(updateCategories);
+  };
+
+  console.log(deletedSubCats);
+
+  const handleSubCategoryInput = (e, id) => {
+    const newSubCategories = subCategories.map((each, i) => {
+      if (each.id === id) {
+        return { ...each, subCategoryName: e.target.value };
+      } else {
+        return each;
+      }
+    });
+    setSubCategories(newSubCategories);
   };
 
   return (
@@ -28,6 +72,34 @@ const CategoryForm = (props) => {
             id="text"
           />
         </div>
+
+        <div className="col-md-12">
+          <label htmlFor="text" className="form-label">
+            Sub Category Name
+          </label>
+          <div className="d-flex flex-wrap">
+            {subCategories?.map((each, i) => (
+              <div
+                key={i}
+                className="subCategoryCont d-flex align-items-center m-1"
+              >
+                <input
+                  type="text"
+                  value={each.subCategoryName}
+                  onChange={(e) => handleSubCategoryInput(e, each.id)}
+                  className="form-control"
+                  id="text"
+                  style={{ width: "90%", height: "fitContent" }}
+                />
+                <div className="dltSubCat">
+                  <RemoveIcon onClick={(e) => removeCategory(each.id)} />
+                </div>
+              </div>
+            ))}
+            <AddIcon onClick={addSubCategories} />
+          </div>
+        </div>
+
         <div className="col-md-12">
           <label htmlFor="description" className="form-label">
             Category Description

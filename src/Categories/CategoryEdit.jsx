@@ -2,9 +2,11 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { v4 } from "uuid";
 import Cookies from "js-cookie";
 import AdminSideBar from "../Pages/AdminSideBar";
 import CategoryForm from "./CategoryForm";
+import ErrorHandler from "../Pages/ErrorHandler";
 
 const CategoryEdit = () => {
   const [categoryImg, setCategoryImg] = useState();
@@ -12,6 +14,14 @@ const CategoryEdit = () => {
     text: "",
     description: "",
   });
+  const [subCategories, setSubCategories] = useState([
+    {
+      id: v4(),
+      subCategoryName: "",
+    },
+  ]);
+
+  const [deletedSubCats, setDeletedSubCats] = useState([]);
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -19,7 +29,7 @@ const CategoryEdit = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const url = `${baseUrl}/category/`;
+      const url = `http://192.168.214.253:5018/api/v1/category/`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
@@ -29,19 +39,27 @@ const CategoryEdit = () => {
         azst_category_name,
         azst_category_img,
         azst_category_description,
+        azst_subCategories = [],
       } = response.data;
       setCategoryImg(azst_category_img);
       setCategoryData({
         text: azst_category_name,
         description: azst_category_description,
       });
+      const subCats = azst_subCategories
+        ? azst_subCategories.map((c) => ({
+            id: c.azst_sub_category_id,
+            subCategoryName: c.azst_sub_category_name,
+          }))
+        : [];
+      setSubCategories(subCats);
     };
     fetchCategories();
   }, [baseUrl, id, token]);
 
   const saveCategory = async () => {
     try {
-      const url = `${baseUrl}/category`;
+      const url = `http://192.168.214.253:5018/api/v1/category`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
@@ -50,16 +68,27 @@ const CategoryEdit = () => {
       const { text, description } = categoryData;
 
       formdata.append("categoryId", id);
-      formdata.append("text", text);
+      formdata.append("categoryName", text);
       formdata.append("description", description);
       formdata.append("categoryImg", categoryImg);
+      formdata.append("subCategories", JSON.stringify(subCategories));
 
+      formdata.append("deletedSubCats", JSON.stringify(deletedSubCats));
+
+      console.log(deletedSubCats, "sdsdsds");
+      ErrorHandler.onLoading();
       const response = await axios.put(url, formdata, { headers });
+      ErrorHandler.onLoadingClose();
+      ErrorHandler.onSuccess();
+      setDeletedSubCats([]);
       console.log(response);
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onLoadingClose();
+      ErrorHandler.onError(error);
     }
   };
+
+  console.log(subCategories, "subCategories");
 
   return (
     <div className="adminSec">
@@ -75,6 +104,10 @@ const CategoryEdit = () => {
                   categoryImg={categoryImg}
                   setCategoryData={setCategoryData}
                   setCategoryImg={setCategoryImg}
+                  subCategories={subCategories}
+                  setSubCategories={setSubCategories}
+                  deletedSubCats={deletedSubCats}
+                  setDeletedSubCats={setDeletedSubCats}
                 />
               </div>
               <div className="col-12">

@@ -1,28 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from "react";
 
-import { Link, useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { v4 } from 'uuid';
+import { Link, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { v4 } from "uuid";
 
-import TextEditor from './TextEditor';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { FaBusinessTime } from 'react-icons/fa6';
-import PopupModal from './PopupModal';
-import Button from 'react-bootstrap/Button';
-import Multiselect from 'multiselect-react-dropdown';
-import { RiDeleteBin6Line } from 'react-icons/ri';
+import TextEditor from "./TextEditor";
+import Dropdown from "react-bootstrap/Dropdown";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaBusinessTime } from "react-icons/fa6";
+import PopupModal from "./PopupModal";
+import Button from "react-bootstrap/Button";
+import Multiselect from "multiselect-react-dropdown";
+import { RiDeleteBin6Line } from "react-icons/ri";
 
-import { FaRegFileImage } from 'react-icons/fa';
-import { IoMdArrowDropup, IoMdArrowDropdown } from 'react-icons/io';
-import { ProductState } from '../Context/ProductContext';
-import { MdDelete } from 'react-icons/md';
-import { showToast } from './ErrorHandler';
+import { FaRegFileImage } from "react-icons/fa";
+import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
+import { ProductState } from "../Context/ProductContext";
+import { MdDelete } from "react-icons/md";
+import { showToast } from "./ErrorHandler";
 
-import './Admin.css';
-import VariantEdit from './VariantEdit';
+import "./Admin.css";
+import VariantEdit from "./VariantEdit";
 
 const AddProductForm = ({ productProps }) => {
   const location = useLocation();
@@ -195,7 +195,7 @@ const AddProductForm = ({ productProps }) => {
       );
 
       mainOptions.forEach((mainOption) => {
-        if (mainOption !== '') {
+        if (mainOption !== "") {
           const subAvail = variantDetails.filter(
             (v) =>
               v.option1 === mainOption ||
@@ -214,7 +214,7 @@ const AddProductForm = ({ productProps }) => {
               id: v4(),
               variantId: 0,
               value: mainOption,
-              variantImage: subAvail[0]?.variant_image[0] || '',
+              variantImage: subAvail[0]?.variant_image[0] || "",
               offer_price: `${Math.min(...offer_price_array)} - ${Math.max(
                 ...offer_price_array
               )}`,
@@ -224,14 +224,14 @@ const AddProductForm = ({ productProps }) => {
                 0
               ),
 
-              hsCode: '',
-              barcode: '',
-              skuCode: '',
+              hsCode: "",
+              barcode: "",
+              skuCode: "",
               isTaxable: false,
               shippingRequired: false,
               inventoryId: 0,
-              inventoryPolicy: '',
-              variantService: '',
+              inventoryPolicy: "",
+              variantService: "",
             };
           } else {
             const mainV = subAvail[0];
@@ -240,21 +240,21 @@ const AddProductForm = ({ productProps }) => {
               id: v4(),
               variantId: id || 0,
               value: mainOption,
-              variantImage: '',
+              variantImage: "",
               offer_price: offer_price || 0,
               comparePrice: comparePrice || 0,
               quantity: subAvail.reduce(
                 (acc, v) => acc + parseInt(v.variant_qty || 0),
                 0
               ),
-              hsCode: '',
-              barcode: '',
-              skuCode: '',
+              hsCode: "",
+              barcode: "",
+              skuCode: "",
               isTaxable: false,
               shippingRequired: false,
               inventoryId: 0,
-              inventoryPolicy: '',
-              variantService: '',
+              inventoryPolicy: "",
+              variantService: "",
             };
           }
           const sub = [];
@@ -275,12 +275,12 @@ const AddProductForm = ({ productProps }) => {
               }
 
               if (subV) {
-                const variants = subVariant.join('-').replace(/^-*|-*$/g, '');
+                const variants = subVariant.join("-").replace(/^-*|-*$/g, "");
                 sub.push({
                   id: v4(),
                   variantId: subV.id,
                   value: variants,
-                  variantImage: subV.variant_image[1] || '',
+                  variantImage: subV.variant_image[1] || "",
                   offer_price: subV.offer_price,
                   comparePrice: subV.compare_at_price,
                   quantity: subV.variant_qty,
@@ -294,24 +294,24 @@ const AddProductForm = ({ productProps }) => {
                   variantService: subV.variant_fulfillment_service,
                 });
               } else {
-                const variants = subVariant.join('-');
+                const variants = subVariant.join("-");
 
                 sub.push({
                   id: v4(),
-                  variantId: '0',
+                  variantId: "0",
                   value: variants,
-                  variantImage: '',
+                  variantImage: "",
                   offer_price: 0,
                   comparePrice: 0,
                   quantity: 0,
-                  hsCode: '',
-                  barcode: '',
-                  skuCode: '',
+                  hsCode: "",
+                  barcode: "",
+                  skuCode: "",
                   isTaxable: false,
                   shippingRequired: false,
                   inventoryId: 0,
-                  inventoryPolicy: '',
-                  variantService: '',
+                  inventoryPolicy: "",
+                  variantService: "",
                 });
               }
 
@@ -319,7 +319,7 @@ const AddProductForm = ({ productProps }) => {
             }
 
             remainingVariants[currentIndex].optionValue.forEach((subValue) => {
-              if (subValue === '') return;
+              if (subValue === "") return;
               recursiveGenerateSubOptions(currentIndex + 1, [
                 ...subVariant,
                 subValue,
@@ -343,7 +343,7 @@ const AddProductForm = ({ productProps }) => {
     setVariantsDetials(variantsData);
 
     if (variants.length <= 1) {
-      setVariantsGroup(variants[0]?.optionName || '');
+      setVariantsGroup(variants[0]?.optionName || "");
     }
   }, [generateOptions, variants, variantGroup]);
 
@@ -436,7 +436,7 @@ const AddProductForm = ({ productProps }) => {
       e.target.value.length === 1 &&
       newVariants[variantIndex].optionValue.length - 1 === i
     ) {
-      newVariants[variantIndex].optionValue.push('');
+      newVariants[variantIndex].optionValue.push("");
       setVariant(newVariants);
     }
     setVariant(newVariants);
@@ -470,8 +470,8 @@ const AddProductForm = ({ productProps }) => {
         ...prevVariants,
         {
           id: v4(),
-          optionName: '',
-          optionValue: [''],
+          optionName: "",
+          optionValue: [""],
           isDone: false,
         },
       ]);
@@ -488,7 +488,7 @@ const AddProductForm = ({ productProps }) => {
   };
 
   const handleProductPrices = (e) => {
-    if (e.target.id === 'isTaxable') {
+    if (e.target.id === "isTaxable") {
       setProductPrices({ ...productPrices, [e.target.id]: e.target.checked });
     } else {
       setProductPrices({ ...productPrices, [e.target.id]: e.target.value });
@@ -524,7 +524,7 @@ const AddProductForm = ({ productProps }) => {
     setVariantsDetials(
       variantsDetails.map((eachVariant) => {
         if (eachVariant.id === vid) {
-          if (type === 'main') {
+          if (type === "main") {
             return {
               ...eachVariant,
               main: { ...eachVariant.main, variantImage: e.target.files[0] },
@@ -555,27 +555,29 @@ const AddProductForm = ({ productProps }) => {
 
   const onChangeMainTitle = (e) => {
     if (e.target.value.length === 0) {
-      setMainError('Main Title can’t be blank');
+      setMainError("Main Title can’t be blank");
     } else {
-      setMainError('');
+      setMainError("");
     }
     setMainTitle(e.target.value);
     setMetaDetails({
       ...metaDetails,
       urlHandle: `${
         window.location.origin
-      }/productItem/${e.target.value.replace(/ /g, '-')}`,
+      }/productItem/${e.target.value.replace(/ /g, "-")}`,
     });
   };
 
   const onChangeTitle = (e) => {
     if (e.target.value.length === 0) {
-      setError('Title can’t be blank');
+      setError("Title can’t be blank");
     } else {
-      setError('');
+      setError("");
     }
     setTitle(e.target.value);
   };
+
+  console.log(variants, "variantsvariantsvariants");
 
   const onchangeVariantGroupBy = (e) => {
     setVariantsGroup(e.target.value);
@@ -591,7 +593,7 @@ const AddProductForm = ({ productProps }) => {
     setVariantsDetials(
       variantsDetails.map((eachVariant) => {
         if (eachVariant.id === vid) {
-          if (type === 'main') {
+          if (type === "main") {
             return {
               ...eachVariant,
               main: { ...eachVariant.main, [id]: value },
@@ -668,7 +670,7 @@ const AddProductForm = ({ productProps }) => {
   };
 
   const toggleSubVariantsVisibility = (variantId) => {
-    console.log(variantId, 'viva');
+    console.log(variantId, "viva");
     setSubVariantsVisibility((prevState) => ({
       ...prevState,
       [variantId]: !prevState[variantId],
@@ -689,23 +691,23 @@ const AddProductForm = ({ productProps }) => {
   };
   const renderVariantImage = (variantImage) => {
     if (variantImage) {
-      if (typeof variantImage === 'string') {
-        return <img src={variantImage} className='vImg' alt='variantImage' />;
+      if (typeof variantImage === "string") {
+        return <img src={variantImage} className="vImg" alt="variantImage" />;
       } else if (variantImage instanceof Blob) {
         return (
           <img
             src={URL.createObjectURL(variantImage)}
-            className='vImg'
-            alt=''
+            className="vImg"
+            alt=""
           />
         );
       }
     }
-    return <FaRegFileImage className='variantImgFile' />;
+    return <FaRegFileImage className="variantImgFile" />;
   };
 
   const renderVariantButton = (va) => (
-    <Button variant='light' onClick={() => setVariantShow(true)}>
+    <Button variant="light" onClick={() => setVariantShow(true)}>
       <span onClick={() => handleVariantClick(va.id)}>{va.value}</span>
     </Button>
   );
@@ -720,12 +722,12 @@ const AddProductForm = ({ productProps }) => {
     const values = e.target.value;
 
     // If the value contains a comma, split it into an array of inventory IDs
-    if (values.includes(',')) {
+    if (values.includes(",")) {
       // Remove any extra spaces from the individual IDs after the split
       const inventoryIds = values
-        .split(',')
+        .split(",")
         .map((id) => id.trim())
-        .filter((id) => id !== '');
+        .filter((id) => id !== "");
       return setInventoryId(inventoryIds);
     }
 
@@ -734,75 +736,75 @@ const AddProductForm = ({ productProps }) => {
   };
 
   return (
-    <div className='container'>
-      <div className='row'>
-        <div className='col-8'>
-          <div className='row'>
-            <div className='col-12'>
-              <div className='bgStyle'>
-                <form className='editorForm'>
-                  <div className='col-md-12'>
-                    <label htmlFor='productMainTitle' className='form-label'>
+    <div className="container">
+      <div className="row">
+        <div className="col-8">
+          <div className="row">
+            <div className="col-12">
+              <div className="bgStyle">
+                <form className="editorForm">
+                  <div className="col-md-12">
+                    <label htmlFor="productMainTitle" className="form-label">
                       Title
                     </label>
                     <input
-                      type='text'
-                      className='form-control'
+                      type="text"
+                      className="form-control"
                       value={mainTitle}
                       onChange={onChangeMainTitle}
-                      id='productMainTitle'
+                      id="productMainTitle"
                     />
-                    <span className='errorValue'>{mainError}</span>
+                    <span className="errorValue">{mainError}</span>
                   </div>
-                  <div className='col-md-12'>
-                    <label htmlFor='title' className='form-label'>
+                  <div className="col-md-12">
+                    <label htmlFor="title" className="form-label">
                       Short Description
                     </label>
                     <input
-                      type='text'
-                      className='form-control'
+                      type="text"
+                      className="form-control"
                       value={title}
                       onChange={onChangeTitle}
-                      id='title'
+                      id="title"
                     />
-                    <span className='errorValue'>{error}</span>
+                    <span className="errorValue">{error}</span>
                   </div>
-                  <div className='mt-3'>
+                  <div className="mt-3">
                     <TextEditor content={content} setContent={setContent} />
                   </div>
                 </form>
               </div>
-              <div className='bgStyle'>
-                <form className='imagesForm'>
-                  <div className='col-md-12'>
-                    <div className='imgController'>
-                      <input type='file' multiple onChange={onChangeImages} />
+              <div className="bgStyle">
+                <form className="imagesForm">
+                  <div className="col-md-12">
+                    <div className="imgController">
+                      <input type="file" multiple onChange={onChangeImages} />
                       {imgFile.length > 0 && (
                         <MdDelete
-                          className='dltImgBtn'
+                          className="dltImgBtn"
                           onClick={onDeleteImgs}
                         />
                       )}
                     </div>
-                    <div className='imgagesCont'>
+                    <div className="imgagesCont">
                       {Array.from(images).map((item, i) => (
-                        <div className='imgCont' key={i}>
+                        <div className="imgCont" key={i}>
                           <input
                             className={
-                              imgFile.length > 0 ? 'enableall' : 'selectImg'
+                              imgFile.length > 0 ? "enableall" : "selectImg"
                             }
-                            type='checkbox'
+                            type="checkbox"
                             checked={imgFile.includes(i)}
                             onClick={(e) => selectImg(e, i)}
                           />
-                          {typeof item === 'string' ? (
-                            <img src={item} width={150} height={150} alt='' />
+                          {typeof item === "string" ? (
+                            <img src={item} width={150} height={150} alt="" />
                           ) : (
                             <img
                               src={item ? URL.createObjectURL(item) : null}
                               width={150}
                               height={150}
-                              alt=''
+                              alt=""
                             />
                           )}
                         </div>
@@ -811,88 +813,90 @@ const AddProductForm = ({ productProps }) => {
                   </div>
                 </form>
               </div>
-              <div className='bgStyle'>
-                <form className='areVariantsForm'>
-                  <div className='form-check'>
+              <div className="bgStyle">
+                <form className="areVariantsForm">
+                  <div className="form-check">
                     <input
-                      className='form-check-input'
-                      type='checkbox'
-                      id='isVariants'
+                      className="form-check-input"
+                      type="checkbox"
+                      id="isVariants"
                       checked={variantsThere}
                       onChange={() => setVariants(!variantsThere)}
                     />
-                    <label className='form-check-label' htmlFor='isVariants'>
+                    <label className="form-check-label" htmlFor="isVariants">
                       Product has variants
                     </label>
                   </div>
                 </form>
               </div>
               {variantsThere ? (
-                <div className='bgStyle'>
-                  <form className='variantsForm'>
+                <div className="bgStyle">
+                  <form className="variantsForm">
                     <p>Variants</p>
                     {variants.map((varient, index) => (
-                      <div className='child-div' key={index}>
-                        <div className='d-flex justify-content-between'>
-                          <div className='variantsDisplay'>
-                            <div className='d-flex'>
+                      <div className="child-div" key={index}>
+                        <div className="d-flex justify-content-between">
+                          <div className="variantsDisplay">
+                            <div className="d-flex">
                               {varient.isDone ? (
                                 <strong>{varient.optionName}</strong>
                               ) : (
-                                <div className='d-flex flex-column'>
-                                  <label htmlFor='optionName'>
+                                <div className="d-flex flex-column">
+                                  <label htmlFor="optionName">
                                     Option Name
                                   </label>
                                   <select
-                                    id='optionName'
-                                    className='your-select-className'
-                                    aria-label='Default select example'
+                                    id="optionName"
+                                    className="your-select-className"
+                                    aria-label="Default select example"
                                     value={varient.optionName}
                                     onChange={(e) =>
                                       handleVariantChange(e, varient.id)
-                                    }>
-                                    <option value=''>Select</option>
-                                    <option value='size'>Size</option>
-                                    <option value='color'>Color</option>
-                                    <option value='material'>Material</option>
-                                    <option value='flavour'>Flavour</option>
-                                    <option value='quantity'>Quantity</option>
+                                    }
+                                  >
+                                    <option value="">Select</option>
+                                    <option value="size">Size</option>
+                                    <option value="color">Color</option>
+                                    <option value="material">Material</option>
+                                    <option value="flavour">Flavour</option>
+                                    <option value="quantity">Quantity</option>
                                   </select>
                                 </div>
                               )}
                             </div>
-                            <div className='d-flex'>
+                            <div className="d-flex">
                               {varient.isDone ? (
                                 varient.optionValue.map((value, i) =>
-                                  value !== '' ? (
-                                    <span key={i} className='valueCont'>
+                                  value !== "" ? (
+                                    <span key={i} className="valueCont">
                                       {value}
                                     </span>
                                   ) : null
                                 )
                               ) : (
-                                <div className='d-flex flex-column'>
-                                  <label htmlFor='optionValue'>
+                                <div className="d-flex flex-column">
+                                  <label htmlFor="optionValue">
                                     Option Value
                                   </label>
                                   {varient.optionValue.map((value, i) => (
-                                    <div key={i} className='d-flex'>
+                                    <div key={i} className="d-flex">
                                       <input
-                                        id='optionValue'
-                                        type='text'
+                                        id="optionValue"
+                                        type="text"
                                         value={value}
-                                        autoComplete='off'
-                                        placeholder='Add Another Option'
+                                        autoComplete="off"
+                                        placeholder="Add Another Option"
                                         onChange={(e) =>
                                           onChangeVariantValue(e, varient.id, i)
                                         }
                                       />
                                       {varient.optionValue.length - 1 !== i && (
                                         <button
-                                          className='variantDltBtn'
+                                          className="variantDltBtn"
                                           onClick={(e) =>
                                             deleteInput(e, varient.id, i)
-                                          }>
+                                          }
+                                        >
                                           <RiDeleteBin6Line />
                                         </button>
                                       )}
@@ -905,16 +909,16 @@ const AddProductForm = ({ productProps }) => {
                           <div>
                             {varient.isDone ? (
                               <button
-                                className='variantEditBtn'
-                                onClick={(e) =>
-                                  changeOptionMode(e, varient.id)
-                                }>
+                                className="variantEditBtn"
+                                onClick={(e) => changeOptionMode(e, varient.id)}
+                              >
                                 Edit
                               </button>
                             ) : (
                               <button
-                                className='variantDltBtn'
-                                onClick={(e) => deleteVariant(e, varient.id)}>
+                                className="variantDltBtn"
+                                onClick={(e) => deleteVariant(e, varient.id)}
+                              >
                                 <RiDeleteBin6Line />
                               </button>
                             )}
@@ -922,32 +926,35 @@ const AddProductForm = ({ productProps }) => {
                         </div>
                         {!varient.isDone && (
                           <button
-                            className='variantDoneBtn'
-                            onClick={(e) => changeOptionMode(e, varient.id)}>
+                            className="variantDoneBtn"
+                            onClick={(e) => changeOptionMode(e, varient.id)}
+                          >
                             Done
                           </button>
                         )}
                       </div>
                     ))}
                     {variants.length < 3 && (
-                      <button className='addVariant' onClick={addVarient}>
+                      <button className="addVariant" onClick={addVarient}>
                         + Add Options like size or color...
                       </button>
                     )}
                   </form>
                   {variantsDetails.length > 0 && (
                     <>
-                      <div className='variantsOutput'>
+                      <div className="variantsOutput">
                         {variants.length > 0 && (
-                          <div className='d-flex align-items-center'>
+                          <div className="d-flex align-items-center">
                             Group By
                             <select
                               value={variantGroup}
-                              onChange={onchangeVariantGroupBy}>
+                              onChange={onchangeVariantGroupBy}
+                            >
                               {variants.map((variant) => (
                                 <option
                                   key={variant.id}
-                                  value={variant.optionName}>
+                                  value={variant.optionName}
+                                >
                                   {variant.optionName}
                                 </option>
                               ))}
@@ -956,43 +963,46 @@ const AddProductForm = ({ productProps }) => {
                         )}
                         <div>
                           <select
-                            className='form-select'
-                            aria-label='Default select example'
+                            className="form-select"
+                            aria-label="Default select example"
                             onChange={onChangeInventory}
-                            value={inventoryIdInfo}>
+                            value={inventoryIdInfo}
+                          >
                             <option
                               selected
                               value={inventoryLocs.map(
                                 (inv) => `${inv.inventory_id}`
-                              )}>
+                              )}
+                            >
                               All Locations
                             </option>
                             {inventoryLocs.map((inv) => (
                               <option
                                 key={inv.inventory_id}
-                                value={inv.inventory_id}>
+                                value={inv.inventory_id}
+                              >
                                 {inv.inventory_name}
                               </option>
                             ))}
                           </select>
                         </div>
                       </div>
-                      <div className='variantsOutputTopbar'>
+                      <div className="variantsOutputTopbar">
                         <span>Variant</span>
                         <span>Price</span>
                         <span>Available</span>
                       </div>
                       {variantsDetails.map((variant) => (
                         <div key={variant.id}>
-                          <div className='variantsOutputValbar'>
-                            <div className='variantImgCont'>
+                          <div className="variantsOutputValbar">
+                            <div className="variantImgCont">
                               {variant.main.variantImage ? (
                                 typeof variant.main.variantImage ===
-                                'string' ? (
+                                "string" ? (
                                   <img
                                     src={variant.main.variantImage}
-                                    className='vImg'
-                                    alt='varaintImage'
+                                    className="vImg"
+                                    alt="varaintImage"
                                   />
                                 ) : variant.main.variantImage instanceof
                                   Blob ? (
@@ -1000,29 +1010,29 @@ const AddProductForm = ({ productProps }) => {
                                     src={URL.createObjectURL(
                                       variant.main.variantImage
                                     )}
-                                    alt=''
-                                    className='vImg'
+                                    alt=""
+                                    className="vImg"
                                   />
                                 ) : (
-                                  <FaRegFileImage className='variantImgFile' />
+                                  <FaRegFileImage className="variantImgFile" />
                                 )
                               ) : (
-                                <FaRegFileImage className='variantImgFile' />
+                                <FaRegFileImage className="variantImgFile" />
                               )}
                               <input
-                                type='file'
-                                id='variantImage'
-                                className='variantImgInput'
+                                type="file"
+                                id="variantImage"
+                                className="variantImgInput"
                                 onChange={(e) =>
-                                  handleVariantsImage(e, variant.id, 'main', 0)
+                                  handleVariantsImage(e, variant.id, "main", 0)
                                 }
                               />
-                              <div className='d-flex flex-column'>
+                              <div className="d-flex flex-column">
                                 {variant.sub.length > 0 ? (
                                   <span>{variant.main.value}</span>
                                 ) : (
                                   <span>
-                                    {location.pathname === '/product/create'
+                                    {location.pathname === "/product/create"
                                       ? renderVariantButton(variant.main)
                                       : variant.main.variantId !== 0
                                       ? renderVariantLink(variant.main)
@@ -1052,23 +1062,23 @@ const AddProductForm = ({ productProps }) => {
                             </div>
                             <div>
                               <input
-                                id='offer_price'
+                                id="offer_price"
                                 onChange={(e) =>
-                                  handleVariantsOutput(e, variant.id, 'main', 0)
+                                  handleVariantsOutput(e, variant.id, "main", 0)
                                 }
                                 value={variant.main.offer_price}
-                                type='text'
-                                placeholder='₹ 0.0'
+                                type="text"
+                                placeholder="₹ 0.0"
                               />
                             </div>
                             <div>
                               <input
-                                id='quantity'
+                                id="quantity"
                                 onChange={(e) =>
-                                  handleVariantsOutput(e, variant.id, 'main', 0)
+                                  handleVariantsOutput(e, variant.id, "main", 0)
                                 }
                                 value={variant.main.quantity}
-                                type='number'
+                                type="number"
                                 disabled={
                                   variant.sub.length === 0 ? false : true
                                 }
@@ -1078,13 +1088,14 @@ const AddProductForm = ({ productProps }) => {
                           {subVariantsVisibility[variant.id] &&
                             variant.sub.map((va, subIndex) => (
                               <div
-                                className='subVariantsOutputValbar'
-                                key={va.id}>
-                                <div className='variantImgCont'>
+                                className="subVariantsOutputValbar"
+                                key={va.id}
+                              >
+                                <div className="variantImgCont">
                                   {renderVariantImage(
                                     va.variantImage || variant.main.variantImage
                                   )}
-                                  {location.pathname === '/product/create'
+                                  {location.pathname === "/product/create"
                                     ? renderVariantButton(va)
                                     : va.variantId !== 0
                                     ? renderVariantLink(va)
@@ -1103,14 +1114,14 @@ const AddProductForm = ({ productProps }) => {
                                   )}
 
                                   <input
-                                    type='file'
-                                    id='variantImage'
-                                    className='variantImgInput'
+                                    type="file"
+                                    id="variantImage"
+                                    className="variantImgInput"
                                     onChange={(e) =>
                                       handleVariantsImage(
                                         e,
                                         variant.id,
-                                        '',
+                                        "",
                                         va.id
                                       )
                                     }
@@ -1118,14 +1129,14 @@ const AddProductForm = ({ productProps }) => {
                                 </div>
                                 <div>
                                   <input
-                                    type='text'
-                                    id='offer_price'
-                                    placeholder='₹ 0.0'
+                                    type="text"
+                                    id="offer_price"
+                                    placeholder="₹ 0.0"
                                     onChange={(e) =>
                                       handleVariantsOutput(
                                         e,
                                         variant.id,
-                                        '',
+                                        "",
                                         va.id
                                       )
                                     }
@@ -1134,13 +1145,13 @@ const AddProductForm = ({ productProps }) => {
                                 </div>
                                 <div>
                                   <input
-                                    type='text'
-                                    id='quantity'
+                                    type="text"
+                                    id="quantity"
                                     onChange={(e) =>
                                       handleVariantsOutput(
                                         e,
                                         variant.id,
-                                        '',
+                                        "",
                                         va.id
                                       )
                                     }
@@ -1155,83 +1166,84 @@ const AddProductForm = ({ productProps }) => {
                   )}
                 </div>
               ) : (
-                <div className='bgStyle'>
-                  <div className='orderDetails'>
-                    <form className='priceForm'>
-                      <div className='row'>
-                        <div className='col-md-6'>
-                          <label htmlFor='price'>Price</label>
+                <div className="bgStyle">
+                  <div className="orderDetails">
+                    <form className="priceForm">
+                      <div className="row">
+                        <div className="col-md-6">
+                          <label htmlFor="price">Price</label>
                           <input
-                            type='text'
-                            className='form-control'
-                            id='price'
+                            type="text"
+                            className="form-control"
+                            id="price"
                             value={productPrices.price}
                             onChange={handleProductPrices}
-                            placeholder='0.00'
+                            placeholder="0.00"
                           />
                         </div>
-                        <div className='col-md-6'>
-                          <label htmlFor='comparePrice'>Compare-at-price</label>
+                        <div className="col-md-6">
+                          <label htmlFor="comparePrice">Compare-at-price</label>
                           <input
-                            type='text'
-                            className='form-control'
-                            id='comparePrice'
+                            type="text"
+                            className="form-control"
+                            id="comparePrice"
                             value={productPrices.comparePrice}
                             onChange={handleProductPrices}
-                            placeholder='0.00'
+                            placeholder="0.00"
                           />
                         </div>
-                        <div className='col-md-12'>
+                        <div className="col-md-12">
                           <input
-                            className='form-check-input'
-                            type='checkbox'
+                            className="form-check-input"
+                            type="checkbox"
                             checked={productPrices.isTaxable}
                             onChange={handleProductPrices}
-                            id='isTaxable'
-                            placeholder='0.00'
+                            id="isTaxable"
+                            placeholder="0.00"
                           />
                           <label
-                            className='form-check-label'
-                            htmlFor='isTaxable'>
+                            className="form-check-label"
+                            htmlFor="isTaxable"
+                          >
                             Charge tax on this product
                           </label>
                         </div>
-                        <div className='col-md-6'>
-                          <label htmlFor='costPerItem'>Cost per item</label>
+                        <div className="col-md-6">
+                          <label htmlFor="costPerItem">Cost per item</label>
                           <input
-                            type='text'
-                            className='form-control'
+                            type="text"
+                            className="form-control"
                             value={productPrices.costPerItem}
                             onChange={handleProductPrices}
-                            id='costPerItem'
-                            placeholder='0.00'
+                            id="costPerItem"
+                            placeholder="0.00"
                           />
                         </div>
                       </div>
                     </form>
-                    <form className='inventoryForm'>
+                    <form className="inventoryForm">
                       <p>Inventory</p>
-                      <div className='form-check'>
+                      <div className="form-check">
                         <input
-                          className='form-check-input'
-                          type='checkbox'
+                          className="form-check-input"
+                          type="checkbox"
                           onClick={trackQty}
                           value={tracker}
-                          id='trackQty'
+                          id="trackQty"
                         />
-                        <label className='form-check-label' htmlFor='trackQty'>
+                        <label className="form-check-label" htmlFor="trackQty">
                           Track quantity
                         </label>
                       </div>
                       {tracker ? (
-                        <div className='uy'>
-                          <div className='form-check'>
+                        <div className="uy">
+                          <div className="form-check">
                             {inventoryLocs.map((inve) => (
-                              <div className='d-flex' key={inve.inventory_id}>
+                              <div className="d-flex" key={inve.inventory_id}>
                                 <label>
                                   <input
                                     id={inve.inventory_id}
-                                    type='checkbox'
+                                    type="checkbox"
                                     checked={locInputs.find(
                                       (loc) =>
                                         loc.inventoryId === inve.inventory_id
@@ -1244,8 +1256,8 @@ const AddProductForm = ({ productProps }) => {
                                   (loc) => loc.inventoryId === inve.inventory_id
                                 ) && (
                                   <input
-                                    className='ms-2'
-                                    type='number'
+                                    className="ms-2"
+                                    type="number"
                                     id={inve.inventory_id}
                                     value={
                                       locInputs.find(
@@ -1259,75 +1271,75 @@ const AddProductForm = ({ productProps }) => {
                               </div>
                             ))}
                             <input
-                              className='form-check-input'
-                              type='checkbox'
+                              className="form-check-input"
+                              type="checkbox"
                               checked={handleLoc.cwos}
-                              id='cwos'
+                              id="cwos"
                               onChange={handleConditions}
                             />
-                            <label className='form-check-label' htmlFor='cwos'>
+                            <label className="form-check-label" htmlFor="cwos">
                               Continue selling when out of stock
                             </label>
                           </div>
                         </div>
                       ) : (
-                        ''
+                        ""
                       )}
 
-                      <div className='form-check'>
+                      <div className="form-check">
                         <input
-                          className='form-check-input'
-                          type='checkbox'
+                          className="form-check-input"
+                          type="checkbox"
                           checked={isSKU}
-                          id='hasSKU'
+                          id="hasSKU"
                           onChange={handleSku}
                         />
-                        <label className='form-check-label' htmlFor='hasSKU'>
+                        <label className="form-check-label" htmlFor="hasSKU">
                           This product has a SKU or barcode
                         </label>
                       </div>
                       {isSKU ? (
-                        <div className='row'>
-                          <div className='col-md-6'>
-                            <div className='mb-3'>
-                              <label htmlFor='SKU' className='form-label'>
+                        <div className="row">
+                          <div className="col-md-6">
+                            <div className="mb-3">
+                              <label htmlFor="SKU" className="form-label">
                                 SKU (Stock Keeping Unit)
                               </label>
                               <input
-                                type='text'
-                                className='form-control'
-                                id='SKU'
+                                type="text"
+                                className="form-control"
+                                id="SKU"
                                 value={skuInput.SKU}
                                 onChange={handleSkuInput}
-                                placeholder=''
+                                placeholder=""
                               />
                             </div>
                           </div>
-                          <div className='col-md-6'>
-                            <div className='mb-3'>
-                              <label htmlFor='barcode' className='form-label'>
+                          <div className="col-md-6">
+                            <div className="mb-3">
+                              <label htmlFor="barcode" className="form-label">
                                 Barcode (ISBN, UPC, GTIN, etc.)
                               </label>
                               <input
-                                type='text'
-                                className='form-control'
-                                id='barcode'
+                                type="text"
+                                className="form-control"
+                                id="barcode"
                                 value={skuInput.barcode}
                                 onChange={handleSkuInput}
-                                placeholder=''
+                                placeholder=""
                               />
                             </div>
                           </div>
                         </div>
                       ) : (
-                        ''
+                        ""
                       )}
                     </form>
-                    <form className='shippingForm'>
+                    <form className="shippingForm">
                       <p>Shipping</p>
                       <label>
                         <input
-                          type='checkbox'
+                          type="checkbox"
                           checked={isShipping}
                           value={isShipping}
                           onChange={handleShipping}
@@ -1335,23 +1347,24 @@ const AddProductForm = ({ productProps }) => {
                         This is a physical product
                       </label>
                       {isShipping ? (
-                        <div className='shippingCont'>
-                          <div className='d-flex'>
+                        <div className="shippingCont">
+                          <div className="d-flex">
                             <input
-                              type='text'
-                              placeholder='0.0'
+                              type="text"
+                              placeholder="0.0"
                               value={weight}
                               onChange={handleWeight}
                             />
                             <select
-                              className=''
-                              aria-label='Default select example'
+                              className=""
+                              aria-label="Default select example"
                               value={weightUnit}
-                              onChange={handleWeightUnit}>
-                              <option value='kg'>Kg</option>
-                              <option value='lb'>lb</option>
-                              <option value='oz'>oz</option>
-                              <option value='g'>g</option>
+                              onChange={handleWeightUnit}
+                            >
+                              <option value="kg">Kg</option>
+                              <option value="lb">lb</option>
+                              <option value="oz">oz</option>
+                              <option value="g">g</option>
                             </select>
                           </div>
                           {/* <label htmlFor="countrySelect">
@@ -1373,57 +1386,58 @@ const AddProductForm = ({ productProps }) => {
                           </select> */}
                         </div>
                       ) : (
-                        ''
+                        ""
                       )}
                     </form>
                   </div>
                 </div>
               )}
-              <div className='bgStyle'>
+              <div className="bgStyle">
                 <h6>Search engine listing</h6>
                 <p>
                   Add a title and description to see how this product might
                   appear in a search engine listing
                 </p>
-                <div className='form-group'>
-                  <label className='heading' htmlFor='metaTitle'>
+                <div className="form-group">
+                  <label className="heading" htmlFor="metaTitle">
                     Page title
                   </label>
                   <input
-                    type='text'
-                    className='form-control'
-                    id='metaTitle'
-                    maxLength='100'
+                    type="text"
+                    className="form-control"
+                    id="metaTitle"
+                    maxLength="100"
                     value={metaDetails.metaTitle}
                     onChange={handleMetaDetails}
                   />
-                  <p className='infoTxt'>
+                  <p className="infoTxt">
                     {metaDetails.metaTitle.length} of 100 characters used
                   </p>
                 </div>
-                <div className='form-group'>
-                  <label className='heading' htmlFor='metaDescription'>
+                <div className="form-group">
+                  <label className="heading" htmlFor="metaDescription">
                     Meta description
                   </label>
                   <textarea
-                    id='metaDescription'
-                    className='form-control'
-                    maxLength='10000'
+                    id="metaDescription"
+                    className="form-control"
+                    maxLength="10000"
                     onChange={handleMetaDetails}
-                    value={metaDetails.metaDescription}></textarea>
-                  <p className='infoTxt'>
+                    value={metaDetails.metaDescription}
+                  ></textarea>
+                  <p className="infoTxt">
                     {metaDetails.metaDescription.length} of 10000 characters
                     used
                   </p>
                 </div>
-                <div className='form-group'>
-                  <label className='heading' htmlFor='urlHandle'>
+                <div className="form-group">
+                  <label className="heading" htmlFor="urlHandle">
                     URL handle
                   </label>
                   <input
-                    type='text'
-                    className='form-control'
-                    id='url'
+                    type="text"
+                    className="form-control"
+                    id="url"
                     value={metaDetails.urlHandle}
                     onChange={handleMetaDetails}
                   />
@@ -1432,70 +1446,73 @@ const AddProductForm = ({ productProps }) => {
             </div>
           </div>
         </div>
-        <div className='col-4'>
-          <div className='row'>
-            <div className='col-12'>
-              <div className='bgStyle'>
-                <form className='statusForm'>
-                  <label htmlFor='inputState' className='form-label'>
+        <div className="col-4">
+          <div className="row">
+            <div className="col-12">
+              <div className="bgStyle">
+                <form className="statusForm">
+                  <label htmlFor="inputState" className="form-label">
                     Status
                   </label>
                   <select
                     onChange={(e) => setProductStatus(e.target.value)}
                     value={productStatus}
-                    id='inputState'
-                    className='form-select'>
-                    <option value='0'>InActive</option>
-                    <option value='1'>Active</option>
+                    id="inputState"
+                    className="form-select"
+                  >
+                    <option value="0">InActive</option>
+                    <option value="1">Active</option>
                   </select>
                 </form>
               </div>
-              <div className='bgStyle'>
-                <form className='publishingForm'>
-                  <div className='top_sec'>
+              <div className="bgStyle">
+                <form className="publishingForm">
+                  <div className="top_sec">
                     <h6>Publishing</h6>
                     <Dropdown>
-                      <Dropdown.Toggle variant='light' id='dropdown-basic'>
+                      <Dropdown.Toggle variant="light" id="dropdown-basic">
                         <BsThreeDotsVertical />
                       </Dropdown.Toggle>
 
                       <Dropdown.Menu>
-                        <Dropdown.Item href='#/action-1'>
+                        <Dropdown.Item href="#/action-1">
                           Manage sales channel
                         </Dropdown.Item>
-                        <Dropdown.Item href='#/action-2'>
+                        <Dropdown.Item href="#/action-2">
                           Manage markets
                         </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
                   </div>
-                  <div className='bot_sec'>
+                  <div className="bot_sec">
                     <p>Sales Channels</p>
                     <ul>
                       <li>
-                        <span></span> Online Store{' '}
+                        <span></span> Online Store{" "}
                         <Button
-                          variant='light'
-                          onClick={() => setStoreShow(true)}>
+                          variant="light"
+                          onClick={() => setStoreShow(true)}
+                        >
                           <FaBusinessTime />
                         </Button>
                       </li>
                       <PopupModal
                         show={modal1Show}
-                        value={'Schedule Online Store publishing'}
+                        value={"Schedule Online Store publishing"}
                         onHide={() => setStoreShow(false)}
                       />
                       <li>
                         <span></span> Google & Youtube
                         <Button
-                          variant='light'
-                          onClick={() => setSiteShow(true)}>
+                          variant="light"
+                          onClick={() => setSiteShow(true)}
+                        >
                           <FaBusinessTime />
                         </Button>
                       </li>
                       <PopupModal
                         show={modal2Show}
-                        value={'Schedule Google & YouTube publishing'}
+                        value={"Schedule Google & YouTube publishing"}
                         onHide={() => setSiteShow(false)}
                       />
                       <li>
@@ -1512,16 +1529,17 @@ const AddProductForm = ({ productProps }) => {
                   </div>
                 </form>
               </div>
-              <div className='bgStyle'>
-                <form className='productOrganization'>
+              <div className="bgStyle">
+                <form className="productOrganization">
                   <h6>Product organization</h6>
-                  <div className='form-group'>
-                    <label htmlFor='category'>Product category</label>
+                  <div className="form-group">
+                    <label htmlFor="category">Product category</label>
                     <select
-                      className='form-control'
+                      className="form-control"
                       value={productCategory.category}
                       onChange={handleProductCategorization}
-                      id='category'>
+                      id="category"
+                    >
                       <option>Search</option>
                       {categoryItems.map((item, i) => (
                         <option key={i} value={item.azst_category_id}>
@@ -1530,14 +1548,15 @@ const AddProductForm = ({ productProps }) => {
                       ))}
                     </select>
                   </div>
-                  <div className='form-group'>
-                    <label htmlFor='productType'>Product type</label>
+                  <div className="form-group">
+                    <label htmlFor="productType">Product type</label>
                     <select
-                      className='form-control'
-                      id='productType'
+                      className="form-control"
+                      id="productType"
                       value={productCategory.productType}
-                      onChange={handleProductCategorization}>
-                      <option value=''>select</option>
+                      onChange={handleProductCategorization}
+                    >
+                      <option value="">select</option>
                       {subCategories.map((item) => (
                         <option key={item.azst_sub_category_id}>
                           {item.azst_sub_category_name}
@@ -1545,58 +1564,77 @@ const AddProductForm = ({ productProps }) => {
                       ))}
                     </select>
                   </div>
-                  <div className='form-group'>
-                    <label htmlFor='vendor'>Vendor</label>
+                  <div className="form-group">
+                    <label htmlFor="vendor">Vendor</label>
                     <select
-                      className='form-control'
-                      id='vendor'
+                      className="form-control"
+                      id="vendor"
                       value={productCategory.vendor}
-                      onChange={handleProductCategorization}>
+                      onChange={handleProductCategorization}
+                    >
                       <option>Search</option>
                       {vendors &&
                         vendors.map((vendor) => (
                           <option
                             key={vendor.azst_vendor_id}
-                            value={vendor.azst_vendor_id}>
+                            value={vendor.azst_vendor_id}
+                          >
                             {vendor.azst_vendor_name}
                           </option>
                         ))}
                     </select>
                   </div>
-                  <div className='form-group'>
-                    <label htmlFor=''>Collections</label>
+                  <div className="form-group">
+                    <label htmlFor="">Collections</label>
                     <Multiselect
-                      displayValue='azst_collection_name'
+                      displayValue="azst_collection_name"
                       onRemove={onSelectCollection}
                       onSelect={onSelectCollection}
                       selectedValues={selectedCollection}
                       options={collections}
                     />
                   </div>
-                  <div className='form-group'>
-                    <label htmlFor=''>Tags</label>
+                  <div className="form-group">
+                    <label htmlFor="">Tags</label>
                     <Multiselect
-                      displayValue='azst_tag_name'
+                      displayValue="azst_tag_name"
                       onRemove={onSelectTag}
                       selectedValues={selectedTag}
                       onSelect={onSelectTag}
                       options={tags}
                     />
                   </div>
-                  <div className='form-group'>
-                    <label htmlFor='category'>Brand</label>
+                  <div className="form-group">
+                    <label htmlFor="category">Brand</label>
                     <select
-                      className='form-control'
+                      className="form-control"
                       value={productCategory.brand}
                       onChange={handleProductCategorization}
-                      id='brand'>
-                      <option value='0'>Search</option>
+                      id="brand"
+                    >
+                      <option value="0">Search</option>
                       {brands.map((item, i) => (
                         <option key={i} value={item.azst_brands_id}>
                           {item.azst_brand_name}
                         </option>
                       ))}
                     </select>
+                  </div>
+                  <div className="">
+                    <label htmlFor="minCartQty">Min quantity</label>
+                    <input
+                      id="minCartQty"
+                      className="form-control"
+                      onChange={handleProductCategorization}
+                    />
+                  </div>
+                  <div className="">
+                    <label htmlFor="maxCartQty">Max quantity</label>
+                    <input
+                      id="maxCartQty"
+                      className="form-control"
+                      onChange={handleProductCategorization}
+                    />
                   </div>
                 </form>
               </div>

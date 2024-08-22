@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { v4 } from "uuid";
 import swalHandle from "../Pages/ErrorHandler";
 import CategoryForm from "./CategoryForm";
 import AdminSideBar from "../Pages/AdminSideBar";
@@ -13,6 +14,12 @@ const CategoriesCreate = () => {
     text: "",
     description: "",
   });
+  const [subCategories, setSubCategories] = useState([
+    {
+      id: v4(),
+      subCategoryName: "",
+    },
+  ]);
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -20,7 +27,7 @@ const CategoriesCreate = () => {
   const navigate = useNavigate();
   const saveCategory = async () => {
     try {
-      const url = `${baseUrl}/category/add`;
+      const url = `http://192.168.214.253:5018/api/v1/category/add`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
@@ -29,6 +36,7 @@ const CategoriesCreate = () => {
       formdata.append("categoryName", text);
       formdata.append("description", description);
       formdata.append("categoryImg", categoryImg);
+      formdata.append("subCategories", JSON.stringify(subCategories));
 
       swalHandle.onLoading();
       const response = await axios.post(url, formdata, { headers });
@@ -37,8 +45,8 @@ const CategoriesCreate = () => {
       navigate(-1);
       console.log(response);
     } catch (error) {
-      swalHandle.onError();
       swalHandle.onLoadingClose();
+      swalHandle.onError(error);
       console.log(error);
     }
   };
@@ -57,6 +65,8 @@ const CategoriesCreate = () => {
                   categoryImg={categoryImg}
                   setCategoryData={setCategoryData}
                   setCategoryImg={setCategoryImg}
+                  subCategories={subCategories}
+                  setSubCategories={setSubCategories}
                 />
               </div>
               <div className="col-12">
