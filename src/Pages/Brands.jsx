@@ -31,7 +31,6 @@ const Brands = () => {
     } catch (error) {
       swalHandle.onLoadingClose();
       swalHandle.onError();
-      console.log(error);
     }
   };
 
@@ -51,7 +50,6 @@ const Brands = () => {
       swalHandle.onLoading();
       const response = await axios.patch(url, body, { headers });
       if (response.status === 200) {
-        console.log(response);
         swalHandle.onSuccess();
         swalHandle.onLoadingClose();
       }
@@ -59,7 +57,6 @@ const Brands = () => {
     } catch (error) {
       swalHandle.onLoadingClose();
       swalHandle.onError();
-      console.log(error);
     }
   };
 

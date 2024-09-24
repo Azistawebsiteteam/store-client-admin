@@ -6,6 +6,7 @@ import swalErr from "../Pages/ErrorHandler";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import ErrorHandler from "../Pages/ErrorHandler";
 
 const EditSlider = () => {
   const [bannerDetails, setBannerDetails] = useState({
@@ -36,7 +37,6 @@ const EditSlider = () => {
           Authorization: `Bearer ${token}`,
         };
         const response = await axios.post(url, { bannerId: id }, { headers });
-        console.log(response);
         if (response.status === 200) {
           const banner = response.data.banner_details;
 
@@ -57,7 +57,7 @@ const EditSlider = () => {
           });
         }
       } catch (error) {
-        console.log(error);
+        ErrorHandler.onError(error);
       }
     };
     getBannerDetails();
@@ -92,12 +92,11 @@ const EditSlider = () => {
       formdata.append("webBanner", imgValue.webBanner);
       formdata.append("mobileBanner", imgValue.mobileBanner);
 
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formdata, { headers });
-      console.log(response);
       swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {
-      console.log(error);
       swalErr.onLoadingClose();
       swalErr.onError(error);
     }

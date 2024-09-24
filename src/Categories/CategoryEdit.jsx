@@ -29,12 +29,11 @@ const CategoryEdit = () => {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const url = `http://192.168.214.253:5018/api/v1/category/`;
+      const url = `${baseUrl}/category/`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
       const response = await axios.post(url, { categoryId: id }, { headers });
-      console.log(response, "res");
       const {
         azst_category_name,
         azst_category_img,
@@ -59,7 +58,7 @@ const CategoryEdit = () => {
 
   const saveCategory = async () => {
     try {
-      const url = `http://192.168.214.253:5018/api/v1/category`;
+      const url = `${baseUrl}/category`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
@@ -72,23 +71,18 @@ const CategoryEdit = () => {
       formdata.append("description", description);
       formdata.append("categoryImg", categoryImg);
       formdata.append("subCategories", JSON.stringify(subCategories));
-
       formdata.append("deletedSubCats", JSON.stringify(deletedSubCats));
 
-      console.log(deletedSubCats, "sdsdsds");
       ErrorHandler.onLoading();
-      const response = await axios.put(url, formdata, { headers });
+      await axios.put(url, formdata, { headers });
       ErrorHandler.onLoadingClose();
       ErrorHandler.onSuccess();
       setDeletedSubCats([]);
-      console.log(response);
     } catch (error) {
       ErrorHandler.onLoadingClose();
       ErrorHandler.onError(error);
     }
   };
-
-  console.log(subCategories, "subCategories");
 
   return (
     <div className="adminSec">

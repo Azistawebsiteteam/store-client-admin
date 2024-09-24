@@ -5,7 +5,7 @@ import { useState } from "react";
 import "../Pages/Admin.css";
 
 const CreateDiscount = () => {
-  const [selectedDiscount, setDiscount] = useState("Amount of products");
+  const [selectedDiscount, setDiscount] = useState("Discount on Products");
   const [count, setCount] = useState(0);
 
   const handleDiscountsTab = (e) => {
@@ -33,8 +33,11 @@ const CreateDiscount = () => {
                   onChange={handleDiscountsTab}
                 >
                   <option selected>Select discount type</option>
-                  <option value="Amount of products">Amount of products</option>
+                  <option value="Discount on Products">
+                    Discount on Products
+                  </option>
                   <option value="Buy X get Y">Buy X get Y</option>
+                  <option value="Order value">Order value</option>
                 </select>
               </div>
             </div>

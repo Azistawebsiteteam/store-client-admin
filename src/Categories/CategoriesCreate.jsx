@@ -27,7 +27,7 @@ const CategoriesCreate = () => {
   const navigate = useNavigate();
   const saveCategory = async () => {
     try {
-      const url = `http://192.168.214.253:5018/api/v1/category/add`;
+      const url = `${baseUrl}/category/add`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
@@ -39,15 +39,14 @@ const CategoriesCreate = () => {
       formdata.append("subCategories", JSON.stringify(subCategories));
 
       swalHandle.onLoading();
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formdata, { headers });
       swalHandle.onSuccess();
       swalHandle.onLoadingClose();
       navigate(-1);
-      console.log(response);
     } catch (error) {
       swalHandle.onLoadingClose();
       swalHandle.onError(error);
-      console.log(error);
     }
   };
 

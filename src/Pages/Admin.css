@@ -347,9 +347,8 @@
 
 .FileUpload {
   opacity: 0;
-  position: absolute;
-  height: 100px;
-  z-index: 1;
+  height: 90px;
+  width: 100px;
 }
 .bannerThumbnail {
   width: 100%;
@@ -530,9 +529,9 @@ svg.copyIcon {
 .singleVariantImg {
   position: relative;
 }
-/* .discountBlock{
-        position: relative;
-    } */
+.discountBlock{
+    position: relative;
+}   
 .percentageSign {
   position: absolute;
   top: 12px;

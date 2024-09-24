@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import ErrorHandler from "../Pages/ErrorHandler";
 
 const EditAnnouncement = () => {
   const [txtColor, setTxtColor] = useState("");
@@ -36,11 +37,6 @@ const EditAnnouncement = () => {
       );
       if (response.status === 200) {
         const details = response.data;
-        console.log(
-          details.announcement_text_color,
-          details.announcement_background_color,
-          "balaji"
-        );
         setTxtColor(details.announcement_text_color);
         setBgColor(details.announcement_background_color);
         setDisplaySettings({
@@ -72,10 +68,10 @@ const EditAnnouncement = () => {
         backgroundCrl: bgColor,
         showHomePageOnly: displaySettings.homePage,
       };
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, body, { headers });
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onError(error);
     }
   };
 

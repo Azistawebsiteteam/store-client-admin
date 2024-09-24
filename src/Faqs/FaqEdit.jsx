@@ -1,24 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import AdminSideBar from '../Pages/AdminSideBar';
-import swalHandle from '../Pages/ErrorHandler';
-import FaqForm from './FaqForm';
-import { useParams } from 'react-router-dom';
-import BackBtn from '../Components/BackBtn';
+import React, { useCallback, useEffect, useState } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
+import AdminSideBar from "../Pages/AdminSideBar";
+import swalHandle from "../Pages/ErrorHandler";
+import FaqForm from "./FaqForm";
+import { useParams } from "react-router-dom";
+import BackBtn from "../Components/BackBtn";
 
 const FaqEdit = () => {
   const [inputVlaues, setInputValues] = useState({
-    type: '',
-    question: '',
-    answer: '',
+    type: "",
+    question: "",
+    answer: "",
     productId: 0,
   });
   const { id } = useParams();
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/faqs`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
-  console.log(id);
   const getFaqDetials = useCallback(async () => {
     const url = `${baseUrl}/faq`;
     const headers = {
@@ -55,21 +54,21 @@ const FaqEdit = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <div>
         <AdminSideBar />
       </div>
-      <div className='commonSec'>
-        <div className='d-flex align-items-center'>
+      <div className="commonSec">
+        <div className="d-flex align-items-center">
           <BackBtn /> <h3>Update Faq</h3>
         </div>
         <FaqForm inputVlaues={inputVlaues} setInputValues={setInputValues} />
-        <button className='btn btn-primary' onClick={onUpdateFaq}>
+        <button className="btn btn-primary" onClick={onUpdateFaq}>
           Update
         </button>
       </div>
 
-      <hr style={{ color: 'grey' }} />
+      <hr style={{ color: "grey" }} />
     </div>
   );
 };

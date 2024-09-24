@@ -50,8 +50,7 @@ const CreateCollections = () => {
       formdata.append("metaDetails", JSON.stringify(metaDetails));
       formdata.append("collectionImg", collectionImg);
 
-      const response = await axios.post(url, formdata, { headers });
-      console.log(response);
+      await axios.post(url, formdata, { headers });
       swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {

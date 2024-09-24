@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import AdminSideBar from './AdminSideBar';
-import { Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { IoMdEye } from 'react-icons/io';
-import swalHandle from './ErrorHandler';
-import './Admin.css';
+import React, { useEffect, useState } from "react";
+import AdminSideBar from "./AdminSideBar";
+import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { IoMdEye } from "react-icons/io";
+import swalHandle from "./ErrorHandler";
+import "./Admin.css";
 
 const ProductListing = () => {
   const [productsList, setProductsList] = useState([]);
@@ -28,61 +28,61 @@ const ProductListing = () => {
       } catch (error) {
         swalHandle.onLoadingClose();
         swalHandle.onError(error);
-        console.log(error);
       }
     };
     productDetails();
   }, [token, baseUrl]);
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <AdminSideBar />
-      <div className='commonSec'>
-        <div className='container'>
-          <div className='row'>
-            <div className='productsTopbar'>
+      <div className="commonSec">
+        <div className="container">
+          <div className="row">
+            <div className="productsTopbar">
               <h3>Products</h3>
-              <Link to='/product/create'>Add Products</Link>
+              <Link to="/product/create">Add Products</Link>
             </div>
-            <div className='col-sm-12'>
-              <table className='table'>
+            <div className="col-sm-12">
+              <table className="table">
                 <thead>
                   <tr>
-                    <th scope='col'>#</th>
-                    <th scope='col'>Product</th>
-                    <th scope='col'></th>
-                    <th scope='col'>Status</th>
-                    <th scope='col'>Inventory</th>
-                    <th scope='col'>Sales channels</th>
-                    <th scope='col'>Markets</th>
-                    <th scope='col'>Category</th>
-                    <th scope='col'>Vendor</th>
-                    <th scope='col'>Actons</th>
+                    <th scope="col">#</th>
+                    <th scope="col">Product</th>
+                    <th scope="col"></th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Inventory</th>
+                    <th scope="col">Sales channels</th>
+                    <th scope="col">Markets</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Vendor</th>
+                    <th scope="col">Actons</th>
                   </tr>
                 </thead>
                 <tbody>
                   {productsList.map((p) => (
                     <tr key={p.product_id}>
-                      <th className='col-1'>
+                      <th className="col-1">
                         <img
                           src={p.image_src}
-                          alt='product'
-                          className='productThumbnail'
+                          alt="product"
+                          className="productThumbnail"
                         />
                       </th>
-                      <td className='col-2'>
+                      <td className="col-2">
                         <Link
-                          className='productLink'
-                          to={`/product/update/${p.product_id}`}>
+                          className="productLink"
+                          to={`/product/update/${p.product_id}`}
+                        >
                           {p.product_title}
                         </Link>
                       </td>
                       <td>
-                        <a target='__blank' href={p.url_handle}>
+                        <a target="__blank" href={p.url_handle}>
                           <IoMdEye />
                         </a>
                       </td>
-                      <td>{p.status === 1 ? 'Active' : 'Draft'}</td>
+                      <td>{p.status === 1 ? "Active" : "Draft"}</td>
                       <td>
                         {p.total_variants === 0 || null
                           ? `${p.total_variant_quantity} in stock`
@@ -94,7 +94,7 @@ const ProductListing = () => {
                       <td>{p.azst_vendor_name}</td>
                       <td>
                         <Link to={`/product/info/${p.product_id}`}>
-                          <input type='button' value='Add Info' />
+                          <input type="button" value="Add Info" />
                         </Link>
                       </td>
                     </tr>

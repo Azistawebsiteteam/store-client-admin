@@ -34,14 +34,16 @@
   justify-content: center;
   align-items: center;
 }
-
+input#webBanner {
+  width: 76%;
+}
 .feature-img {
   width: 100%;
 }
 
 .img-input {
   position: absolute;
-  left: 3%;
+  left: 10%;
   opacity: 0;
 }
 

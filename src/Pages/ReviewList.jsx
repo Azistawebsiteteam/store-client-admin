@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
+import ErrorHandler from "./ErrorHandler";
 
 const ReviewList = () => {
   const [reviewsList, setReviewsList] = useState([]);
@@ -15,12 +16,11 @@ const ReviewList = () => {
 
   useEffect(() => {
     const getReviews = async () => {
-      const url = `${baseUrl}/admin/reviews/get/reviews`;
+      const url = `${baseUrl}/admin/reviews/all`;
       const headers = {
         Authorization: `Bearer ${jwtToken}`,
       };
       const response = await axios.post(url, {}, { headers });
-      console.log(response);
       setReviewsList(response.data);
     };
     getReviews();
@@ -48,9 +48,8 @@ const ReviewList = () => {
 
         setReviewsList(updatedReviews);
       }
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onError(error);
     }
   };
 

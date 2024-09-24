@@ -1,9 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
 import Swal from "sweetalert2";
 
-const onLoading = () => {
+const onLoading = (message) => {
   return Swal.fire({
-    title: "Loading",
+    text: message ?? "Loading",
     allowOutsideClick: false,
     allowEscapeKey: false,
     didOpen: () => {

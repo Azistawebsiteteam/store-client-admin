@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect } from "react";
+import axios from "axios";
+import ErrorHandler from "./ErrorHandler";
 
 const body = {
   cartProducts: [
@@ -18,14 +19,16 @@ const body = {
   ],
 };
 
+const baseUrl = process.env.REACT_APP_API_URL;
+
 const Cart = () => {
   const fetchIPAddress = async () => {
     try {
-      const response = await fetch('https://api.ipify.org?format=json');
+      const response = await fetch("https://api.ipify.org?format=json");
       const data = await response.json();
       return data.ip;
     } catch (error) {
-      console.error('Failed to fetch IP address:', error);
+      console.error("Failed to fetch IP address:", error);
       return null;
     }
   };
@@ -40,15 +43,15 @@ const Cart = () => {
   useEffect(() => {
     const initialize = async () => {
       // Check if the IP and key already exist in localStorage
-      let storedIP = localStorage.getItem('e_com_cart_ky');
+      let storedIP = localStorage.getItem("e_com_cart_ky");
       if (!storedIP) {
         // Fetch the IP address if not found in localStorage
         storedIP = await fetchIPAddress();
         if (storedIP) {
-          localStorage.setItem('e_com_cart_ky', storedIP);
+          localStorage.setItem("e_com_cart_ky", storedIP);
         } else {
           const storedKey = generateRandomKey();
-          localStorage.setItem('e_com_cart_ky', storedKey);
+          localStorage.setItem("e_com_cart_ky", storedKey);
         }
       }
     };
@@ -58,16 +61,20 @@ const Cart = () => {
 
   const submitCart = async () => {
     try {
-      const url = 'http://192.168.212.94:5018/api/v1/cart';
-      let sessionId = localStorage.getItem('e_com_cart_ky');
+      const url = `${baseUrl}/cart`;
+      let sessionId = localStorage.getItem("e_com_cart_ky");
+      ErrorHandler.onLoading();
+
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, {
         ...body,
         customerId: 55,
         sessionId,
       });
-      console.log(response);
+      ErrorHandler.onLoadingClose();
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onLoadingClose();
+      ErrorHandler.onError(error);
     }
   };
 

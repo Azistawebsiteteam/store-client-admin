@@ -44,8 +44,6 @@ const CategoryForm = (props) => {
     setSubCategories(updateCategories);
   };
 
-  console.log(deletedSubCats);
-
   const handleSubCategoryInput = (e, id) => {
     const newSubCategories = subCategories.map((each, i) => {
       if (each.id === id) {

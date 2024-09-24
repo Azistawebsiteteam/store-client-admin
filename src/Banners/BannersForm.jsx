@@ -50,15 +50,12 @@ const BannersForm = (props) => {
     } catch (error) {
       Swal.close();
       swalHandle.onError(error);
-      console.log(error.response.data.message);
     }
   };
 
   const hideBanner = async (id, status) => {
     try {
-      console.log(status);
       const isHide = status === 1 ? true : false;
-      console.log(isHide);
       const url = `${baseUrl}/banners`;
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -74,7 +71,6 @@ const BannersForm = (props) => {
     } catch (error) {
       Swal.close();
       swalHandle.onError(error);
-      console.log(error);
     }
   };
 

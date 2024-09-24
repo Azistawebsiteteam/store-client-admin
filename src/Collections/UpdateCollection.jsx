@@ -86,8 +86,8 @@ const UpdateCollection = () => {
       formdata.append("metaDetails", JSON.stringify(metaDetails));
       formdata.append("collectionImg", collectionImg);
 
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.put(url, formdata, { headers });
-      console.log(response);
       swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {
@@ -95,7 +95,6 @@ const UpdateCollection = () => {
       swalErr.onError(error);
     }
   };
-  console.log(collectionData, "sdsds");
   return (
     <div>
       <CollectionForm

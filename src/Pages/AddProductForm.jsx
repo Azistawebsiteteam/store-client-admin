@@ -16,13 +16,14 @@ import Multiselect from "multiselect-react-dropdown";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 import { FaRegFileImage } from "react-icons/fa";
-import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
+import { IoMdArrowDropup } from "react-icons/io";
 import { ProductState } from "../Context/ProductContext";
 import { MdDelete } from "react-icons/md";
-import { showToast } from "./ErrorHandler";
+import ErrorHandler, { showToast } from "./ErrorHandler";
 
 import "./Admin.css";
 import VariantEdit from "./VariantEdit";
+import { useMemo } from "react";
 
 const AddProductForm = ({ productProps }) => {
   const location = useLocation();
@@ -73,7 +74,6 @@ const AddProductForm = ({ productProps }) => {
     setImages,
     variantGroup,
     setSiteShow,
-    setVariantShow,
     modal2Show,
     modal1Show,
     setStoreShow,
@@ -90,7 +90,6 @@ const AddProductForm = ({ productProps }) => {
   } = productProps;
 
   const [imgFile, setImgFile] = useState([]);
-  // const [countriesList, setCountries] = useState([]);
 
   const [subCategories, setSubCategories] = useState([]);
   const [tags, setTags] = useState([]);
@@ -105,11 +104,10 @@ const AddProductForm = ({ productProps }) => {
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
-  const localUrl = process.env.REACT_APP_LOCAL_URL;
 
-  const handleVariantClick = (variantId) => {
-    setModalVariantId(variantId);
-  };
+  // const handleVariantClick = (variantId) => {
+  //   setModalVariantId(variantId);
+  // };
   const handleModalClose = () => {
     setModalVariantId(null);
   };
@@ -165,7 +163,7 @@ const AddProductForm = ({ productProps }) => {
           setBrands(brandsList.data);
         }
       } catch (error) {
-        console.log(error);
+        ErrorHandler.onError(error);
       }
     };
     apiCallback();
@@ -173,7 +171,7 @@ const AddProductForm = ({ productProps }) => {
 
   useEffect(() => {
     const selectedCollections = collections.filter((collection) =>
-      collectionValue.includes(collection.collection_url_title)
+      collectionValue.includes(collection.azst_collection_id)
     );
     setSelectedColletions(selectedCollections);
     const selectedTags = tags.filter((tag) =>
@@ -338,7 +336,16 @@ const AddProductForm = ({ productProps }) => {
     return result;
   }, [variants, variantGroup]);
 
-  useEffect(() => {
+  // useMemo(() => {
+  //   const variantsData = generateOptions();
+  //   setVariantsDetials(variantsData);
+
+  //   if (variants.length <= 1) {
+  //     setVariantsGroup(variants[0]?.optionName || "");
+  //   }
+  // }, [generateOptions, variants, variantGroup]);
+
+  useMemo(() => {
     const variantsData = generateOptions();
     setVariantsDetials(variantsData);
 
@@ -372,7 +379,7 @@ const AddProductForm = ({ productProps }) => {
 
   const onSelectCollection = (selectedItem) => {
     setSelectedColletions(selectedItem);
-    setCollectionValue(selectedItem.map((each) => each.collection_url_title));
+    setCollectionValue(selectedItem.map((each) => each.azst_collection_id));
   };
 
   const handleConditions = (e) => {
@@ -560,12 +567,6 @@ const AddProductForm = ({ productProps }) => {
       setMainError("");
     }
     setMainTitle(e.target.value);
-    setMetaDetails({
-      ...metaDetails,
-      urlHandle: `${
-        window.location.origin
-      }/productItem/${e.target.value.replace(/ /g, "-")}`,
-    });
   };
 
   const onChangeTitle = (e) => {
@@ -575,9 +576,13 @@ const AddProductForm = ({ productProps }) => {
       setError("");
     }
     setTitle(e.target.value);
+    setMetaDetails({
+      ...metaDetails,
+      urlHandle: `${
+        window.location.origin
+      }/productItem/${e.target.value.replace(/ /g, "-")}`,
+    });
   };
-
-  console.log(variants, "variantsvariantsvariants");
 
   const onchangeVariantGroupBy = (e) => {
     setVariantsGroup(e.target.value);
@@ -670,7 +675,6 @@ const AddProductForm = ({ productProps }) => {
   };
 
   const toggleSubVariantsVisibility = (variantId) => {
-    console.log(variantId, "viva");
     setSubVariantsVisibility((prevState) => ({
       ...prevState,
       [variantId]: !prevState[variantId],
@@ -707,9 +711,11 @@ const AddProductForm = ({ productProps }) => {
   };
 
   const renderVariantButton = (va) => (
-    <Button variant="light" onClick={() => setVariantShow(true)}>
-      <span onClick={() => handleVariantClick(va.id)}>{va.value}</span>
-    </Button>
+    // onClick={() => setVariantShow(true)}
+    // onClick={() => handleVariantClick(va.id)}
+    // <Button variant="light">
+    <span className="ms-1">{va.value}</span>
+    // </Button>
   );
 
   const renderVariantLink = (va) => (
@@ -1625,6 +1631,7 @@ const AddProductForm = ({ productProps }) => {
                     <input
                       id="minCartQty"
                       className="form-control"
+                      value={productCategory.minCartQty}
                       onChange={handleProductCategorization}
                     />
                   </div>
@@ -1633,6 +1640,7 @@ const AddProductForm = ({ productProps }) => {
                     <input
                       id="maxCartQty"
                       className="form-control"
+                      value={productCategory.maxCartQty}
                       onChange={handleProductCategorization}
                     />
                   </div>

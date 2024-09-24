@@ -42,7 +42,6 @@ const EditBrand = () => {
       } catch (error) {
         Swal.close();
         swalHandle.onError();
-        console.log(error);
       }
     };
     apiCallback();
@@ -67,9 +66,8 @@ const EditBrand = () => {
         navigate("/brands");
       }
     } catch (error) {
-      swalHandle.onError();
+      swalHandle.onError(error);
       Swal.close();
-      console.log(error);
     }
   };
 

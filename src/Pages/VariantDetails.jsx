@@ -30,9 +30,7 @@ const VariantDetails = () => {
     comparePrice: "",
     isTaxable: false,
   });
-
   const baseUrl = process.env.REACT_APP_API_URL;
-  const localUrl = process.env.REACT_APP_LOCAL_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
   const params = useParams();
@@ -54,7 +52,6 @@ const VariantDetails = () => {
           { variantId: id },
           { headers }
         );
-        console.log(selectedVariantDetails, "selectedVariantDetails");
         if (response.status === 200) {
           Swal.close();
           const selectedVariantDetails = response.data.variant;
@@ -75,14 +72,10 @@ const VariantDetails = () => {
             weight: selectedVariantDetails.variant_weight,
             weightUnit: selectedVariantDetails.variant_weight_unit,
           });
-          console.log(
-            selectedVariantDetails.variant_weight,
-            selectedVariantDetails.variant_weight !== null
-          );
+
           setIsPhysical(selectedVariantDetails.variant_weight !== null);
         }
       } catch (error) {
-        console.log(error);
         Swal.close();
       }
     };
@@ -111,17 +104,17 @@ const VariantDetails = () => {
 
   const onUpdateVariants = async () => {
     try {
-      const url = `${localUrl}/product/update/variant`;
+      const url = `http://192.168.212.37:5018/api/v1/product/update/variant`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
-      console.log(prices.isTaxable, "prices.isTaxable");
+
       swalErr.onLoading();
       const formdata = new FormData();
       formdata.append("variantImage", JSON.stringify([variantImg]));
       formdata.append("offer_price", prices.price);
-      formdata.append("amount", prices.comparePrice);
-      formdata.append("isTaxable", prices.isTaxable);
+      formdata.append("comparePrice", prices.comparePrice);
+      formdata.append("isTaxable", prices.isTaxable === "on" ? true : false);
       formdata.append("value", "[]");
       formdata.append("barcode", inventory.barcode);
       formdata.append("hsCode", inventory.hscode);
@@ -142,7 +135,6 @@ const VariantDetails = () => {
       Swal.close();
     } catch (e) {
       Swal.close();
-      console.log(e);
     }
   };
 
@@ -164,11 +156,8 @@ const VariantDetails = () => {
       Swal.close();
     } catch (error) {
       Swal.close();
-      console.log(error);
     }
   };
-
-  console.log(selectedVariantDetails);
 
   return (
     <div className="adminSec">

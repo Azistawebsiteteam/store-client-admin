@@ -13,7 +13,7 @@ const AnnouncementFrom = (props) => {
     announcementBarContent,
     setAnnouncementBarContent,
   } = props;
-  console.log(props, "props");
+
   const handleTxtColor = (e) => {
     setTxtColor(e.target.value);
   };
@@ -33,7 +33,6 @@ const AnnouncementFrom = (props) => {
     });
   };
 
-  console.log(displaySettings, "displaySettings");
   return (
     <div className="adminSec">
       <AdminSideBar />

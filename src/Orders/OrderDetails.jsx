@@ -48,8 +48,6 @@ const OrderDetails = () => {
     navigator.clipboard.writeText(ShippingDetails.address_mobile);
   };
 
-  console.log(orderData);
-  console.log(ShippingDetails);
   if (Object.keys(orderData).length === 0) {
     return <div>Loading</div>;
   }

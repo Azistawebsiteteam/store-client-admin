@@ -1,8 +1,8 @@
-import React from 'react';
-import { v4 } from 'uuid';
+import React from "react";
+import { v4 } from "uuid";
 
-import { FaRegFileImage } from 'react-icons/fa';
-import { AddIcon, RemoveIcon } from './Icons';
+import { FaRegFileImage } from "react-icons/fa";
+import { AddIcon, RemoveIcon } from "./Icons";
 
 const Ingredients = (props) => {
   const {
@@ -17,13 +17,13 @@ const Ingredients = (props) => {
     setIsChangesOccur(true);
     setIngredients([
       ...ingredients,
-      { id: v4(), title: '', description: '', image: '' },
+      { id: v4(), title: "", description: "", image: "" },
     ]);
   };
 
   const removeIngredient = (id) => {
     setIsChangesOccur(true);
-    if (typeof id === 'number') {
+    if (typeof id === "number") {
       setDeletedIngredient([...deleteIngredient, id]);
     }
     const updateIngs = ingredients.filter((ing) => ing.id !== id);
@@ -49,75 +49,76 @@ const Ingredients = (props) => {
   //div className='faq-bgStyle '
   return (
     <>
-      <div className='row'>
+      <div className="row">
         {ingredients.map((ing) => (
-          <div className='col-6 col-md-4' key={ing.id}>
-            <div className='ingrident-containers'>
-              <div className='cross-icon'>
+          <div className="col-6 col-md-4" key={ing.id}>
+            <div className="ingrident-containers">
+              <div className="cross-icon">
                 <RemoveIcon onClick={(e) => removeIngredient(ing.id)} />
               </div>
-              <div className='file-contaner ing-img-container'>
-                <div className='img-icon'>
+              <div className="file-contaner ing-img-container">
+                <div className="img-icon">
                   {ing.image ? (
-                    typeof ing.image === 'string' ? (
+                    typeof ing.image === "string" ? (
                       <img
                         src={ing.image}
-                        alt='Banner'
-                        className='feature-img'
+                        alt="Banner"
+                        className="feature-img"
                       />
                     ) : (
                       <img
                         src={URL.createObjectURL(ing.image)}
-                        alt='Banner'
-                        className='feature-img'
+                        alt="Banner"
+                        className="feature-img"
                       />
                     )
                   ) : (
-                    <FaRegFileImage className='feature-img' />
+                    <FaRegFileImage className="feature-img" />
                   )}
                 </div>
-                <div className='img-input'>
+                <div className="img-input">
                   <input
-                    type='file'
-                    accept='image/*'
+                    type="file"
+                    accept="image/*"
                     onChange={(e) => handleIngrediantValues(e, ing.id)}
-                    className='FileUpload'
-                    id='webBanner'
+                    className="FileUpload"
+                    id="webBanner"
                   />
                 </div>
               </div>
-              <div className='d-flex align-items-center'>
-                <label className='heading' htmlFor='title'>
+              <div className="d-flex align-items-center">
+                <label className="heading" htmlFor="title">
                   Title :
                 </label>
                 <input
-                  id='title'
-                  type='text'
-                  className='form-control'
-                  placeholder='Enter Title here'
-                  maxLength='50'
+                  id="title"
+                  type="text"
+                  className="form-control"
+                  placeholder="Enter Title here"
+                  maxLength="50"
                   value={ing.title}
                   onChange={(e) => handleIngrediantValues(e, ing.id)}
                 />
               </div>
               <>
-                <p className='infoTxt'>
+                <p className="infoTxt">
                   {ing.title.length} of 50 characters used
                 </p>
               </>
-              <div className='form-group'>
-                <label className='heading' htmlFor='description'>
+              <div className="form-group">
+                <label className="heading" htmlFor="description">
                   Description
                 </label>
                 <textarea
-                  id='description'
-                  className='form-control'
-                  cols='50'
-                  rows='4'
-                  maxLength='200'
+                  id="description"
+                  className="form-control"
+                  cols="50"
+                  rows="4"
+                  maxLength="200"
                   onChange={(e) => handleIngrediantValues(e, ing.id)}
-                  value={ing.description}></textarea>
-                <p className='infoTxt'>
+                  value={ing.description}
+                ></textarea>
+                <p className="infoTxt">
                   {ing.description.length} of 200 characters used
                 </p>
               </div>
@@ -125,7 +126,7 @@ const Ingredients = (props) => {
           </div>
         ))}
       </div>
-      <div className='col-6 text-end'>
+      <div className="col-6 text-end">
         <AddIcon onClick={addIngredient} />
       </div>
     </>
@@ -133,71 +134,3 @@ const Ingredients = (props) => {
 };
 
 export default Ingredients;
-
-//  <div className='text-end'>
-//             <RemoveIcon onClick={(e) => removeIngredient(ing.id)} />
-//           </div>
-//           <div className='col-sm-12 col-md-6 form-group'>
-//             <>
-//               <label className='heading' htmlFor='title'>
-//                 Title
-//               </label>
-//               <input
-//                 type='text'
-//                 className='form-control'
-//                 id='title'
-//                 maxLength='50'
-//                 value={ing.title}
-//                 onChange={(e) => handleIngrediantValues(e, ing.id)}
-//               />
-//               <p className='infoTxt'>
-//                 {ing.title.length} of 50 characters used
-//               </p>
-//             </>
-
-//             <>
-//               <div className='form-group'>
-//                 <label className='heading' htmlFor='description'>
-//                   Description
-//                 </label>
-//                 <textarea
-//                   id='description'
-//                   className='form-control'
-//                   cols='60'
-//                   rows='2'
-//                   maxLength='200'
-//                   onChange={(e) => handleIngrediantValues(e, ing.id)}
-//                   value={ing.description}></textarea>
-//                 <p className='infoTxt'>
-//                   {ing.description.length} of 200 characters used
-//                 </p>
-//               </div>
-//             </>
-//           </div>
-//           <div className='col-sm-12 col-md-6 form-group '>
-//             <label className='heading'>Ingredient Image</label>
-//             <div className='drop-zone'>
-//               {ing.image ? (
-//                 typeof ing.image === 'string' ? (
-//                   <img src={ing.image} alt='Banner' className='bImg' />
-//                 ) : (
-//                   <img
-//                     src={URL.createObjectURL(ing.image)}
-//                     alt='Banner'
-//                     className='bImg'
-//                   />
-//                 )
-//               ) : (
-//                 <span className='dropZoneOverlay'>
-//                   <FaUpload /> Drop file here or click to upload
-//                 </span>
-//               )}
-//               <input
-//                 type='file'
-//                 accept='image/*'
-//                 onChange={(e) => handleIngrediantValues(e, ing.id)}
-//                 className='FileUpload'
-//                 id='webBanner'
-//               />
-//             </div>
-//           </div>

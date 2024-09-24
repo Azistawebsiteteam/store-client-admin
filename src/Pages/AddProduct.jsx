@@ -123,7 +123,17 @@ const AddProduct = () => {
       formdata.append("productType", productCategory.productType);
       formdata.append("vendor", productCategory.vendor);
       formdata.append("brand", productCategory.brand);
-      formdata.append("collections", JSON.stringify(collectionValue));
+      if (collectionValue.length > 1) {
+        collectionValue.forEach((id) => {
+          formdata.append("collections", JSON.stringify(id));
+        });
+      } else {
+        collectionValue.push(0);
+        collectionValue.forEach((id) => {
+          formdata.append("collections", JSON.stringify(id));
+        });
+      }
+
       formdata.append("tags", JSON.stringify(tagValue));
       formdata.append("metaTitle", metaDetails.metaTitle);
       formdata.append("metaDescription", metaDetails.metaDescription);
@@ -160,7 +170,6 @@ const AddProduct = () => {
       navigate("/products");
     } catch (error) {
       SwalErr.onLoadingClose();
-      console.log(error);
       SwalErr.onError(error);
     }
   };

@@ -16,7 +16,6 @@ const BlogForm = (props) => {
   };
 
   const handleBannerImg = (e) => {
-    console.log(e.target.id, "handleBannerImg");
     setInputValues({ ...inputVlaues, [e.target.id]: e.target.files[0] });
   };
 

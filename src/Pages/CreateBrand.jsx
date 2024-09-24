@@ -39,7 +39,6 @@ const CreateBrand = () => {
       swalErr.onSuccess();
       navigate("/brands"); // Redirect to brand list
     } catch (error) {
-      console.log(error);
       swalErr.onLoadingClose();
       swalErr.onError(error.response?.data?.message || "An error occurred.");
     } finally {

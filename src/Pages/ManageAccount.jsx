@@ -2,6 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import AdminSideBar from "./AdminSideBar";
+import ErrorHandler from "./ErrorHandler";
 
 const ManageAccount = () => {
   const baseUrl = process.env.REACT_APP_API_URL;
@@ -31,7 +32,6 @@ const ManageAccount = () => {
         const response = await axios.post(url, {}, { headers });
         if (response.status === 200) {
           const userDetails = response.data.admin_details;
-          console.log(userDetails.azst_admin_details_profile_photo);
           setInputValue({
             fullName: userDetails.azst_admin_details_fname,
             userName: userDetails.azst_admin_details_admin_id,
@@ -41,7 +41,7 @@ const ManageAccount = () => {
           });
         }
       } catch (error) {
-        console.log(error);
+        ErrorHandler.onError(error);
       }
     };
     getDetails();
@@ -76,11 +76,11 @@ const ManageAccount = () => {
       formData.append("mobileNumber", inputValues.mobileNumber);
       formData.append("profilePic", inputValues.profilePic);
 
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formData, { headers });
       window.location.reload();
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onError(error);
     }
   };
 
@@ -106,10 +106,10 @@ const ManageAccount = () => {
         "Content-type": `application/json`,
       };
 
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, body, { headers });
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onError(error);
     }
   };
 

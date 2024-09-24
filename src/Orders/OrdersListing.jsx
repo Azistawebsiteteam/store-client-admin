@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import AdminSideBar from "../Pages/AdminSideBar";
 import errorHandle from "../Pages/ErrorHandler";
@@ -14,14 +14,11 @@ const OrdersListing = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const customerId = searchParams.get("customer_id");
-  console.log(customerId, "searchParams");
   const navigate = useNavigate();
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/orders/admin`;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
 
-  const { id } = useParams();
-  console.log(id, "id");
   useEffect(() => {
     const getOrders = async () => {
       try {
@@ -38,13 +35,12 @@ const OrdersListing = () => {
           };
         }
         const response = await axios.post(url, body, { headers });
-        console.log(response, "response");
+
         errorHandle.onLoadingClose();
         setOrders(response.data);
       } catch (error) {
         errorHandle.onLoadingClose();
         errorHandle.onError(error);
-        console.log(error);
       }
     };
     getOrders();

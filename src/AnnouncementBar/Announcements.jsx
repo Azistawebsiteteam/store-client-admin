@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
+import ErrorHandler from "../Pages/ErrorHandler";
 
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -43,7 +44,7 @@ const Announcements = () => {
         getAnnouncements();
       }
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onError(error);
     }
   };
 

@@ -32,7 +32,6 @@ const Collections = () => {
     } catch (error) {
       swalErr.onLoadingClose();
       swalErr.onError(error);
-      console.error(error);
     }
   }, [baseUrl, token]);
 
@@ -42,7 +41,6 @@ const Collections = () => {
   }, [setDropdownItems, collectionsApi]);
 
   const deleteCollection = async (id) => {
-    console.log(id, "ididid");
     try {
       const url = `${baseUrl}/collections`;
       const headers = {
@@ -51,7 +49,6 @@ const Collections = () => {
       const body = { collectionId: id };
       const response = await axios.patch(url, body, { headers });
       if (response.status === 200) {
-        console.log(response);
         swalErr.onSuccess();
         swalErr.onLoadingClose();
       }

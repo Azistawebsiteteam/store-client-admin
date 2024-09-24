@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -13,26 +13,28 @@ const ProductBannerListing = () => {
 
   const [banners, setBanners] = useState([]);
 
-  const sliderDetails = async () => {
-    try {
-      const url = `${baseUrl}/banners/product/all`;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      swalHandle.onLoading();
-      const response = await axios.get(url, { headers });
-      Swal.close();
-      setBanners(response.data);
-    } catch (error) {
-      swalHandle.onError(error);
-    }
-  };
+  const sliderDetails = useCallback(
+    () => async () => {
+      try {
+        const url = `${baseUrl}/banners/product/all`;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+        swalHandle.onLoading();
+        const response = await axios.get(url, { headers });
+        Swal.close();
+        setBanners(response.data);
+      } catch (error) {
+        swalHandle.onError(error);
+      }
+    },
+    [baseUrl, token]
+  );
 
   useEffect(() => {
     sliderDetails();
-  }, [token, baseUrl]);
+  }, [token, baseUrl, sliderDetails]);
 
-  console.log(banners);
   return (
     <div className="adminSec">
       <AdminSideBar />

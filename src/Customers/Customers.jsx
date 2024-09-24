@@ -73,8 +73,6 @@ const Customers = () => {
     navigator.clipboard.writeText(customerData.azst_customer_email);
   };
 
-  console.log(customerData);
-  console.log(lastOrdersData);
   return (
     <div className="adminSec">
       <AdminSideBar />

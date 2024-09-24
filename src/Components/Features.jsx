@@ -85,6 +85,7 @@ const Features = (props) => {
                   <input
                     type="file"
                     accept="image/*"
+                    className="featureImgInput"
                     onChange={(e) => handleFeatruesValues(e, feature.id)}
                     id="webBanner"
                   />

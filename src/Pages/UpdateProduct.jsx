@@ -21,7 +21,6 @@ const UpdateProduct = () => {
     tracker: false,
     locValues: false,
     isShipping: false,
-    variantsThere: false,
     isSKU: false,
     error: false,
     handleLoc: { cwos: false },
@@ -60,7 +59,7 @@ const UpdateProduct = () => {
   const [variantGroup, setVariantsGroup] = useState("");
   const [inventoryIdInfo, setInventoryId] = useState([]);
   const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
-
+  const [variantsThere, setVariants] = useState(false);
   const baseUrl = process.env.REACT_APP_API_URL;
   // const localUrl = process.env.REACT_APP_LOCAL_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -99,7 +98,6 @@ const UpdateProduct = () => {
       min_cart_quantity,
       max_cart_quantity,
     } = productDetails;
-    //console.log(productDetails, 'productDetails');
 
     setProductData((prevData) => ({
       ...prevData,
@@ -141,26 +139,24 @@ const UpdateProduct = () => {
       isSKU: !!(sku_code || sku_bar_code),
       skuInput: { SKU: sku_code, barcode: sku_bar_code },
       handleLoc: { cwos: out_of_stock_sale },
-      variantsThere: JSON.parse(variant_store_order)?.length > 0,
+
       tracker: !JSON.parse(variant_store_order)?.length > 0,
     }));
+    setVariants(JSON.parse(variant_store_order)?.length > 0);
   };
 
   const setVariantsUpdateDetails = (v) => {
     setVariantsGroup(v[0].UOM);
-    v.forEach((each) => {
-      setVariant((prevVariants) => [
-        ...prevVariants,
-        {
-          id: v4(),
-          optionName: each.UOM,
-          optionValue: [...each.values, ""],
-          isDone: true,
-        },
-      ]);
-    });
-  };
+    const newVariants = v.map((each) => ({
+      id: v4(),
+      optionName: each.UOM,
+      optionValue: [...each.values, ""],
+      isDone: true,
+    }));
 
+    // Set the variants state once after the array has been constructed
+    setVariant(newVariants);
+  };
   const getDetails = async () => {
     try {
       const url = `${baseUrl}/product/get/details`;
@@ -191,8 +187,6 @@ const UpdateProduct = () => {
     getDetails();
   }, [id, baseUrl, token, inventoryIdInfo]);
 
-  console.log(productData);
-
   const onSubmitProductDetails = async () => {
     try {
       if (!productData.title) {
@@ -205,7 +199,7 @@ const UpdateProduct = () => {
         setProductData((prevData) => ({ ...prevData, error: "" }));
       }
 
-      const url = `http://192.168.213.209:5018/api/v1/product/update-store`;
+      const url = `${baseUrl}/product/update-store`;
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",
@@ -227,9 +221,9 @@ const UpdateProduct = () => {
       });
       formdata.append("productId", id);
       formdata.append("productTitle", productData.title);
-      formdata.append("productMainTitle", productData.title);
+      formdata.append("productMainTitle", productData.mainTitle);
       formdata.append("productInfo", productData.content);
-      formdata.append("variantsThere", productData.variantsThere);
+      formdata.append("variantsThere", variantsThere);
       formdata.append("metaTitle", productData.metaDetails.metaTitle);
       formdata.append(
         "metaDescription",
@@ -241,17 +235,17 @@ const UpdateProduct = () => {
       formdata.append("productType", productData.productCategory.productType);
       formdata.append("vendor", productData.productCategory.vendor);
       formdata.append("brand", productData.productCategory.brand);
-      formdata.append("brand", productData.productCategory.minCartQty);
-      formdata.append("brand", productData.productCategory.maxCartQty);
-      formdata.append(
-        "collections",
-        JSON.stringify(productData.collectionValue)
-      );
+      formdata.append("minCartQty", productData.productCategory.minCartQty);
+      formdata.append("maxCartQty", productData.productCategory.maxCartQty);
+
+      productData.collectionValue.forEach((id) => {
+        formdata.append("collections", id);
+      });
       formdata.append("tags", JSON.stringify(productData.tagValue));
       const inventory = productData.locInputs.filter(
         (i) => i.inventoryId !== null
       );
-      if (productData.variantsThere) {
+      if (variantsThere) {
         productData.variantsDetails.forEach((variant) => {
           formdata.append("variantImage", variant.main.variantImage);
           variant.sub.forEach((subVariant) =>
@@ -264,7 +258,7 @@ const UpdateProduct = () => {
           JSON.stringify(productData.variantsDetails)
         );
 
-        formdata.append("vInventoryInfo", JSON.stringify(inventory));
+        formdata.append("vInventoryInfo", JSON.stringify(inventoryIdInfo));
       } else {
         formdata.append("productPrice", productData.productPrices.price);
         formdata.append(
@@ -296,7 +290,6 @@ const UpdateProduct = () => {
       swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {
-      console.log(error);
       swalErr.onLoadingClose();
       swalErr.onError(error);
     }
@@ -345,9 +338,9 @@ const UpdateProduct = () => {
     setContent: (content) =>
       setProductData((prevData) => ({ ...prevData, content })),
     images: productData.images,
-    setVariants: (variants) =>
-      setProductData((prevData) => ({ ...prevData, variants })),
-    variantsThere: productData.variantsThere,
+    // setVariants: (variants) =>
+    //   setProductData((prevData) => ({ ...prevData, variants })),
+    variantsThere,
     tracker: productData.tracker,
     setTracker: (tracker) =>
       setProductData((prevData) => ({ ...prevData, tracker })),
@@ -420,6 +413,7 @@ const UpdateProduct = () => {
     variants,
     variantGroup,
     setVariantsGroup,
+    setVariants,
   };
 
   return (

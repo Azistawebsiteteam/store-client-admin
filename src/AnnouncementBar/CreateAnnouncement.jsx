@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import AnnouncementForm from "./AnnouncementForm";
 import { useState } from "react";
 import axios from "axios";
+import ErrorHandler from "../Pages/ErrorHandler";
 
 const CreateAnnouncement = () => {
   const [txtColor, setTxtColor] = useState("");
@@ -33,13 +34,12 @@ const CreateAnnouncement = () => {
         backgroundCrl: bgColor,
         showHomePageOnly: displaySettings.homePage,
       };
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, body, { headers });
-      console.log(response);
     } catch (error) {
-      console.log(error);
+      ErrorHandler.onError(error);
     }
   };
-  console.log(txtColor, bgColor, "balu");
 
   return (
     <div>
