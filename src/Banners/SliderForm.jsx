@@ -2,6 +2,7 @@ import React from "react";
 import moment from "moment";
 import AdminSideBar from "../Pages/AdminSideBar";
 import { FaUpload } from "react-icons/fa";
+import BackBtn from "./../Components/BackBtn";
 
 const SliderForm = (props) => {
   const { setImgDetails, imgDetails, setimgValue, imgValue } = props;
@@ -41,7 +42,10 @@ const SliderForm = (props) => {
       <div className="commonSec">
         <div className="container">
           <div className="row">
-            <h3>Add Slider</h3>
+            <h3 className="d-flex">
+              <BackBtn />
+              Add Slider
+            </h3>
             <div className="col-sm-8">
               <div className="row">
                 <div className="col-sm-12">
@@ -51,12 +55,12 @@ const SliderForm = (props) => {
                     </label>
                     <select
                       id="bannerType"
-                      class="form-select"
+                      className="form-select"
                       aria-label="Default select example"
                       value={imgDetails.bannerType}
                       onChange={handleImgDetails}
                     >
-                      <option selected>Select Banner type</option>
+                      <option>Select Banner type</option>
                       <option value="slider">Slider Banner</option>
                       <option value="product">Product Banner</option>
                     </select>
@@ -106,13 +110,13 @@ const SliderForm = (props) => {
                             <img
                               src={imgValue.webBanner}
                               alt="Banner"
-                              className="bImg"
+                              className="wImg"
                             />
                           ) : (
                             <img
                               src={URL.createObjectURL(imgValue.webBanner)}
                               alt="Banner"
-                              className="bImg"
+                              className="wImg"
                             />
                           )
                         ) : (
@@ -141,13 +145,13 @@ const SliderForm = (props) => {
                             <img
                               src={imgValue.mobileBanner}
                               alt="Banner"
-                              className="bImg"
+                              className="mImg"
                             />
                           ) : (
                             <img
                               src={URL.createObjectURL(imgValue.mobileBanner)}
                               alt="Banner"
-                              className="bImg"
+                              className="mImg"
                             />
                           )
                         ) : (

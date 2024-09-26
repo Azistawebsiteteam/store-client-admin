@@ -1,17 +1,16 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { v4 } from 'uuid';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import Swal from 'sweetalert2';
+import React, { useEffect, useCallback, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { v4 } from "uuid";
+import Cookies from "js-cookie";
+import axios from "axios";
+import Swal from "sweetalert2";
 
-import swalHandle from './ErrorHandler';
-import AdminSideBar from './AdminSideBar';
-import Ingredients from '../Components/Ingredients';
-import Features from '../Components/Features';
-import { IoMdArrowRoundBack } from 'react-icons/io';
-
-import '../index.css';
+import swalHandle from "./ErrorHandler";
+import AdminSideBar from "./AdminSideBar";
+import Ingredients from "../Components/Ingredients";
+import Features from "../Components/Features";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import "../index.css";
 
 const ProductInfo = () => {
   const { id } = useParams();
@@ -19,9 +18,9 @@ const ProductInfo = () => {
   const [ingredients, setIngredients] = useState([
     {
       id: v4(),
-      title: '',
-      description: '',
-      image: '',
+      title: "",
+      description: "",
+      image: "",
     },
   ]);
 
@@ -31,8 +30,8 @@ const ProductInfo = () => {
   const [features, setFeatures] = useState([
     {
       id: v4(),
-      title: '',
-      image: '',
+      title: "",
+      image: "",
     },
   ]);
 
@@ -77,22 +76,22 @@ const ProductInfo = () => {
       const formdata = new FormData();
 
       ingredients.forEach((ing) => {
-        formdata.append('ingImages', ing.image);
+        formdata.append("ingImages", ing.image);
       });
       features.forEach((feature) => {
-        formdata.append('feaImages', feature.image);
+        formdata.append("feaImages", feature.image);
       });
 
-      formdata.append('ingredients', JSON.stringify(ingredients));
-      formdata.append('features', JSON.stringify(features));
-      formdata.append('productId', id);
+      formdata.append("ingredients", JSON.stringify(ingredients));
+      formdata.append("features", JSON.stringify(features));
+      formdata.append("productId", id);
       // Append unique values to FormData
       // Note: Delete items id is appendeing to array of unique values
       [...new Set(deleteIngredient)].forEach((item) =>
-        formdata.append('deleteIngredient[]', item)
+        formdata.append("deleteIngredient[]", item)
       );
       [...new Set(deleteFeatures)].forEach((item) =>
-        formdata.append('deleteFeatures[]', item)
+        formdata.append("deleteFeatures[]", item)
       );
 
       swalHandle.onLoading();
@@ -101,22 +100,22 @@ const ProductInfo = () => {
         setIngredients([
           {
             id: v4(),
-            title: '',
-            description: '',
-            image: '',
+            title: "",
+            description: "",
+            image: "",
           },
         ]);
         setFeatures([
           {
             id: v4(),
-            title: '',
-            image: '',
+            title: "",
+            image: "",
           },
         ]);
         swalHandle.onLoadingClose();
         swalHandle.onSuccess();
         setTimeout(() => {
-          navigate('/products');
+          navigate("/products");
         }, 2000);
       }
     } catch (error) {
@@ -130,14 +129,14 @@ const ProductInfo = () => {
     if (isChangesOccur) {
       const Toast = Swal.mixin({
         toast: true,
-        position: 'top',
-        width: '50%',
-        height: '10%',
+        position: "top",
+        width: "50%",
+        height: "10%",
         customClass: {
-          popup: 'color-toast',
-          content: 'swal-custom-content',
-          confirmButton: 'swal-custom-confirm-button',
-          cancelButton: 'swal-custom-cancel-button',
+          popup: "color-toast",
+          content: "swal-custom-content",
+          confirmButton: "swal-custom-confirm-button",
+          cancelButton: "swal-custom-cancel-button",
         },
         timerProgressBar: true,
         showConfirmButton: false,
@@ -154,15 +153,15 @@ const ProductInfo = () => {
         `,
         didOpen: () => {
           document
-            .getElementById('save-button')
-            .addEventListener('click', () => {
+            .getElementById("save-button")
+            .addEventListener("click", () => {
               // saving changes and send back to server
               handleSubmitIngs();
               Swal.close();
             });
           document
-            .getElementById('cancel-button')
-            .addEventListener('click', () => {
+            .getElementById("cancel-button")
+            .addEventListener("click", () => {
               // undo chnages and got to previous page
               navigate(-1);
               Swal.close();
@@ -174,14 +173,14 @@ const ProductInfo = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <AdminSideBar />
-      <div className='commonSec'>
-        <div className='d-flex align-items-center'>
+      <div className="commonSec">
+        <div className="d-flex align-items-center">
           <IoMdArrowRoundBack
-            style={{ fontSize: '30px', cursor: 'pointer', marginRight: '4px' }}
+            style={{ fontSize: "30px", cursor: "pointer", marginRight: "4px" }}
             onClick={goBacktoPage}
-          />{' '}
+          />{" "}
           <h3>Product Info</h3>
         </div>
         <Ingredients
@@ -198,12 +197,13 @@ const ProductInfo = () => {
           setDeletedFeatures={setDeletedFeatures}
           setIsChangesOccur={setIsChangesOccur}
         />
-        <div className='row mt-3'>
-          <div className='col-6'>
+        <div className="row mt-3">
+          <div className="col-6">
             <button
-              className='btn btn-primary'
+              className="btn btn-primary"
               disabled={!isChangesOccur}
-              onClick={handleSubmitIngs}>
+              onClick={handleSubmitIngs}
+            >
               Save
             </button>
           </div>

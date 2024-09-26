@@ -7,6 +7,7 @@ import { v4 } from "uuid";
 import swalHandle from "../Pages/ErrorHandler";
 import CategoryForm from "./CategoryForm";
 import AdminSideBar from "../Pages/AdminSideBar";
+import BackBtn from "../Components/BackBtn";
 
 const CategoriesCreate = () => {
   const [categoryImg, setCategoryImg] = useState();
@@ -58,7 +59,10 @@ const CategoriesCreate = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h4>Create Category</h4>
+                <h4 className="d-flex">
+                  <BackBtn />
+                  Create Category
+                </h4>
                 <CategoryForm
                   categoryData={categoryData}
                   categoryImg={categoryImg}

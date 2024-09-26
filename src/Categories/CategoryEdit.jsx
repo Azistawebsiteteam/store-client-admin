@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import AdminSideBar from "../Pages/AdminSideBar";
 import CategoryForm from "./CategoryForm";
 import ErrorHandler from "../Pages/ErrorHandler";
+import BackBtn from "../Components/BackBtn";
 
 const CategoryEdit = () => {
   const [categoryImg, setCategoryImg] = useState();
@@ -92,7 +93,10 @@ const CategoryEdit = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h4>Create Category</h4>
+                <h4 className="d-flex">
+                  <BackBtn />
+                  Update Category
+                </h4>
                 <CategoryForm
                   categoryData={categoryData}
                   categoryImg={categoryImg}

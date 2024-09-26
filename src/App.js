@@ -15,15 +15,15 @@ import UpdateCollection from "./Collections/UpdateCollection";
 import SlidersListing from "./Banners/SlidersListing";
 import ProductListing from "./Pages/ProductListing";
 import UpdateProduct from "./Pages/UpdateProduct";
-import Brands from "./Pages/Brands";
+import Brands from "./Brands/Brands";
 import VariantDetails from "./Pages/VariantDetails";
 import VariantEdit from "./Pages/VariantEdit";
 import Inventory from "./Inventory/Inventory";
 import NotFound from "./Pages/NotFound";
 import Discounts from "./Discounts/Discounts";
 import CreateDiscount from "./Discounts/CreateDiscount";
-import CreateBrand from "./Pages/CreateBrand";
-import EditBrand from "./Pages/EditBrand";
+import CreateBrand from "./Brands/CreateBrand";
+import EditBrand from "./Brands/EditBrand";
 import VariantsComponent from "./Pages/VariantsComponent";
 import ReviewList from "./Pages/ReviewList";
 import EditSlider from "./Banners/EditSlider";
@@ -51,6 +51,7 @@ import Cart from "./Pages/Cart";
 import PopupListing from "./Popup/PopupListing";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Pages/Admin.css";
+import EditDiscount from "./Discounts/EditDiscount";
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -198,6 +199,14 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateDiscount />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/editDiscount/:id"
+          element={
+            <ProtectedRoute>
+              <EditDiscount />
             </ProtectedRoute>
           }
         />

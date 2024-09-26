@@ -424,8 +424,12 @@
   border: none;
   border-radius: 4px;
 }
-.bImg {
-  max-width: 170px;
+.wImg{
+  max-width: 380px;
+  position: absolute;
+}
+.mImg {
+  max-width: 140px;
   position: absolute;
 }
 .mbImg {

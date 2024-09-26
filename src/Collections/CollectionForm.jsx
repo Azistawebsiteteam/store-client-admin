@@ -137,56 +137,6 @@ const CollectionForm = (props) => {
               </div>
             </div>
             <div className="col-sm-4">
-              {/* <div className='bgStyle'>
-                            <div className='d-flex justify-content-between align-items-center'>
-                                <h6>Publishing</h6>
-                                <button type="button" className="btn" data-bs-toggle="modal" data-bs-target="#editLoc">
-                                    Manage
-                                </button>
-                                <div className="modal fade" id="editLoc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div className="modal-dialog">
-                                        <div className="modal-content">
-                                            <div className="modal-header">
-                                                <h5 className="modal-title" id="exampleModalLabel">Manage sales Channels</h5>
-                                                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div className="modal-body">
-                                                <button className="d-block" onClick={handleStores}>{(channelValues) ? 'Deselect All' : 'Select All'}</button>
-                                                <div className="form-check">
-                                                    <input className="form-check-input" type="checkbox" value={channel.onlineStore} onClick={handleChannels} id="onlinestore" />
-                                                    <label className="form-check-label" htmlFor="onlinestore">
-                                                        Online store
-                                                    </label>
-                                                </div>
-                                                <div className="form-check">
-                                                    <input className="form-check-input" type="checkbox" value={channel['Facebook & Instagram']} onClick={handleChannels} id="facebook_instagram" />
-                                                    <label className="form-check-label" htmlFor="facebook_instagram">
-                                                        Facebook & Instagram
-                                                    </label>
-                                                </div>
-                                                <div className="form-check">
-                                                    <input className="form-check-input" type="checkbox" value={channel['Google & YouTube']} onClick={handleChannels} id="google_youTube" />
-                                                    <label className="form-check-label" htmlFor="google_youTube">
-                                                        Google & YouTube
-                                                    </label>
-                                                </div>
-                                                <div className="form-check">
-                                                    <input className="form-check-input" type="checkbox" value={channel.azistastore_mobile_app} onClick={handleChannels} id="azistastore_mobile_app" />
-                                                    <label className="form-check-label" htmlFor="azistastore_mobile_app">
-                                                        azistastore_mobile_app
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div className="modal-footer">
-                                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Done</button>
-                                                 <button type="button" className="btn btn-primary">Done</button> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p>Sales channels</p>
-                        </div> */}
               <div className="bgStyle">
                 <div className="form-group">
                   <h6>Image</h6>

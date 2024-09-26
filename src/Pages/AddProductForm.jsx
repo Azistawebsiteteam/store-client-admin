@@ -212,7 +212,7 @@ const AddProductForm = ({ productProps }) => {
               id: v4(),
               variantId: 0,
               value: mainOption,
-              variantImage: subAvail[0]?.variant_image[0] || "",
+              variantImage: subAvail[0]?.variant_image[0] ?? "",
               offer_price: `${Math.min(...offer_price_array)} - ${Math.max(
                 ...offer_price_array
               )}`,
@@ -737,7 +737,6 @@ const AddProductForm = ({ productProps }) => {
       return setInventoryId(inventoryIds);
     }
 
-    // If the value doesn't contain a comma, set it as a single-item array
     setInventoryId([values.trim()]);
   };
 
