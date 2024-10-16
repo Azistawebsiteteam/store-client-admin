@@ -52,6 +52,7 @@ import PopupListing from "./Popup/PopupListing";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Pages/Admin.css";
 import EditDiscount from "./Discounts/EditDiscount";
+import AddCustomer from "./Customers/AddCustomer";
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -203,7 +204,7 @@ function App() {
           }
         />
         <Route
-          path="/editDiscount/:id"
+          path="/discounts-edit/:id"
           element={
             <ProtectedRoute>
               <EditDiscount />
@@ -242,6 +243,7 @@ function App() {
         <Route path="/customers" element={<CustomersListing />} />
         <Route path="/dummy" element={<Dummy />} />
         <Route path="/customer/:id" element={<Customers />} />
+        <Route path="add-customer" element={<AddCustomer />} />
         <Route path="/orders" element={<OrdersListing />} />
         <Route path="/orders/:id" element={<OrderDetails />} />
         <Route path="/blogs" element={<BlogsListing />} />

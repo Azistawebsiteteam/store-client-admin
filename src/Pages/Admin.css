@@ -274,9 +274,9 @@
 .commonSec {
   background-color: #f1f2f4;
   width: 100%;
-  height: 100%;
   margin-left: 220px;
   padding: 80px 15px;
+  min-height: 100vh;
 }
 .infoTxt {
   font-size: 14px;
@@ -347,9 +347,15 @@
 
 .FileUpload {
   opacity: 0;
-  height: 90px;
-  width: 100px;
+  height: 100%;
+  width: 100%;
+  position: absolute;
 }
+img.bImg{
+  max-height: 100%;
+  width: 100%;
+}
+
 .bannerThumbnail {
   width: 100%;
 }
@@ -496,8 +502,8 @@
   width: 50%;
 }
 .methodBtnCont {
-  border-radius: 4px;
-  width: 50%;
+  border-radius: 8px;
+  width: 60%;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border: 1px solid #c9c6c6;
   margin-bottom: 4px;

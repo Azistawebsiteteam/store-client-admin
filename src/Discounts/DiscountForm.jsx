@@ -1,6 +1,5 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { FaRegCopy } from "react-icons/fa";
 import { LiaPercentSolid } from "react-icons/lia";
 import { MdCurrencyRupee } from "react-icons/md";
@@ -12,66 +11,64 @@ import ErrorHandler from "./../Pages/ErrorHandler";
 import "../Pages/Admin.css";
 
 const DiscountForm = (props) => {
-  const { selectedDiscount } = props;
-  const [method, setMethodTab] = useState("Automatic");
+  const { selectedDiscount, discountProps } = props;
 
-  const [disCode, setDisCode] = useState("");
-  const [amtOfPrdctsDscntVal, setAmtOfPrdctsDscntVal] = useState("");
-  const [discountVal, setDiscountVal] = useState("");
-  // eslint-disable-next-line no-unused-vars
-  const [productsList, setProductsList] = useState([]);
+  const [customersList, setCustomersList] = useState([]);
   const [updatedProductsList, setUpdatedProductsList] = useState([]);
-  // const [selectedListItem, setSelectedListItem] = useState([]);
-  const [selectedCustomers, setSelectedCustomers] = useState([]);
-
-  const [customerSpendsSelectedListItem, setCustomerSpendsSelectedListItem] =
-    useState([]);
-  const [customerGetsSelectedListItem, setCustomerGetsSelectedListItem] =
-    useState([]);
   const [collectionsList, setCollectionsList] = useState([]);
-  // const [discountAppliedValue, setDiscountAppliedValue] =
-  //   useState("collection");
-  const [custEligibility, setCustEligibility] = useState("");
 
-  const [maxDisUses, setMaxDisUses] = useState("");
-  const [usageLimit, setUsageLimit] = useState("");
-
-  const [minCartVal, setMinCartVal] = useState("");
-
-  const [endDate, setEndDate] = useState(false);
-  const [startTimings, setStartTimings] = useState({
-    startDate: "",
-    startTime: "",
-  });
-  const [endTimings, setEndTimings] = useState({
-    endDate: "",
-    endTime: "",
-  });
   const [salesChannels, setSalesChannels] = useState({
     facebookAndInsta: "",
     googleAndYoutube: "",
     azistaStore: "",
   });
-  const [customerBuyItems, setCustomerBuyItems] = useState("collection");
-  const [custOrderQuant, setCustOrderQuant] = useState({
-    minBuyQty: null,
-    maxGetYQty: null,
-  });
-  const [customerGetsItems, setCustomerGetsItems] = useState("collection");
-  const [discountedValues, setDiscountedValues] = useState("");
-  // const [discountInputs, setDiscountInputs] = useState({
-  //   discountInAmount: "",
-  //   discountInPercentage: "",
-  // });
-  const [maxUses, setMaxUses] = useState(false);
-  // const [maxUsesInput, setMaxUsesInput] = useState("");
-
-  const [customersList, setCustomersList] = useState([]);
-  const [disTitle, setDisTitle] = useState("");
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
+
+  const {
+    disCode,
+    setDisCode,
+    disTitle,
+    setDisTitle,
+    method,
+    setMethodTab,
+    amtOfPrdctsDscntVal,
+    setAmtOfPrdctsDscntVal,
+    discountedValues,
+    setDiscountedValues,
+    discountVal,
+    setDiscountVal,
+    startTimings,
+    setStartTimings,
+    endTimings,
+    setEndTimings,
+    maxDisUses,
+    setMaxDisUses,
+    usageLimit,
+    setUsageLimit,
+    custEligibility,
+    setCustEligibility,
+    selectedCustomers,
+    setSelectedCustomers,
+    minCartVal,
+    setMinCartVal,
+    customerBuyItems,
+    setCustomerBuyItems,
+    customerSpendsSelectedListItem,
+    setCustomerSpendsSelectedListItem,
+    customerGetsSelectedListItem,
+    setCustomerGetsSelectedListItem,
+    custOrderQuant,
+    setCustOrderQuant,
+    customerGetsItems,
+    setCustomerGetsItems,
+    endDate,
+    setEndDate,
+    maxUses,
+    setMaxUses,
+  } = discountProps;
 
   useEffect(() => {
     const productDetails = async () => {
@@ -89,7 +86,7 @@ const DiscountForm = (props) => {
             axios.get(collectionsUrl, { headers }),
             axios.post(customersUrl, { isActive: true }, { headers }),
           ]);
-        setProductsList(productsData.data.products);
+
         const updatedProductList = productsData.data.products.map((each) => ({
           productTitle: `${each.product_title} ${
             each.option1 !== null ? `- ${each.option1}` : ""
@@ -100,8 +97,8 @@ const DiscountForm = (props) => {
           productId: each.product_id,
           variantId: each.variant_id,
         }));
-        setUpdatedProductsList(updatedProductList);
 
+        setUpdatedProductsList(updatedProductList);
         setCollectionsList(collectionsData.data);
         setCustomersList(customersData.data);
       } catch (error) {
@@ -110,95 +107,6 @@ const DiscountForm = (props) => {
     };
     productDetails();
   }, [token, baseUrl]);
-
-  const discountType = () => {
-    switch (selectedDiscount) {
-      case "Discount on Products":
-        return "product";
-      case "Buy X get Y":
-        return "buy_x_get_y";
-      case "Order value":
-        return "cart";
-      default:
-        return null;
-    }
-  };
-
-  const typeValue = () => {
-    if (amtOfPrdctsDscntVal) {
-      return amtOfPrdctsDscntVal;
-    } else {
-      if (discountedValues === "free") {
-        return "percentage";
-      } else if (discountedValues === "flat") {
-        return "flat";
-      } else {
-        return "percentage";
-      }
-    }
-  };
-
-  const handleSubmitButton = async () => {
-    try {
-      const url = `http://192.168.213.153:5018/api/v1/discount/create`;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      const body = {
-        discount: {
-          title: disTitle,
-          code: disCode,
-          method: method,
-          type: typeValue(),
-          value: discountedValues === "free" ? "100" : discountVal,
-          startTime: `${startTimings.startDate} ${startTimings.startTime}`,
-          endTime: `${endTimings.endDate} ${endTimings.endTime}`,
-          usageCount: maxDisUses === "mutipleTimeDiscntUses" ? usageLimit : 1,
-          customers:
-            custEligibility === "specificCustomer"
-              ? JSON.stringify(
-                  selectedCustomers.map((eachCust) => eachCust.azst_customer_id)
-                )
-              : "all",
-        },
-        conditions: {
-          scope: discountType(),
-          minCartValue: parseInt(minCartVal),
-          buyProductType: customerBuyItems,
-          buyProductId:
-            customerBuyItems === "collection"
-              ? customerSpendsSelectedListItem.map(
-                  (each) => each.azst_collection_id
-                )
-              : customerSpendsSelectedListItem.map((each) => ({
-                  productId: each.productId,
-                  variantId: each.variantId,
-                })),
-          minBuyQty: custOrderQuant.minBuyQty,
-          getProductType: customerGetsItems,
-          getYproductId:
-            customerGetsItems === "collection"
-              ? customerGetsSelectedListItem.map(
-                  (each) => each.azst_collection_id
-                )
-              : customerGetsSelectedListItem.map((each) => ({
-                  productId: each.productId,
-                  variantId: each.variantId,
-                })),
-          maxGetYQty: custOrderQuant.maxGetYQty,
-        },
-      };
-
-      ErrorHandler.onLoading("Creating your discount, please wait...");
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post(url, body, { headers });
-      ErrorHandler.onLoadingClose();
-      ErrorHandler.onSuccess();
-    } catch (error) {
-      ErrorHandler.onLoadingClose();
-      ErrorHandler.onError(error);
-    }
-  };
 
   const generateRandomCode = () => {
     let chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZ";
@@ -209,8 +117,6 @@ const DiscountForm = (props) => {
     }
     setDisCode(randomcode);
   };
-
-  const navigate = useNavigate();
 
   const handleMethodTab = (tab) => {
     setMethodTab(tab);
@@ -248,7 +154,7 @@ const DiscountForm = (props) => {
   //   setDiscountAppliedValue(e.target.value);
   // };
 
-  const customerEligibility = (e) => {
+  const handleCustomerEligibility = (e) => {
     setCustEligibility(e.target.value);
   };
 
@@ -314,11 +220,14 @@ const DiscountForm = (props) => {
                 <h6 className="">Discount Title</h6>
                 <input
                   type="text"
-                  onChange={(e) => setDisTitle(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length <= 50) {
+                      setDisTitle(value);
+                    }
+                  }}
                   value={disTitle}
                   className="form-control"
-                  min={3}
-                  max={100}
                 />
               </div>
               <div className="d-flex justify-content-between">
@@ -556,6 +465,7 @@ const DiscountForm = (props) => {
                       onChange={handleDiscountedValues}
                       type="radio"
                       name="atDiscount"
+                      checked={discountedValues === "percentage"}
                       value="percentage"
                       id="atDiscountPercentage"
                     />
@@ -581,6 +491,7 @@ const DiscountForm = (props) => {
                     <input
                       className="form-check-input"
                       onChange={handleDiscountedValues}
+                      checked={discountedValues === "flat"}
                       value="flat"
                       type="radio"
                       name="atDiscount"
@@ -616,6 +527,7 @@ const DiscountForm = (props) => {
                       className="form-check-input"
                       onChange={handleDiscountedValues}
                       type="radio"
+                      checked={discountVal === 100}
                       name="atDiscount"
                       value="free"
                       id="fullDiscount"
@@ -630,6 +542,7 @@ const DiscountForm = (props) => {
                   <input
                     className="form-check-input"
                     type="checkbox"
+                    value={maxUses}
                     checked={maxUses}
                     onChange={handleMaxUses}
                     id="setMaximumUses"
@@ -812,9 +725,10 @@ const DiscountForm = (props) => {
                 <div className="form-check">
                   <input
                     className="form-check-input"
-                    onChange={customerEligibility}
+                    onChange={handleCustomerEligibility}
                     type="radio"
                     name="customerEligibility"
+                    checked={custEligibility === "all"}
                     id="allCustomers"
                     value="allCustomers"
                   />
@@ -841,10 +755,11 @@ const DiscountForm = (props) => {
                 <div className="form-check">
                   <input
                     className="form-check-input"
-                    onChange={customerEligibility}
+                    onChange={handleCustomerEligibility}
                     type="radio"
                     name="customerEligibility"
                     id="specificCustomer"
+                    checked={custEligibility === "specificCustomer"}
                     value="specificCustomer"
                   />
                   <label
@@ -876,6 +791,7 @@ const DiscountForm = (props) => {
                 <input
                   className="form-check-input"
                   type="radio"
+                  checked={maxDisUses === "mutipleTimeDiscntUses"}
                   onChange={handleMaxDisUses}
                   id="mutipleTimeDiscntUses"
                   name="discountUses"
@@ -902,6 +818,7 @@ const DiscountForm = (props) => {
                   type="radio"
                   value="1"
                   id="oneTimeUser"
+                  checked={maxDisUses === "oneTimeUser"}
                   onChange={handleMaxDisUses}
                   name="discountUses"
                 />
@@ -943,7 +860,7 @@ const DiscountForm = (props) => {
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  value={endDate}
+                  checked={endDate}
                   onChange={handleEndDate}
                   id="setEndDate"
                 />
@@ -973,7 +890,7 @@ const DiscountForm = (props) => {
                       type="time"
                       className="form-control"
                       id="endTime"
-                      value={endTimings.startDate}
+                      value={endTimings.endTime}
                       onChange={handleEndTimings}
                     />
                   </div>
@@ -1079,18 +996,6 @@ const DiscountForm = (props) => {
                 </div>
               </div>
             )}
-          </div>
-          <div className="col-md-12 d-flex justify-content-end mt-4">
-            <button
-              className="dltBtn"
-              onClick={() => navigate(-1)}
-              style={{ marginRight: "10px" }}
-            >
-              Discard
-            </button>
-            <button className="saveBtn" onClick={handleSubmitButton}>
-              Save discount
-            </button>
           </div>
         </div>
       </div>

@@ -78,6 +78,9 @@ const CustomersListing = () => {
               Active users
             </label>
           </div>
+          <Link to={"/add-customer"} className="btn bg-dark text-light">
+            Add Customer
+          </Link>
           <button
             className="sortBtn"
             onClick={() => setDisplayFilterDropdown(!displayFilterDropdown)}

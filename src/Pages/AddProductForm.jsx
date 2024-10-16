@@ -5,7 +5,7 @@ import { Link, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { v4 } from "uuid";
-
+import { useMemo } from "react";
 import TextEditor from "./TextEditor";
 import Dropdown from "react-bootstrap/Dropdown";
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -14,16 +14,13 @@ import PopupModal from "./PopupModal";
 import Button from "react-bootstrap/Button";
 import Multiselect from "multiselect-react-dropdown";
 import { RiDeleteBin6Line } from "react-icons/ri";
-
 import { FaRegFileImage } from "react-icons/fa";
 import { IoMdArrowDropup } from "react-icons/io";
 import { ProductState } from "../Context/ProductContext";
 import { MdDelete } from "react-icons/md";
 import ErrorHandler, { showToast } from "./ErrorHandler";
-
-import "./Admin.css";
 import VariantEdit from "./VariantEdit";
-import { useMemo } from "react";
+import "./Admin.css";
 
 const AddProductForm = ({ productProps }) => {
   const location = useLocation();
@@ -336,15 +333,6 @@ const AddProductForm = ({ productProps }) => {
     return result;
   }, [variants, variantGroup]);
 
-  // useMemo(() => {
-  //   const variantsData = generateOptions();
-  //   setVariantsDetials(variantsData);
-
-  //   if (variants.length <= 1) {
-  //     setVariantsGroup(variants[0]?.optionName || "");
-  //   }
-  // }, [generateOptions, variants, variantGroup]);
-
   useMemo(() => {
     const variantsData = generateOptions();
     setVariantsDetials(variantsData);
@@ -495,26 +483,40 @@ const AddProductForm = ({ productProps }) => {
   };
 
   const handleProductPrices = (e) => {
-    if (e.target.id === "isTaxable") {
-      setProductPrices({ ...productPrices, [e.target.id]: e.target.checked });
+    const { value, id, checked } = e.target;
+    if (id === "isTaxable") {
+      setProductPrices({ ...productPrices, [id]: checked });
     } else {
-      setProductPrices({ ...productPrices, [e.target.id]: e.target.value });
+      const numericValue = value.replace(/[^0-9]/g, "");
+      setProductPrices({ ...productPrices, [id]: numericValue });
     }
   };
 
   const handleSkuInput = (e) => {
-    setSkuInput({ ...skuInput, [e.target.id]: e.target.value });
+    if (e.target.value.length < 50) {
+      setSkuInput({ ...skuInput, [e.target.id]: e.target.value });
+    }
   };
 
   const handleWeight = (e) => {
-    setWeight(e.target.value);
+    const { value } = e.target;
+    const numericValue = value.replace(/[^0-9]/g, "");
+    if (numericValue.length <= 3) {
+      setWeight(numericValue);
+    }
   };
   const handleWeightUnit = (e) => {
     setWeightUnit(e.target.value);
   };
 
   const handleProductCategorization = (e) => {
-    setProductCategory({ ...productCategory, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    if (id === "minCartQty" || id === "maxCartQty") {
+      const numericValue = value.replace(/[^0-9]/g, "");
+      setProductCategory({ ...productCategory, [id]: numericValue });
+    } else {
+      setProductCategory({ ...productCategory, [id]: value });
+    }
   };
 
   const onSelectTag = (selectedItem) => {
@@ -566,7 +568,9 @@ const AddProductForm = ({ productProps }) => {
     } else {
       setMainError("");
     }
-    setMainTitle(e.target.value);
+    if (e.target.value.length <= 200) {
+      setMainTitle(e.target.value);
+    }
   };
 
   const onChangeTitle = (e) => {
@@ -575,7 +579,9 @@ const AddProductForm = ({ productProps }) => {
     } else {
       setError("");
     }
-    setTitle(e.target.value);
+    if (e.target.value.length <= 200) {
+      setTitle(e.target.value);
+    }
     setMetaDetails({
       ...metaDetails,
       urlHandle: `${
@@ -595,13 +601,14 @@ const AddProductForm = ({ productProps }) => {
 
   const handleVariantsOutput = (e, vid, type, subId) => {
     const { value, id } = e.target;
+    const numericVal = value.replace(/[^0-9]/g, "");
     setVariantsDetials(
       variantsDetails.map((eachVariant) => {
         if (eachVariant.id === vid) {
           if (type === "main") {
             return {
               ...eachVariant,
-              main: { ...eachVariant.main, [id]: value },
+              main: { ...eachVariant.main, [id]: numericVal },
             };
           } else {
             // Use map to return the updated sub-variants
@@ -609,7 +616,7 @@ const AddProductForm = ({ productProps }) => {
               if (subV.id === subId) {
                 return {
                   ...subV,
-                  [id]: value,
+                  [id]: numericVal,
                 };
               }
               return subV;
@@ -758,6 +765,7 @@ const AddProductForm = ({ productProps }) => {
                       value={mainTitle}
                       onChange={onChangeMainTitle}
                       id="productMainTitle"
+                      required
                     />
                     <span className="errorValue">{mainError}</span>
                   </div>
@@ -783,7 +791,12 @@ const AddProductForm = ({ productProps }) => {
                 <form className="imagesForm">
                   <div className="col-md-12">
                     <div className="imgController">
-                      <input type="file" multiple onChange={onChangeImages} />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={onChangeImages}
+                      />
                       {imgFile.length > 0 && (
                         <MdDelete
                           className="dltImgBtn"
@@ -1031,6 +1044,7 @@ const AddProductForm = ({ productProps }) => {
                                 onChange={(e) =>
                                   handleVariantsImage(e, variant.id, "main", 0)
                                 }
+                                accept="image/*"
                               />
                               <div className="d-flex flex-column">
                                 {variant.sub.length > 0 ? (
@@ -1074,6 +1088,7 @@ const AddProductForm = ({ productProps }) => {
                                 value={variant.main.offer_price}
                                 type="text"
                                 placeholder="₹ 0.0"
+                                maxLength={5}
                               />
                             </div>
                             <div>
@@ -1083,7 +1098,8 @@ const AddProductForm = ({ productProps }) => {
                                   handleVariantsOutput(e, variant.id, "main", 0)
                                 }
                                 value={variant.main.quantity}
-                                type="number"
+                                type="text"
+                                maxLength={5}
                                 disabled={
                                   variant.sub.length === 0 ? false : true
                                 }
@@ -1122,6 +1138,7 @@ const AddProductForm = ({ productProps }) => {
                                     type="file"
                                     id="variantImage"
                                     className="variantImgInput"
+                                    accept="image/*"
                                     onChange={(e) =>
                                       handleVariantsImage(
                                         e,
@@ -1145,6 +1162,7 @@ const AddProductForm = ({ productProps }) => {
                                         va.id
                                       )
                                     }
+                                    maxLength={5}
                                     value={va.offer_price}
                                   />
                                 </div>
@@ -1160,6 +1178,7 @@ const AddProductForm = ({ productProps }) => {
                                         va.id
                                       )
                                     }
+                                    maxLength={5}
                                     value={va.quantity}
                                   />
                                 </div>
@@ -1184,6 +1203,7 @@ const AddProductForm = ({ productProps }) => {
                             value={productPrices.price}
                             onChange={handleProductPrices}
                             placeholder="0.00"
+                            maxLength={5}
                           />
                         </div>
                         <div className="col-md-6">
@@ -1195,6 +1215,7 @@ const AddProductForm = ({ productProps }) => {
                             value={productPrices.comparePrice}
                             onChange={handleProductPrices}
                             placeholder="0.00"
+                            maxLength={5}
                           />
                         </div>
                         <div className="col-md-12">
@@ -1222,6 +1243,7 @@ const AddProductForm = ({ productProps }) => {
                             onChange={handleProductPrices}
                             id="costPerItem"
                             placeholder="0.00"
+                            maxLength={5}
                           />
                         </div>
                       </div>
@@ -1359,6 +1381,7 @@ const AddProductForm = ({ productProps }) => {
                               placeholder="0.0"
                               value={weight}
                               onChange={handleWeight}
+                              minLength={3}
                             />
                             <select
                               className=""
@@ -1632,6 +1655,7 @@ const AddProductForm = ({ productProps }) => {
                       className="form-control"
                       value={productCategory.minCartQty}
                       onChange={handleProductCategorization}
+                      maxLength={4}
                     />
                   </div>
                   <div className="">
@@ -1641,6 +1665,7 @@ const AddProductForm = ({ productProps }) => {
                       className="form-control"
                       value={productCategory.maxCartQty}
                       onChange={handleProductCategorization}
+                      maxLength={4}
                     />
                   </div>
                 </form>

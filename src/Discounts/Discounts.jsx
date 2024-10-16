@@ -1,42 +1,59 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AdminSideBar from "../Pages/AdminSideBar";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import "../Pages/Admin.css";
 import ErrorHandler from "../Pages/ErrorHandler";
-import { MdEdit } from "react-icons/md";
+import { MdEdit, MdDelete } from "react-icons/md";
 import moment from "moment";
 
 const Discounts = () => {
   const [discounts, setDiscount] = useState([]);
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
 
-  useEffect(() => {
-    const getDiscount = async () => {
-      try {
-        const url = `${baseUrl}/discount`;
-        const headers = {
-          Authorization: `Bearer ${jwtToken}`,
-        };
-        ErrorHandler.onLoading();
-        const response = await axios.get(url, { headers });
-        ErrorHandler.onLoadingClose();
-        if (response.status === 200) {
-          setDiscount(response.data);
-        }
-      } catch (error) {
-        ErrorHandler.onLoadingClose();
-        ErrorHandler.onError(error);
+  const getDiscount = useCallback(async () => {
+    try {
+      const url = `${baseUrl}/discount`;
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+      };
+      ErrorHandler.onLoading();
+      const response = await axios.get(url, { headers });
+      ErrorHandler.onLoadingClose();
+      if (response.status === 200) {
+        setDiscount(response.data);
       }
-    };
-    getDiscount();
+    } catch (error) {
+      ErrorHandler.onLoadingClose();
+      ErrorHandler.onError(error);
+    }
   }, [baseUrl, jwtToken]);
 
-  // console.log(discounts, "discounts");
+  useEffect(() => {
+    getDiscount();
+  }, [getDiscount]);
+
+  const deleteDiscount = async (id) => {
+    try {
+      const url = `${baseUrl}/discount`;
+      const headers = {
+        Authorization: `Bearer ${jwtToken}`,
+      };
+      const formData = new FormData();
+      formData.append("discountId", id);
+      ErrorHandler.onLoading();
+      await axios.patch(url, formData, { headers });
+      ErrorHandler.onLoadingClose();
+      getDiscount();
+    } catch (error) {
+      ErrorHandler.onLoadingClose();
+      ErrorHandler.onError(error);
+    }
+  };
 
   return (
     <div className="adminSec">
@@ -82,13 +99,14 @@ const Discounts = () => {
                           <td>{each.status}</td>
                           <td>
                             <MdEdit
-                            // onClick={() => {
-                            //   navigate(`editDiscount/${each.id}`, {
-                            //     state: {
-                            //       discounts,
-                            //     },
-                            //   });
-                            // }}
+                              style={{ cursor: "pointer" }}
+                              onClick={() => {
+                                navigate(`/discounts-edit/${each.dsc_id}`);
+                              }}
+                            />
+                            <MdDelete
+                              style={{ cursor: "pointer", marginLeft: "4px" }}
+                              onClick={() => deleteDiscount(each.dsc_id)}
                             />
                           </td>
                         </tr>

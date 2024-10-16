@@ -25,8 +25,35 @@ const SliderForm = (props) => {
   };
 
   const handleBannerImg = (e) => {
-    setimgValue({ ...imgValue, [e.target.id]: e.target.files[0] });
+    const { id, files } = e.target;
+
+    // Create a new FileReader to read the file as a Data URL
+    const reader = new FileReader();
+    reader.readAsDataURL(files[0]);
+
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result; // Set the image src to the file's data URL
+
+      // Once the image loads, get the dimensions
+      img.onload = () => {
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+
+        if (id === "webBanner" && width !== 1350 && height !== 500) {
+          alert("Image dimensions should be 1350x500px");
+          return;
+        }
+        // Update state or do something with the file and its dimensions
+        else if (id === "mobileBanner" && width !== 400 && height !== 500) {
+          alert("Image dimensions should be 400x500px");
+          return;
+        }
+        setimgValue({ ...imgValue, [id]: files[0] });
+      };
+    };
   };
+
   const currentDate = new Date();
   const formattedDate = currentDate.toISOString().split("T")[0]; // Extract date part
   const formattedTime = currentDate.toLocaleTimeString("en-US", {
@@ -172,15 +199,15 @@ const SliderForm = (props) => {
                   <div className="col-sm-12 mt-3 mb-3">
                     <div className="image_size">
                       <p className="infoTxt mb-0">
-                        <strong>Image:</strong> we recommend using an image size
-                        of 1800px x 1000px. This size is optimal htmlFor
+                        <strong>Image:</strong> We recommend using an image size
+                        of 1350px x 500px. This size is optimal htmlFor
                         displaying the slideshow on larger screens and ensuring
                         high-quality visuals
                       </p>
                       <p className="infoTxt">
                         <strong>Mobile image:</strong> By default, the slideshow
                         will utilize the main slide image on mobile devices. We
-                        recommend using an image size of 420px x 500px.
+                        recommend using an image size of 400px x 500px.
                       </p>
                     </div>
                   </div>

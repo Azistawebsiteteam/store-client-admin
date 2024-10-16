@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Cookies from "js-cookie";
 import swalErr from "../Pages/ErrorHandler";
 import SliderForm from "./SliderForm";
+import { useNavigate } from "react-router-dom";
 
 const AddSlider = () => {
   const [imgDetails, setImgDetails] = useState({
@@ -23,7 +24,7 @@ const AddSlider = () => {
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
-
+  const navigate = useNavigate();
   const onSubmitSliderDetails = async () => {
     try {
       if (
@@ -51,8 +52,10 @@ const AddSlider = () => {
       formdata.append("webBanner", imgValue.webBanner);
       formdata.append("mobileBanner", imgValue.mobileBanner);
 
-      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formdata, { headers });
+      if (response.status === 200) {
+        navigate(-1);
+      }
       swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {

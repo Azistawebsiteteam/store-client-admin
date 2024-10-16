@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 import Cookies from "js-cookie";
 import AdminSideBar from "../Pages/AdminSideBar";
@@ -28,31 +28,40 @@ const CategoryEdit = () => {
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
   const { id } = useParams();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchCategories = async () => {
-      const url = `${baseUrl}/category/`;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      const response = await axios.post(url, { categoryId: id }, { headers });
-      const {
-        azst_category_name,
-        azst_category_img,
-        azst_category_description,
-        azst_subCategories = [],
-      } = response.data;
-      setCategoryImg(azst_category_img);
-      setCategoryData({
-        text: azst_category_name,
-        description: azst_category_description,
-      });
-      const subCats = azst_subCategories
-        ? azst_subCategories.map((c) => ({
-            id: c.azst_sub_category_id,
-            subCategoryName: c.azst_sub_category_name,
-          }))
-        : [];
-      setSubCategories(subCats);
+      try {
+        const url = `${baseUrl}/category/`;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+        ErrorHandler.onLoading();
+        const response = await axios.post(url, { categoryId: id }, { headers });
+        ErrorHandler.onLoadingClose();
+        const {
+          azst_category_name,
+          azst_category_img,
+          azst_category_description,
+          azst_subCategories = [],
+        } = response.data;
+        setCategoryImg(azst_category_img);
+        setCategoryData({
+          text: azst_category_name,
+          description: azst_category_description,
+        });
+        const subCats = azst_subCategories
+          ? azst_subCategories.map((c) => ({
+              id: c.azst_sub_category_id,
+              subCategoryName: c.azst_sub_category_name,
+            }))
+          : [];
+        setSubCategories(subCats);
+      } catch (error) {
+        ErrorHandler.onLoadingClose();
+        ErrorHandler.onError(error);
+      }
     };
     fetchCategories();
   }, [baseUrl, id, token]);
@@ -78,6 +87,7 @@ const CategoryEdit = () => {
       await axios.put(url, formdata, { headers });
       ErrorHandler.onLoadingClose();
       ErrorHandler.onSuccess();
+      navigate(-1);
       setDeletedSubCats([]);
     } catch (error) {
       ErrorHandler.onLoadingClose();

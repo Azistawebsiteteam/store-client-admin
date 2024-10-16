@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import AddProductForm from "./AddProductForm";
 import AdminSideBar from "./AdminSideBar";
 import SwalErr from "./ErrorHandler";
+import BackBtn from "../Components/BackBtn";
 
 const AddProduct = () => {
   const [title, setTitle] = useState("");
@@ -60,8 +61,8 @@ const AddProduct = () => {
     productType: "",
     vendor: "",
     brand: "0",
-    minCartQty: 0,
-    maxCartQty: 0,
+    minCartQty: 1,
+    maxCartQty: 100,
   });
 
   const [tagValue, setTagValue] = useState([]);
@@ -89,6 +90,7 @@ const AddProduct = () => {
       };
 
       if (mainTitle === "") {
+        window.scrollTo(0, 0);
         setMainError("Main Title can’t be blank");
         return;
       } else {
@@ -97,6 +99,7 @@ const AddProduct = () => {
 
       if (title === "") {
         setError("Title can’t be blank");
+
         return;
       } else {
         setError("");
@@ -259,7 +262,10 @@ const AddProduct = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h3>Add Product</h3>
+                <div className="d-flex align-items-center">
+                  <BackBtn onClick={() => navigate(-1)} />
+                  <h3>Add Product</h3>
+                </div>
               </div>
               <AddProductForm productProps={productProps} />
               <div className="col-12">

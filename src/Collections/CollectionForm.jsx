@@ -3,6 +3,7 @@ import { FaUpload } from "react-icons/fa6";
 import AdminSideBar from "../Pages/AdminSideBar";
 
 import "../Pages/Admin.css";
+import BackBtn from "../Components/BackBtn";
 
 const CollectionForm = (props) => {
   const { collectionData, setCollectionData } = props;
@@ -35,6 +36,7 @@ const CollectionForm = (props) => {
   const handleMetaDetails = (e) => {
     setCollectionData({ ...collectionData, [e.target.id]: e.target.value });
   };
+
   const setCollectionContent = (e) => {
     setCollectionData({ ...collectionData, content: e.target.value });
   };
@@ -50,7 +52,10 @@ const CollectionForm = (props) => {
       <div className="commonSec">
         <div className="container">
           <div className="row">
-            <h3>Create Collections</h3>
+            <div className="d-flex">
+              <BackBtn />
+              <h3>Collections</h3>
+            </div>
             <div className="col-sm-8">
               <div className="row">
                 <div className="col-sm-12">

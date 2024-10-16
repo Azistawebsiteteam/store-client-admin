@@ -5,7 +5,7 @@ import { useState } from "react";
 import swalErr from "../Pages/ErrorHandler";
 import Cookies from "js-cookie";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ErrorHandler from "../Pages/ErrorHandler";
 
 const EditSlider = () => {
@@ -28,6 +28,7 @@ const EditSlider = () => {
   const baseUrl = `${process.env.REACT_APP_API_URL}/banners`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getBannerDetails = async () => {
@@ -92,8 +93,10 @@ const EditSlider = () => {
       formdata.append("webBanner", imgValue.webBanner);
       formdata.append("mobileBanner", imgValue.mobileBanner);
 
-      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formdata, { headers });
+      if (response.status === 200) {
+        navigate(-1);
+      }
       swalErr.onLoadingClose();
       swalErr.onSuccess();
     } catch (error) {

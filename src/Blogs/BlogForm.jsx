@@ -182,7 +182,7 @@ const BlogForm = (props) => {
             <strong>Note:-</strong> Image dimensions must be in 1220*550 pixels
           </small>
         </div>
-        <div className="mt-3 text-center">
+        <div className="mt-3 text-end">
           <button className="btn btn-primary" onClick={onSubmitBlog}>
             {buttonText}
           </button>

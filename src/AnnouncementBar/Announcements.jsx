@@ -9,6 +9,7 @@ import { IoIosEye } from "react-icons/io";
 import { IoIosEyeOff } from "react-icons/io";
 import { MdEdit } from "react-icons/md";
 import ErrorHandler from "../Pages/ErrorHandler";
+import { MdDelete } from "react-icons/md";
 
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState([]);
@@ -44,6 +45,23 @@ const Announcements = () => {
         getAnnouncements();
       }
     } catch (error) {
+      ErrorHandler.onError(error);
+    }
+  };
+
+  const deleteAnnouncement = async (id) => {
+    try {
+      const url = `${baseUrl}/delete`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      ErrorHandler.onLoading();
+
+      await axios.post(url, { announcementId: id }, { headers });
+      getAnnouncements();
+      ErrorHandler.onLoadingClose();
+    } catch (error) {
+      ErrorHandler.onLoadingClose();
       ErrorHandler.onError(error);
     }
   };
@@ -96,10 +114,15 @@ const Announcements = () => {
                         />
                       )}
                     </span>
-                    <span>
+                    <span className="me-4">
                       <Link to={`/announcement/edit/${each.announcement_id}`}>
                         <MdEdit />
                       </Link>
+                    </span>
+                    <span style={{ cursor: "pointer" }}>
+                      <MdDelete
+                        onClick={() => deleteAnnouncement(each.announcement_id)}
+                      />
                     </span>
                   </td>
                 </tr>

@@ -104,7 +104,7 @@ const VariantDetails = () => {
 
   const onUpdateVariants = async () => {
     try {
-      const url = `http://192.168.212.37:5018/api/v1/product/update/variant`;
+      const url = `${baseUrl}/product/update/variant`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };

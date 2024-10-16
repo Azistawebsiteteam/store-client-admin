@@ -58,7 +58,7 @@ const AdminSideBar = () => {
           id="drobdownBtn"
           onClick={(e) => setDropdownItems(!dropdownItems)}
         >
-          Dropdown{"  "}
+          Features
           {dropdownItems ? <FaAngleUp /> : <FaAngleDown />}
         </button>
         {dropdownItems && (

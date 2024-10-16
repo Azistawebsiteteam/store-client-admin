@@ -50,7 +50,17 @@ const AdminLoginPage = () => {
         onSubmitSuccess(admin_details, jwtToken);
       }
     } catch (error) {
-      setError(error.response.data.message);
+      let errorMessage = "";
+      if (error.response) {
+        if (error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        } else {
+          errorMessage = "Internal Server Error";
+        }
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      setError(errorMessage);
     }
   };
 

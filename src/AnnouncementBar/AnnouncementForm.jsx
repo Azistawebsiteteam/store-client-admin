@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import AdminSideBar from "../Pages/AdminSideBar";
 import "../Pages/Admin.css";
+import BackBtn from "../Components/BackBtn";
 
 const AnnouncementFrom = (props) => {
   const {
@@ -13,6 +15,8 @@ const AnnouncementFrom = (props) => {
     announcementBarContent,
     setAnnouncementBarContent,
   } = props;
+
+  const navigate = useNavigate();
 
   const handleTxtColor = (e) => {
     setTxtColor(e.target.value);
@@ -40,7 +44,10 @@ const AnnouncementFrom = (props) => {
         <div className="container">
           <div className="row">
             <div className="col-sm-12">
-              <h3>Announcement Bar</h3>
+              <div className="d-flex align-items-center">
+                <BackBtn onClick={() => navigate(-1)} />
+                <h3>Announcement Bar</h3>
+              </div>
               <div className="announcementBarSec">
                 <div className="form-check spacing">
                   <input
@@ -63,7 +70,11 @@ const AnnouncementFrom = (props) => {
                     rows="3"
                     value={announcementBarContent.annoncementBarTxt}
                     onChange={handleAnnoncementBarCont}
+                    maxLength={120}
                   ></textarea>
+                  <small>
+                    {announcementBarContent.annoncementBarTxt.length}/120
+                  </small>
                 </div>
                 <div className="form-group spacing">
                   <label htmlFor="annoncementBarMobTxt">Text (Mobile)</label>
@@ -73,7 +84,11 @@ const AnnouncementFrom = (props) => {
                     rows="3"
                     value={announcementBarContent.annoncementBarMobTxt}
                     onChange={handleAnnoncementBarCont}
+                    maxLength={120}
                   ></textarea>
+                  <small className="d-block">
+                    {announcementBarContent.annoncementBarMobTxt.length}/120
+                  </small>
                   <small>
                     Use this option if you want to display alternate text in
                     mobile. Recommended htmlFor shortening announcement text to

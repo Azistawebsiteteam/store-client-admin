@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { v4 } from "uuid";
@@ -9,6 +10,7 @@ import AdminSideBar from "./AdminSideBar";
 import { useParams } from "react-router-dom";
 import swalErr from "./ErrorHandler";
 import { ProductState } from "../Context/ProductContext";
+import BackBtn from "../Components/BackBtn";
 
 const UpdateProduct = () => {
   const [productData, setProductData] = useState({
@@ -67,6 +69,8 @@ const UpdateProduct = () => {
   const { id } = useParams();
   const { setProductDetails, setVariantsData, setVariantDetails } =
     ProductState();
+
+  const navigate = useNavigate();
 
   const setProductUpdateDetails = (productDetails) => {
     const {
@@ -237,10 +241,17 @@ const UpdateProduct = () => {
       formdata.append("brand", productData.productCategory.brand);
       formdata.append("minCartQty", productData.productCategory.minCartQty);
       formdata.append("maxCartQty", productData.productCategory.maxCartQty);
+      if (productData.collectionValue.length > 1) {
+        productData.collectionValue.forEach((id) => {
+          formdata.append("collections", JSON.stringify(id));
+        });
+      } else {
+        productData.collectionValue.push(0);
+        productData.collectionValue.forEach((id) => {
+          formdata.append("collections", JSON.stringify(id));
+        });
+      }
 
-      productData.collectionValue.forEach((id) => {
-        formdata.append("collections", id);
-      });
       formdata.append("tags", JSON.stringify(productData.tagValue));
       const inventory = productData.locInputs.filter(
         (i) => i.inventoryId !== null
@@ -424,7 +435,10 @@ const UpdateProduct = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h3>{productData.title}</h3>
+                <div className="d-flex align-items-center">
+                  <BackBtn onClick={() => navigate(-1)} />
+                  <h3>{productData.title}</h3>
+                </div>
               </div>
               <AddProductForm productProps={productProps} />
               <div className="col-12">

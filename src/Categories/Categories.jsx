@@ -8,6 +8,7 @@ import swalHandle from "../Pages/ErrorHandler";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import AdminSideBar from "../Pages/AdminSideBar";
+import ErrorHandler from "../Pages/ErrorHandler";
 
 const Categories = () => {
   const [categories, setCategories] = useState();
@@ -23,7 +24,9 @@ const Categories = () => {
       };
       const response = await axios.get(url, { headers });
       setCategories(response.data);
-    } catch (error) {}
+    } catch (error) {
+      ErrorHandler.onError(error);
+    }
   }, [baseUrl, token]);
 
   useEffect(() => {
@@ -48,7 +51,7 @@ const Categories = () => {
       getCategories();
     } catch (error) {
       Swal.close();
-      swalHandle.onError();
+      swalHandle.onError(error);
     }
   };
 

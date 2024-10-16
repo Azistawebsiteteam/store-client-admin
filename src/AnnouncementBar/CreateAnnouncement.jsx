@@ -4,6 +4,7 @@ import AnnouncementForm from "./AnnouncementForm";
 import { useState } from "react";
 import axios from "axios";
 import ErrorHandler from "../Pages/ErrorHandler";
+import { useNavigate } from "react-router-dom";
 
 const CreateAnnouncement = () => {
   const [txtColor, setTxtColor] = useState("");
@@ -20,6 +21,8 @@ const CreateAnnouncement = () => {
   const baseUrl = process.env.REACT_APP_API_URL;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
 
+  const navigate = useNavigate();
+
   const onSubmitDetails = async () => {
     try {
       const url = `${baseUrl}/announcement/add`;
@@ -34,9 +37,15 @@ const CreateAnnouncement = () => {
         backgroundCrl: bgColor,
         showHomePageOnly: displaySettings.homePage,
       };
-      // eslint-disable-next-line no-unused-vars
+      ErrorHandler.onLoading();
       const response = await axios.post(url, body, { headers });
+      if (response.status === 201) {
+        ErrorHandler.onSuccess("Announcement created successfully!");
+        navigate(-1);
+      }
+      ErrorHandler.onLoadingClose();
     } catch (error) {
+      ErrorHandler.onLoadingClose();
       ErrorHandler.onError(error);
     }
   };

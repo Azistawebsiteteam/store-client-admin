@@ -66,6 +66,7 @@ const CategoryForm = (props) => {
             type="text"
             value={categoryData.text}
             onChange={handleBrandInput}
+            maxLength={50}
             className="form-control"
             id="text"
           />
@@ -139,11 +140,15 @@ const CategoryForm = (props) => {
               )}
               <input
                 type="file"
-                className="FileUpload"
+                className="FileUpload categoryImgUpload"
                 id="categoryImage"
                 onChange={handleCategoryImage}
               />
             </div>
+            <span>
+              <strong>Note:</strong> Shape the image into a circle for a more
+              appealing design.
+            </span>
           </div>
         </div>
       </form>

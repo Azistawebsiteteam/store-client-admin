@@ -4,7 +4,7 @@ import AnnouncementForm from "./AnnouncementForm";
 import { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ErrorHandler from "../Pages/ErrorHandler";
 
 const EditAnnouncement = () => {
@@ -23,6 +23,7 @@ const EditAnnouncement = () => {
   const baseUrl = `${process.env.REACT_APP_API_URL}/announcement`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getAnnouncements = async () => {
@@ -68,9 +69,14 @@ const EditAnnouncement = () => {
         backgroundCrl: bgColor,
         showHomePageOnly: displaySettings.homePage,
       };
-      // eslint-disable-next-line no-unused-vars
+      ErrorHandler.onLoading();
       const response = await axios.post(url, body, { headers });
+      if (response.status === 200) {
+        navigate(-1);
+      }
+      ErrorHandler.onLoadingClose();
     } catch (error) {
+      ErrorHandler.onLoadingClose();
       ErrorHandler.onError(error);
     }
   };
