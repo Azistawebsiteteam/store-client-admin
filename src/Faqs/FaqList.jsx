@@ -1,18 +1,19 @@
-import React, { useRef, useEffect, useCallback, useState } from "react";
-import { DownloadTableExcel } from "react-export-table-to-excel";
-import Cookies from "js-cookie";
-import axios from "axios";
+import React, { useRef, useEffect, useCallback, useState } from 'react';
+import { downloadExcel } from 'react-export-table-to-excel';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 
-import { MdDelete, MdModeEditOutline } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { MdDelete, MdModeEditOutline } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
-import swalHandle from "../Pages/ErrorHandler";
-import AdminSideBar from "../Pages/AdminSideBar";
+import swalHandle from '../Pages/ErrorHandler';
+import AdminSideBar from '../Pages/AdminSideBar';
 
 const FaqList = () => {
   const [totalFaqs, setTotalFaqs] = useState(0);
-  const [faqsList, setFaqsList] = useState([]);
-  const [faqType, setFaqType] = useState("");
+  const [fullFaqsList, setFullFaqsList] = useState([]); // Store full list
+  const [filteredFaqsList, setFilteredFaqsList] = useState([]); // For pagination
+  const [faqType, setFaqType] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const tableRef = useRef(null);
 
@@ -22,13 +23,16 @@ const FaqList = () => {
   useEffect(() => {
     const startIndex = (currentPage - 1) * logsPerPage;
     const endIndex = startIndex + logsPerPage;
-    setTotalFaqs(faqsList.slice(startIndex, endIndex));
-  }, [faqsList, currentPage]);
+    const filfaq = fullFaqsList.slice(startIndex, endIndex);
+    setFilteredFaqsList(filfaq);
+  }, [fullFaqsList, currentPage]);
 
   const totalPages = Math.ceil(totalFaqs / logsPerPage);
 
   const handlePageChange = (page) => {
-    setCurrentPage(page);
+    if (page > 0 && page <= totalPages) {
+      setCurrentPage(page);
+    }
   };
 
   const changeFaqType = (e) => {
@@ -37,12 +41,10 @@ const FaqList = () => {
   };
 
   const renderPageNumbers = () => {
-    const activePage = currentPage;
     const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
-    let startPage = Math.max(activePage - halfMaxPagesToShow, 1);
+    let startPage = Math.max(currentPage - halfMaxPagesToShow, 1);
     let endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
 
-    // Adjust startPage and endPage when nearing the beginning or end of totalPages
     if (endPage - startPage + 1 < maxPagesToShow) {
       startPage = Math.max(endPage - maxPagesToShow + 1, 1);
     }
@@ -50,8 +52,10 @@ const FaqList = () => {
     const pageNumbers = [];
     for (let i = startPage; i <= endPage; i++) {
       pageNumbers.push(
-        <li key={i} className={`page-item ${i === activePage ? "active" : ""}`}>
-          <span className="page-link" onClick={() => handlePageChange(i)}>
+        <li
+          key={i}
+          className={`page-item ${i === currentPage ? 'active' : ''}`}>
+          <span className='page-link' onClick={() => handlePageChange(i)}>
             {i}
           </span>
         </li>
@@ -61,12 +65,12 @@ const FaqList = () => {
   };
 
   const faqTypes = [
-    "General",
-    "Order",
-    "Tracking",
-    "Payment",
-    "Return",
-    "Product",
+    'General',
+    'Order',
+    'Tracking',
+    'Payment',
+    'Return',
+    'Product',
   ];
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/faqs`;
@@ -78,21 +82,19 @@ const FaqList = () => {
         Authorization: `Bearer ${token}`,
       };
       swalHandle.onLoading();
-      const body = { faqType, pageNum: currentPage };
-      //console.log(baseUrl);
-      const response = await axios.post(`${baseUrl}/admin`, body, {
-        headers,
-      });
+      const body = { faqType };
+      const response = await axios.post(`${baseUrl}/admin`, body, { headers });
       const { total_rec, faqs } = response.data;
-      setFaqsList(faqs);
+      setFullFaqsList(faqs);
       setTotalFaqs(total_rec);
+      setCurrentPage(1); // Reset page to 1 after fetching new data
       swalHandle.onLoadingClose();
     } catch (error) {
-      console.log(error);
+      console.error(error);
       swalHandle.onLoadingClose();
       swalHandle.onError(error.message);
     }
-  }, [baseUrl, token, setFaqsList, faqType, currentPage]); // Add all dependencies
+  }, [faqType, token, baseUrl]);
 
   useEffect(() => {
     getFaqs();
@@ -116,27 +118,38 @@ const FaqList = () => {
 
   const truncateText = (text, maxLength) => {
     if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + "...";
+    return text.substring(0, maxLength) + '...';
+  };
+
+  const header = ['FAQ Question', 'FAQ Answer', 'FAQ Type'];
+  const handleDownloadExcel = () => {
+    downloadExcel({
+      fileName: 'faqs',
+      sheet: 'faqs-list',
+      tablePayload: {
+        header,
+        body: fullFaqsList.map((faq) => ({
+          Question: faq.azst_faq_question,
+          Answer: faq.azst_faq_ans,
+          Type: faq.azst_faq_type,
+        })),
+      },
+    });
   };
 
   return (
-    <div className="adminSec">
+    <div className='adminSec'>
       <div>
         <AdminSideBar />
       </div>
-      <div className="commonSec">
-        {" "}
-        <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
-          <h4>Faq's</h4>
-          <DownloadTableExcel
-            filename="Faqsheets"
-            sheet="FaqsList"
-            currentTableRef={tableRef.current}
-          >
-            <button disabled={!faqsList.length}> Export excel </button>
-          </DownloadTableExcel>
+      <div className='commonSec'>
+        <div className='col-12 mt-2 mb-2 d-flex justify-content-between'>
+          <h4>FAQ's</h4>
+          <button disabled={!fullFaqsList.length} onClick={handleDownloadExcel}>
+            Export to Excel
+          </button>
           <select value={faqType} onChange={changeFaqType}>
-            <option value="">All</option>
+            <option value=''>All</option>
             {faqTypes.map((faq, index) => (
               <option key={index} value={faq}>
                 {faq}
@@ -144,35 +157,35 @@ const FaqList = () => {
             ))}
           </select>
 
-          <Link to="/faqs/create">Create Faq</Link>
+          <Link to='/faqs/create'>Create FAQ</Link>
         </div>
-        <div className="col-sm-12">
-          {faqsList.length ? (
+        <div className='col-sm-12'>
+          {filteredFaqsList.length ? (
             <>
-              <table className="table" ref={tableRef}>
+              <table className='table' ref={tableRef}>
                 <thead>
                   <tr>
-                    <th scope="col">S.No</th>
-                    <th scope="col">Faq Question</th>
-                    <th scope="col">Faq Answer</th>
-                    <th scope="col">Faq Type</th>
-                    <th scope="col">Actions</th>
+                    <th scope='col'>S.No</th>
+                    <th scope='col'>FAQ Question</th>
+                    <th scope='col'>FAQ Answer</th>
+                    <th scope='col'>FAQ Type</th>
+                    <th scope='col'>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {faqsList?.map((each, i) => (
-                    <tr className="item" key={i}>
-                      <td>{i + 1}</td>
-                      <td>{truncateText(each.azst_faq_question, 80)}</td>
-                      <td>{truncateText(each.azst_faq_ans, 100)}</td>
-                      <td>{each.azst_faq_type}</td>
+                  {filteredFaqsList.map((faq, i) => (
+                    <tr key={faq.azst_faq_id}>
+                      <td>{(currentPage - 1) * logsPerPage + i + 1}</td>
+                      <td>{truncateText(faq.azst_faq_question, 80)}</td>
+                      <td>{truncateText(faq.azst_faq_ans, 100)}</td>
+                      <td>{faq.azst_faq_type}</td>
                       <td>
                         <MdDelete
-                          className="icons"
-                          onClick={() => deleteFaq(each.azst_faq_id)}
-                        />{" "}
-                        <Link to={`/edit-faq/${each.azst_faq_id}`}>
-                          <MdModeEditOutline className="icons" />
+                          className='icons'
+                          onClick={() => deleteFaq(faq.azst_faq_id)}
+                        />{' '}
+                        <Link to={`/edit-faq/${faq.azst_faq_id}`}>
+                          <MdModeEditOutline className='icons' />
                         </Link>
                       </td>
                     </tr>
@@ -180,50 +193,45 @@ const FaqList = () => {
                 </tbody>
               </table>
               <p>
-                showing{" "}
-                {totalFaqs > currentPage * 10 ? currentPage * 10 : totalFaqs}{" "}
-                out of {totalFaqs}
+                Showing {Math.min(currentPage * logsPerPage, totalFaqs)} out of{' '}
+                {totalFaqs}
               </p>
-              {faqsList.length > 0 && totalPages > 1 && (
-                <div className="mt-2 d-flex justify-content-end">
-                  <nav aria-label="Page navigation example">
-                    <ul className="pagination">
-                      <li
-                        className={`page-item ${
-                          currentPage === 1 && "disabled"
-                        }`}
-                      >
-                        <span
-                          className="page-link"
-                          aria-label="Previous"
-                          onClick={() => handlePageChange(currentPage - 1)}
-                        >
-                          <span aria-hidden="true">&laquo;</span>
-                        </span>
-                      </li>
-                      {renderPageNumbers()}
-                      <li
-                        className={`page-item ${
-                          currentPage === totalPages && "disabled"
-                        }`}
-                      >
-                        <span
-                          className="page-link"
-                          aria-label="Next"
-                          onClick={() => handlePageChange(currentPage + 1)}
-                        >
-                          <span aria-hidden="true">&raquo;</span>
-                        </span>
-                      </li>
-                    </ul>
-                  </nav>
-                </div>
-              )}
             </>
           ) : (
-            <p>No Faq's Found</p>
+            <p>No FAQs Found</p>
           )}
         </div>
+        {totalPages > 1 && (
+          <div className='mt-2 d-flex justify-content-end'>
+            <nav aria-label='Page navigation'>
+              <ul className='pagination'>
+                <li
+                  className={`page-item ${
+                    currentPage === 1 ? 'disabled' : ''
+                  }`}>
+                  <span
+                    className='page-link'
+                    aria-label='Previous'
+                    onClick={() => handlePageChange(currentPage - 1)}>
+                    &laquo;
+                  </span>
+                </li>
+                {renderPageNumbers()}
+                <li
+                  className={`page-item ${
+                    currentPage === totalPages ? 'disabled' : ''
+                  }`}>
+                  <span
+                    className='page-link'
+                    aria-label='Next'
+                    onClick={() => handlePageChange(currentPage + 1)}>
+                    &raquo;
+                  </span>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        )}
       </div>
     </div>
   );
