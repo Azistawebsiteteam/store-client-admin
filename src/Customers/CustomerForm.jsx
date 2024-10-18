@@ -1,13 +1,44 @@
 import React from "react";
 
 const CustomerForm = (props) => {
-  const { customerData, setCustomerData } = props;
+  const {
+    customerData,
+    setCustomerData,
+    errors,
+    setErrors,
+    permissions,
+    setPermissions,
+  } = props;
 
   const handleCustomerData = (e) => {
-    setCustomerData({ ...customerData, [e.target.id]: e.target.value });
+    let { id, value } = e.target;
+
+    if (id === "customerMobileNum" || id === "wtsupNum") {
+      value = value.replace(/[^0-9]/g, "");
+    }
+    if (id === "customerMobileNum" && permissions.sameForWhatsapp) {
+      setCustomerData({ ...customerData, [id]: value, wtsupNum: value });
+      setErrors({ ...errors, [id]: "", wtsupNum: "" });
+    } else {
+      setCustomerData({ ...customerData, [id]: value });
+      setErrors({ ...errors, [id]: "" });
+    }
   };
 
-  console.log(customerData.customerMobileNum.length > 0);
+  const handleCheckbox = (e) => {
+    const { id, checked } = e.target;
+    if (id === "sameForWhatsapp") {
+      if (checked) {
+        setCustomerData({
+          ...customerData,
+          wtsupNum: customerData.customerMobileNum,
+        });
+      } else {
+        setCustomerData({ ...customerData, wtsupNum: "" });
+      }
+    }
+    setPermissions({ ...permissions, [id]: checked });
+  };
 
   return (
     <div className="container">
@@ -27,7 +58,11 @@ const CustomerForm = (props) => {
                       className="form-control"
                       id="customerFirstName"
                       onChange={handleCustomerData}
+                      value={customerData.customerFirstName}
                     />
+                    {errors.customerFirstName && (
+                      <span className="error">{errors.customerFirstName}</span>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="customerLastName" className="form-label">
@@ -38,7 +73,11 @@ const CustomerForm = (props) => {
                       className="form-control"
                       id="customerLastName"
                       onChange={handleCustomerData}
+                      value={customerData.customerLastName}
                     />
+                    {errors.customerLastName && (
+                      <span className="error">{errors.customerLastName}</span>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="customerEmail" className="form-label">
@@ -49,7 +88,11 @@ const CustomerForm = (props) => {
                       className="form-control"
                       id="customerEmail"
                       onChange={handleCustomerData}
+                      value={customerData.customerEmail}
                     />
+                    {errors.customerEmail && (
+                      <span className="error">{errors.customerEmail}</span>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="customerMobileNum" className="form-label">
@@ -60,28 +103,58 @@ const CustomerForm = (props) => {
                       className="form-control"
                       id="customerMobileNum"
                       onChange={handleCustomerData}
+                      value={customerData.customerMobileNum}
                     />
+                    {errors.customerMobileNum && (
+                      <span className="error">{errors.customerMobileNum}</span>
+                    )}
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id="sameForWhatsapp"
+                        onChange={handleCheckbox}
+                        checked={permissions.sameForWhatsapp}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="sameForWhatsapp"
+                      >
+                        Same for WhatsApp.
+                      </label>
+                    </div>
                   </div>
-                  <div className="col-md-6">
-                    <label htmlFor="wtsupNum" className="form-label">
-                      Whatsapp number
-                    </label>
-                    <input
-                      type="text"
-                      onChange={handleCustomerData}
-                      className="form-control"
-                      id="wtsupNum"
-                    />
-                  </div>
+                  {!permissions.sameForWhatsapp && (
+                    <div className="col-md-6">
+                      <label htmlFor="wtsupNum" className="form-label">
+                        Whatsapp number
+                      </label>
+                      <input
+                        type="text"
+                        onChange={handleCustomerData}
+                        className="form-control"
+                        id="wtsupNum"
+                        value={
+                          permissions.sameForWhatsapp
+                            ? customerData.customerMobileNum
+                            : customerData.wtsupNum
+                        }
+                      />
+                      {errors.wtsupNum && (
+                        <span className="error">{errors.wtsupNum}</span>
+                      )}
+                    </div>
+                  )}
                   <div className="col-md-6">
                     <label htmlFor="password" className="form-label">
-                      Password
+                      Password (optional)
                     </label>
                     <input
                       type="password"
                       className="form-control"
                       id="password"
                       onChange={handleCustomerData}
+                      value={customerData.password}
                     />
                   </div>
                   <div className="col-md-6">
@@ -93,7 +166,9 @@ const CustomerForm = (props) => {
                       onChange={handleCustomerData}
                       className="form-control"
                       id="DOB"
+                      value={customerData.DOB}
                     />
+                    {errors.DOB && <span className="error">{errors.DOB}</span>}
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="gender" className="form-label">
@@ -104,11 +179,15 @@ const CustomerForm = (props) => {
                       aria-label="Default select example"
                       id="gender"
                       onChange={handleCustomerData}
+                      value={customerData.gender}
                     >
                       <option>Select gender</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
                     </select>
+                    {errors.gender && (
+                      <span className="error">{errors.gender}</span>
+                    )}
                   </div>
                   <div className="col-12">
                     <div className="form-check">
@@ -116,9 +195,11 @@ const CustomerForm = (props) => {
                         className="form-check-input"
                         type="checkbox"
                         id="emailMarketing"
+                        onChange={handleCheckbox}
                         disabled={
-                          customerData.customerEmail.length > 0 ? false : true
+                          customerData.customerEmail.length > 1 ? false : true
                         }
+                        checked={permissions.emailMarketing}
                       />
                       <label
                         className="form-check-label"
@@ -134,11 +215,13 @@ const CustomerForm = (props) => {
                         className="form-check-input"
                         type="checkbox"
                         id="smsMarketing"
+                        onChange={handleCheckbox}
                         disabled={
-                          customerData.customerMobileNum.length > 0
+                          customerData.customerMobileNum.length >= 10
                             ? false
                             : true
                         }
+                        checked={permissions.smsMarketing}
                       />
                       <label
                         className="form-check-label"

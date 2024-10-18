@@ -91,3 +91,7 @@ img.cartImg {
     color: #000;
     padding: 4px 8px;
 }
+.error{
+    color: #f14848;
+    font-size: 15px;
+}
