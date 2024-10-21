@@ -20,13 +20,6 @@ const FaqList = () => {
   const logsPerPage = 10; // number of logs per page
   const maxPagesToShow = 10; // Maximum number of page buttons to display
 
-  useEffect(() => {
-    const startIndex = (currentPage - 1) * logsPerPage;
-    const endIndex = startIndex + logsPerPage;
-    const filfaq = fullFaqsList.slice(startIndex, endIndex);
-    setFilteredFaqsList(filfaq);
-  }, [fullFaqsList, currentPage]);
-
   const totalPages = Math.ceil(totalFaqs / logsPerPage);
 
   const handlePageChange = (page) => {
@@ -84,9 +77,9 @@ const FaqList = () => {
       swalHandle.onLoading();
       const body = { faqType };
       const response = await axios.post(`${baseUrl}/admin`, body, { headers });
-      const { total_rec, faqs } = response.data;
+      const faqs = response.data;
       setFullFaqsList(faqs);
-      setTotalFaqs(total_rec);
+      setTotalFaqs(faqs.length);
       setCurrentPage(1); // Reset page to 1 after fetching new data
       swalHandle.onLoadingClose();
     } catch (error) {
@@ -99,6 +92,13 @@ const FaqList = () => {
   useEffect(() => {
     getFaqs();
   }, [getFaqs]);
+
+  useEffect(() => {
+    const startIndex = (currentPage - 1) * logsPerPage;
+    const endIndex = startIndex + logsPerPage;
+    const filfaq = fullFaqsList.slice(startIndex, endIndex);
+    setFilteredFaqsList(filfaq);
+  }, [fullFaqsList, currentPage]);
 
   const deleteFaq = async (id) => {
     try {
