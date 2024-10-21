@@ -122,6 +122,7 @@ const FaqList = () => {
   };
 
   const header = ['FAQ Question', 'FAQ Answer', 'FAQ Type'];
+
   const handleDownloadExcel = () => {
     downloadExcel({
       fileName: 'faqs',
