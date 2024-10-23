@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Swal from "sweetalert2";
 import axios from "axios";
 import Cookies from "js-cookie";
 import AdminSideBar from "../Pages/AdminSideBar";
@@ -13,27 +12,25 @@ const ProductBannerListing = () => {
 
   const [banners, setBanners] = useState([]);
 
-  const sliderDetails = useCallback(
-    () => async () => {
-      try {
-        const url = `${baseUrl}/banners/product/all`;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-        swalHandle.onLoading();
-        const response = await axios.get(url, { headers });
-        Swal.close();
-        setBanners(response.data);
-      } catch (error) {
-        swalHandle.onError(error);
-      }
-    },
-    [baseUrl, token]
-  );
+  const sliderDetails = useCallback(async () => {
+    try {
+      const url = `${baseUrl}/banners/product/all`;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      swalHandle.onLoading();
+      const response = await axios.get(url, { headers });
+      swalHandle.onLoadingClose();
+      setBanners(response.data);
+    } catch (error) {
+      swalHandle.onLoadingClose();
+      swalHandle.onError(error);
+    }
+  }, [baseUrl, token]);
 
   useEffect(() => {
     sliderDetails();
-  }, [token, baseUrl, sliderDetails]);
+  }, [sliderDetails]);
 
   return (
     <div className="adminSec">

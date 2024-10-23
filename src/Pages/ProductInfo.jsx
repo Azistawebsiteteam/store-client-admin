@@ -169,6 +169,7 @@ const ProductInfo = () => {
         },
       });
     } else {
+      navigate(-1);
     }
   };
 
@@ -183,6 +184,7 @@ const ProductInfo = () => {
           />{" "}
           <h3>Product Info</h3>
         </div>
+        <h4>Ingredients</h4>
         <Ingredients
           ingredients={ingredients}
           setIngredients={setIngredients}
@@ -190,6 +192,7 @@ const ProductInfo = () => {
           setDeletedIngredient={setDeletedIngredient}
           setIsChangesOccur={setIsChangesOccur}
         />
+        <h4>Features</h4>
         <Features
           features={features}
           setFeatures={setFeatures}

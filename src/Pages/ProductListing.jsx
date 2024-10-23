@@ -40,67 +40,76 @@ const ProductListing = () => {
         <div className="container">
           <div className="row">
             <div className="productsTopbar">
-              <h3>Products</h3>
-              <Link to="/product/create">Add Products</Link>
+              <h4>Products</h4>
+              <Link to="/product/create" className="btn bg-dark text-light">
+                Add Products
+              </Link>
             </div>
             <div className="col-sm-12">
-              <table className="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Product</th>
-                    <th scope="col"></th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Inventory</th>
-                    <th scope="col">Sales channels</th>
-                    <th scope="col">Markets</th>
-                    <th scope="col">Category</th>
-                    <th scope="col">Vendor</th>
-                    <th scope="col">Actons</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {productsList.map((p) => (
-                    <tr key={p.product_id}>
-                      <th className="col-1">
-                        <img
-                          src={p.image_src}
-                          alt="product"
-                          className="productThumbnail"
-                        />
+              <div className="tableCont">
+                <table
+                  className="table table-hover"
+                  style={{ minWidth: "1200px" }}
+                >
+                  <thead>
+                    <tr>
+                      <th className="sticky-column" scope="col">
+                        #
                       </th>
-                      <td className="col-2">
-                        <Link
-                          className="productLink"
-                          to={`/product/update/${p.product_id}`}
-                        >
-                          {p.product_title}
-                        </Link>
-                      </td>
-                      <td>
-                        <a target="__blank" href={p.url_handle}>
-                          <IoMdEye />
-                        </a>
-                      </td>
-                      <td>{p.status === 1 ? "Active" : "Draft"}</td>
-                      <td>
-                        {p.total_variants === 0 || null
-                          ? `${p.total_variant_quantity} in stock`
-                          : `${p.total_variant_quantity} in stock for ${p.total_variants} variants`}
-                      </td>
-                      <td>null</td>
-                      <td>Indian Market</td>
-                      <td>{p.product_category}</td>
-                      <td>{p.azst_vendor_name}</td>
-                      <td>
-                        <Link to={`/product/info/${p.product_id}`}>
-                          <input type="button" value="Add Info" />
-                        </Link>
-                      </td>
+                      <th scope="col">Product</th>
+                      <th scope="col"></th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Inventory</th>
+                      <th scope="col">Sales channels</th>
+                      <th scope="col">Markets</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Vendor</th>
+                      <th scope="col">Actons</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {productsList.map((p) => (
+                      <tr key={p.product_id}>
+                        <th className="sticky-column">
+                          <img
+                            src={p.image_src}
+                            alt="product"
+                            className="productThumbnail"
+                          />
+                        </th>
+                        <td className="col-2">
+                          <Link
+                            className="productLink"
+                            to={`/product/update/${p.product_id}`}
+                          >
+                            {p.product_title}
+                          </Link>
+                        </td>
+                        <td>
+                          <a target="__blank" href={p.url_handle}>
+                            <IoMdEye />
+                          </a>
+                        </td>
+                        <td>{p.status === 1 ? "Active" : "Draft"}</td>
+                        <td>
+                          {p.total_variants === 0 || null
+                            ? `${p.total_variant_quantity} in stock`
+                            : `${p.total_variant_quantity} in stock for ${p.total_variants} variants`}
+                        </td>
+                        <td>null</td>
+                        <td>Indian Market</td>
+                        <td>{p.product_category}</td>
+                        <td>{p.azst_vendor_name}</td>
+                        <td>
+                          <Link to={`/product/info/${p.product_id}`}>
+                            <input type="button" value="Add Info" />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

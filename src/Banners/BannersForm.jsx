@@ -79,8 +79,10 @@ const BannersForm = (props) => {
       <div className="row">
         <div className="col-sm-12">
           <div className="d-flex justify-content-between mb-4">
-            <h3>{mainTitle}</h3>
-            <Link to="/slider/create">Create {linkTitle}</Link>
+            <h4>{mainTitle}</h4>
+            <Link to="/slider/create" className="btn bg-dark text-light">
+              Create {linkTitle}
+            </Link>
           </div>
         </div>
         <div className="col-sm-12">
@@ -102,7 +104,7 @@ const BannersForm = (props) => {
             </div>
           </div>
           {sliders.map((slider, i) => (
-            <div className="row mb-4">
+            <div className="row mb-4" key={i}>
               <div className="col-sm-2 d-flex justify-content-center align-items-center">
                 <img
                   className="bannerThumbnail"

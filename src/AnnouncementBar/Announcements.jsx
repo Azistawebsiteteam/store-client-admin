@@ -73,11 +73,13 @@ const Announcements = () => {
       </div>
       <div className="commonSec">
         <div className="collectionTopbar">
-          <h3>Announcements</h3>
-          <Link to="/announcement/create">Create Announcement</Link>
+          <h4>Announcements</h4>
+          <Link to="/announcement/create" className="btn bg-dark text-light">
+            Create Announcement
+          </Link>
         </div>
-        <div className="announcements">
-          <table className="table">
+        <div className="tableCont">
+          <table className="table table-hover" style={{ minWidth: "1000px" }}>
             <thead>
               <tr>
                 <th scope="col">S.no</th>

@@ -70,10 +70,15 @@ const Brands = () => {
             <div className="row">
               <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
                 <h4>Brands</h4>
-                <Link to="/brands/create">Create brands</Link>
+                <Link to="/brands/create" className="btn bg-dark text-light">
+                  Create brands
+                </Link>
               </div>
-              <div className="col-sm-12">
-                <table className="table">
+              <div className="tableCont">
+                <table
+                  className="table table-hover"
+                  style={{ minWidth: "1000px" }}
+                >
                   <thead>
                     <tr>
                       <th scope="col">#</th>
@@ -86,7 +91,7 @@ const Brands = () => {
                     {brands.map((each, i) => (
                       <tr className="item" key={i}>
                         <td>{i + 1}</td>
-                        <td>
+                        <td style={{ width: "20%" }}>
                           <img
                             className="brandThumbnail"
                             src={each.azst_brand_logo}

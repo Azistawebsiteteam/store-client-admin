@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import AdminSideBar from '../Pages/AdminSideBar';
-import { Link } from 'react-router-dom';
-import { FaRegFileImage } from 'react-icons/fa';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import swalErr from '../Pages/ErrorHandler';
-import { ProductState } from '../Context/ProductContext';
-import { MdDelete } from 'react-icons/md';
-import { MdModeEditOutline } from 'react-icons/md';
-import '../Pages/Admin.css';
-import { useCallback } from 'react';
+import React, { useEffect, useState } from "react";
+import AdminSideBar from "../Pages/AdminSideBar";
+import { Link } from "react-router-dom";
+import { FaRegFileImage } from "react-icons/fa";
+import Cookies from "js-cookie";
+import axios from "axios";
+import swalErr from "../Pages/ErrorHandler";
+import { ProductState } from "../Context/ProductContext";
+import { MdDelete } from "react-icons/md";
+import { MdModeEditOutline } from "react-icons/md";
+import "../Pages/Admin.css";
+import { useCallback } from "react";
 
 const Collections = () => {
   const [collectionData, setCollectionData] = useState([]);
@@ -60,62 +60,63 @@ const Collections = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <div>
         <AdminSideBar />
       </div>
-      <div className='commonSec'>
-        <div className='collectionTopbar'>
-          <h3>Collections</h3>
-          <Link to='/collections/create'>Create collection</Link>
+      <div className="commonSec">
+        <div className="collectionTopbar">
+          <h4>Collections</h4>
+          <Link to="/collections/create" className="btn bg-dark text-light">
+            Create collection
+          </Link>
         </div>
-        <div className='collectionsDisplay'>
-          <div className='row'>
-            <table className='table' style={{ width: '100%' }}>
-              <thead>
-                <tr>
-                  <th scope='col'>Collection Image</th>
-                  <th scope='col'>Title</th>
-                  <th scope='col'>Products</th>
-                  <th scope='col'>Action</th>
+        <div className="tableCont">
+          <table className="table table-hover" style={{ minWidth: "1000px" }}>
+            <thead>
+              <tr>
+                <th scope="col">Collection Image</th>
+                <th scope="col">Title</th>
+                <th scope="col">Products</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {collectionData.map((eachCollection, id) => (
+                <tr key={id} className="item">
+                  <td>
+                    {eachCollection.azst_collection_img ? (
+                      <img
+                        src={eachCollection.azst_collection_img}
+                        width={40}
+                        height={40}
+                        alt=""
+                      />
+                    ) : (
+                      <div className="imgThumbnail">
+                        <FaRegFileImage />
+                      </div>
+                    )}
+                  </td>
+                  <td>{eachCollection.azst_collection_name}</td>
+                  <td>{eachCollection.no_products}</td>
+                  <td>
+                    <MdDelete
+                      className="icons"
+                      onClick={() =>
+                        deleteCollection(eachCollection.azst_collection_id)
+                      }
+                    />{" "}
+                    <Link
+                      to={`/collection/update/${eachCollection.azst_collection_id}`}
+                    >
+                      <MdModeEditOutline className="icons" />
+                    </Link>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {collectionData.map((eachCollection, id) => (
-                  <tr key={id} className='item'>
-                    <td>
-                      {eachCollection.azst_collection_img ? (
-                        <img
-                          src={eachCollection.azst_collection_img}
-                          width={40}
-                          height={40}
-                          alt=''
-                        />
-                      ) : (
-                        <div className='imgThumbnail'>
-                          <FaRegFileImage />
-                        </div>
-                      )}
-                    </td>
-                    <td>{eachCollection.azst_collection_name}</td>
-                    <td>{eachCollection.no_products}</td>
-                    <td>
-                      <MdDelete
-                        className='icons'
-                        onClick={() =>
-                          deleteCollection(eachCollection.azst_collection_id)
-                        }
-                      />{' '}
-                      <Link
-                        to={`/collection/update/${eachCollection.azst_collection_id}`}>
-                        <MdModeEditOutline className='icons' />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

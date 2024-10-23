@@ -89,6 +89,7 @@ const BlogEdit = () => {
         navigate("/blogs");
       }, 2000);
     } catch (error) {
+      console.log(error);
       swalHandle.onLoadingClose();
       swalHandle.onError(error);
     }

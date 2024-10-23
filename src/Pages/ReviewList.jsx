@@ -63,55 +63,70 @@ const ReviewList = () => {
       <div className="adminSec">
         <AdminSideBar />
         <div className="commonSec">
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col">Customer</th>
-                <th scope="col">Created</th>
-                <th scope="col">Rating</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reviewsList.map((review, index) => (
-                <tr key={index}>
-                  <td>
-                    <h6>
-                      {review.azst_customer_fname} {review.azst_customer_lname}
-                    </h6>
-                    <p>
-                      <Link to={review.url_handle}>{review.product_title}</Link>
-                    </p>
-                  </td>
-                  <td>{review.created_on}</td>
-                  <td>
-                    <Rating
-                      name="read-only"
-                      value={review.review_points}
-                      precision={0.5}
-                      readOnly
-                    />
-                    <p>{review.review_content}</p>
-                  </td>
-                  <td>
-                    <div class="form-group">
-                      <select
-                        class="form-control"
-                        id="reviewStatus"
-                        value={review.review_approval_status}
-                        onChange={(e) =>
-                          handleReviewStatus(e, review.review_id)
-                        }
-                      >
-                        <option value={0}>Hidden</option>
-                        <option value={1}>Publish Review</option>
-                      </select>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="container">
+            <div className="row">
+              <div className="mb-4">
+                <h4>Customer Reviews</h4>
+              </div>
+              <div className="tableCont">
+                <table
+                  className="table table-hover"
+                  style={{ minWidth: "1000px" }}
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Customer</th>
+                      <th scope="col">Created</th>
+                      <th scope="col">Rating</th>
+                      <th scope="col">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reviewsList.map((review, index) => (
+                      <tr key={index}>
+                        <td>
+                          <h6>
+                            {review.azst_customer_fname}{" "}
+                            {review.azst_customer_lname}
+                          </h6>
+                          <p>
+                            <Link to={review.url_handle}>
+                              {review.product_title}
+                            </Link>
+                          </p>
+                        </td>
+                        <td>{review.created_on}</td>
+                        <td>
+                          <Rating
+                            name="read-only"
+                            value={review.review_points}
+                            precision={0.5}
+                            readOnly
+                          />
+                          <p>{review.review_content}</p>
+                        </td>
+                        <td>
+                          <div className="form-group">
+                            <select
+                              className="form-control"
+                              id="reviewStatus"
+                              value={review.review_approval_status}
+                              onChange={(e) =>
+                                handleReviewStatus(e, review.review_id)
+                              }
+                            >
+                              <option value={0}>Hidden</option>
+                              <option value={1}>Publish Review</option>
+                            </select>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

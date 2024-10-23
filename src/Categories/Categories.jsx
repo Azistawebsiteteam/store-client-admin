@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { MdDelete } from 'react-icons/md';
-import { downloadExcel } from 'react-export-table-to-excel';
-import { MdModeEditOutline } from 'react-icons/md';
-import swalHandle from '../Pages/ErrorHandler';
-import Swal from 'sweetalert2';
-import Cookies from 'js-cookie';
-import AdminSideBar from '../Pages/AdminSideBar';
-import ErrorHandler from '../Pages/ErrorHandler';
+import { useState, useEffect, useCallback, useRef } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import { MdDelete } from "react-icons/md";
+import { downloadExcel } from "react-export-table-to-excel";
+import { MdModeEditOutline } from "react-icons/md";
+import swalHandle from "../Pages/ErrorHandler";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
+import AdminSideBar from "../Pages/AdminSideBar";
+import ErrorHandler from "../Pages/ErrorHandler";
 
 const Categories = () => {
   const [categories, setCategories] = useState();
@@ -58,11 +58,11 @@ const Categories = () => {
     }
   };
 
-  const header = ['Category Name', 'Number of Products'];
+  const header = ["Category Name", "Number of Products"];
   function handleDownloadExcel() {
     downloadExcel({
-      fileName: 'categories',
-      sheet: 'categories-list',
+      fileName: "categories",
+      sheet: "categories-list",
       tablePayload: {
         header,
         body: categories.map((c) => ({
@@ -74,47 +74,53 @@ const Categories = () => {
   }
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <div>
         <AdminSideBar />
       </div>
-      <div className='commonSec'>
-        <div className='col-12 mt-2 mb-2 d-flex justify-content-between'>
+      <div className="commonSec">
+        <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
           <h4>Categories</h4>
           <button onClick={handleDownloadExcel}>Export excel</button>
-          <Link to='/category/create'>Create category</Link>
+          <Link to="/category/create" className="btn bg-dark text-light">
+            Create category
+          </Link>
         </div>
-        <div className='col-sm-12'>
-          <table className='table' ref={tableRef}>
+        <div className="tableCont">
+          <table
+            className="table table-hover"
+            style={{ minWidth: "1000px" }}
+            ref={tableRef}
+          >
             <thead>
               <tr>
-                <th scope='col'>#</th>
-                <th scope='col'>Category Image</th>
-                <th scope='col'>Category Name</th>
-                <th scope='col'>No. Products</th>
-                <th scope='col'>Actions</th>
+                <th scope="col">#</th>
+                <th scope="col">Category Image</th>
+                <th scope="col">Category Name</th>
+                <th scope="col">No. Products</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               {categories?.map((each, i) => (
-                <tr className='item' key={i}>
+                <tr className="item" key={i}>
                   <td>{i + 1}</td>
-                  <td style={{ width: '20%' }}>
+                  <td style={{ width: "20%" }}>
                     <img
-                      className='brandThumbnail'
+                      className="brandThumbnail"
                       src={each.azst_category_img}
                       alt={each.azst_category_name}
                     />
                   </td>
                   <td>{each.azst_category_name}</td>
-                  <td style={{ textAlign: 'center' }}>{each.no_products}</td>
+                  <td style={{ textAlign: "center" }}>{each.no_products}</td>
                   <td>
                     <MdDelete
-                      className='icons'
+                      className="icons"
                       onClick={() => deleteBrand(each.azst_category_id)}
-                    />{' '}
+                    />{" "}
                     <Link to={`/edit-category/${each.azst_category_id}`}>
-                      <MdModeEditOutline className='icons' />
+                      <MdModeEditOutline className="icons" />
                     </Link>
                   </td>
                 </tr>

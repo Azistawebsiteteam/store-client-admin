@@ -1,12 +1,12 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import Cookies from 'js-cookie';
-import axios from 'axios';
+import React, { useEffect, useCallback, useState } from "react";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-import { MdDelete, MdModeEditOutline } from 'react-icons/md';
-import { Link } from 'react-router-dom';
+import { MdDelete, MdModeEditOutline } from "react-icons/md";
+import { Link } from "react-router-dom";
 
-import swalHandle from '../Pages/ErrorHandler';
-import AdminSideBar from '../Pages/AdminSideBar';
+import swalHandle from "../Pages/ErrorHandler";
+import AdminSideBar from "../Pages/AdminSideBar";
 
 const BlogsListing = () => {
   const [blogsList, setBlogsList] = useState([]);
@@ -55,53 +55,54 @@ const BlogsListing = () => {
 
   const truncateText = (text, maxLength) => {
     if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+    return text.substring(0, maxLength) + "...";
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <div>
         <AdminSideBar />
       </div>
-      <div className='commonSec'>
-        {' '}
-        <div className='col-12 mt-2 mb-2 d-flex justify-content-between'>
+      <div className="commonSec">
+        <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
           <h4>Blogs</h4>
-          <Link to='/blogs/create'>Create Blog</Link>
+          <Link to="/blogs/create" className="btn bg-dark text-light">
+            Create Blog
+          </Link>
         </div>
-        <div className='col-sm-12'>
-          <table className='table'>
+        <div className="tableCont">
+          <table className="table table-hover" style={{ minWidth: "1000px" }}>
             <thead>
               <tr>
-                <th scope='col'>S.No</th>
-                <th scope='col'>Title</th>
-                <th scope='col'>Description</th>
-                <th scope='col'>Image</th>
-                <th scope='col'>Blog Type</th>
-                <th scope='col'>Actions</th>
+                <th scope="col">S.No</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Image</th>
+                <th scope="col">Blog Type</th>
+                <th scope="col">Actions</th>
               </tr>
             </thead>
             <tbody>
               {blogsList?.map((each, i) => (
-                <tr className='item' key={i}>
+                <tr className="item" key={i}>
                   <td>{i + 1}</td>
                   <td>{truncateText(each.azst_blg_title, 80)}</td>
                   <td>{truncateText(each.azst_blg_description, 100)}</td>
                   <td>
                     <img
-                      style={{ width: '60px' }}
+                      style={{ width: "60px" }}
                       src={each.azst_blg_img}
-                      alt=''
+                      alt=""
                     />
                   </td>
                   <td>{each.azst_blg_type}</td>
                   <td>
                     <MdDelete
-                      className='icons'
+                      className="icons"
                       onClick={() => deleteBlog(each.azst_blg_id)}
-                    />{' '}
+                    />{" "}
                     <Link to={`/blogs/edit/${each.azst_blg_id}`}>
-                      <MdModeEditOutline className='icons' />
+                      <MdModeEditOutline className="icons" />
                     </Link>
                   </td>
                 </tr>

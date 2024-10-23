@@ -64,13 +64,21 @@ const Discounts = () => {
             <div className="col-sm-12">
               <div className="col-sm-12">
                 <div className="d-flex justify-content-between mb-4">
-                  <h3>List of Discounts</h3>
-                  <Link to="/discount/create">Create Discount</Link>
+                  <h4>List of Discounts</h4>
+                  <Link
+                    to="/discount/create"
+                    className="btn bg-dark text-light"
+                  >
+                    Create Discount
+                  </Link>
                 </div>
               </div>
               <div className="col-sm-12">
-                <div>
-                  <table class="table table-hover">
+                <div className="tableCont">
+                  <table
+                    className="table table-hover"
+                    style={{ minWidth: "1000px" }}
+                  >
                     <thead>
                       <tr>
                         <th scope="col">S.No</th>

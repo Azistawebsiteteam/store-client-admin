@@ -1,27 +1,44 @@
 import Cookies from "js-cookie";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
-
-// import { IoMdArrowDropdown } from "react-icons/io";
+import "./Admin.css";
 
 function BasicButtonExample() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
-
   const handleUserLogout = () => {
     window.location.replace("/adminLoginPage");
     Cookies.remove(adminToken);
   };
   return (
-    <DropdownButton
-      id="dropdown-basic-button"
-      variant="bg-light"
-      className="adminDropdown"
-      title="Admin"
-    >
-      <Dropdown.Item href="ManageAccount">Manage Accounts</Dropdown.Item>
-      <Dropdown.Item href="#/action-2">User Activities</Dropdown.Item>
-      <Dropdown.Item onClick={handleUserLogout}>Logout</Dropdown.Item>
-    </DropdownButton>
+    <div className="dropdown-center">
+      <button
+        className="btn btn-secondary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        User
+      </button>
+      <ul className="dropdown-menu customDropDown">
+        <li>
+          <a className="dropdown-item" href="ManageAccount">
+            Manage Accounts
+          </a>
+        </li>
+        <li>
+          <a className="dropdown-item" href="#/action-2">
+            User Activities
+          </a>
+        </li>
+        <li>
+          <a
+            className="dropdown-item"
+            onClick={handleUserLogout}
+            href="/adminLoginPage"
+          >
+            Logout
+          </a>
+        </li>
+      </ul>
+    </div>
   );
 }
 

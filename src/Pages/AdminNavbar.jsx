@@ -16,10 +16,13 @@ const AdminNavbar = () => {
   let token = Cookies.get(adminToken);
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top adminNavbar">
+    <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-top adminNavbar">
       <div className="container-fluid adminNavbarInnerSection">
         <div className="navIcon">
-          <Link className="navbar-brand m-auto mr-md-auto" to="/">
+          <Link
+            className="navbar-brand m-auto mr-md-auto text-light navText"
+            to="/"
+          >
             <img className="navlogo" src="../../../azista.png" alt="img" />{" "}
             Azista
           </Link>

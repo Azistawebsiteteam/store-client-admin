@@ -289,25 +289,25 @@ const Inventory = () => {
             </div>
           )}
         </div>
-        <div className="bgStyle">
-          <Table hover responsive size="lg">
+        <div className="tableCont">
+          <table className="table table-hover" style={{ minWidth: "1200px" }}>
             <thead>
               <tr>
-                <th className="col"></th>
-                <th className="col">Product</th>
-                <th className="col" width={"20%"}>
-                  SKU
+                <th className="sticky-column" scope="col">
+                  Image
                 </th>
-                <th className="col">Unavailable</th>
-                <th className="col">Committed</th>
-                <th className="col">Available</th>
-                <th className="col">On hand</th>
+                <th scope="col">Product</th>
+                <th scope="col">SKU</th>
+                <th scope="col">Unavailable</th>
+                <th scope="col">Committed</th>
+                <th scope="col">Available</th>
+                <th scope="col">On hand</th>
               </tr>
             </thead>
             <tbody>
               {inventoryData.map((each, i) => (
                 <tr key={each.azst_ipm_id}>
-                  <td>
+                  <td className="sticky-column">
                     {each.is_varaints_aval === 1 ? (
                       <img
                         className="productImg"
@@ -322,7 +322,7 @@ const Inventory = () => {
                       />
                     )}
                   </td>
-                  <td className="col">
+                  <td>
                     <span>{each.product_title}</span>
                     {each.is_varaints_aval && (
                       <p className="variantsOpt">
@@ -332,11 +332,11 @@ const Inventory = () => {
                       </p>
                     )}
                   </td>
-                  <td className="col">{each.sku_code}</td>
-                  <td className="col">{each.azst_ipm_unavbl_quantity}</td>
-                  <td className="col">{each.azst_ipm_commit_quantity}</td>
+                  <td>{each.sku_code}</td>
+                  <td>{each.azst_ipm_unavbl_quantity}</td>
+                  <td>{each.azst_ipm_commit_quantity}</td>
 
-                  <td className="col">
+                  <td>
                     <input
                       id="onHandQty"
                       type="number"
@@ -348,7 +348,7 @@ const Inventory = () => {
                     />
                   </td>
 
-                  <td className="col inventoryInputCont">
+                  <td className="inventoryInputCont">
                     <input
                       id="onHandQty"
                       type="number"
@@ -362,7 +362,7 @@ const Inventory = () => {
                 </tr>
               ))}
             </tbody>
-          </Table>
+          </table>
         </div>
       </div>
     </div>

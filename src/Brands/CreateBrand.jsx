@@ -11,7 +11,6 @@ const CreateBrand = () => {
   const [brandImg, setBrandImg] = useState();
   const [brandName, setBrandName] = useState("");
   const [description, setDescription] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -19,13 +18,7 @@ const CreateBrand = () => {
   const navigate = useNavigate();
 
   const saveBrandBtn = async () => {
-    if (!brandName || !description || !brandImg) {
-      swalErr.onError("All fields are required.");
-      return;
-    }
-
     try {
-      setLoading(true);
       const url = `${baseUrl}/brands/add`;
       const headers = { Authorization: `Bearer ${token}` };
       swalErr.onLoading();
@@ -33,8 +26,7 @@ const CreateBrand = () => {
       const formdata = new FormData();
       formdata.append("brandLogo", brandImg);
       formdata.append("brandName", brandName);
-      formdata.append("brandDescription", description);
-
+      formdata.append("description", description);
       await axios.post(url, formdata, { headers });
       swalErr.onLoadingClose();
       swalErr.onSuccess();
@@ -42,9 +34,7 @@ const CreateBrand = () => {
     } catch (error) {
       console.log(error, "brand");
       swalErr.onLoadingClose();
-      swalErr.onError(error.response?.data?.message || "An error occurred.");
-    } finally {
-      setLoading(false);
+      swalErr.onError(error);
     }
   };
 
@@ -72,12 +62,8 @@ const CreateBrand = () => {
                 </div>
               </div>
               <div className="col-12">
-                <button
-                  className="saveBtn"
-                  onClick={saveBrandBtn}
-                  disabled={loading}
-                >
-                  {loading ? "Saving..." : "Save"}
+                <button className="saveBtn" onClick={saveBrandBtn}>
+                  Save
                 </button>
               </div>
             </div>

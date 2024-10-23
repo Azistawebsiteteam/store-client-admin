@@ -89,7 +89,7 @@ const PopupListing = () => {
       ErrorHandler.onLoadingClose();
       ErrorHandler.onSuccess();
       setPopups(
-        popups.map((p) => (p.id === popup.id ? { ...p, mode: "normal" } : p))
+        popups.map((p) => (p.id === popup.id ? { ...p, mode: "edit" } : p))
       );
     } catch (error) {
       ErrorHandler.onLoadingClose();
@@ -194,6 +194,11 @@ const PopupListing = () => {
     setPopups([...popups, newPopup]);
   };
 
+  const getImageLink = (popImg) => {
+    const url = URL.createObjectURL(popImg);
+    return url;
+  };
+
   return (
     <div className="adminSec">
       <div>
@@ -258,7 +263,7 @@ const PopupListing = () => {
                           ) : (
                             <div className="popupImgCont">
                               <img
-                                src={URL.createObjectURL(each.popup_image)}
+                                src={getImageLink(each.popup_image)}
                                 className="card-img-top"
                                 alt="popupImg"
                               />

@@ -15,8 +15,8 @@ import { TfiAnnouncement } from "react-icons/tfi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { IoIosPerson } from "react-icons/io";
 import { SiBlogger } from "react-icons/si";
-import { FcFaq } from "react-icons/fc";
-
+import { FaQuestion } from "react-icons/fa";
+import { MdFeaturedPlayList } from "react-icons/md";
 import { BiSolidCategoryAlt } from "react-icons/bi";
 
 const AdminSideBar = () => {
@@ -26,40 +26,56 @@ const AdminSideBar = () => {
     <div className="sidebarCont">
       <ul className="sideBarItems">
         <Link className="link" to="/">
-          <li className={activeTab === "/" ? "activeTab" : "linkItem"}>
-            <FaHome /> Home
+          <li
+            className={activeTab === "/" ? "linkItem activeTab" : "linkItem"}
+            onClick={(e) => setDropdownItems(false)}
+          >
+            <FaHome className="me-1" /> Home
           </li>
         </Link>
         <Link className="link" to="/orders">
           <li
             className={
-              activeTab.startsWith("/order") ? "activeTab" : "linkItem"
+              activeTab.startsWith("/order") ? "linkItem activeTab" : "linkItem"
             }
+            onClick={(e) => setDropdownItems(false)}
           >
-            <FaFirstOrder /> Orders
+            <FaFirstOrder className="me-1" /> Orders
           </li>
         </Link>
         <Link className="link" to="/inventory">
-          <li className={activeTab === "/inventory" ? "activeTab" : "linkItem"}>
-            <MdInventory /> Inventory
+          <li
+            className={
+              activeTab === "/inventory" ? "linkItem activeTab" : "linkItem"
+            }
+            onClick={(e) => setDropdownItems(false)}
+          >
+            <MdInventory className="me-1" /> Inventory
           </li>
         </Link>
         <Link className="link" to="/products">
           <li
             className={
-              activeTab.startsWith("/product") ? "activeTab" : "linkItem"
+              activeTab.startsWith("/product")
+                ? "linkItem activeTab"
+                : "linkItem"
             }
+            onClick={(e) => setDropdownItems(false)}
           >
-            <FaProductHunt /> Products
+            <FaProductHunt className="me-1" /> Products
           </li>
         </Link>
         <button
-          className="dropdown-btn"
+          className="dropdown-btn customDropdownButton"
           id="drobdownBtn"
           onClick={(e) => setDropdownItems(!dropdownItems)}
         >
-          Features
-          {dropdownItems ? <FaAngleUp /> : <FaAngleDown />}
+          <MdFeaturedPlayList /> Features
+          {dropdownItems ? (
+            <FaAngleUp className="ms-2" />
+          ) : (
+            <FaAngleDown className="ms-2" />
+          )}
         </button>
         {dropdownItems && (
           <div className="childElements">
@@ -67,29 +83,33 @@ const AdminSideBar = () => {
               <li
                 className={
                   activeTab.startsWith("/collections")
-                    ? "activeTab"
-                    : "linkItem"
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <MdCollectionsBookmark /> Collections
+                <MdCollectionsBookmark className="me-1" /> Collections
               </li>
             </Link>
             <Link className="link" to="/popup">
               <li
                 className={
-                  activeTab.startsWith("/popup") ? "activeTab" : "linkItem"
+                  activeTab.startsWith("/popup")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <MdCollectionsBookmark /> Popup
+                <MdCollectionsBookmark className="me-1" /> Popup
               </li>
             </Link>
             <Link className="link" to="/slider">
               <li
                 className={
-                  activeTab.startsWith("/slider") ? "activeTab" : "linkItem"
+                  activeTab.startsWith("/slider")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <GiKnightBanner />
+                <GiKnightBanner className="me-1" />
                 Slider Banner
               </li>
             </Link>
@@ -97,30 +117,34 @@ const AdminSideBar = () => {
               <li
                 className={
                   activeTab.startsWith("/product-banners")
-                    ? "activeTab"
-                    : "linkItem"
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <GiKnightBanner />
+                <GiKnightBanner className="me-1" />
                 Product Banner
               </li>
             </Link>
             <Link className="link" to="/categories">
               <li
                 className={
-                  activeTab.startsWith("/categories") ? "activeTab" : "linkItem"
+                  activeTab.startsWith("/categories")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <BiSolidCategoryAlt /> Categories
+                <BiSolidCategoryAlt className="me-1" /> Categories
               </li>
             </Link>
             <Link className="link" to="/brands">
               <li
                 className={
-                  activeTab.startsWith("/brands") ? "activeTab" : "linkItem"
+                  activeTab.startsWith("/brands")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <SiBrandfolder /> Brands
+                <SiBrandfolder className="me-1" /> Brands
               </li>
             </Link>
 
@@ -128,29 +152,33 @@ const AdminSideBar = () => {
               <li
                 className={
                   activeTab.startsWith("/announcements")
-                    ? "activeTab"
-                    : "linkItem"
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <TfiAnnouncement /> Announcement Bar
+                <TfiAnnouncement className="me-1" /> Announcement Bar
               </li>
             </Link>
             <Link className="link" to="/blogs">
               <li
                 className={
-                  activeTab.startsWith("/blogs") ? "activeTab" : "linkItem"
+                  activeTab.startsWith("/blogs")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <SiBlogger /> Blogs
+                <SiBlogger className="me-1" /> Blogs
               </li>
             </Link>
             <Link className="link" to="/faqs">
               <li
                 className={
-                  activeTab.startsWith("/faqs") ? "activeTab" : "linkItem"
+                  activeTab.startsWith("/faqs")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
                 }
               >
-                <FcFaq style={{ fontSize: "25px" }} /> Faqs
+                <FaQuestion className="me-1" /> Faqs
               </li>
             </Link>
           </div>
@@ -158,28 +186,37 @@ const AdminSideBar = () => {
         <Link className="link" to="/discount">
           <li
             className={
-              activeTab.startsWith("/discount") ? "activeTab" : "linkItem"
+              activeTab.startsWith("/discount")
+                ? "linkItem activeTab"
+                : "linkItem"
             }
+            onClick={(e) => setDropdownItems(false)}
           >
-            <BiSolidDiscount /> Discounts
+            <BiSolidDiscount className="me-1" /> Discounts
           </li>
         </Link>
         <Link className="link" to="/review-list">
           <li
             className={
-              activeTab.startsWith("/review") ? "activeTab" : "linkItem"
+              activeTab.startsWith("/review")
+                ? "linkItem activeTab"
+                : "linkItem"
             }
+            onClick={(e) => setDropdownItems(false)}
           >
-            <MdRateReview /> Manage Reviews
+            <MdRateReview className="me-1" /> Manage Reviews
           </li>
         </Link>
         <Link className="link" to="/customers">
           <li
             className={
-              activeTab.startsWith("/customer") ? "activeTab" : "linkItem"
+              activeTab.startsWith("/customer")
+                ? "linkItem activeTab"
+                : "linkItem"
             }
+            onClick={(e) => setDropdownItems(false)}
           >
-            <IoIosPerson /> Customers
+            <IoIosPerson className="me-1" /> Customers
           </li>
         </Link>
       </ul>

@@ -1,5 +1,4 @@
 import React from "react";
-import Table from "react-bootstrap/Table";
 import AdminSideBar from "../Pages/AdminSideBar";
 import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
@@ -65,7 +64,7 @@ const CustomersListing = () => {
             type="search"
             placeholder="Search Customers"
           />
-          <div class="form-check form-switch">
+          <div className="form-check form-switch">
             <input
               className="form-check-input"
               type="checkbox"
@@ -167,62 +166,64 @@ const CustomersListing = () => {
             </div>
           )}
         </div>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>S.No</th>
-              <th>Customer name</th>
-              <th>Email subscription</th>
-              <th>Location</th>
-              <th>Orders</th>
-              <th>Amount spent</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {customersData.map((each, i) => (
-              <tr key={i}>
-                <td>{i + 1}</td>
-                <td>
-                  <Link
-                    to={`/customer/${each.azst_customer_id}`}
-                    style={{ textDecoration: "none" }}
-                  >
-                    {each.azst_customer_name}
-                  </Link>
-                </td>
-                <td>
-                  <span
-                    className={
-                      each?.azst_customer_acceptemail_marketing.toLowerCase() ===
-                      "yes"
-                        ? "subscribed"
-                        : "notsubscribed"
-                    }
-                  >
-                    {each?.azst_customer_acceptemail_marketing.toLowerCase() ===
-                    "yes"
-                      ? "Subscribed"
-                      : "Not Subscribed"}
-                  </span>
-                </td>
-                <td>
-                  {each?.azst_customer_state +
-                    "," +
-                    each?.azst_customer_country}
-                </td>
-                <td>
-                  {each.azst_customer_totalorders &&
-                    each.azst_customer_totalorders + "  orders"}
-                </td>
-                <td>
-                  <BiRupee />
-                  {each.azst_customer_totalspent}
-                </td>
+        <div className="tableCont">
+          <table className="table table-hover" style={{ minWidth: "1000px" }}>
+            <thead>
+              <tr>
+                <th>S.No</th>
+                <th>Customer name</th>
+                <th>Email subscription</th>
+                <th>Location</th>
+                <th>Orders</th>
+                <th>Amount spent</th>
               </tr>
-            ))}
-          </tbody>
-        </Table>
+            </thead>
+
+            <tbody>
+              {customersData.map((each, i) => (
+                <tr key={i}>
+                  <td>{i + 1}</td>
+                  <td>
+                    <Link
+                      to={`/customer/${each.azst_customer_id}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      {each.azst_customer_name}
+                    </Link>
+                  </td>
+                  <td>
+                    <span
+                      className={
+                        each?.azst_customer_acceptemail_marketing.toLowerCase() ===
+                        "yes"
+                          ? "subscribed"
+                          : "notsubscribed"
+                      }
+                    >
+                      {each?.azst_customer_acceptemail_marketing.toLowerCase() ===
+                      "yes"
+                        ? "Subscribed"
+                        : "Not Subscribed"}
+                    </span>
+                  </td>
+                  <td>
+                    {each?.azst_customer_state +
+                      "," +
+                      each?.azst_customer_country}
+                  </td>
+                  <td>
+                    {each.azst_customer_totalorders &&
+                      each.azst_customer_totalorders + "  orders"}
+                  </td>
+                  <td>
+                    <BiRupee />
+                    {each.azst_customer_totalspent}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
