@@ -81,7 +81,12 @@ const Categories = () => {
       <div className="commonSec">
         <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
           <h4>Categories</h4>
-          <button onClick={handleDownloadExcel}>Export excel</button>
+          <button
+            className="btn bg-success text-light"
+            onClick={handleDownloadExcel}
+          >
+            Export
+          </button>
           <Link to="/category/create" className="btn bg-dark text-light">
             Create category
           </Link>

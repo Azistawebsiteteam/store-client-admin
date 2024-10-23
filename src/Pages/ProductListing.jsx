@@ -70,14 +70,17 @@ const ProductListing = () => {
                   <tbody>
                     {productsList.map((p) => (
                       <tr key={p.product_id}>
-                        <th className="sticky-column">
+                        <td
+                          className="sticky-column"
+                          style={{ width: "120px" }}
+                        >
                           <img
                             src={p.image_src}
                             alt="product"
                             className="productThumbnail"
                           />
-                        </th>
-                        <td className="col-2">
+                        </td>
+                        <td style={{ width: "500px" }}>
                           <Link
                             className="productLink"
                             to={`/product/update/${p.product_id}`}
