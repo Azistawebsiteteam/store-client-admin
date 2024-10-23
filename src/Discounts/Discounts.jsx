@@ -63,7 +63,7 @@ const Discounts = () => {
           <div className="row">
             <div className="col-sm-12">
               <div className="col-sm-12">
-                <div className="d-flex justify-content-between mb-4">
+                <div className="d-flex justify-content-between">
                   <h4>List of Discounts</h4>
                   <Link
                     to="/discount/create"

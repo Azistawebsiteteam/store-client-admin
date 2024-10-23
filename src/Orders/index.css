@@ -55,13 +55,13 @@ hr.v1 {
     border-radius: 8px;
     border: 1px solid #dee2e6;
     padding: 0 !important;
+    margin-top: 1rem;
 }
 .table{
     margin-bottom: 0 !important;
 }
 th, td {
     padding: 12px !important;
-    white-space: nowrap; 
     font-size: 14px;
 }
 .sticky-column {

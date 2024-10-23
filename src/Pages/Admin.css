@@ -449,10 +449,9 @@ img.bImg {
 .productsTopbar {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 10px;
 }
 .productThumbnail {
-  width: 50%;
+  width: 60%;
 }
 
 .variantInput {

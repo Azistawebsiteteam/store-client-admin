@@ -163,7 +163,6 @@ const FaqList = () => {
               </option>
             ))}
           </select>
-
           <Link to="/faqs/create" className="btn bg-dark text-light">
             Create FAQ
           </Link>
@@ -188,11 +187,17 @@ const FaqList = () => {
                 <tbody>
                   {filteredFaqsList.map((faq, i) => (
                     <tr key={faq.azst_faq_id}>
-                      <td>{(currentPage - 1) * logsPerPage + i + 1}</td>
-                      <td>{truncateText(faq.azst_faq_question, 80)}</td>
-                      <td>{truncateText(faq.azst_faq_ans, 100)}</td>
-                      <td>{faq.azst_faq_type}</td>
-                      <td>
+                      <td style={{ width: "5%" }}>
+                        {(currentPage - 1) * logsPerPage + i + 1}
+                      </td>
+                      <td style={{ width: "30%" }}>
+                        {truncateText(faq.azst_faq_question, 50)}
+                      </td>
+                      <td style={{ width: "45%" }}>
+                        {truncateText(faq.azst_faq_ans, 100)}
+                      </td>
+                      <td style={{ width: "10%" }}>{faq.azst_faq_type}</td>
+                      <td style={{ width: "10%" }}>
                         <MdDelete
                           className="icons"
                           onClick={() => deleteFaq(faq.azst_faq_id)}

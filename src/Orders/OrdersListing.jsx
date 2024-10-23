@@ -302,7 +302,9 @@ const OrdersListing = () => {
                       <th scope="col">Channel</th>
                       <th scope="col">Total</th>
                       <th scope="col">Payment Status</th>
-                      <th scope="col">Fulfillment Status</th>
+                      <th className="text-nowrap" scope="col">
+                        Fulfillment Status
+                      </th>
                       <th scope="col">Items</th>
                       <th scope="col">Delivery Method</th>
                       <th scope="col">Order status</th>
@@ -315,27 +317,35 @@ const OrdersListing = () => {
                           onClick={() =>
                             handleCustOrder(eachOrder.azst_orders_id)
                           }
-                          className="sticky-column"
+                          className="sticky-column text-nowrap"
                         >
                           {eachOrder.azst_orders_id}
                         </th>
-                        <td>{date(eachOrder.azst_orders_created_on)}</td>
-                        <td>{eachOrder.customer_name}</td>
-                        <td>Online store</td>
-                        <td>{eachOrder.azst_orders_total}</td>
-                        <td>
+                        <td className="text-nowrap">
+                          {date(eachOrder.azst_orders_created_on)}
+                        </td>
+                        <td className="text-nowrap">
+                          {eachOrder.customer_name}
+                        </td>
+                        <td className="text-nowrap">Online store</td>
+                        <td className="text-nowrap">
+                          {eachOrder.azst_orders_total}
+                        </td>
+                        <td className="text-nowrap">
                           {eachOrder.azst_orders_financial_status === "1"
                             ? "Paid"
                             : "Payment pending"}
                         </td>
-                        <td>
+                        <td className="text-nowrap">
                           {eachOrder.azst_orders_fulfillment_status === "1"
                             ? "Fullfilled"
                             : "Unfulfilled"}
                         </td>
-                        <td>{eachOrder.items}</td>
-                        <td>{eachOrder.azst_order_delivery_method}</td>
-                        <td>
+                        <td className="text-nowrap">{eachOrder.items}</td>
+                        <td className="text-nowrap">
+                          {eachOrder.azst_order_delivery_method}
+                        </td>
+                        <td className="text-nowrap">
                           <div>
                             {eachOrder.azst_orders_status === 1 ? (
                               eachOrder.azst_orders_confirm_status === 0 ? (
