@@ -307,10 +307,10 @@ const Inventory = () => {
             <tbody>
               {inventoryData.map((each, i) => (
                 <tr key={each.azst_ipm_id}>
-                  <td className="sticky-column" style={{ width: "120px" }}>
+                  <td className="sticky-column">
                     {each.is_varaints_aval === 1 ? (
                       <img
-                        className="productThumbnail"
+                        className="productImg"
                         src={each.variant_image}
                         alt="productImg"
                       />
@@ -322,7 +322,7 @@ const Inventory = () => {
                       />
                     )}
                   </td>
-                  <td style={{ width: "500px" }}>
+                  <td>
                     <span>{each.product_title}</span>
                     {each.is_varaints_aval && (
                       <p className="variantsOpt">
