@@ -130,7 +130,7 @@ const ManageAccount = () => {
                 <div className="bgStyle">
                   {inputValues.profilePic ? (
                     <img
-                      className="userProfile"
+                      className="userProfile me-2"
                       src={inputValues.profilePic}
                       alt="Profile Pic"
                     />
