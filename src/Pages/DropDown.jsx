@@ -3,7 +3,13 @@ import { Link } from 'react-router-dom';
 import './Admin.css';
 
 function BasicButtonExample() {
+  const [showDropdown, setShowDropdown] = useState(false);
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   const handleUserLogout = () => {
     window.location.replace('/adminLoginPage');
     Cookies.remove(adminToken);

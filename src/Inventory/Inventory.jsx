@@ -296,7 +296,9 @@ const Inventory = () => {
                 <th className="sticky-column" scope="col">
                   Image
                 </th>
-                <th scope="col">Product</th>
+                <th style={{ width: "  10%" }} scope="col">
+                  Product
+                </th>
                 <th scope="col">SKU</th>
                 <th scope="col">Unavailable</th>
                 <th scope="col">Committed</th>
@@ -323,7 +325,7 @@ const Inventory = () => {
                     )}
                   </td>
                   <td>
-                    <span>{each.product_title}</span>
+                    <span style={{ width: "  10%" }}>{each.product_title}</span>
                     {each.is_varaints_aval && (
                       <p className="variantsOpt">
                         {each.option1 && <span>{each.option1}</span>}

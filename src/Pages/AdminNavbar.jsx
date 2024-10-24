@@ -41,7 +41,6 @@ const AdminNavbar = () => {
               <HiMiniUserCircle className="nav_social_icon" />
             )}
           </li>
-
           {token ? (
             <DropDown />
           ) : (

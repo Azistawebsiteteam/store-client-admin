@@ -20,6 +20,17 @@
   align-items: center;
   gap: 4px;
 }
+ul.dropdownMenu {
+  position: absolute;
+  background-color: #fff;
+  right: 0;
+  top: 44px;
+  list-style-type: none;
+  padding: 1rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
 
 /* pagination */
 .page-item.active .page-link {
@@ -139,7 +150,6 @@
   width: 50px;
   border-radius: 50%;
   height: 50px;
-  margin-right: 10px;
   border: 0.5px solid grey;
 }
 .nav_social_icon {
