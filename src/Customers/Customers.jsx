@@ -12,6 +12,7 @@ import { FaRegCopy } from 'react-icons/fa';
 import AdminSideBar from '../Pages/AdminSideBar';
 import errorHandle from '../Pages/ErrorHandler';
 import BackBtn from '../Components/BackBtn';
+import { getOptons, getStringData } from '../Utils/StringConcat';
 
 const Customers = () => {
   const [customerData, setCustomerData] = useState({});
@@ -44,14 +45,12 @@ const Customers = () => {
   }, [baseUrl, id, token]);
 
   // const getCustomerTime = (createDate) => {
-  //   console.log(createDate); // 22-10-2024 09:51:49
 
   //   // Correct the date format
   //   let result = moment(createDate, 'DD-MM-YYYY HH:mm:ss').diff(
   //     moment(),
   //     'days'
   //   );
-  //   console.log(result);
 
   //   if (result < 30) {
   //     return Math.abs(result) + ' days'; // Using Math.abs to handle negative values if createDate is in the future
@@ -121,15 +120,10 @@ const Customers = () => {
                   customerData.azst_customer_lname}
               </h3>
               <small>
-                {(customerData.azst_customer_state ||
-                  customerData.azst_customer_country) &&
-                  [
-                    customerData.azst_customer_state,
-                    customerData.azst_customer_country,
-                    ',',
-                  ]
-                    .filter(Boolean)
-                    .join(', ')}
+                {getStringData([
+                  customerData.azst_customer_state,
+                  customerData.azst_customer_country,
+                ])}
               </small>
 
               <small>
@@ -234,17 +228,13 @@ const Customers = () => {
                           <p>{product.product_title}</p>
                           {product.azst_order_variant_id !== 0 && (
                             <>
-                              <small>{product.option1}</small>
-                              {product.option2 && (
-                                <>
-                                  {' / '} <small>{product.option2}</small>
-                                </>
-                              )}
-                              {product.option3 && (
-                                <>
-                                  {' / '} <small>{product.option3}</small>
-                                </>
-                              )}
+                              <small>
+                                {getOptons(
+                                  product.option1,
+                                  product.option2,
+                                  product.option3
+                                )}
+                              </small>
                             </>
                           )}
                         </div>
@@ -257,7 +247,7 @@ const Customers = () => {
                       </div>
                     ))}
                   </div>
-                  {customerData.azst_customer_totalorders > 1 && (
+                  {parseInt(customerData.azst_customer_totalorders) > 1 && (
                     <div className='d-flex justify-content-end mt-2'>
                       <Link
                         to={{
@@ -296,16 +286,24 @@ const Customers = () => {
                 </span>
                 <br />
                 <span>
-                  {`${customerData.azst_customer_hno}, 
-                  ${customerData.azst_customer_area},`}
+                  {getStringData([
+                    customerData.azst_customer_hno,
+                    customerData.azst_customer_area,
+                  ])}
                 </span>
                 <br />
                 <span>
-                  {`${customerData.azst_customer_city}, 
-                  ${customerData.azst_customer_country},`}
+                  {getStringData([
+                    customerData.azst_customer_city,
+                    customerData.azst_customer_country,
+                  ])}
                 </span>
                 <br />
-                <span>{`${customerData.azst_customer_zip}.`}</span>
+                <span>
+                  {' '}
+                  {getStringData([customerData.azst_customer_zip]) ??
+                    getStringData([customerData.azst_customer_zip]) + '.'}
+                </span>
               </address>
               <h6>Marketing</h6>
               <ul>

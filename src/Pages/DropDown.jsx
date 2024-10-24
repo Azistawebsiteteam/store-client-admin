@@ -1,39 +1,34 @@
-import Cookies from "js-cookie";
-import "./Admin.css";
+import Cookies from 'js-cookie';
+import { Link } from 'react-router-dom';
+import './Admin.css';
 
 function BasicButtonExample() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const handleUserLogout = () => {
-    window.location.replace("/adminLoginPage");
+    window.location.replace('/adminLoginPage');
     Cookies.remove(adminToken);
   };
   return (
-    <div className="dropdown-center">
+    <div className='dropdown-center'>
       <button
-        className="btn btn-secondary dropdown-toggle"
-        type="button"
-        data-bs-toggle="dropdown"
-        aria-expanded="false"
-      >
+        className='btn btn-secondary dropdown-toggle'
+        type='button'
+        data-bs-toggle='dropdown'
+        aria-expanded='false'>
         User
       </button>
-      <ul className="dropdown-menu customDropDown">
+      <ul className='dropdown-menu customDropDown'>
         <li>
-          <a className="dropdown-item" href="ManageAccount">
+          <Link className='dropdown-item' to='/manageAccount'>
             Manage Accounts
-          </a>
+          </Link>
         </li>
-        <li>
-          <a className="dropdown-item" href="#/action-2">
-            User Activities
-          </a>
-        </li>
+
         <li>
           <a
-            className="dropdown-item"
+            className='dropdown-item'
             onClick={handleUserLogout}
-            href="/adminLoginPage"
-          >
+            href='/adminLoginPage'>
             Logout
           </a>
         </li>

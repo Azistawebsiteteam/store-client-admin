@@ -4,14 +4,15 @@
   top: 44px !important;
   left: -102px !important;
 }
-.btn-check:focus+.btn, .btn:focus {
+.btn-check:focus + .btn,
+.btn:focus {
   outline: 0;
   box-shadow: none !important;
 }
-.btn{
+.btn {
   font-size: 0.8rem !important;
 }
-.navText{
+.navText {
   font-family: revert;
   font-size: 1.5rem;
   font-weight: 600;
@@ -23,7 +24,7 @@
 /* pagination */
 .page-item.active .page-link {
   color: #fff !important;
-  background-color : #000 !important;
+  background-color: #000 !important;
   border-color: #000 !important;
 }
 .page-link {
@@ -255,7 +256,7 @@
   text-decoration: none;
   color: #000;
 }
-.customDropdownButton{
+.customDropdownButton {
   font-weight: 500;
   color: #303030;
   font-size: 14px;
@@ -303,7 +304,7 @@
   background-color: #fff;
 }
 
-.activePage{
+.activePage {
   padding: 0 !important;
 }
 
@@ -442,7 +443,6 @@ img.bImg {
   padding: 0 8px;
   margin-top: -20px;
 }
-
 
 /* productListing */
 
@@ -665,7 +665,7 @@ button#drobdownBtn {
   padding: 6px 10px;
   background-color: transparent;
 }
-.dropdownItems{
+.dropdownItems {
   color: #616161;
 }
 .childElements {
@@ -686,4 +686,10 @@ input.inventoryInput {
   width: 70%;
   border-radius: 8px;
   border: 1px solid darkslategray;
+}
+
+.reset-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }

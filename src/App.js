@@ -49,10 +49,224 @@ import ProductInfo from './Pages/ProductInfo';
 import FeaturesT from './Components/FeaturesT';
 import Cart from './Pages/Cart';
 import PopupListing from './Popup/PopupListing';
-import 'bootstrap/dist/css/bootstrap.css';
-import './Pages/Admin.css';
+
 import EditDiscount from './Discounts/EditDiscount';
 import AddCustomer from './Customers/AddCustomer';
+import ResetPassword from './Pages/ResetPassword';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import './Pages/Admin.css';
+
+// function App() {
+//   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
+//   const admJwt = Cookies.get(adminToken);
+
+//   return (
+//     <>
+//       {admJwt && <AdminNavbar />}
+//       <Routes>
+//         <Route path='/features' element={<FeaturesT />} />
+//         <Route path='/cart' element={<Cart />} />
+//         <Route
+//           path='/'
+//           element={
+//             <ProtectedRoute>
+//               <Home />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route path='/adminLoginPage' element={<AdminLoginPage />} />
+//         <Route
+//           path='/product/create'
+//           element={
+//             <ProtectedRoute>
+//               <AddProduct />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/products'
+//           element={
+//             <ProtectedRoute>
+//               <ProductListing />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/adminSidebar'
+//           element={
+//             <ProtectedRoute>
+//               <AdminSideBar />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/slider/create'
+//           element={
+//             <ProtectedRoute>
+//               <AddSlider />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/collections'
+//           element={
+//             <ProtectedRoute>
+//               <Collections />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/collections/create'
+//           element={
+//             <ProtectedRoute>
+//               <CreateCollections />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/manageAccount'
+//           element={
+//             <ProtectedRoute>
+//               <ManageAccount />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/collection/update/:id'
+//           element={
+//             <ProtectedRoute>
+//               <UpdateCollection />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/slider'
+//           element={
+//             <ProtectedRoute>
+//               <SlidersListing />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/product-banners'
+//           element={
+//             <ProtectedRoute>
+//               <ProductBannerListing />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route path='/edit/slider/:id' element={<EditSlider />} />
+//         <Route
+//           path='/product/update/:id'
+//           element={
+//             <ProtectedRoute>
+//               <UpdateProduct />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/product/info/:id'
+//           element={
+//             <ProtectedRoute>
+//               <ProductInfo />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/variant-details/:id'
+//           element={
+//             <ProtectedRoute>
+//               <VariantDetails />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/variantEdit/:id'
+//           element={
+//             <ProtectedRoute>
+//               <VariantEdit />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route path='/inventory' element={<Inventory />} />
+//         <Route
+//           path='/discount'
+//           element={
+//             <ProtectedRoute>
+//               <Discounts />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/discount/create'
+//           element={
+//             <ProtectedRoute>
+//               <CreateDiscount />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/discounts-edit/:id'
+//           element={
+//             <ProtectedRoute>
+//               <EditDiscount />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/brands'
+//           element={
+//             <ProtectedRoute>
+//               <Brands />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/brands/create'
+//           element={
+//             <ProtectedRoute>
+//               <CreateBrand />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route
+//           path='/edit-brand/:id'
+//           element={
+//             <ProtectedRoute>
+//               <EditBrand />
+//             </ProtectedRoute>
+//           }
+//         />
+//         <Route path='/variantsNew' element={<VariantsComponent />} />
+//         <Route path='/review-list' element={<ReviewList />} />
+//         <Route path='/announcement/create' element={<CreateAnnouncement />} />
+//         <Route path='/announcements' element={<Announcements />} />
+//         <Route path='/announcement/edit/:id' element={<EditAnnouncement />} />
+//         <Route path='/customers' element={<CustomersListing />} />
+//         <Route path='/dummy' element={<Dummy />} />
+//         <Route path='/customer/:id' element={<Customers />} />
+//         <Route path='add-customer' element={<AddCustomer />} />
+//         <Route path='/orders' element={<OrdersListing />} />
+//         <Route path='/orders/:id' element={<OrderDetails />} />
+//         <Route path='/blogs' element={<BlogsListing />} />
+//         <Route path='/blogs/create' element={<BlogsCreate />} />
+//         <Route path='/blogs/edit/:id' element={<BlogsEdit />} />
+//         <Route path='/faqs' element={<FaqList />} />
+//         <Route path='/faqs/create' element={<FaqCreate />} />
+//         <Route path='/edit-faq/:id' element={<FaqEdit />} />
+//         <Route path='/Categories' element={<Categories />} />
+//         <Route path='/category/create' element={<CategoriesCreate />} />
+//         <Route path='/edit-category/:id' element={<CategoriesEdit />} />
+//         <Route path='/popup' element={<PopupListing />} />
+//         <Route path='/reset-password' element={<ResetPawword />} />
+//         <Route path='*' element={<NotFound />} />
+//       </Routes>
+//     </>
+//   );
+// }
+
+// export default App;
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -60,202 +274,189 @@ function App() {
 
   return (
     <>
+      {/* Render AdminNavbar only if JWT exists */}
       {admJwt && <AdminNavbar />}
+
       <Routes>
-        <Route path='/features' element={<FeaturesT />} />
-        <Route path='/cart' element={<Cart />} />
-        <Route
-          path='/'
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
+        {/* Unprotected Routes */}
         <Route path='/adminLoginPage' element={<AdminLoginPage />} />
+
+        {/* Protected Routes */}
+        <Route path='/' element={<ProtectedRoute element={Home} />} />
+        <Route
+          path='/reset-password'
+          element={<ProtectedRoute element={ResetPassword} />}
+        />
         <Route
           path='/product/create'
-          element={
-            <ProtectedRoute>
-              <AddProduct />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={AddProduct} />}
         />
         <Route
           path='/products'
-          element={
-            <ProtectedRoute>
-              <ProductListing />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={ProductListing} />}
         />
         <Route
           path='/adminSidebar'
-          element={
-            <ProtectedRoute>
-              <AdminSideBar />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={AdminSideBar} />}
         />
         <Route
           path='/slider/create'
-          element={
-            <ProtectedRoute>
-              <AddSlider />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/collections'
-          element={
-            <ProtectedRoute>
-              <Collections />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/collections/create'
-          element={
-            <ProtectedRoute>
-              <CreateCollections />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/manageAccount'
-          element={
-            <ProtectedRoute>
-              <ManageAccount />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/collection/update/:id'
-          element={
-            <ProtectedRoute>
-              <UpdateCollection />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/slider'
-          element={
-            <ProtectedRoute>
-              <SlidersListing />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={AddSlider} />}
         />
         <Route
           path='/product-banners'
-          element={
-            <ProtectedRoute>
-              <ProductBannerListing />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={ProductBannerListing} />}
         />
-        <Route path='/edit/slider/:id' element={<EditSlider />} />
+        <Route
+          path='/collections'
+          element={<ProtectedRoute element={Collections} />}
+        />
+        <Route
+          path='/collections/create'
+          element={<ProtectedRoute element={CreateCollections} />}
+        />
+        <Route
+          path='/manageAccount'
+          element={<ProtectedRoute element={ManageAccount} />}
+        />
+        <Route
+          path='/collection/update/:id'
+          element={<ProtectedRoute element={UpdateCollection} />}
+        />
+        <Route
+          path='/slider'
+          element={<ProtectedRoute element={SlidersListing} />}
+        />
+        <Route
+          path='/edit/slider/:id'
+          element={<ProtectedRoute element={EditSlider} />}
+        />
         <Route
           path='/product/update/:id'
-          element={
-            <ProtectedRoute>
-              <UpdateProduct />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={UpdateProduct} />}
         />
         <Route
           path='/product/info/:id'
-          element={
-            <ProtectedRoute>
-              <ProductInfo />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={ProductInfo} />}
         />
         <Route
           path='/variant-details/:id'
-          element={
-            <ProtectedRoute>
-              <VariantDetails />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={VariantDetails} />}
         />
         <Route
           path='/variantEdit/:id'
-          element={
-            <ProtectedRoute>
-              <VariantEdit />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={VariantEdit} />}
         />
-        <Route path='/inventory' element={<Inventory />} />
+        <Route
+          path='/inventory'
+          element={<ProtectedRoute element={Inventory} />}
+        />
         <Route
           path='/discount'
-          element={
-            <ProtectedRoute>
-              <Discounts />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={Discounts} />}
         />
         <Route
           path='/discount/create'
-          element={
-            <ProtectedRoute>
-              <CreateDiscount />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={CreateDiscount} />}
         />
         <Route
           path='/discounts-edit/:id'
-          element={
-            <ProtectedRoute>
-              <EditDiscount />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={EditDiscount} />}
         />
-        <Route
-          path='/brands'
-          element={
-            <ProtectedRoute>
-              <Brands />
-            </ProtectedRoute>
-          }
-        />
+        <Route path='/brands' element={<ProtectedRoute element={Brands} />} />
         <Route
           path='/brands/create'
-          element={
-            <ProtectedRoute>
-              <CreateBrand />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={CreateBrand} />}
         />
         <Route
           path='/edit-brand/:id'
-          element={
-            <ProtectedRoute>
-              <EditBrand />
-            </ProtectedRoute>
-          }
+          element={<ProtectedRoute element={EditBrand} />}
         />
-        <Route path='/variantsNew' element={<VariantsComponent />} />
-        <Route path='/review-list' element={<ReviewList />} />
-        <Route path='/announcement/create' element={<CreateAnnouncement />} />
-        <Route path='/announcements' element={<Announcements />} />
-        <Route path='/announcement/edit/:id' element={<EditAnnouncement />} />
-        <Route path='/customers' element={<CustomersListing />} />
-        <Route path='/dummy' element={<Dummy />} />
-        <Route path='/customer/:id' element={<Customers />} />
-        <Route path='add-customer' element={<AddCustomer />} />
-        <Route path='/orders' element={<OrdersListing />} />
-        <Route path='/orders/:id' element={<OrderDetails />} />
-        <Route path='/blogs' element={<BlogsListing />} />
-        <Route path='/blogs/create' element={<BlogsCreate />} />
-        <Route path='/blogs/edit/:id' element={<BlogsEdit />} />
-        <Route path='/faqs' element={<FaqList />} />
-        <Route path='/faqs/create' element={<FaqCreate />} />
-        <Route path='/edit-faq/:id' element={<FaqEdit />} />
-        <Route path='/Categories' element={<Categories />} />
-        <Route path='/category/create' element={<CategoriesCreate />} />
-        <Route path='/edit-category/:id' element={<CategoriesEdit />} />
-        <Route path='/popup' element={<PopupListing />} />
+        <Route
+          path='/variantsNew'
+          element={<ProtectedRoute element={VariantsComponent} />}
+        />
+        <Route
+          path='/review-list'
+          element={<ProtectedRoute element={ReviewList} />}
+        />
+        <Route
+          path='/announcement/create'
+          element={<ProtectedRoute element={CreateAnnouncement} />}
+        />
+        <Route
+          path='/announcements'
+          element={<ProtectedRoute element={Announcements} />}
+        />
+        <Route
+          path='/announcement/edit/:id'
+          element={<ProtectedRoute element={EditAnnouncement} />}
+        />
+        <Route
+          path='/customers'
+          element={<ProtectedRoute element={CustomersListing} />}
+        />
+
+        <Route
+          path='/customer/:id'
+          element={<ProtectedRoute element={Customers} />}
+        />
+        <Route
+          path='/add-customer'
+          element={<ProtectedRoute element={AddCustomer} />}
+        />
+        <Route
+          path='/orders'
+          element={<ProtectedRoute element={OrdersListing} />}
+        />
+        <Route
+          path='/orders/:id'
+          element={<ProtectedRoute element={OrderDetails} />}
+        />
+        <Route
+          path='/blogs'
+          element={<ProtectedRoute element={BlogsListing} />}
+        />
+        <Route
+          path='/blogs/create'
+          element={<ProtectedRoute element={BlogsCreate} />}
+        />
+        <Route
+          path='/blogs/edit/:id'
+          element={<ProtectedRoute element={BlogsEdit} />}
+        />
+        <Route path='/faqs' element={<ProtectedRoute element={FaqList} />} />
+        <Route
+          path='/faqs/create'
+          element={<ProtectedRoute element={FaqCreate} />}
+        />
+        <Route
+          path='/edit-faq/:id'
+          element={<ProtectedRoute element={FaqEdit} />}
+        />
+        <Route
+          path='/Categories'
+          element={<ProtectedRoute element={Categories} />}
+        />
+        <Route
+          path='/category/create'
+          element={<ProtectedRoute element={CategoriesCreate} />}
+        />
+        <Route
+          path='/edit-category/:id'
+          element={<ProtectedRoute element={CategoriesEdit} />}
+        />
+        <Route
+          path='/popup'
+          element={<ProtectedRoute element={PopupListing} />}
+        />
+        <Route
+          path='/features'
+          element={<ProtectedRoute element={FeaturesT} />}
+        />
+        <Route path='/cart' element={<ProtectedRoute element={Cart} />} />
+        <Route path='/dummy' element={<ProtectedRoute element={Dummy} />} />
+        {/* Fallback NotFound Route */}
         <Route path='*' element={<NotFound />} />
       </Routes>
     </>

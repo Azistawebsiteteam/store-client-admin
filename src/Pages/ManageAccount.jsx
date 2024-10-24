@@ -1,8 +1,8 @@
-import axios from "axios";
-import Cookies from "js-cookie";
-import React, { useEffect, useState } from "react";
-import AdminSideBar from "./AdminSideBar";
-import ErrorHandler from "./ErrorHandler";
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import React, { useEffect, useState } from 'react';
+import AdminSideBar from './AdminSideBar';
+import ErrorHandler from './ErrorHandler';
 
 const ManageAccount = () => {
   const baseUrl = process.env.REACT_APP_API_URL;
@@ -10,16 +10,10 @@ const ManageAccount = () => {
   let token = Cookies.get(adminToken);
 
   const [inputValues, setInputValue] = useState({
-    fullName: "",
-    email: "",
-    mobileNumber: "",
-    profilePic: "",
-  });
-
-  const [userCredential, setUserCredential] = useState({
-    currentPassword: "",
-    newPassword: "",
-    confirmPassword: "",
+    fullName: '',
+    email: '',
+    mobileNumber: '',
+    profilePic: '',
   });
 
   useEffect(() => {
@@ -49,7 +43,7 @@ const ManageAccount = () => {
 
   const handleUserInfo = (e) => {
     const { id, value } = e.target;
-    if (id === "profilePic") {
+    if (id === 'profilePic') {
       setInputValue((prevState) => ({
         ...prevState,
         profilePic: e.target.files[0],
@@ -67,14 +61,14 @@ const ManageAccount = () => {
       const url = `${baseUrl}/adminauth/update/details`;
       const headers = {
         Authorization: `Bearer ${token}`,
-        "Content-type": "multipart/form-data",
+        'Content-type': 'multipart/form-data',
       };
       const formData = new FormData();
 
-      formData.append("fullName", inputValues.fullName);
-      formData.append("email", inputValues.email);
-      formData.append("mobileNumber", inputValues.mobileNumber);
-      formData.append("profilePic", inputValues.profilePic);
+      formData.append('fullName', inputValues.fullName);
+      formData.append('email', inputValues.email);
+      formData.append('mobileNumber', inputValues.mobileNumber);
+      formData.append('profilePic', inputValues.profilePic);
 
       // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formData, { headers });
@@ -84,85 +78,53 @@ const ManageAccount = () => {
     }
   };
 
-  const handleUserCredential = (e) => {
-    const { id, value } = e.target;
-    setUserCredential({ ...userCredential, [id]: value });
-  };
-
-  const onResetPassword = async () => {
-    const { newPassword, confirmPassword, currentPassword } = userCredential;
-    if (newPassword !== confirmPassword) {
-      alert("Password didn't match");
-      return;
-    }
-    try {
-      const url = `${baseUrl}/adminauth/reset-password`;
-      const body = {
-        currentPassword,
-        newPassword,
-      };
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-type": `application/json`,
-      };
-
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post(url, body, { headers });
-    } catch (error) {
-      ErrorHandler.onError(error);
-    }
-  };
-
   return (
-    <div className="adminSec">
+    <div className='adminSec'>
       <AdminSideBar />
-      <div className="commonSec">
-        <div className="manageAccountSec">
-          <div className="container">
-            <div className="row">
-              <div className="col-md-12">
-                <h5 className="mb-4">Manage Account</h5>
+      <div className='commonSec'>
+        <div className='manageAccountSec'>
+          <div className='container'>
+            <div className='row'>
+              <div className='col-md-12'>
+                <h5 className='mb-4'>Manage Account</h5>
               </div>
-              <div className="col-md-4">
-                <h6>Details</h6>
-              </div>
-              <div className="col-md-8">
-                <div className="bgStyle">
+              <div className='col-12'>
+                <div className='bgStyle'>
                   {inputValues.profilePic ? (
                     <img
-                      className="userProfile"
+                      className='userProfile'
                       src={inputValues.profilePic}
-                      alt="Profile Pic"
+                      alt='Profile Pic'
                     />
                   ) : (
-                    ""
+                    ''
                   )}
                   <input
-                    type="file"
-                    id="profilePic"
+                    type='file'
+                    id='profilePic'
                     onChange={handleUserInfo}
                   />
                   <hr />
-                  <div className="row">
-                    <div className="col">
-                      <label htmlFor="fullName">Full name</label>
+                  <div className='row'>
+                    <div className='col'>
+                      <label htmlFor='fullName'>Full name</label>
                       <input
-                        type="text"
-                        className="form-control"
-                        id="fullName"
+                        type='text'
+                        className='form-control'
+                        id='fullName'
                         onChange={handleUserInfo}
                         value={inputValues.fullName}
-                        placeholder="Full name"
+                        placeholder='Full name'
                       />
                     </div>
-                    <div className="col">
-                      <label htmlFor="userName">User name</label>
+                    <div className='col'>
+                      <label htmlFor='userName'>User name</label>
                       <input
-                        type="text"
-                        className="form-control"
-                        id="userName"
+                        type='text'
+                        className='form-control'
+                        id='userName'
                         value={inputValues.userName}
-                        placeholder="User name"
+                        placeholder='User name'
                         disabled
                       />
                     </div>
@@ -172,79 +134,36 @@ const ManageAccount = () => {
                     </p>
                   </div>
                   <hr />
-                  <div className="row">
-                    <div className="col">
-                      <label htmlFor="email">Email</label>
+                  <div className='row'>
+                    <div className='col'>
+                      <label htmlFor='email'>Email</label>
                       <input
-                        type="email"
-                        className="form-control"
+                        type='email'
+                        className='form-control'
                         onChange={handleUserInfo}
-                        id="email"
+                        id='email'
                         value={inputValues.email}
-                        placeholder="Email"
+                        placeholder='Email'
                       />
                     </div>
                   </div>
                   <hr />
-                  <div className="row">
-                    <div className="col">
-                      <label htmlFor="mobileNumber">Phone</label>
+                  <div className='row'>
+                    <div className='col'>
+                      <label htmlFor='mobileNumber'>Phone</label>
                       <input
-                        type="text"
-                        className="form-control"
+                        type='text'
+                        className='form-control'
                         onChange={handleUserInfo}
-                        id="mobileNumber"
+                        id='mobileNumber'
                         value={inputValues.mobileNumber}
-                        placeholder="Contact Number"
+                        placeholder='Contact Number'
                       />
                     </div>
                   </div>
-                  <div className="text-end mt-3">
-                    <button className="adminBtn" onClick={onSaveDetails}>
+                  <div className='text-end mt-3'>
+                    <button className='adminBtn' onClick={onSaveDetails}>
                       Save Details
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <hr className="mt-3 mb-3" />
-              <div className="col-md-4">
-                <h6>Change your password</h6>
-              </div>
-              <div className="col-md-8">
-                <div className="bgStyle">
-                  <div className="col">
-                    <label htmlFor="currentPassword">Current password</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="currentPassword"
-                      onChange={handleUserCredential}
-                      value={userCredential.currentPassword}
-                    />
-                  </div>
-                  <div className="col">
-                    <label htmlFor="newPassword">New password</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="newPassword"
-                      onChange={handleUserCredential}
-                      value={userCredential.newPassword}
-                    />
-                  </div>
-                  <div className="col">
-                    <label htmlFor="confirmPassword">Confirm password</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="confirmPassword"
-                      onChange={handleUserCredential}
-                      value={userCredential.confirmPassword}
-                    />
-                  </div>
-                  <div className="text-end mt-3">
-                    <button className="adminBtn" onClick={onResetPassword}>
-                      Reset Password
                     </button>
                   </div>
                 </div>
