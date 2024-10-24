@@ -17,7 +17,7 @@ const FaqList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const tableRef = useRef(null);
 
-  const logsPerPage = 10; // number of logs per page
+  const logsPerPage = 8; // number of logs per page
   const maxPagesToShow = 10; // Maximum number of page buttons to display
 
   const totalPages = Math.ceil(totalFaqs / logsPerPage);
