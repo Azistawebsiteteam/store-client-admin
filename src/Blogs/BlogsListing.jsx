@@ -73,7 +73,7 @@ const BlogsListing = () => {
         <div className="tableCont">
           <table className="table table-hover" style={{ minWidth: "1000px" }}>
             <thead>
-              <tr>
+              <tr className="tableHeader">
                 <th scope="col">S.No</th>
                 <th scope="col">Title</th>
                 <th scope="col">Description</th>

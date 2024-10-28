@@ -8,57 +8,58 @@ import { Link } from "react-router-dom";
 
 import swalHandle from "../Pages/ErrorHandler";
 import AdminSideBar from "../Pages/AdminSideBar";
+import Pagination from "../Components/Pagination";
 
 const FaqList = () => {
-  const [totalFaqs, setTotalFaqs] = useState(0);
-  const [fullFaqsList, setFullFaqsList] = useState([]); // Store full list
+  const [totalFaqs, setTotalFaqs] = useState(0); //totalItems
+  const [fullFaqsList, setFullFaqsList] = useState([]); // Store full list listOfItems
   const [filteredFaqsList, setFilteredFaqsList] = useState([]); // For pagination
   const [faqType, setFaqType] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const tableRef = useRef(null);
 
-  const logsPerPage = 8; // number of logs per page
-  const maxPagesToShow = 10; // Maximum number of page buttons to display
+  const logsPerPage = 10; // number of logs per page
+  // const maxPagesToShow = 10; // Maximum number of page buttons to display
 
-  const totalPages = Math.ceil(totalFaqs / logsPerPage);
+  // const totalPages = Math.ceil(totalFaqs / logsPerPage);
 
-  const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  // const handlePageChange = (page) => {
+  //   if (page > 0 && page <= totalPages) {
+  //     setCurrentPage(page);
+  //   }
+  // };
 
   const changeFaqType = (e) => {
     setCurrentPage(1);
     setFaqType(e.target.value);
   };
 
-  const renderPageNumbers = () => {
-    const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
-    let startPage = Math.max(currentPage - halfMaxPagesToShow, 1);
-    let endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
+  // const renderPageNumbers = () => {
+  //   const halfMaxPagesToShow = Math.floor(maxPagesToShow / 2);
+  //   let startPage = Math.max(currentPage - halfMaxPagesToShow, 1);
+  //   let endPage = Math.min(startPage + maxPagesToShow - 1, totalPages);
 
-    if (endPage - startPage + 1 < maxPagesToShow) {
-      startPage = Math.max(endPage - maxPagesToShow + 1, 1);
-    }
+  //   if (endPage - startPage + 1 < maxPagesToShow) {
+  //     startPage = Math.max(endPage - maxPagesToShow + 1, 1);
+  //   }
 
-    const pageNumbers = [];
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <li
-          key={i}
-          className={`page-item ${
-            i === currentPage ? "active activePage" : ""
-          }`}
-        >
-          <span className="page-link" onClick={() => handlePageChange(i)}>
-            {i}
-          </span>
-        </li>
-      );
-    }
-    return pageNumbers;
-  };
+  //   const pageNumbers = [];
+  //   for (let i = startPage; i <= endPage; i++) {
+  //     pageNumbers.push(
+  //       <li
+  //         key={i}
+  //         className={`page-item ${
+  //           i === currentPage ? "active activePage" : ""
+  //         }`}
+  //       >
+  //         <span className="page-link" onClick={() => handlePageChange(i)}>
+  //           {i}
+  //         </span>
+  //       </li>
+  //     );
+  //   }
+  //   return pageNumbers;
+  // };
 
   const faqTypes = [
     "General",
@@ -96,12 +97,12 @@ const FaqList = () => {
     getFaqs();
   }, [getFaqs]);
 
-  useEffect(() => {
-    const startIndex = (currentPage - 1) * logsPerPage;
-    const endIndex = startIndex + logsPerPage;
-    const filfaq = fullFaqsList.slice(startIndex, endIndex);
-    setFilteredFaqsList(filfaq);
-  }, [fullFaqsList, currentPage]);
+  // useEffect(() => {
+  //   const startIndex = (currentPage - 1) * logsPerPage;
+  //   const endIndex = startIndex + logsPerPage;
+  //   const filfaq = fullFaqsList.slice(startIndex, endIndex);
+  //   setFilteredFaqsList(filfaq);
+  // }, [fullFaqsList, currentPage]);
 
   const deleteFaq = async (id) => {
     try {
@@ -146,7 +147,7 @@ const FaqList = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="col-12 mt-2 mb-2 d-flex justify-content-between align-items-center">
+        <div className="mt-2 mb-2 d-flex justify-content-between align-items-center">
           <h4>FAQ's</h4>
           <button
             className="btn btn-success"
@@ -167,7 +168,7 @@ const FaqList = () => {
             Create FAQ
           </Link>
         </div>
-        <div className="col-sm-12">
+        <div className="middleSec">
           {filteredFaqsList.length ? (
             <div className="tableCont">
               <table
@@ -176,7 +177,7 @@ const FaqList = () => {
                 ref={tableRef}
               >
                 <thead>
-                  <tr>
+                  <tr className="tableHeader">
                     <th scope="col">S.No</th>
                     <th scope="col">FAQ Question</th>
                     <th scope="col">FAQ Answer</th>
@@ -215,48 +216,60 @@ const FaqList = () => {
             <p>No FAQs Found</p>
           )}
         </div>
-        <div className="col-sm-12 d-flex justify-content-between align-items-center">
-          <p>
-            Showing {Math.min(currentPage * logsPerPage, totalFaqs)} out of{" "}
-            {totalFaqs}
-          </p>
+        <Pagination
+          logsPerPage={logsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalItems={totalFaqs}
+          listOfItems={fullFaqsList}
+          setFilteredItemsList={setFilteredFaqsList}
+        />
+        {/* <div className="paginationCont">
+          <div className="col-sm-12 d-flex justify-content-between align-items-center">
+            <p>
+              Showing {Math.min(currentPage * logsPerPage, totalFaqs)} out of{" "}
+              {totalFaqs}
+            </p>
 
-          {totalPages > 1 && (
-            <div className="mt-2 d-flex justify-content-end">
-              <nav aria-label="Page navigation">
-                <ul className="pagination">
-                  <li
-                    className={`page-item ${
-                      currentPage === 1 ? "disabled" : ""
-                    }`}
-                  >
-                    <span
-                      className="page-link"
-                      aria-label="Previous"
-                      onClick={() => handlePageChange(currentPage - 1)}
+            {totalPages > 1 && (
+              <div className="mt-2 d-flex justify-content-end">
+                <nav aria-label="Page navigation">
+                  <ul className="pagination">
+                    <li
+                      className={`page-item ${
+                        currentPage === 1 ? "disabled" : ""
+                      }`}
+                      style={{ cursor: "pointer" }}
                     >
-                      &laquo;
-                    </span>
-                  </li>
-                  {renderPageNumbers()}
-                  <li
-                    className={`page-item ${
-                      currentPage === totalPages ? "disabled" : ""
-                    }`}
-                  >
-                    <span
-                      className="page-link"
-                      aria-label="Next"
-                      onClick={() => handlePageChange(currentPage + 1)}
+                      <span
+                        className="page-link"
+                        aria-label="Previous"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                      >
+                        &laquo;
+                      </span>
+                    </li>
+                    {renderPageNumbers()}
+                    <li
+                      className={`page-item ${
+                        currentPage === totalPages ? "disabled" : ""
+                      }`}
+                      style={{ cursor: "pointer" }}
                     >
-                      &raquo;
-                    </span>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          )}
-        </div>
+                      <span
+                        className="page-link"
+                        aria-label="Next"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                      >
+                        &raquo;
+                      </span>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            )}
+          </div>
+        </div> */}
       </div>
     </div>
   );
