@@ -1,6 +1,7 @@
 * {
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 body {
   margin: 0;
@@ -27,7 +28,7 @@ code {
 }
 
 div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
-  background-color: #28d20a;
+  background-color: #7066e0;
   color: #fff;
 }
 

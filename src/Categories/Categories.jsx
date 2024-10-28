@@ -98,7 +98,7 @@ const Categories = () => {
             ref={tableRef}
           >
             <thead>
-              <tr>
+              <tr className="tableHeader">
                 <th scope="col">#</th>
                 <th scope="col">Category Image</th>
                 <th scope="col">Category Name</th>

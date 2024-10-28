@@ -12,6 +12,9 @@
 .btn {
   font-size: 0.8rem !important;
 }
+.form-check-input:checked {
+  background-color: black !important;
+}
 .navText {
   font-family: revert;
   font-size: 1.5rem;
@@ -125,8 +128,10 @@ ul.dropdownMenu {
   min-width: 210px;
   position: fixed;
   height: 100vh;
-  overflow: auto;
   top: 50px;
+}
+.sidebarCont:hover{
+  overflow: auto;
 }
 .searchInputCont {
   background-color: #f1f2f4;
@@ -329,9 +334,27 @@ ul.dropdownMenu {
   background-color: #f1f1f1;
   width: 100%;
   margin-left: 220px;
-  padding: 80px 15px;
+  padding: 80px 15px 0 15px;
   height: 100vh;
-  overflow: hidden;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+.middleSec {
+  min-height: 68vh;
+  padding-bottom: 4rem;
+}
+tr.tableHeader {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+}
+.paginationCont {
+  position: fixed;
+  background: #f1f1f1;
+  bottom: 0;
+  width: 81% !important;
+  z-index: 3;
+  min-height: 62px;
 }
 .infoTxt {
   font-size: 14px;

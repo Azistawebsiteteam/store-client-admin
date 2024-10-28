@@ -80,7 +80,7 @@ const Brands = () => {
                   style={{ minWidth: "1000px" }}
                 >
                   <thead>
-                    <tr>
+                    <tr className="tableHeader">
                       <th scope="col">#</th>
                       <th scope="col">Brand Logo</th>
                       <th scope="col">Brand Name</th>

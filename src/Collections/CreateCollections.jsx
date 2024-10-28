@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import axios from "axios";
 import CollectionForm from "./CollectionForm";
@@ -19,6 +20,7 @@ const CreateCollections = () => {
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(tokenKey);
   const baseUrl = process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
 
   const onSubmitCollection = async () => {
     try {
@@ -53,6 +55,7 @@ const CreateCollections = () => {
       await axios.post(url, formdata, { headers });
       swalErr.onLoadingClose();
       swalErr.onSuccess();
+      navigate(-1);
     } catch (error) {
       swalErr.onLoadingClose();
       swalErr.onError(error);

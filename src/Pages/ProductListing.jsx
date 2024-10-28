@@ -6,13 +6,18 @@ import axios from "axios";
 import { IoMdEye } from "react-icons/io";
 import swalHandle from "./ErrorHandler";
 import "./Admin.css";
+import Pagination from "../Components/Pagination";
 
 const ProductListing = () => {
   const [productsList, setProductsList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [filteredProductsList, setFilteredProductsList] = useState([]);
 
   const baseUrl = process.env.REACT_APP_API_URL;
-  //const localUrl = process.env.REACT_APP_LOCAL_URL;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
+
+  const logsPerPage = 10;
 
   useEffect(() => {
     const productDetails = async () => {
@@ -24,7 +29,9 @@ const ProductListing = () => {
         swalHandle.onLoading();
         const response = await axios.post(url, {}, { headers });
         swalHandle.onLoadingClose();
-        setProductsList(response.data.products);
+        const totalItems = response.data.products;
+        setProductsList(totalItems);
+        setTotalProducts(totalItems.length);
       } catch (error) {
         swalHandle.onLoadingClose();
         swalHandle.onError(error);
@@ -45,30 +52,34 @@ const ProductListing = () => {
                 Add Products
               </Link>
             </div>
-            <div className="col-sm-12">
+            <div className="middleSec">
               <div className="tableCont">
                 <table
                   className="table table-hover"
                   style={{ minWidth: "1200px" }}
                 >
                   <thead>
-                    <tr>
+                    <tr className="tableHeader">
                       <th className="sticky-column" scope="col">
                         #
                       </th>
                       <th scope="col">Product</th>
                       <th scope="col"></th>
                       <th scope="col">Status</th>
-                      <th scope="col">Inventory</th>
+                      <th scope="col" style={{ width: "10%" }}>
+                        Inventory
+                      </th>
                       <th scope="col">Sales channels</th>
                       <th scope="col">Markets</th>
                       <th scope="col">Category</th>
-                      <th scope="col">Vendor</th>
+                      <th style={{ width: "  14%" }} scope="col">
+                        Vendor
+                      </th>
                       <th scope="col">Actons</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {productsList.map((p) => (
+                    {filteredProductsList.map((p) => (
                       <tr key={p.product_id}>
                         <td
                           className="sticky-column"
@@ -94,7 +105,7 @@ const ProductListing = () => {
                           </a>
                         </td>
                         <td>{p.status === 1 ? "Active" : "Draft"}</td>
-                        <td>
+                        <td style={{ width: "10%" }}>
                           {p.total_variants === 0 || null
                             ? `${p.total_variant_quantity} in stock`
                             : `${p.total_variant_quantity} in stock for ${p.total_variants} variants`}
@@ -102,7 +113,7 @@ const ProductListing = () => {
                         <td>null</td>
                         <td>Indian Market</td>
                         <td>{p.product_category}</td>
-                        <td>{p.azst_vendor_name}</td>
+                        <td style={{ width: "14%" }}>{p.azst_vendor_name}</td>
                         <td>
                           <Link to={`/product/info/${p.product_id}`}>
                             <input type="button" value="Add Info" />
@@ -114,6 +125,14 @@ const ProductListing = () => {
                 </table>
               </div>
             </div>
+            <Pagination
+              logsPerPage={logsPerPage}
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalItems={totalProducts}
+              listOfItems={productsList}
+              setFilteredItemsList={setFilteredProductsList}
+            />
           </div>
         </div>
       </div>
