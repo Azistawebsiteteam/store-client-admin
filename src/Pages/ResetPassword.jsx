@@ -91,7 +91,7 @@ const ResetPassword = () => {
       <AdminSideBar />
       <div className='commonSec'>
         <div className='reset-password-container'>
-          <div className={`${isMobile ? 'w-75' : 'w-25'} mt-5`}>
+          <div className={`${isMobile ? 'w-100' : 'w-50'} mt-5`}>
             <Box component='form' onSubmit={onChangePassword}>
               <FormControl
                 fullWidth
