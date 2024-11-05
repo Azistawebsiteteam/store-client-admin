@@ -155,7 +155,8 @@ const DiscountForm = (props) => {
   // };
 
   const handleCustomerEligibility = (e) => {
-    setCustEligibility(e.target.value);
+    const value = e.target.value === "allCustomers" ? "all" : e.target.value;
+    setCustEligibility(value);
   };
 
   const handleMaxDisUses = (e) => {
@@ -204,6 +205,8 @@ const DiscountForm = (props) => {
   const handleMaxUses = (e) => {
     setMaxUses(e.target.checked);
   };
+
+  console.log(custEligibility === "allCustomers", "ggg");
 
   return (
     <div>
