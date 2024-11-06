@@ -4,7 +4,7 @@ import axios from "axios";
 import AdminSideBar from "../Pages/AdminSideBar";
 import swalHandle from "../Pages/ErrorHandler";
 import FaqForm from "./FaqForm";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import BackBtn from "../Components/BackBtn";
 
 const FaqEdit = () => {
@@ -37,6 +37,8 @@ const FaqEdit = () => {
     getFaqDetials();
   }, [getFaqDetials]);
 
+  const navigate = useNavigate();
+
   const onUpdateFaq = async (e) => {
     try {
       const url = baseUrl;
@@ -47,6 +49,7 @@ const FaqEdit = () => {
       await axios.put(url, { id, ...inputVlaues }, { headers });
       swalHandle.onLoadingClose();
       swalHandle.onSuccess();
+      navigate(-1);
     } catch (error) {
       swalHandle.onLoadingClose();
       swalHandle.onError(error);

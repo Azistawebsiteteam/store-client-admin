@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import React, { useState } from "react";
+import axios from "axios";
+import Cookies from "js-cookie";
 
-import AdminSideBar from '../Pages/AdminSideBar';
-import swalHandle from '../Pages/ErrorHandler';
-import FaqForm from './FaqForm';
-import { useNavigate } from 'react-router-dom';
-import BackBtn from '../Components/BackBtn';
+import AdminSideBar from "../Pages/AdminSideBar";
+import swalHandle from "../Pages/ErrorHandler";
+import FaqForm from "./FaqForm";
+import { useNavigate } from "react-router-dom";
+import BackBtn from "../Components/BackBtn";
 
 const FaqCreate = () => {
   const [inputVlaues, setInputValues] = useState({
-    type: '',
-    question: '',
-    answer: '',
+    type: "",
+    question: "",
+    answer: "",
     productId: 0,
   });
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const FaqCreate = () => {
       swalHandle.onLoadingClose();
       swalHandle.onSuccess();
       setTimeout(() => {
-        navigate('/faqs');
+        navigate("/faqs");
       }, 2000);
     } catch (error) {
       swalHandle.onLoadingClose();
@@ -40,21 +40,21 @@ const FaqCreate = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <div>
         <AdminSideBar />
       </div>
-      <div className='commonSec'>
-        <div className='d-flex align-items-center'>
+      <div className="commonSec">
+        <div className="d-flex align-items-center">
           <BackBtn /> <h3>Create Faq</h3>
         </div>
         <FaqForm inputVlaues={inputVlaues} setInputValues={setInputValues} />
-        <button className='btn btn-primary' onClick={onSubmitFaq}>
+        <button className="btn btn-primary" onClick={onSubmitFaq}>
           Save
         </button>
       </div>
 
-      <hr style={{ color: 'grey' }} />
+      <hr style={{ color: "grey" }} />
     </div>
   );
 };

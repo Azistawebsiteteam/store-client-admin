@@ -360,6 +360,8 @@ const EditDiscount = () => {
     setMaxUses,
   };
 
+  console.log(custEligibility, "custEligibility");
+
   return (
     <div className="adminSec">
       <AdminSideBar />

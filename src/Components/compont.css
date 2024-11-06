@@ -43,7 +43,7 @@ input#webBanner {
 
 .img-input {
   position: absolute;
-  left: 10%;
+  left: 0;
   opacity: 0;
 }
 
