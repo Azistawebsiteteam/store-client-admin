@@ -78,3 +78,7 @@ input#webBanner {
 .heading {
   min-width: 45px;
 }
+
+li.page-item {
+  cursor: pointer;
+}
