@@ -124,7 +124,7 @@ const Inventory = () => {
 
   const saveValues = async () => {
     try {
-      const url = `${localUrl}/inventory/update/product-qty`;
+      const url = `${baseUrl}/inventory/update/product-qty`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
