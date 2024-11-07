@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import "./compont.css";
 
 const Pagination = ({
   logsPerPage,
@@ -30,7 +31,11 @@ const Pagination = ({
             i === currentPage ? "active activePage" : ""
           }`}
         >
-          <span className="page-link" onClick={() => handlePageChange(i)}>
+          <span
+            className="page-link"
+            style={{ cursor: "pointer" }}
+            onClick={() => handlePageChange(i)}
+          >
             {i}
           </span>
         </li>

@@ -156,6 +156,7 @@ ul.dropdownMenu {
   border-radius: 50%;
   height: 50px;
   border: 0.5px solid grey;
+  margin-right: 10px;
 }
 .nav_social_icon {
   font-size: 50px;
