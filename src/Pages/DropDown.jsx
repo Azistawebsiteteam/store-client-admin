@@ -6,6 +6,7 @@ import { RiAccountPinCircleLine } from 'react-icons/ri';
 import { CiLogout } from 'react-icons/ci';
 import { MdLockReset } from 'react-icons/md';
 import './Admin.css';
+import Swal from 'sweetalert2';
 
 function BasicButtonExample() {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -16,9 +17,16 @@ function BasicButtonExample() {
   };
 
   const handleUserLogout = () => {
+    Swal.fire({
+      icon: 'success',
+      title: 'logged out',
+      showConfirmButton: false,
+      timer: 3000,
+    });
     window.location.replace('/adminLoginPage');
     Cookies.remove(adminToken);
   };
+
   return (
     <div className='dropdown'>
       {showDropdown ? (

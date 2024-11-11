@@ -21,6 +21,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import './index.css';
+import Swal from 'sweetalert2';
 
 const AdminLoginPage = () => {
   const [inputValues, setInputValues] = useState({
@@ -54,8 +55,14 @@ const AdminLoginPage = () => {
   // On successful login, store the JWT and admin details
   const onSubmitSuccess = (userDetails, jwtToken) => {
     localStorage.setItem('adminDetails', JSON.stringify(userDetails));
-    Cookies.set(jwt_token, jwtToken);
-    window.location.reload('/');
+    Cookies.set(jwt_token, jwtToken, { expires: 365 });
+    Swal.fire({
+      icon: 'success',
+      title: 'Please Wait Redirecting to Dashboard ...',
+      showConfirmButton: false,
+      timer: 3000,
+    });
+    window.location.replace('/');
   };
 
   // Handle form submission
