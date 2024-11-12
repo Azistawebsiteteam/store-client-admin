@@ -25,7 +25,7 @@ import CreateDiscount from './Discounts/CreateDiscount';
 import CreateBrand from './Brands/CreateBrand';
 import EditBrand from './Brands/EditBrand';
 import VariantsComponent from './Pages/VariantsComponent';
-import ReviewList from './Pages/ReviewList';
+import ReviewList from './Reviews/ReviewList';
 import EditSlider from './Banners/EditSlider';
 import CreateAnnouncement from './AnnouncementBar/CreateAnnouncement';
 import Announcements from './AnnouncementBar/Announcements';
@@ -56,6 +56,7 @@ import ResetPassword from './Pages/ResetPassword';
 
 import 'bootstrap/dist/css/bootstrap.css';
 import './Pages/Admin.css';
+import ReviewDetails from './Reviews/ReviewDetails';
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -168,6 +169,10 @@ function App() {
         <Route
           path='/review-list'
           element={<ProtectedRoute element={ReviewList} />}
+        />
+        <Route
+          path='/review-details/:reviewId'
+          element={<ProtectedRoute element={ReviewDetails} />}
         />
         <Route
           path='/announcement/create'

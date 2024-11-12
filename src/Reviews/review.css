@@ -1,0 +1,15 @@
+.displayIeviewImgsCont {
+  display: flex;
+  overflow-x: auto;
+  width: 96%;
+}
+
+.displayIeviewImg {
+  width: 66px;
+  margin-right: 8px;
+}
+
+.product-image {
+  width: 100px;
+  margin-right: 8px;
+}
