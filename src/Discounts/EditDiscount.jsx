@@ -52,6 +52,7 @@ const EditDiscount = () => {
   const [customersList, setCustomersList] = useState([]);
   const [updatedProductsList, setUpdatedProductsList] = useState([]);
   const [collectionsList, setCollectionsList] = useState([]);
+  const [productDisTypeValue, setProductDisTypeValue] = useState("");
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -82,7 +83,6 @@ const EditDiscount = () => {
         return null;
     }
   };
-
   const typeValue = () => {
     if (amtOfPrdctsDscntVal) {
       return amtOfPrdctsDscntVal;
@@ -194,8 +194,12 @@ const EditDiscount = () => {
           setDisCode(details.code);
           setMethodTab(details.method);
           setAmtOfPrdctsDscntVal(details.type);
-          setDiscountedValues(details.type);
-          setDiscountVal(details.value);
+          if (details.type === "percentage" && details.value === 100) {
+            setDiscountedValues("free");
+          } else {
+            setDiscountedValues(details.type);
+            setDiscountVal(details.value);
+          }
 
           setStartTimings({
             startDate: dateFormatter(details.start_time, "YYYY-MM-DD"),
@@ -268,7 +272,7 @@ const EditDiscount = () => {
           code: disCode,
           method: method,
           type: typeValue(),
-          value: discountedValues === "free" ? "100" : discountVal,
+          value: discountedValues === "free" ? 100 : discountVal,
           startTime: `${startTimings.startDate} ${startTimings.startTime}`,
           endTime: `${endTimings.endDate} ${endTimings.endTime}`,
           usageCount: maxDisUses === "mutipleTimeDiscntUses" ? usageLimit : 1,
@@ -358,9 +362,9 @@ const EditDiscount = () => {
     setEndDate,
     maxUses,
     setMaxUses,
+    productDisTypeValue,
+    setProductDisTypeValue,
   };
-
-  console.log(custEligibility, "custEligibility");
 
   return (
     <div className="adminSec">

@@ -43,6 +43,7 @@ const CreateDiscount = () => {
     maxGetYQty: null,
   });
   const [customerGetsItems, setCustomerGetsItems] = useState("collection");
+  const [productDisTypeValue, setProductDisTypeValue] = useState("");
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -70,6 +71,8 @@ const CreateDiscount = () => {
         return "percentage";
       } else if (discountedValues === "flat") {
         return "flat";
+      } else if (discountedValues === "product") {
+        return "product";
       } else {
         return "percentage";
       }
@@ -122,6 +125,8 @@ const CreateDiscount = () => {
     setEndDate,
     maxUses,
     setMaxUses,
+    productDisTypeValue,
+    setProductDisTypeValue,
   };
 
   const handleSubmitButton = async () => {
@@ -136,7 +141,8 @@ const CreateDiscount = () => {
           code: disCode,
           method: method,
           type: typeValue(),
-          value: discountedValues === "free" ? "100" : discountVal,
+          value: discountVal,
+          productDscType: productDisTypeValue || "",
           startTime: `${startTimings.startDate} ${startTimings.startTime}`,
           endTime: `${endTimings.endDate} ${endTimings.endTime}`,
           usageCount: maxDisUses === "mutipleTimeDiscntUses" ? usageLimit : 1,
@@ -186,6 +192,8 @@ const CreateDiscount = () => {
       ErrorHandler.onError(error);
     }
   };
+
+  console.log(discountedValues);
 
   return (
     <div className="adminSec">

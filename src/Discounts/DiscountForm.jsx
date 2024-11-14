@@ -68,6 +68,8 @@ const DiscountForm = (props) => {
     setEndDate,
     maxUses,
     setMaxUses,
+    productDisTypeValue,
+    setProductDisTypeValue,
   } = discountProps;
 
   useEffect(() => {
@@ -123,7 +125,7 @@ const DiscountForm = (props) => {
     setDisCode("");
   };
   const handleDisCode = (e) => {
-    setDisCode(e.target.value);
+    setDisCode(e.target.value.toUpperCase());
   };
   const copyTxt = () => {
     navigator.clipboard.writeText(disCode);
@@ -133,7 +135,11 @@ const DiscountForm = (props) => {
   };
 
   const handleDiscountBlock = (e) => {
-    setDiscountVal(e.target.value);
+    if (discountedValues === "free" || productDisTypeValue === "free") {
+      setDiscountVal("100");
+    } else {
+      setDiscountVal(e.target.value);
+    }
   };
 
   // const onSelectedValue = (selectedItem) => {
@@ -206,8 +212,10 @@ const DiscountForm = (props) => {
     setMaxUses(e.target.checked);
   };
 
-  console.log(custEligibility === "allCustomers", "ggg");
-
+  const handleProductDisTypeValues = (e) => {
+    setProductDisTypeValue(e.target.value);
+  };
+  console.log(productDisTypeValue, discountVal);
   return (
     <div>
       <div className="col-sm-12">
@@ -485,6 +493,7 @@ const DiscountForm = (props) => {
                           value={discountVal}
                           onChange={handleDiscountBlock}
                           className="form-control"
+                          id=""
                         />
                         <LiaPercentSolid className="percentageSign" />
                       </div>
@@ -529,10 +538,10 @@ const DiscountForm = (props) => {
                     <input
                       className="form-check-input"
                       onChange={handleDiscountedValues}
-                      type="radio"
-                      checked={discountVal === 100}
-                      name="atDiscount"
+                      checked={discountedValues === "free"}
                       value="free"
+                      type="radio"
+                      name="atDiscount"
                       id="fullDiscount"
                     />
                     <label className="form-check-label" htmlFor="fullDiscount">
@@ -692,32 +701,219 @@ const DiscountForm = (props) => {
                     >
                       <option value="percentage">Percentage</option>
                       <option value="flat">Fixed Amount</option>
+                      <option value="product">Product</option>
                     </select>
                   </div>
-                  <div className="col-md-4">
-                    {amtOfPrdctsDscntVal === "percentage" ? (
-                      <div className="discountBlock">
-                        <input
-                          type="text"
-                          value={discountVal}
-                          onChange={handleDiscountBlock}
-                          className="form-control"
-                        />
-                        <LiaPercentSolid className="percentageSign" />
+                  {amtOfPrdctsDscntVal !== "product" ? (
+                    <div className="col-md-4">
+                      {amtOfPrdctsDscntVal === "percentage" ? (
+                        <div className="discountBlock">
+                          <input
+                            type="text"
+                            value={discountVal}
+                            onChange={handleDiscountBlock}
+                            className="form-control"
+                          />
+                          <LiaPercentSolid className="percentageSign" />
+                        </div>
+                      ) : (
+                        <div className="discountBlock">
+                          <input
+                            value={discountVal}
+                            type="text"
+                            className="form-control"
+                            onChange={handleDiscountBlock}
+                            placeholder=" 0.00"
+                          />
+                          <MdCurrencyRupee className="rupeeSign" />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="col-md-12">
+                      <div className="mt-3 mb-3">
+                        <div className="">
+                          <h6>Customer gets</h6>
+                          <p>
+                            Customers must add the quantity of items specified
+                            below to their cart.
+                          </p>
+                          <div className="row">
+                            <div className="col-md-4">
+                              <label
+                                className="form-check-label"
+                                htmlFor="CustomerBuysQuantity"
+                              >
+                                Max Quantity
+                              </label>
+                              <input
+                                type="text"
+                                value={custOrderQuant.maxGetYQty}
+                                onChange={handleCustGetsQuant}
+                                className="form-control"
+                                id="maxGetYQty"
+                                placeholder="Max Quantity"
+                              />
+                            </div>
+                            <div className="col-md-8">
+                              <label
+                                className="form-check-label"
+                                htmlFor="CustomerGetItems"
+                              >
+                                Any items from
+                              </label>
+                              <select
+                                id="CustomerGetItems"
+                                value={customerGetsItems}
+                                onChange={handleCustomerGetsItems}
+                                className="form-select"
+                                aria-label="Default select example"
+                              >
+                                <option value="collection">
+                                  Specific collections
+                                </option>
+                                <option value="product">
+                                  Specific products
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                          <div className="mt-3 mb-3">
+                            <Multiselect
+                              displayValue={
+                                customerGetsItems === "product"
+                                  ? "productTitle"
+                                  : "azst_collection_name"
+                              }
+                              onRemove={onSelectedCustomerGetsValue}
+                              selectedValues={customerGetsSelectedListItem}
+                              onSelect={onSelectedCustomerGetsValue}
+                              options={
+                                customerGetsItems === "product"
+                                  ? updatedProductsList
+                                  : collectionsList
+                              }
+                              placeholder={
+                                customerGetsItems === "product"
+                                  ? "Search products"
+                                  : "Search collections"
+                              }
+                            />
+                          </div>
+                        </div>
+                        <hr />
+                        <div className="">
+                          <h6>At a discounted value</h6>
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              onChange={handleProductDisTypeValues}
+                              type="radio"
+                              name="productDisType"
+                              checked={productDisTypeValue === "percentage"}
+                              value="percentage"
+                              id="atDiscountPercentage"
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="atDiscountPercentage"
+                            >
+                              Percentage
+                            </label>
+                            {productDisTypeValue === "percentage" && (
+                              <div className="discountBlock">
+                                <input
+                                  type="text"
+                                  value={discountVal}
+                                  onChange={handleDiscountBlock}
+                                  className="form-control"
+                                />
+                                <LiaPercentSolid className="percentageSign" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              onChange={handleProductDisTypeValues}
+                              checked={productDisTypeValue === "flat"}
+                              value="flat"
+                              type="radio"
+                              name="productDisType"
+                              id="atDiscountAmount"
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="atDiscountAmount"
+                            >
+                              Amount off each
+                            </label>
+                            {productDisTypeValue === "flat" && (
+                              <>
+                                <div className="discountBlock">
+                                  <input
+                                    value={discountVal}
+                                    type="text"
+                                    className="form-control"
+                                    onChange={handleDiscountBlock}
+                                    placeholder=" 0.00"
+                                  />
+                                  <MdCurrencyRupee className="rupeeSign" />
+                                </div>
+                                <span>
+                                  For multiple quantities, the discount amount
+                                  will be taken off each Y item.
+                                </span>
+                              </>
+                            )}
+                          </div>
+                          <div className="form-check">
+                            <input
+                              className="form-check-input"
+                              onChange={handleProductDisTypeValues}
+                              type="radio"
+                              checked={productDisTypeValue === "free"}
+                              name="productDisType"
+                              value="free"
+                              id="fullDiscount"
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="fullDiscount"
+                            >
+                              Free
+                            </label>
+                          </div>
+                        </div>
+                        <hr />
+                        <div className="form-check">
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            value={maxUses}
+                            checked={maxUses}
+                            onChange={handleMaxUses}
+                            id="setMaximumUses"
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="setMaximumUses"
+                          >
+                            Set a maximum number of uses.
+                          </label>
+                          {maxUses && (
+                            <input
+                              className="form-input amtInpt d-block"
+                              type="number"
+                              id="usageLimit"
+                              value={usageLimit}
+                              onChange={handleUsageLimit}
+                            />
+                          )}
+                        </div>
                       </div>
-                    ) : (
-                      <div className="discountBlock">
-                        <input
-                          value={discountVal}
-                          type="text"
-                          className="form-control"
-                          onChange={handleDiscountBlock}
-                          placeholder=" 0.00"
-                        />
-                        <MdCurrencyRupee className="rupeeSign" />
-                      </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
               </div>
             ) : null}
