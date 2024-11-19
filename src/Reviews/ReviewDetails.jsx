@@ -64,18 +64,27 @@ const ReviewDetails = () => {
           <div className='row m-3'>
             <div className='col-md-7'>
               <div>
-                <div>
-                  <a
-                    href={review.url_handle}
-                    target='__blank'
-                    className='d-flex'>
-                    <img
-                      src={review.product_image}
-                      className='product-image'
-                      alt='productImage'
+                <div className='d-flex'>
+                  <img
+                    src={review.product_image}
+                    className='product-image'
+                    alt='productImage'
+                  />
+                  <div>
+                    <a
+                      href={review.url_handle}
+                      target='__blank'
+                      className='product-link'>
+                      <p>{review.product_title}</p>
+                    </a>
+
+                    <Rating
+                      name='read-only'
+                      value={review.review_points}
+                      precision={0.5}
+                      readOnly
                     />
-                    <p>{review.product_title}</p>
-                  </a>
+                  </div>
                 </div>
                 <div className='my-3'>
                   <p>
@@ -85,15 +94,6 @@ const ReviewDetails = () => {
                   <p className='truncate'>
                     <strong>Description : </strong> {review.review_content}
                   </p>
-                  <small className='d-flex'>
-                    <strong>Rating : </strong>
-                    <Rating
-                      name='read-only'
-                      value={review.review_points}
-                      precision={0.5}
-                      readOnly
-                    />
-                  </small>
                 </div>
               </div>
             </div>
@@ -110,12 +110,13 @@ const ReviewDetails = () => {
                 ))}
               </div>
               <p>
-                <strong> Created By :</strong>
-                {review.azst_customer_fname} {review.azst_customer_lname}
+                <strong> Created By :</strong> {review.azst_customer_fname}{' '}
+                {review.azst_customer_lname}
               </p>
               <p>
                 <strong> Reviewed on :</strong> {review.created_on}
               </p>
+              <strong>Action : </strong>
               <button
                 className='btn btn-primary mx-2'
                 disabled={review.review_approval_status === 0}
@@ -128,6 +129,27 @@ const ReviewDetails = () => {
                 onClick={updateReviewStatus}>
                 Publilsh
               </button>
+              <p></p>
+              <p>
+                <strong>
+                  {' '}
+                  {review.review_approval_status === 1
+                    ? 'Published'
+                    : 'Hidden'}{' '}
+                  By :
+                </strong>{' '}
+                {review.approve_by}
+              </p>
+              <p>
+                <strong>
+                  {' '}
+                  {review.review_approval_status === 1
+                    ? 'Published'
+                    : 'Hidden'}{' '}
+                  On :
+                </strong>{' '}
+                {review.approve_on}
+              </p>
             </div>
           </div>
         )}

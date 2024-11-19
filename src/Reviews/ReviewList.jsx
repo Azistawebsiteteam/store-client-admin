@@ -6,9 +6,13 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect } from 'react';
+import { TiArrowRight } from 'react-icons/ti';
 
 import { IoIosEyeOff, IoMdEye } from 'react-icons/io';
 import { onStatusUpdate } from './ReviwFun';
+
+import './review.css';
+import { truncateText } from '../Utils/StringConcat';
 
 const ReviewList = () => {
   const [reviewsList, setReviewsList] = useState([]);
@@ -62,36 +66,37 @@ const ReviewList = () => {
                       <th scope='col'>Customer</th>
                       <th scope='col'>Created</th>
                       <th scope='col'>Rating</th>
-                      <th> Visibility status</th>
+                      <th> Visibility </th>
                       <th scope='col'>Action</th>
                     </tr>
                   </thead>
                   <tbody>
                     {reviewsList.map((review, index) => (
                       <tr key={index}>
-                        <td>
+                        <td className='col-2'>
                           <h6>
                             {review.azst_customer_fname}{' '}
                             {review.azst_customer_lname}
                           </h6>
                           <p>
-                            <Link to={review.url_handle}>
+                            <Link
+                              to={review.url_handle}
+                              className='product-link'>
                               {review.product_title}
                             </Link>
                           </p>
                         </td>
-                        <td>{review.created_on}</td>
-                        <td>
+                        <td className='col-1'>{review.created_on}</td>
+                        <td className='col-4'>
                           <Rating
                             name='read-only'
                             value={review.review_points}
                             precision={0.5}
                             readOnly
                           />
-                          <p>{review.review_content}</p>
+                          <p>{truncateText(review.review_content, 100)}</p>
                         </td>
-                        <td>
-                          {' '}
+                        <td className='col-1'>
                           <p
                             className={
                               review.review_approval_status === 1
@@ -103,29 +108,28 @@ const ReviewList = () => {
                               : 'Hide'}
                           </p>
                         </td>
-                        <td>
-                          <div className='d-flex justify-content-center align-items-center'>
-                            <span className='password-toggle-icon'>
-                              {review.review_approval_status === 1 ? (
-                                <IoMdEye
-                                  onClick={() =>
-                                    updateReviewStatus(review.review_id, 0)
-                                  }
-                                />
-                              ) : (
-                                <IoIosEyeOff
-                                  onClick={() =>
-                                    updateReviewStatus(review.review_id, 1)
-                                  }
-                                />
-                              )}
-                            </span>
-                            <span className='password-toggle-icon'>
-                              <Link to={`/review-details/${review.review_id}`}>
-                                View Details
-                              </Link>
-                            </span>
-                          </div>
+                        <td className='col-2'>
+                          <span className='password-toggle-icon'>
+                            {review.review_approval_status === 1 ? (
+                              <IoMdEye
+                                onClick={() =>
+                                  updateReviewStatus(review.review_id, 0)
+                                }
+                              />
+                            ) : (
+                              <IoIosEyeOff
+                                onClick={() =>
+                                  updateReviewStatus(review.review_id, 1)
+                                }
+                              />
+                            )}
+                          </span>
+                          <Link
+                            to={`/review-details/${review.review_id}`}
+                            className='deatils-btn'>
+                            View Details
+                            <TiArrowRight />
+                          </Link>
                         </td>
                       </tr>
                     ))}
