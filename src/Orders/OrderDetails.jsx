@@ -61,7 +61,6 @@ const OrderDetails = () => {
 
   const updateOrderDeliveryStatus = async (orderId, deliveryStatus) => {
     try {
-      console.log(orderId, deliveryStatus);
       const url = `${baseUrl}/orders/admin/delivery`;
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -71,8 +70,8 @@ const OrderDetails = () => {
         deliveryStatus,
       };
       errorHandle.onLoading();
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, body, { headers });
-      console.log(response);
       errorHandle.onLoadingClose();
     } catch (error) {
       errorHandle.onLoadingClose();

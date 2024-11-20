@@ -193,8 +193,6 @@ const CreateDiscount = () => {
     }
   };
 
-  console.log(discountedValues);
-
   return (
     <div className="adminSec">
       <AdminSideBar />

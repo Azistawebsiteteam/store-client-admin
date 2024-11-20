@@ -20,7 +20,7 @@ const VariantDetails = () => {
   const [inventory, setInventory] = useState({
     sku: "",
     barcode: "",
-    hscode: "",
+    hsCode: "",
   });
   const [variantImg, setVariantImg] = useState([]);
 
@@ -59,14 +59,14 @@ const VariantDetails = () => {
           SetSelectedVariantDetails(selectedVariantDetails);
           setPrices({
             price: selectedVariantDetails.offer_price,
-            costperitem: selectedVariantDetails.actual_price,
-            comparePrice: selectedVariantDetails.actual_price,
+            costperitem: selectedVariantDetails.cost_per_item,
+            comparePrice: selectedVariantDetails.compare_at_price,
             isTaxable: selectedVariantDetails.variant_taxable,
           });
           setInventory({
             sku: selectedVariantDetails.variant_sku,
             barcode: selectedVariantDetails.variant_barcode,
-            hscode: selectedVariantDetails.variant_HS_code,
+            hsCode: selectedVariantDetails.variant_HS_code,
           });
           setShippingDetails({
             weight: selectedVariantDetails.variant_weight,
@@ -302,7 +302,7 @@ const VariantDetails = () => {
                       type="text"
                       className="form-control"
                       id="costperitem"
-                      value={prices.costperitem}
+                      value={prices.costperitem ?? 0}
                       onChange={updatePrice}
                     />
                   </div>
@@ -320,8 +320,8 @@ const VariantDetails = () => {
                       value={inventory.sku}
                       className="form-control"
                       id="sku"
-                      placeholder=""
                       onChange={handleInventory}
+                      maxLength={50}
                     />
                   </div>
                   <div className="col-sm-6">
@@ -333,8 +333,8 @@ const VariantDetails = () => {
                       value={inventory.barcode}
                       className="form-control"
                       id="barcode"
-                      placeholder=""
                       onChange={handleInventory}
+                      maxLength={50}
                     />
                   </div>
                   <div className="col-sm-6">
@@ -343,11 +343,11 @@ const VariantDetails = () => {
                     </label>
                     <input
                       type="text"
-                      value={inventory.hscode}
+                      value={inventory.hsCode}
                       className="form-control"
                       id="hsCode"
-                      placeholder=""
                       onChange={handleInventory}
+                      maxLength={50}
                     />
                   </div>
                 </div>
@@ -371,14 +371,16 @@ const VariantDetails = () => {
                         <input
                           type="text"
                           placeholder="0.0"
-                          value={shippingDetails.weight}
+                          value={shippingDetails.weight ?? ""}
                           onChange={handleShippingQty}
+                          id="weight"
                         />
                         <select
                           className=""
                           aria-label="Default select example"
                           value={shippingDetails.weightUnit}
                           onChange={handleShippingQty}
+                          id="weightUnit"
                         >
                           <option value="kg">Kg</option>
                           <option value="lb">lb</option>
@@ -387,17 +389,6 @@ const VariantDetails = () => {
                         </select>
                       </div>
                     )}
-                    {/* <div className='countriesList'>
-                                            <label htmlFor='countrySelect'>Country/Region of origin</label>
-                                            <select id="countrySelect" value={originCountry} onChange={(e) => setOriginCountry(e.target.value)} className="form-select" aria-label="Default select example">
-                                                <option value="">Select</option>
-                                                {countriesList ? countriesList.data.map(eachObj => (
-                                                    <option value={eachObj.iso2} key={eachObj.iso3}>
-                                                        {eachObj.name}
-                                                    </option>
-                                                )) : ''}
-                                            </select>
-                                        </div> */}
                   </div>
                 </div>
               </div>
