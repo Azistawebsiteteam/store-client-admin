@@ -19,7 +19,6 @@ const OrderDetails = () => {
   const [billingDetails, setBillingDetails] = useState({});
 
   const [inventory, setInventory] = useState([]);
-  const [shippingMethod, setShippingMethod] = useState('0');
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/orders/admin`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
