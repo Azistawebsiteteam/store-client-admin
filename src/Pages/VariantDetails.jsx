@@ -109,7 +109,7 @@ const VariantDetails = () => {
   const updateVariantImg = (e) => {
     setVariantImg(e.target.files[0]);
     const url = URL.createObjectURL(e.target.files[0]);
- 
+
     const update = variantDetails.map((v) => {
       if (v.id === parseInt(id)) {
         return { ...v, variant_image: [v.variant_image[0], url] };
@@ -119,7 +119,6 @@ const VariantDetails = () => {
     });
     setVariantDetails(update);
   };
-
 
   const updatePrice = (e) => {
     const { id, checked, value } = e.target;

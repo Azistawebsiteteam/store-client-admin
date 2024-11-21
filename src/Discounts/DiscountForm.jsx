@@ -215,7 +215,7 @@ const DiscountForm = (props) => {
   const handleProductDisTypeValues = (e) => {
     setProductDisTypeValue(e.target.value);
   };
-  console.log(productDisTypeValue, discountVal);
+
   return (
     <div>
       <div className="col-sm-12">

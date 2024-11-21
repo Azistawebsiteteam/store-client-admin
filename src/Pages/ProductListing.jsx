@@ -75,7 +75,7 @@ const ProductListing = () => {
                       <th style={{ width: "  14%" }} scope="col">
                         Vendor
                       </th>
-                      <th scope="col">Actons</th>
+                      <th scope="col">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
