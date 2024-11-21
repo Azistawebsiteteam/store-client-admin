@@ -73,7 +73,7 @@ const AddProduct = () => {
   const [metaDetails, setMetaDetails] = useState({
     metaTitle: '',
     metaDescription: '',
-    urlHandle: `${window.location.origin}/productItem`,
+    urlHandle: `http://20.235.149.147:5019/product/`,
   });
   const [inventoryIdInfo, setInventoryId] = useState([]);
 

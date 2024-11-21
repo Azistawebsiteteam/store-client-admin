@@ -101,9 +101,9 @@ const PopupListing = () => {
     const updatedPopups = popups.map((popup) => {
       if (popup.id === id) {
         if (popup.mode === 'edit') {
-          return { ...popup, mode: 'edit' };
-        } else {
           return { ...popup, mode: 'normal' };
+        } else {
+          return { ...popup, mode: 'edit' };
         }
       }
       return popup;

@@ -53,7 +53,7 @@ const UpdateProduct = () => {
     metaDetails: {
       metaTitle: '',
       metaDescription: '',
-      urlHandle: `${window.location.origin}/productItem`,
+      urlHandle: `http://20.235.149.147:5019/product/`,
     },
     modal3Show: false,
   });
@@ -63,7 +63,7 @@ const UpdateProduct = () => {
   const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
   const [variantsThere, setVariants] = useState(false);
   const baseUrl = process.env.REACT_APP_API_URL;
-  // const localUrl = process.env.REACT_APP_LOCAL_URL;
+
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
   const { id } = useParams();
@@ -168,6 +168,7 @@ const UpdateProduct = () => {
     // Set the variants state once after the array has been constructed
     setVariant(newVariants);
   };
+
   const getDetails = async () => {
     try {
       const url = `${baseUrl}/product/get/details`;

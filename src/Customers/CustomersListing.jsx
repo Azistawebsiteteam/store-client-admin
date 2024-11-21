@@ -18,6 +18,7 @@ const CustomersListing = () => {
   const [filteredVal, setFilteredValue] = useState('registeredon');
   const [filtersOrder, setFiltersOrder] = useState('DESC');
   const [activeUsers, setActiveUsers] = useState(true);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/users/get`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -39,6 +40,7 @@ const CustomersListing = () => {
         errorHandler.onSuccess();
         errorHandler.onLoadingClose();
         setCustomersData(response.data);
+        setFilteredCustomers(response.data);
       } catch (error) {
         errorHandler.onLoadingClose();
         errorHandler.onError(error);
@@ -55,6 +57,17 @@ const CustomersListing = () => {
     setFiltersOrder(txt);
   };
 
+  const filterCustomers = (e) => {
+    const customers = customersData.filter((customer) =>
+      customer.azst_customer_name
+        .toLowerCase()
+        .startsWith(e.target.value.toLowerCase())
+    );
+    setFilteredCustomers(customers);
+  };
+
+  console.log(customersData);
+
   return (
     <div className='adminSec'>
       <AdminSideBar />
@@ -64,6 +77,7 @@ const CustomersListing = () => {
             className='searchCustomer'
             type='search'
             placeholder='Search Customers'
+            onChange={filterCustomers}
           />
           <div className='form-check form-switch'>
             <input
@@ -176,9 +190,8 @@ const CustomersListing = () => {
                 <th>Amount spent</th>
               </tr>
             </thead>
-
             <tbody>
-              {customersData.map((each, i) => (
+              {filteredCustomers.map((each, i) => (
                 <tr key={i}>
                   <td>{i + 1}</td>
                   <td>
