@@ -11,7 +11,9 @@ const ProductContextProvider = (props) => {
   const [productDetails, setProductDetails] = useState({});
   const [variantsData, setVariantsData] = useState([]);
   const [variantDetails, setVariantDetails] = useState([]);
-  const [dropdownItems, setDropdownItems] = useState(false);
+  const [featureDropdownItems, setFeatureDropdownItems] = useState(false);
+  const [ordersDropdownItems, setOrdersDropdownItems] = useState(false);
+  const [productsDropdownItems, setProductsDropdownItems] = useState(false);
   const [activeTab, setActiveTab] = useState(location.pathname);
   const [allProducts, setAllProducts] = useState([]);
 
@@ -48,8 +50,12 @@ const ProductContextProvider = (props) => {
         setVariantDetails,
         activeTab,
         setActiveTab,
-        dropdownItems,
-        setDropdownItems,
+        featureDropdownItems,
+        setFeatureDropdownItems,
+        ordersDropdownItems,
+        setOrdersDropdownItems,
+        productsDropdownItems,
+        setProductsDropdownItems,
         allProducts,
         setAllProducts,
       }}

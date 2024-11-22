@@ -48,7 +48,7 @@ const ProductListing = () => {
           <div className="row">
             <div className="productsTopbar">
               <h4>Products</h4>
-              <Link to="/product/create" className="btn bg-dark text-light">
+              <Link to="/product/create" className="infoBtn">
                 Add Products
               </Link>
             </div>

@@ -271,9 +271,9 @@ const AddProduct = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <div className="d-flex align-items-center">
+                <div className="d-flex align-items-center mb-3">
                   <BackBtn onClick={() => navigate(-1)} />
-                  <h3>Add Product</h3>
+                  <h5>Add Product</h5>
                 </div>
               </div>
               <AddProductForm productProps={productProps} />

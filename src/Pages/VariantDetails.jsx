@@ -42,7 +42,7 @@ const VariantDetails = () => {
   useEffect(() => {
     const apiCallback = async () => {
       try {
-        const variantDetailsUrl = `${baseUrl}/product/variants/`;
+        const variantDetailsUrl = `http://192.168.215.137:5018/api/v1/product/variants/`;
         const headers = {
           Authorization: `Bearer ${token}`,
         };
@@ -53,6 +53,7 @@ const VariantDetails = () => {
           { headers }
         );
         if (response.status === 200) {
+          console.log(response.data);
           Swal.close();
           const selectedVariantDetails = response.data.variant;
           setVariantImg(selectedVariantDetails.variant_image[1]);
@@ -69,10 +70,15 @@ const VariantDetails = () => {
             hsCode: selectedVariantDetails.variant_HS_code,
           });
           setShippingDetails({
-            weight: selectedVariantDetails.variant_weight,
-            weightUnit: selectedVariantDetails.variant_weight_unit,
+            weight:
+              selectedVariantDetails.variant_weight !== null
+                ? selectedVariantDetails.variant_weight
+                : "0",
+            weightUnit:
+              selectedVariantDetails.variant_weight_unit !== null
+                ? selectedVariantDetails.variant_weight_unit
+                : "",
           });
-
           setIsPhysical(selectedVariantDetails.variant_weight !== null);
         }
       } catch (error) {
@@ -91,7 +97,11 @@ const VariantDetails = () => {
   };
 
   const updatePrice = (e) => {
-    setPrices({ ...prices, [e.target.id]: e.target.value });
+    if (e.target.id === "isTaxable") {
+      setPrices({ ...prices, [e.target.id]: e.target.checked });
+    } else {
+      setPrices({ ...prices, [e.target.id]: e.target.value });
+    }
   };
 
   const handleInventory = (e) => {
@@ -104,20 +114,21 @@ const VariantDetails = () => {
 
   const onUpdateVariants = async () => {
     try {
-      const url = `${baseUrl}/product/update/variant`;
+      const url = `http://192.168.215.137:5018/api/v1/product/update/variant`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
 
       swalErr.onLoading();
       const formdata = new FormData();
-      formdata.append("variantImage", JSON.stringify([variantImg]));
+      formdata.append("variantImage", variantImg);
       formdata.append("offer_price", prices.price);
       formdata.append("comparePrice", prices.comparePrice);
-      formdata.append("isTaxable", prices.isTaxable === "on" ? true : false);
+      formdata.append("costPerItem", prices.costperitem);
+      formdata.append("isTaxable", prices.isTaxable);
       formdata.append("value", "[]");
-      formdata.append("barcode", inventory.barcode);
-      formdata.append("hsCode", inventory.hscode);
+      formdata.append("barCode", inventory.barcode);
+      formdata.append("hsCode", inventory.hsCode);
       formdata.append("skuCode", inventory.sku);
       formdata.append("variantWeight", shippingDetails.weight);
       formdata.append("variantWeightUnit", shippingDetails.weightUnit);
@@ -134,10 +145,11 @@ const VariantDetails = () => {
       }
       Swal.close();
     } catch (e) {
+      console.log(e);
       Swal.close();
     }
   };
-
+  console.log(inventory.barcode, "inventory.barcode");
   const deleteVariant = async () => {
     try {
       const url = `${baseUrl}/product/delete/variant`;
@@ -195,13 +207,13 @@ const VariantDetails = () => {
               <div className="bgStyle">
                 <h6>Variants</h6>
                 <hr />
-                {variantDetails.map((variant) => (
-                  <Link to={`/variant-details/${variant.id}`}>
+                {variantDetails.map((variant, i) => (
+                  <Link to={`/variant-details/${variant.id}`} key={variant.id}>
                     <div className="d-flex align-items-center">
                       <img
                         className="vImg"
                         src={variant.variant_image[0]}
-                        alt="ghg"
+                        alt={`Variant ${i + 1}`}
                       />
                       <p style={{ marginBottom: "0", marginLeft: "6px" }}>
                         {variant.option1 && <span>{variant.option1}</span>}{" "}
@@ -217,7 +229,7 @@ const VariantDetails = () => {
               <div className="bgStyle">
                 <h6>Options</h6>
                 {variantsData.map((v, i) => (
-                  <div className="mb-3">
+                  <div className="mb-3" key={i}>
                     <label htmlFor="optionName" className="col-form-label">
                       {v.UOM}
                     </label>
@@ -240,10 +252,12 @@ const VariantDetails = () => {
                       />
                     ) : null
                   ) : (
-                    <img className="vImg" src={variantImg} alt="yu" />
+                    <img className="vImg" src={variantImg} alt="variant" />
                   )}
                   <div className="singleVariantImg">
-                    <label htmlFor="chooseImg">Change</label>
+                    <label style={{ cursor: "pointer" }} htmlFor="chooseImg">
+                      Change
+                    </label>
                     <input
                       type="file"
                       id="chooseImg"
@@ -269,7 +283,7 @@ const VariantDetails = () => {
                     />
                   </div>
                   <div className="col">
-                    <label htmlFor="costperitem" className="col-form-label">
+                    <label htmlFor="comparePrice" className="col-form-label">
                       Compare-at-price
                     </label>
                     <input
@@ -295,7 +309,7 @@ const VariantDetails = () => {
                 </div>
                 <div className="row">
                   <div className="col">
-                    <label htmlFor="price" className="col-form-label">
+                    <label htmlFor="costperitem" className="col-form-label">
                       Cost per item
                     </label>
                     <input
@@ -358,7 +372,7 @@ const VariantDetails = () => {
                   <input
                     className="form-check-input"
                     checked={isPhysical}
-                    onClick={isPhysicalProduct}
+                    onChange={isPhysicalProduct}
                     type="checkbox"
                     id="physicalProduct"
                   />

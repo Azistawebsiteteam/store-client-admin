@@ -87,7 +87,7 @@ const Categories = () => {
           >
             Export
           </button>
-          <Link to="/category/create" className="btn bg-dark text-light">
+          <Link to="/category/create" className="infoBtn">
             Create category
           </Link>
         </div>

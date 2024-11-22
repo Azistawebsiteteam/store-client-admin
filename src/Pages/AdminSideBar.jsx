@@ -3,82 +3,174 @@ import { Link } from "react-router-dom";
 import { FaHome } from "react-icons/fa";
 import { FaFirstOrder } from "react-icons/fa6";
 import { MdInventory } from "react-icons/md";
-import { FaProductHunt } from "react-icons/fa";
-import { MdCollectionsBookmark } from "react-icons/md";
-import { GiKnightBanner } from "react-icons/gi";
+// import { FaProductHunt } from "react-icons/fa";
+// import { MdCollectionsBookmark } from "react-icons/md";
+// import { GiKnightBanner } from "react-icons/gi";
 import { ProductState } from "../Context/ProductContext";
-
+// import { MdAssignmentReturned } from "react-icons/md";
 import { BiSolidDiscount } from "react-icons/bi";
-import { SiBrandfolder } from "react-icons/si";
+// import { SiBrandfolder } from "react-icons/si";
 import { MdRateReview } from "react-icons/md";
-import { TfiAnnouncement } from "react-icons/tfi";
+// import { TfiAnnouncement } from "react-icons/tfi";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import { IoIosPerson } from "react-icons/io";
-import { SiBlogger } from "react-icons/si";
-import { FaQuestion } from "react-icons/fa";
+// import { SiBlogger } from "react-icons/si";
+// import { FaQuestion } from "react-icons/fa";
 import { MdFeaturedPlayList } from "react-icons/md";
-import { BiSolidCategoryAlt } from "react-icons/bi";
+// import { BiSolidCategoryAlt } from "react-icons/bi";
 
 const AdminSideBar = () => {
-  const { activeTab, dropdownItems, setDropdownItems } = ProductState();
+  const {
+    activeTab,
+    featureDropdownItems,
+    setFeatureDropdownItems,
+    ordersDropdownItems,
+    setOrdersDropdownItems,
+    productsDropdownItems,
+    setProductsDropdownItems,
+  } = ProductState();
+
+  const handleProductsDropdownClick = () => {
+    setProductsDropdownItems(!productsDropdownItems);
+    setFeatureDropdownItems(false);
+    setOrdersDropdownItems(false);
+  };
+
+  const handleOrdersDropdownClick = () => {
+    setOrdersDropdownItems(!ordersDropdownItems);
+    setFeatureDropdownItems(false);
+    setProductsDropdownItems(false);
+  };
+
+  const handleFeaturesDropdownClick = () => {
+    setFeatureDropdownItems(!featureDropdownItems);
+    setOrdersDropdownItems(false);
+    setProductsDropdownItems(false);
+  };
+
+  const handleNavbarItemClick = () => {
+    setFeatureDropdownItems(false);
+    setOrdersDropdownItems(false);
+    setProductsDropdownItems(false);
+  };
+
+  const handleCloseNavbar = () => {
+    const sidebarContEl = document.getElementById("sidebarCont");
+    if (sidebarContEl) {
+      sidebarContEl.classList.toggle("onClickClose");
+    }
+  };
 
   return (
-    <div className="sidebarCont">
+    <div className="sidebarCont" id="sidebarCont">
+      <span onClick={handleCloseNavbar} className="navCloseIcon">
+        &times;
+      </span>
       <ul className="sideBarItems">
         <Link className="link" to="/">
           <li
-            className={activeTab === "/" ? "linkItem activeTab" : "linkItem"}
-            onClick={(e) => setDropdownItems(false)}
-          >
-            <FaHome className="me-1" /> Home
-          </li>
-        </Link>
-        <Link className="link" to="/orders">
-          <li
             className={
-              activeTab.startsWith("/order") ? "linkItem activeTab" : "linkItem"
-            }
-            onClick={(e) => setDropdownItems(false)}
-          >
-            <FaFirstOrder className="me-1" /> Orders
-          </li>
-        </Link>
-        <Link className="link" to="/inventory">
-          <li
-            className={
-              activeTab === "/inventory" ? "linkItem activeTab" : "linkItem"
-            }
-            onClick={(e) => setDropdownItems(false)}
-          >
-            <MdInventory className="me-1" /> Inventory
-          </li>
-        </Link>
-        <Link className="link" to="/products">
-          <li
-            className={
-              activeTab.startsWith("/product")
+              activeTab === "/"
                 ? "linkItem activeTab"
-                : "linkItem"
+                : "linkItem singleLinkItem"
             }
-            onClick={(e) => setDropdownItems(false)}
+            onClick={handleNavbarItemClick}
           >
-            <FaProductHunt className="me-1" /> Products
+            <FaHome className="me-3" /> Home
           </li>
         </Link>
+
         <button
           className="dropdown-btn customDropdownButton"
           id="drobdownBtn"
-          onClick={(e) => setDropdownItems(!dropdownItems)}
+          onClick={handleOrdersDropdownClick}
         >
-          <MdFeaturedPlayList /> Features
-          {dropdownItems ? (
+          <FaFirstOrder className="me-3" />
+          Orders
+          {ordersDropdownItems ? (
             <FaAngleUp className="ms-2" />
           ) : (
             <FaAngleDown className="ms-2" />
           )}
         </button>
-        {dropdownItems && (
+        {ordersDropdownItems && (
           <div className="childElements">
+            <Link className="link" to="/orders">
+              <li
+                className={
+                  activeTab.startsWith("/order")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
+                }
+              >
+                {/* <FaFirstOrder className="me-3" /> */}
+                Orders
+              </li>
+            </Link>
+            <Link className="link" to="/products">
+              <li
+                className={
+                  activeTab.startsWith("/product")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
+                }
+              >
+                {/* <MdAssignmentReturned className="me-3" />  */}Returns
+              </li>
+            </Link>
+            <Link className="link" to="/products">
+              <li
+                className={
+                  activeTab.startsWith("/product")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
+                }
+              >
+                {/* <FaProductHunt className="me-3" />  */}
+                Abandoned checkouts
+              </li>
+            </Link>
+          </div>
+        )}
+        <Link className="link" to="/inventory">
+          <li
+            className={
+              activeTab === "/inventory"
+                ? "linkItem activeTab"
+                : "linkItem singleLinkItem"
+            }
+            onClick={(e) => handleNavbarItemClick(false)}
+          >
+            <MdInventory className="me-3" /> Inventory
+          </li>
+        </Link>
+        <button
+          className="dropdown-btn customDropdownButton"
+          id="drobdownBtn"
+          onClick={handleProductsDropdownClick}
+        >
+          <MdFeaturedPlayList className="me-3" />
+          Products
+          {productsDropdownItems ? (
+            <FaAngleUp className="ms-2" />
+          ) : (
+            <FaAngleDown className="ms-2" />
+          )}
+        </button>
+        {productsDropdownItems && (
+          <div className="childElements">
+            <Link className="link" to="/products">
+              <li
+                className={
+                  activeTab.startsWith("/product")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
+                }
+              >
+                {/* <FaProductHunt className="me-3" />  */}
+                Products
+              </li>
+            </Link>
             <Link className="link" to="/collections">
               <li
                 className={
@@ -87,9 +179,63 @@ const AdminSideBar = () => {
                     : "linkItem dropdownItems"
                 }
               >
-                <MdCollectionsBookmark className="me-1" /> Collections
+                {/* <MdCollectionsBookmark className="me-3" />  */}
+                Collections
               </li>
             </Link>
+            <Link className="link" to="/categories">
+              <li
+                className={
+                  activeTab.startsWith("/categories")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
+                }
+              >
+                {/* <BiSolidCategoryAlt className="me-3" />  */}
+                Categories
+              </li>
+            </Link>
+            <Link className="link" to="/brands">
+              <li
+                className={
+                  activeTab.startsWith("/brands")
+                    ? "linkItem activeTab"
+                    : "linkItem dropdownItems"
+                }
+              >
+                {/* <SiBrandfolder className="me-3" />  */}
+                Brands
+              </li>
+            </Link>
+          </div>
+        )}
+        <Link className="link" to="/discount">
+          <li
+            className={
+              activeTab.startsWith("/discount")
+                ? "linkItem activeTab"
+                : "linkItem singleLinkItem"
+            }
+            onClick={(e) => handleNavbarItemClick(false)}
+          >
+            <BiSolidDiscount className="me-3" /> Discounts
+          </li>
+        </Link>
+        <button
+          className="dropdown-btn customDropdownButton"
+          id="drobdownBtn"
+          onClick={handleFeaturesDropdownClick}
+        >
+          <MdFeaturedPlayList className="me-3" />
+          Features
+          {featureDropdownItems ? (
+            <FaAngleUp className="ms-2" />
+          ) : (
+            <FaAngleDown className="ms-2" />
+          )}
+        </button>
+        {featureDropdownItems && (
+          <div className="childElements">
             <Link className="link" to="/popup">
               <li
                 className={
@@ -98,7 +244,8 @@ const AdminSideBar = () => {
                     : "linkItem dropdownItems"
                 }
               >
-                <MdCollectionsBookmark className="me-1" /> Popup
+                {/* <MdCollectionsBookmark className="me-3" /> */}
+                Popup
               </li>
             </Link>
             <Link className="link" to="/slider">
@@ -109,7 +256,7 @@ const AdminSideBar = () => {
                     : "linkItem dropdownItems"
                 }
               >
-                <GiKnightBanner className="me-1" />
+                {/* <GiKnightBanner className="me-3" /> */}
                 Slider Banner
               </li>
             </Link>
@@ -121,33 +268,10 @@ const AdminSideBar = () => {
                     : "linkItem dropdownItems"
                 }
               >
-                <GiKnightBanner className="me-1" />
+                {/* <GiKnightBanner className="me-3" /> */}
                 Product Banner
               </li>
             </Link>
-            <Link className="link" to="/categories">
-              <li
-                className={
-                  activeTab.startsWith("/categories")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                <BiSolidCategoryAlt className="me-1" /> Categories
-              </li>
-            </Link>
-            <Link className="link" to="/brands">
-              <li
-                className={
-                  activeTab.startsWith("/brands")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                <SiBrandfolder className="me-1" /> Brands
-              </li>
-            </Link>
-
             <Link className="link" to="/announcements">
               <li
                 className={
@@ -156,7 +280,8 @@ const AdminSideBar = () => {
                     : "linkItem dropdownItems"
                 }
               >
-                <TfiAnnouncement className="me-1" /> Announcement Bar
+                {/* <TfiAnnouncement className="me-3" />  */}
+                Announcement Bar
               </li>
             </Link>
             <Link className="link" to="/blogs">
@@ -167,7 +292,8 @@ const AdminSideBar = () => {
                     : "linkItem dropdownItems"
                 }
               >
-                <SiBlogger className="me-1" /> Blogs
+                {/* <SiBlogger className="me-3" />  */}
+                Blogs
               </li>
             </Link>
             <Link className="link" to="/faqs">
@@ -178,33 +304,22 @@ const AdminSideBar = () => {
                     : "linkItem dropdownItems"
                 }
               >
-                <FaQuestion className="me-1" /> Faqs
+                {/* <FaQuestion className="me-3" /> */}
+                Faqs
               </li>
             </Link>
           </div>
         )}
-        <Link className="link" to="/discount">
-          <li
-            className={
-              activeTab.startsWith("/discount")
-                ? "linkItem activeTab"
-                : "linkItem"
-            }
-            onClick={(e) => setDropdownItems(false)}
-          >
-            <BiSolidDiscount className="me-1" /> Discounts
-          </li>
-        </Link>
         <Link className="link" to="/review-list">
           <li
             className={
               activeTab.startsWith("/review")
                 ? "linkItem activeTab"
-                : "linkItem"
+                : "linkItem singleLinkItem"
             }
-            onClick={(e) => setDropdownItems(false)}
+            onClick={(e) => handleNavbarItemClick(false)}
           >
-            <MdRateReview className="me-1" /> Manage Reviews
+            <MdRateReview className="me-3" /> Manage Reviews
           </li>
         </Link>
         <Link className="link" to="/customers">
@@ -212,11 +327,11 @@ const AdminSideBar = () => {
             className={
               activeTab.startsWith("/customer")
                 ? "linkItem activeTab"
-                : "linkItem"
+                : "linkItem singleLinkItem"
             }
-            onClick={(e) => setDropdownItems(false)}
+            onClick={(e) => handleNavbarItemClick(false)}
           >
-            <IoIosPerson className="me-1" /> Customers
+            <IoIosPerson className="me-3" /> Customers
           </li>
         </Link>
       </ul>

@@ -7,7 +7,7 @@ const BackBtn = () => {
   return (
     <div>
       <TiArrowLeft
-        style={{ fontSize: "30px", cursor: "pointer", marginRight: "4px" }}
+        style={{ fontSize: "26px", cursor: "pointer", marginRight: "4px" }}
         onClick={() => navigate(-1)}
       />
     </div>

@@ -2,7 +2,7 @@
 import Cookies from "js-cookie";
 import React from "react";
 import { HiMiniUserCircle } from "react-icons/hi2";
-import { IoMdSearch } from "react-icons/io";
+// import { IoMdSearch } from "react-icons/io";
 
 import { Link } from "react-router-dom";
 import DropDown from "./DropDown";
@@ -20,21 +20,21 @@ const AdminNavbar = () => {
       <div className="container-fluid adminNavbarInnerSection">
         <div className="navIcon">
           <Link
-            className="navbar-brand m-auto mr-md-auto text-light navText"
+            className="navbar-brand m-auto mr-md-auto text-light navText d-flex align-items-center"
             to="/"
           >
             <img className="navlogo" src="../../../azista.png" alt="img" />{" "}
-            Azista
+            <h4 className="mb-0">Azista</h4>
           </Link>
         </div>
-        <form className="form input_group searchInputCont">
+        {/* <form className="form input_group searchInputCont">
           <span>
             <IoMdSearch className="searchIcon" />
           </span>
           <input type="search" className="searchInput" placeholder="Search.." />
-        </form>
+        </form> */}
         <ul className="navbar-nav d-flex align-items-center">
-          <li className="nav-item d-flex align-items-center">
+          <li className="nav-item d-flex justify-content-center align-items-center">
             {profilePic && token ? (
               <img src={profilePic} className="userProfile" alt="userProfile" />
             ) : (

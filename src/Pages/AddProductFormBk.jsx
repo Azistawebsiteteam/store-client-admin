@@ -7,9 +7,11 @@ import axios from "axios";
 import { v4 } from "uuid";
 import { useMemo } from "react";
 import TextEditor from "./TextEditor";
-import { FaPlus } from "react-icons/fa6";
-// import PopupModal from "./PopupModal";
-// import Button from "react-bootstrap/Button";
+import Dropdown from "react-bootstrap/Dropdown";
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { FaBusinessTime } from "react-icons/fa6";
+import PopupModal from "./PopupModal";
+import Button from "react-bootstrap/Button";
 import Multiselect from "multiselect-react-dropdown";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FaRegFileImage } from "react-icons/fa";
@@ -18,7 +20,6 @@ import { ProductState } from "../Context/ProductContext";
 import { MdDelete } from "react-icons/md";
 import ErrorHandler, { showToast } from "./ErrorHandler";
 import VariantEdit from "./VariantEdit";
-import { FiPlusCircle } from "react-icons/fi";
 import "./Admin.css";
 
 const AddProductForm = ({ productProps }) => {
@@ -73,10 +74,10 @@ const AddProductForm = ({ productProps }) => {
     tagValue,
     setImages,
     variantGroup,
-    // setSiteShow,
-    // modal2Show,
-    // modal1Show,
-    // setStoreShow,
+    setSiteShow,
+    modal2Show,
+    modal1Show,
+    setStoreShow,
     productStatus,
     setProductStatus,
     weight,
@@ -761,7 +762,7 @@ const AddProductForm = ({ productProps }) => {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-sm-12 col-md-8">
+        <div className="col-8">
           <div className="row">
             <div className="col-12">
               <div className="bgStyle">
@@ -808,10 +809,13 @@ const AddProductForm = ({ productProps }) => {
               <div className="bgStyle">
                 <form className="imagesForm">
                   <div className="col-md-12">
-                    <div className="d-flex justify-content-between">
-                      <label htmlFor="productImages" className="formLabel">
-                        Media
-                      </label>
+                    <div className="imgController">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        onChange={onChangeImages}
+                      />
                       {imgFile.length > 0 && (
                         <MdDelete
                           className="dltImgBtn"
@@ -819,19 +823,7 @@ const AddProductForm = ({ productProps }) => {
                         />
                       )}
                     </div>
-                    <div className="imagesCont">
-                      <div className="imgController">
-                        <input
-                          type="file"
-                          accept="image/*"
-                          multiple
-                          onChange={onChangeImages}
-                          className="imageFileInput"
-                        />
-                        <div className="imgUploadIcon">
-                          <FaPlus size={20} />
-                        </div>
-                      </div>
+                    <div className="imgagesCont">
                       {Array.from(images).map((item, i) => (
                         <div className="imgCont" key={i}>
                           <input
@@ -843,12 +835,12 @@ const AddProductForm = ({ productProps }) => {
                             onChange={(e) => selectImg(e, i)}
                           />
                           {typeof item === "string" ? (
-                            <img src={item} width={120} height={120} alt="" />
+                            <img src={item} width={150} height={150} alt="" />
                           ) : (
                             <img
                               src={item ? URL.createObjectURL(item) : null}
-                              width={120}
-                              height={120}
+                              width={150}
+                              height={150}
                               alt=""
                             />
                           )}
@@ -860,19 +852,15 @@ const AddProductForm = ({ productProps }) => {
               </div>
               <div className="bgStyle">
                 <form className="areVariantsForm">
-                  <div className="d-flex align-items-center">
+                  <div className="form-check">
                     <input
-                      className="checkboxInput"
+                      className="form-check-input"
                       type="checkbox"
                       id="isVariants"
                       checked={Boolean(variantsThere)}
                       onChange={() => setVariants(!variantsThere)}
                     />
-                    <label
-                      className="form-check-label"
-                      style={{ marginBottom: "0" }}
-                      htmlFor="isVariants"
-                    >
+                    <label className="form-check-label" htmlFor="isVariants">
                       Product has variants
                     </label>
                   </div>
@@ -881,7 +869,7 @@ const AddProductForm = ({ productProps }) => {
               {variantsThere ? (
                 <div className="bgStyle">
                   <form className="variantsForm">
-                    <label className="formLabel h6 d-block">Variants</label>
+                    <p>Variants</p>
                     {variants.map((varient, index) => (
                       <div className="child-div" key={index}>
                         <div className="d-flex justify-content-between">
@@ -985,8 +973,7 @@ const AddProductForm = ({ productProps }) => {
                     ))}
                     {variants.length < 3 && (
                       <button className="addVariant" onClick={addVarient}>
-                        <FiPlusCircle size={14} /> Add options like size or
-                        color...
+                        + Add Options like size or color...
                       </button>
                     )}
                   </form>
@@ -1249,9 +1236,9 @@ const AddProductForm = ({ productProps }) => {
                             maxLength={5}
                           />
                         </div>
-                        <div className="col-md-12 mt-2">
+                        <div className="col-md-12">
                           <input
-                            className="checkboxInput"
+                            className="form-check-input"
                             type="checkbox"
                             checked={Boolean(productPrices.isTaxable)}
                             onChange={handleProductPrices}
@@ -1283,7 +1270,7 @@ const AddProductForm = ({ productProps }) => {
                       <p>Inventory</p>
                       <div className="form-check">
                         <input
-                          className="checkboxInput"
+                          className="form-check-input"
                           type="checkbox"
                           onClick={trackQty}
                           value={tracker}
@@ -1297,14 +1284,10 @@ const AddProductForm = ({ productProps }) => {
                         <div className="uy">
                           <div className="form-check">
                             {inventoryLocs.map((inve) => (
-                              <div
-                                className="d-flex align-items-center mb-2"
-                                key={inve.inventory_id}
-                              >
+                              <div className="d-flex" key={inve.inventory_id}>
                                 <label>
                                   <input
                                     id={inve.inventory_id}
-                                    className="checkboxInput"
                                     type="checkbox"
                                     checked={locInputs.find(
                                       (loc) =>
@@ -1312,31 +1295,28 @@ const AddProductForm = ({ productProps }) => {
                                     )}
                                     onChange={handleCorporateLoc} // Handle onChange to prevent warning
                                   />
-                                  {`  ${inve.inventory_name}`}
+                                  {inve.inventory_name}
                                 </label>
                                 {locInputs.find(
                                   (loc) => loc.inventoryId === inve.inventory_id
                                 ) && (
-                                  <div className="col-2 ms-2">
-                                    <input
-                                      className="form-control"
-                                      type="text"
-                                      id={inve.inventory_id}
-                                      value={
-                                        locInputs.find(
-                                          (loc) =>
-                                            loc.inventoryId ===
-                                            inve.inventory_id
-                                        ).qty ?? 0
-                                      }
-                                      onChange={handleLocationInputs}
-                                    />
-                                  </div>
+                                  <input
+                                    className="ms-2"
+                                    type="number"
+                                    id={inve.inventory_id}
+                                    value={
+                                      locInputs.find(
+                                        (loc) =>
+                                          loc.inventoryId === inve.inventory_id
+                                      ).qty ?? 0
+                                    }
+                                    onChange={handleLocationInputs}
+                                  />
                                 )}
                               </div>
                             ))}
                             <input
-                              className="checkboxInput"
+                              className="form-check-input"
                               type="checkbox"
                               checked={Boolean(handleLoc.cwos)}
                               id="cwos"
@@ -1353,7 +1333,7 @@ const AddProductForm = ({ productProps }) => {
 
                       <div className="form-check">
                         <input
-                          className="checkboxInput"
+                          className="form-check-input"
                           type="checkbox"
                           checked={Boolean(isSKU)}
                           id="hasSKU"
@@ -1402,9 +1382,8 @@ const AddProductForm = ({ productProps }) => {
                     </form>
                     <form className="shippingForm">
                       <p>Shipping</p>
-                      <label className="d-flex align-items-center">
+                      <label>
                         <input
-                          className="checkboxInput"
                           type="checkbox"
                           checked={Boolean(isShipping)}
                           value={isShipping}
@@ -1413,10 +1392,9 @@ const AddProductForm = ({ productProps }) => {
                         This is a physical product
                       </label>
                       {isShipping ? (
-                        <div className="shippingCont col-md-6">
+                        <div className="shippingCont">
                           <div className="d-flex">
                             <input
-                              className="form-control"
                               type="text"
                               placeholder="0.0"
                               value={weight}
@@ -1424,12 +1402,7 @@ const AddProductForm = ({ productProps }) => {
                               minLength={3}
                             />
                             <select
-                              style={{
-                                border: "1px solid #8e8e8e",
-                                borderRadius: "0.8rem",
-                                marginLeft: "0.2rem",
-                                fontSize: "1.2rem",
-                              }}
+                              className=""
                               aria-label="Default select example"
                               value={weightUnit}
                               onChange={handleWeightUnit}
@@ -1518,7 +1491,7 @@ const AddProductForm = ({ productProps }) => {
             </div>
           </div>
         </div>
-        <div className="col-sm-12 col-md-4">
+        <div className="col-4">
           <div className="row">
             <div className="col-12">
               <div className="bgStyle">

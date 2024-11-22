@@ -5,7 +5,7 @@ import { FaRegFileImage } from "react-icons/fa";
 import Cookies from "js-cookie";
 import axios from "axios";
 import swalErr from "../Pages/ErrorHandler";
-import { ProductState } from "../Context/ProductContext";
+// import { ProductState } from "../Context/ProductContext";
 import { MdDelete } from "react-icons/md";
 import { MdModeEditOutline } from "react-icons/md";
 import "../Pages/Admin.css";
@@ -17,7 +17,7 @@ const Collections = () => {
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(tokenKey);
 
-  const { setDropdownItems } = ProductState();
+  // const { setProductsDropdownItems } = ProductState();
 
   const collectionsApi = useCallback(async () => {
     try {
@@ -36,9 +36,9 @@ const Collections = () => {
   }, [baseUrl, token]);
 
   useEffect(() => {
-    setDropdownItems(true);
+    // setProductsDropdownItems(true);
     collectionsApi();
-  }, [setDropdownItems, collectionsApi]);
+  }, [collectionsApi]);
 
   const deleteCollection = async (id) => {
     try {
@@ -67,7 +67,7 @@ const Collections = () => {
       <div className="commonSec">
         <div className="collectionTopbar">
           <h4>Collections</h4>
-          <Link to="/collections/create" className="btn bg-dark text-light">
+          <Link to="/collections/create" className="infoBtn">
             Create collection
           </Link>
         </div>

@@ -70,7 +70,7 @@ const Brands = () => {
             <div className="row">
               <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
                 <h4>Brands</h4>
-                <Link to="/brands/create" className="btn bg-dark text-light">
+                <Link to="/brands/create" className="infoBtn">
                   Create brands
                 </Link>
               </div>

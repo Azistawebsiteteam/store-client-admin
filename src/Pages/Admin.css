@@ -1,3 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+html { 
+  font-size: 62.5%;
+} 
+body {
+  font-family: 'Inter', sans-serif !important;
+}
+
+h4, .h4 {
+  font-size: 2.3rem !important;
+  font-weight: 600 !important;
+}
+h5, .h5{
+  font-size: 2rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 0 !important;
+}
+h6, .h6 {
+  font-size: 1.4rem !important;
+  font-weight: 600 !important;
+}
+p, .p{
+  font-size: 1.4rem;
+}
+label {
+  font-size: 1.3rem;
+  padding-bottom: 0.3rem;
+}
+.form-select,.form-control,.searchWrapper{
+  padding: 0.6rem 2.25rem 0.6rem 0.75rem !important;
+  border: 1px solid #8e8e8e !important;
+  border-radius: 0.8rem !important;
+  font-size: 1.3rem !important;
+}
+.form-group {
+  margin: 1.4rem 0;
+}
 /* navbar */
 
 .customDropDown[data-bs-popper] {
@@ -11,6 +49,9 @@
 }
 .btn {
   font-size: 0.8rem !important;
+}
+.checkboxInput{
+  width: 2rem !important;
 }
 .form-check-input:checked {
   background-color: black !important;
@@ -27,10 +68,10 @@ ul.dropdownMenu {
   position: absolute;
   background-color: #fff;
   right: 0;
-  top: 44px;
+  top: 5rem;
   list-style-type: none;
   padding: 1rem;
-  font-size: 1rem;
+  line-height:3rem;
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -52,7 +93,21 @@ ul.dropdownMenu {
 .jodit-workplace {
   max-height: 300px !important;
 }
-
+.jodit-add-new-line{
+  display: none !important;;
+}
+.jodit-container:not(.jodit_inline) {
+  background-color: #f5f5f6;
+  border: 1px solid #8e8e8e !important;
+  border-radius: 0.8rem !important;
+  font-size: 1.3rem !important;
+}
+.jodit-toolbar__box:not(:empty):not(:empty) {
+  border-radius: 0.8rem;
+}
+.jodit-workplace+.jodit-status-bar:not(:empty) {
+  border-radius: 0.8rem;
+}
 .ql-editor {
   min-height: 200px;
 }
@@ -81,9 +136,10 @@ ul.dropdownMenu {
 }
 .addVariant {
   border-style: none;
-  background-color: none;
-  font-size: 14px;
-  color: blue;
+  background-color: transparent;
+  font-size: 1.2rem;
+  color: #303030;
+  font-weight: 600;
 }
 .btnStyle {
   border: none;
@@ -105,7 +161,7 @@ ul.dropdownMenu {
 
 .adminNavbar {
   box-shadow: 0rem 0.0625rem 0.0625rem #1f21241a;
-  padding: 4px 12px;
+  padding: 0.8rem !important;
 }
 
 .adminDropdown > li {
@@ -122,13 +178,17 @@ ul.dropdownMenu {
   display: flex;
   background-color: #f1f2f4;
 }
+span.navCloseIcon {
+  display: none;
+}
 
 .sidebarCont {
   background-color: #eaeaea;
-  min-width: 210px;
+  min-width: 22rem;
   position: fixed;
   height: 100vh;
-  top: 50px;
+  top: 6rem;
+  z-index: 2;
 }
 .sidebarCont:hover{
   overflow: auto;
@@ -152,11 +212,10 @@ ul.dropdownMenu {
   font-size: 22px;
 }
 .userProfile {
-  width: 50px;
+  width: 5rem;
   border-radius: 50%;
-  height: 50px;
+  height: 5rem;
   border: 0.5px solid grey;
-  margin-right: 10px;
 }
 .nav_social_icon {
   font-size: 50px;
@@ -273,19 +332,22 @@ ul.dropdownMenu {
   color: #000;
 }
 .customDropdownButton {
-  font-weight: 500;
-  color: #303030;
-  font-size: 14px;
+  font-weight: 600;
+  color: #403f3f;
+  font-size: 1.3rem;
 }
 .linkItem {
   text-decoration: none;
-  color: #303030;
-  font-weight: 500;
+  color: #403f3f;
+  font-weight: 600;
   list-style-type: none;
   display: flex;
   align-items: center;
   padding: 6px 10px;
-  font-size: 14px;
+  font-size: 1.3rem;
+}
+.singleLinkItem{
+  color: #403f3f;
 }
 .activeTab {
   background: #fafafa;
@@ -334,8 +396,8 @@ ul.dropdownMenu {
 .commonSec {
   background-color: #f1f1f1;
   width: 100%;
-  margin-left: 220px;
-  padding: 80px 15px 0 15px;
+  margin-left: 24rem;
+  padding: 9rem 2rem 0 2rem;
   height: 100vh;
   overflow-y: scroll;
   overflow-x: hidden;
@@ -358,17 +420,18 @@ tr.tableHeader {
   min-height: 62px;
 }
 .infoTxt {
-  font-size: 14px;
+  font-size: 1.2rem;
   padding-top: 1px;
+  color: gray;
 }
 .heading {
   padding-bottom: 2px;
 }
 .btnCont {
-  text-align: right;
   background-color: #f1f2f4;
-  padding-bottom: 30px;
-  padding-right: 30px;
+  padding: 3rem 0;
+  display: flex;
+  justify-content: end;
 }
 .collectionTopbar {
   display: flex;
@@ -404,13 +467,6 @@ tr.tableHeader {
   position: absolute;
   left: 24px;
   cursor: pointer;
-}
-.adminBtn {
-  background-color: #a99400;
-  color: #fff;
-  border-style: none;
-  padding: 6px 10px;
-  border-radius: 4px;
 }
 .radioBtnStylings {
   padding-left: 4px;
@@ -483,6 +539,22 @@ img.bImg {
 .productsTopbar {
   display: flex;
   justify-content: space-between;
+}
+a.infoBtn, .adminBtn {
+  background-color: #303030;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 1);
+  font-size: 1.2rem;
+  font-weight: 600;
+  width: max-content;
+  border-radius: 1rem;
+  padding: 0 1.4rem;
+  box-shadow: 0rem -.0625rem 0rem .0625rem rgba(0, 0, 0, .8) inset, 0rem 0rem 0rem .0625rem rgba(48, 48, 48, 1) inset, 0rem .03125rem 0rem .09375rem rgba(255, 255, 255, .25) inset;
+  display: flex;
+  align-items: center;
+}
+.adminBtn{
+  padding: 0.4rem 1.4rem;
 }
 .productThumbnail {
   width: 60%;
@@ -644,14 +716,41 @@ svg.copyIcon {
   margin-top: 12%;
 }
 .imgController {
+  position: relative;
   display: flex;
-  justify-content: space-between;
+  width: 12rem;
+  min-height: 100%;
 }
-.imgagesCont {
+.imagesCont {
   display: flex;
-  margin: 20px 0;
+  margin: 1rem 0;
+  border: 1px dashed grey;
+  padding: 0.5rem;
+  border-radius: 0.8rem;
   flex-wrap: wrap;
   gap: 14px;
+  min-height: 10rem;
+}
+.imgUploadIcon {
+  border: 1px dotted grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Match the container width */
+  height: 100%; /* Match the container height */
+  border-radius: 0.5rem;
+  background-color: #f8f9fa; /* Optional: Add a background color */
+  z-index: 1; /* Place it below the input */
+}
+.imageFileInput {
+  position: absolute; /* Make the input overlay the icon */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0; /* Hide the input visually but keep it clickable */
+  cursor: pointer; /* Ensure it's clickable */
+  z-index: 2; /* Bring it above the icon */
 }
 .imgCont {
   position: relative;
@@ -700,10 +799,12 @@ button#drobdownBtn {
   background-color: transparent;
 }
 .dropdownItems {
-  color: #616161;
+  color: gray !important;
+  display: flex !important;
+  align-items: center;
 }
 .childElements {
-  padding: 0 0 0 14px;
+  padding: 0 0 0 2.4rem;
 }
 
 /* inventoryPage */
@@ -726,4 +827,25 @@ input.inventoryInput {
   display: flex;
   justify-content: center;
   align-items: flex-start;
+}
+
+
+@media screen and (max-width: 768px) {
+  .commonSec {
+    margin-left: 0;
+  }
+  span.navCloseIcon {
+    display: block;
+    position: absolute;
+    right: 1rem;
+    right: 2rem;
+    top: 6rem;
+    font-size: 2rem;
+  }
+  .onClickClose{
+    left: -22rem;
+  }
+  .sideBarItems {
+    padding: 6rem 1rem;
+  }
 }
