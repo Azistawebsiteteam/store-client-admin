@@ -14,13 +14,13 @@ const VariantDetails = () => {
   const [isPhysical, setIsPhysical] = useState(false);
   const [selectedVariantDetails, SetSelectedVariantDetails] = useState({});
   const [shippingDetails, setShippingDetails] = useState({
-    weight: "",
-    weightUnit: "",
+    weight: "0",
+    weightUnit: "kg",
   });
   const [inventory, setInventory] = useState({
     sku: "",
     barcode: "",
-    hsCode: "",
+    hscode: "",
   });
   const [variantImg, setVariantImg] = useState([]);
 
@@ -37,79 +37,117 @@ const VariantDetails = () => {
   const { id } = params;
   const navigate = useNavigate();
 
-  const { productDetails, variantsData, variantDetails } = ProductState();
+  const { productDetails, variantsData, variantDetails, setVariantDetails } =
+    ProductState();
 
   useEffect(() => {
     const apiCallback = async () => {
       try {
-        const variantDetailsUrl = `http://192.168.215.137:5018/api/v1/product/variants/`;
+        // Define API endpoint and headers
+        const variantDetailsUrl = `${baseUrl}/product/variants/`;
         const headers = {
           Authorization: `Bearer ${token}`,
         };
-        swalErr.onLoading();
+
+        // Show loading
+        Swal.fire({ title: "Loading...", allowOutsideClick: false });
+        Swal.showLoading();
+
+        // Make the API request
         const response = await axios.post(
           variantDetailsUrl,
           { variantId: id },
           { headers }
         );
+
+        // Handle successful response
         if (response.status === 200) {
           console.log(response.data);
           Swal.close();
           const selectedVariantDetails = response.data.variant;
-          setVariantImg(selectedVariantDetails.variant_image[1]);
+
+          // Set variant image
+          const variantImg = selectedVariantDetails.variant_image[1];
+          setVariantImg(variantImg);
+
+          // Set variant details
           SetSelectedVariantDetails(selectedVariantDetails);
+
+          // Set prices
           setPrices({
-            price: selectedVariantDetails.offer_price,
-            costperitem: selectedVariantDetails.cost_per_item,
-            comparePrice: selectedVariantDetails.compare_at_price,
-            isTaxable: selectedVariantDetails.variant_taxable,
+            price: selectedVariantDetails.offer_price ?? "0",
+            costperitem: selectedVariantDetails.cost_per_item ?? "0",
+            comparePrice: selectedVariantDetails.compare_at_price ?? "0",
+            isTaxable: selectedVariantDetails.variant_taxable === "true",
           });
+
+          // Set inventory details
           setInventory({
-            sku: selectedVariantDetails.variant_sku,
-            barcode: selectedVariantDetails.variant_barcode,
-            hsCode: selectedVariantDetails.variant_HS_code,
+            sku: selectedVariantDetails.variant_sku || "",
+            barcode: selectedVariantDetails.variant_barcode || "",
+            hscode: selectedVariantDetails.variant_HS_code || "",
           });
+
+          // Set shipping details
           setShippingDetails({
-            weight:
-              selectedVariantDetails.variant_weight !== null
-                ? selectedVariantDetails.variant_weight
-                : "0",
-            weightUnit:
-              selectedVariantDetails.variant_weight_unit !== null
-                ? selectedVariantDetails.variant_weight_unit
-                : "",
+            weight: selectedVariantDetails.variant_weight || "0",
+            weightUnit: selectedVariantDetails.variant_weight_unit || "kg",
           });
+
+          // Determine if the item is physical
           setIsPhysical(selectedVariantDetails.variant_weight !== null);
         }
       } catch (error) {
         Swal.close();
+        swalErr.onError(error);
       }
     };
+
+    // Call the API
     apiCallback();
   }, [id, baseUrl, token]);
 
-  const isPhysicalProduct = () => {
-    setIsPhysical(!isPhysical);
-  };
-
   const updateVariantImg = (e) => {
     setVariantImg(e.target.files[0]);
+    const url = URL.createObjectURL(e.target.files[0]);
+
+    const update = variantDetails.map((v) => {
+      if (v.id === parseInt(id)) {
+        return { ...v, variant_image: [v.variant_image[0], url] };
+      } else {
+        return v;
+      }
+    });
+    setVariantDetails(update);
   };
 
   const updatePrice = (e) => {
-    if (e.target.id === "isTaxable") {
-      setPrices({ ...prices, [e.target.id]: e.target.checked });
-    } else {
-      setPrices({ ...prices, [e.target.id]: e.target.value });
+    const { id, checked, value } = e.target;
+
+    if (id === "isTaxable") {
+      setPrices({ ...prices, [id]: checked });
+    } else if (/^[0-9]*$/.test(value)) {
+      setPrices({ ...prices, [id]: value });
     }
   };
 
   const handleInventory = (e) => {
-    setInventory({ ...inventory, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    if (id === "hscode" && /^[0-9]*$/.test(value)) {
+      setInventory({ ...inventory, [id]: value });
+    } else if (id !== "hscode") {
+      setInventory({ ...inventory, [id]: value });
+    }
   };
 
   const handleShippingQty = (e) => {
-    setShippingDetails({ ...shippingDetails, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+
+    if (id === "weight" && /^[0-9]*$/.test(value)) {
+      setShippingDetails({ ...shippingDetails, [id]: value });
+    } else if (id !== "weight") {
+      setShippingDetails({ ...shippingDetails, [id]: value });
+    }
   };
 
   const onUpdateVariants = async () => {
@@ -119,34 +157,42 @@ const VariantDetails = () => {
         Authorization: `Bearer ${token}`,
       };
 
-      swalErr.onLoading();
-      const formdata = new FormData();
-      formdata.append("variantImage", variantImg);
-      formdata.append("offer_price", prices.price);
-      formdata.append("comparePrice", prices.comparePrice);
-      formdata.append("costPerItem", prices.costperitem);
-      formdata.append("isTaxable", prices.isTaxable);
-      formdata.append("value", "[]");
-      formdata.append("barCode", inventory.barcode);
-      formdata.append("hsCode", inventory.hsCode);
-      formdata.append("skuCode", inventory.sku);
-      formdata.append("variantWeight", shippingDetails.weight);
-      formdata.append("variantWeightUnit", shippingDetails.weightUnit);
-      formdata.append("variantId", id);
-      formdata.append("quantity", 100);
-      formdata.append("inventoryId", 10);
-      formdata.append("inventoryPolicy", "na");
-      formdata.append("variantService", "na");
-      formdata.append("shippingRequired", isPhysical);
+      // Show loading indicator
+      Swal.fire({ title: "Updating...", allowOutsideClick: false });
+      Swal.showLoading();
 
-      const response = await axios.put(url, formdata, { headers });
+      // Initialize FormData
+      const formData = new FormData();
+
+      // Append necessary form data
+      formData.append("variantImage", variantImg);
+      formData.append("offer_price", prices.price);
+      formData.append("comparePrice", prices.comparePrice);
+      formData.append("Costperitem", prices.costperitem);
+      formData.append("isTaxable", prices.isTaxable ? true : false); // Convert to boolean
+      formData.append("value", "[]"); // Placeholder for value field
+      formData.append("barcode", inventory.barcode);
+      formData.append("hsCode", inventory.hscode);
+      formData.append("skuCode", inventory.sku);
+      formData.append("variantWeight", shippingDetails.weight); // Add fallback for null/undefined
+      formData.append("variantWeightUnit", shippingDetails.weightUnit); // Add fallback
+      formData.append("variantId", id);
+      formData.append("inventoryPolicy", "na");
+      formData.append("variantService", "na");
+      formData.append("shippingRequired", isPhysical);
+
+      // Send the API request
+      const response = await axios.put(url, formData, { headers });
+
+      // Handle success
       if (response.status === 200) {
-        navigate(-1);
+        Swal.close();
+        swalErr.onSuccess();
+        // navigate(-1); // Navigate back
       }
+    } catch (error) {
       Swal.close();
-    } catch (e) {
-      console.log(e);
-      Swal.close();
+      swalErr.onError(error);
     }
   };
   console.log(inventory.barcode, "inventory.barcode");
@@ -164,11 +210,22 @@ const VariantDetails = () => {
           variantId: id,
         },
       });
-      // navigate(-1)
+
       Swal.close();
     } catch (error) {
       Swal.close();
+      swalErr.onError(error);
     }
+  };
+  const getVariantImgurl = (imges) => {
+    const [productImg, variantImg] = imges;
+    let imgurl = "";
+    if (variantImg) {
+      imgurl = variantImg;
+    } else {
+      imgurl = productImg;
+    }
+    return imgurl;
   };
 
   return (
@@ -207,13 +264,13 @@ const VariantDetails = () => {
               <div className="bgStyle">
                 <h6>Variants</h6>
                 <hr />
-                {variantDetails.map((variant, i) => (
-                  <Link to={`/variant-details/${variant.id}`} key={variant.id}>
+                {variantDetails.map((variant) => (
+                  <Link to={`/variant-details/${variant.id}`}>
                     <div className="d-flex align-items-center">
                       <img
                         className="vImg"
-                        src={variant.variant_image[0]}
-                        alt={`Variant ${i + 1}`}
+                        src={getVariantImgurl(variant.variant_image)}
+                        alt="ghg"
                       />
                       <p style={{ marginBottom: "0", marginLeft: "6px" }}>
                         {variant.option1 && <span>{variant.option1}</span>}{" "}
@@ -229,7 +286,7 @@ const VariantDetails = () => {
               <div className="bgStyle">
                 <h6>Options</h6>
                 {variantsData.map((v, i) => (
-                  <div className="mb-3" key={i}>
+                  <div className="mb-3">
                     <label htmlFor="optionName" className="col-form-label">
                       {v.UOM}
                     </label>
@@ -252,12 +309,10 @@ const VariantDetails = () => {
                       />
                     ) : null
                   ) : (
-                    <img className="vImg" src={variantImg} alt="variant" />
+                    <img className="vImg" src={variantImg} alt="yu" />
                   )}
                   <div className="singleVariantImg">
-                    <label style={{ cursor: "pointer" }} htmlFor="chooseImg">
-                      Change
-                    </label>
+                    <label htmlFor="chooseImg">Change</label>
                     <input
                       type="file"
                       id="chooseImg"
@@ -280,10 +335,12 @@ const VariantDetails = () => {
                       id="price"
                       value={prices.price ?? 0}
                       onChange={updatePrice}
+                      minLength={1}
+                      maxLength={5}
                     />
                   </div>
                   <div className="col">
-                    <label htmlFor="comparePrice" className="col-form-label">
+                    <label htmlFor="costperitem" className="col-form-label">
                       Compare-at-price
                     </label>
                     <input
@@ -292,6 +349,8 @@ const VariantDetails = () => {
                       id="comparePrice"
                       value={prices.comparePrice}
                       onChange={updatePrice}
+                      minLength={1}
+                      maxLength={5}
                     />
                   </div>
                 </div>
@@ -309,15 +368,17 @@ const VariantDetails = () => {
                 </div>
                 <div className="row">
                   <div className="col">
-                    <label htmlFor="costperitem" className="col-form-label">
+                    <label htmlFor="price" className="col-form-label">
                       Cost per item
                     </label>
                     <input
                       type="text"
                       className="form-control"
                       id="costperitem"
-                      value={prices.costperitem ?? 0}
+                      value={prices.costperitem}
                       onChange={updatePrice}
+                      minLength={1}
+                      maxLength={5}
                     />
                   </div>
                 </div>
@@ -334,8 +395,10 @@ const VariantDetails = () => {
                       value={inventory.sku}
                       className="form-control"
                       id="sku"
+                      placeholder=""
                       onChange={handleInventory}
-                      maxLength={50}
+                      minLength={1}
+                      maxLength={25}
                     />
                   </div>
                   <div className="col-sm-6">
@@ -347,8 +410,10 @@ const VariantDetails = () => {
                       value={inventory.barcode}
                       className="form-control"
                       id="barcode"
+                      placeholder=""
                       onChange={handleInventory}
-                      maxLength={50}
+                      minLength={1}
+                      maxLength={25}
                     />
                   </div>
                   <div className="col-sm-6">
@@ -357,11 +422,13 @@ const VariantDetails = () => {
                     </label>
                     <input
                       type="text"
-                      value={inventory.hsCode}
+                      value={inventory.hscode}
                       className="form-control"
-                      id="hsCode"
+                      id="hscode"
+                      placeholder=""
                       onChange={handleInventory}
-                      maxLength={50}
+                      minLength={1}
+                      maxLength={25}
                     />
                   </div>
                 </div>
@@ -372,7 +439,7 @@ const VariantDetails = () => {
                   <input
                     className="form-check-input"
                     checked={isPhysical}
-                    onChange={isPhysicalProduct}
+                    onChange={(e) => setIsPhysical(e.target.checked)}
                     type="checkbox"
                     id="physicalProduct"
                   />
@@ -385,16 +452,18 @@ const VariantDetails = () => {
                         <input
                           type="text"
                           placeholder="0.0"
-                          value={shippingDetails.weight ?? ""}
+                          value={shippingDetails.weight}
                           onChange={handleShippingQty}
                           id="weight"
+                          minLength={1}
+                          maxLength={5}
                         />
                         <select
                           className=""
                           aria-label="Default select example"
                           value={shippingDetails.weightUnit}
-                          onChange={handleShippingQty}
                           id="weightUnit"
+                          onChange={handleShippingQty}
                         >
                           <option value="kg">Kg</option>
                           <option value="lb">lb</option>

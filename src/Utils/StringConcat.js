@@ -19,3 +19,8 @@ export const getStringData = (values) => {
   }
   return dataString.trim();
 };
+
+export const truncateText = (content, size) => {
+  const text = content.length > size ? content.slice(0, size) + '...' : content;
+  return text;
+};

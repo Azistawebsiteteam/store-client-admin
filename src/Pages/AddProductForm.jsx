@@ -1512,6 +1512,7 @@ const AddProductForm = ({ productProps }) => {
                     id="url"
                     value={metaDetails.urlHandle}
                     onChange={handleMetaDetails}
+                    maxLength={150}
                   />
                 </div>
               </div>
