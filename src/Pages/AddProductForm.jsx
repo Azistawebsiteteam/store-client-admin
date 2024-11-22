@@ -575,6 +575,13 @@ const AddProductForm = ({ productProps }) => {
     if (e.target.value.length <= 200) {
       setMainTitle(e.target.value);
     }
+    setMetaDetails({
+      ...metaDetails,
+      urlHandle: `http://20.235.149.149:5019/product/${e.target.value.replace(
+        / /g,
+        '-'
+      )}`,
+    });
   };
 
   const onChangeTitle = (e) => {
@@ -586,13 +593,6 @@ const AddProductForm = ({ productProps }) => {
     if (e.target.value.length <= 200) {
       setTitle(e.target.value);
     }
-    setMetaDetails({
-      ...metaDetails,
-      urlHandle: `http://20.235.149.149:5019/product/${e.target.value.replace(
-        / /g,
-        '-'
-      )}`,
-    });
   };
 
   const onchangeVariantGroupBy = (e) => {
@@ -606,7 +606,7 @@ const AddProductForm = ({ productProps }) => {
     if (id === 'urlHandle' && value.length >= 35) {
       setMetaDetails({
         ...metaDetails,
-        [id]: value,
+        [id]: value.replace(/ /g, '-'),
       });
     } else if (id !== 'urlHandle') {
       setMetaDetails({ ...metaDetails, [id]: value });
