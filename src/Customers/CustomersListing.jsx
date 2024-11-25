@@ -99,7 +99,7 @@ const CustomersListing = () => {
             className="sortBtn"
             onClick={() => setDisplayFilterDropdown(!displayFilterDropdown)}
           >
-            <RiArrowUpDownLine size={16} />
+            <RiArrowUpDownLine color="#878282" strikeWidth={2} size={16} />
           </button>
           {displayFilterDropdown && (
             <div className="dropDown">

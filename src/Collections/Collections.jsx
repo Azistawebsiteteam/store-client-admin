@@ -72,14 +72,27 @@ const Collections = () => {
           </Link>
         </div>
         <div className="tableCont" style={{ maxHeight: "76vh" }}>
-          <table className="table table-hover" style={{ minWidth: "1000px" }}>
+          <table
+            className="table custom-table table-hover"
+            style={{ minWidth: "1000px" }}
+          >
             <thead>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Collection Image</th>
-                <th scope="col">Title</th>
-                <th scope="col">Products</th>
-                <th scope="col">Action</th>
+                <th scope="col" style={{ width: "8%" }}>
+                  #
+                </th>
+                <th scope="col" style={{ width: "20%" }}>
+                  Collection Image
+                </th>
+                <th scope="col" style={{ width: "40%" }}>
+                  Title
+                </th>
+                <th scope="col" style={{ width: "20%" }}>
+                  No. Products
+                </th>
+                <th scope="col" style={{ width: "12%" }}>
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody>

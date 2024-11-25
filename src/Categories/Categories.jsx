@@ -90,17 +90,27 @@ const Categories = () => {
         </div>
         <div className="tableCont" style={{ maxHeight: "76vh" }}>
           <table
-            className="table table-hover"
+            className="table custom-table table-hover"
             style={{ minWidth: "1000px" }}
             ref={tableRef}
           >
             <thead>
               <tr className="tableHeader">
-                <th scope="col">#</th>
-                <th scope="col">Category Image</th>
-                <th scope="col">Category Name</th>
-                <th scope="col">No. Products</th>
-                <th scope="col">Actions</th>
+                <th scope="col" style={{ width: "8%" }}>
+                  #
+                </th>
+                <th scope="col" style={{ width: "20%" }}>
+                  Category Image
+                </th>
+                <th scope="col" style={{ width: "40%" }}>
+                  Category Name
+                </th>
+                <th scope="col" style={{ width: "20%" }}>
+                  No. Products
+                </th>
+                <th scope="col" style={{ width: "12%" }}>
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>

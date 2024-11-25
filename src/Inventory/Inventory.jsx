@@ -191,14 +191,14 @@ const Inventory = () => {
             className="sortBtn"
             onClick={() => setDisplayFilterDropdown(!displayFilterDropdown)}
           >
-            <RiArrowUpDownLine />
+            <RiArrowUpDownLine color="#878282" strikeWidth={2} size={16} />
           </button>
           {displayFilterDropdown && (
-            <div className="dropDown">
-              <p>Sort by</p>
+            <div className="filterDropdown">
+              <p style={{ marginLeft: "-1.4rem" }}>Sort by</p>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="producttitle"
@@ -212,7 +212,7 @@ const Inventory = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="sku"
@@ -226,7 +226,7 @@ const Inventory = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="unavailable"
@@ -240,7 +240,7 @@ const Inventory = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="commited"
@@ -254,7 +254,7 @@ const Inventory = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="available"
@@ -268,7 +268,7 @@ const Inventory = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="onhand"
@@ -280,23 +280,29 @@ const Inventory = () => {
                   On hand
                 </label>
               </div>
-              <div className="mt-1">
-                <GoArrowUp />
-                <small
+              <div
+                className="mt-1"
+                style={{ marginLeft: "-1.4rem", cursor: "pointer" }}
+              >
+                <GoArrowUp size={14} style={{ marginRight: "0.8rem" }} />
+                <label
                   className={filtersOrder === "ASC" && "active"}
                   onClick={() => handleFiltersOrder("ASC")}
                 >
                   A - Z
-                </small>
+                </label>
               </div>
-              <div className="mt-1">
-                <GoArrowDown />
-                <small
+              <div
+                className="mt-1"
+                style={{ marginLeft: "-1.4rem", cursor: "pointer" }}
+              >
+                <GoArrowDown size={14} style={{ marginRight: "0.8rem" }} />
+                <label
                   className={filtersOrder === "DESC" && "active"}
                   onClick={() => handleFiltersOrder("DESC")}
                 >
                   Z - A
-                </small>
+                </label>
               </div>
             </div>
           )}
@@ -304,10 +310,7 @@ const Inventory = () => {
         <div className="middleSec">
           {filteredInventoryList.length ? (
             <div className="tableCont">
-              <table
-                className="table table-hover"
-                style={{ minWidth: "1200px" }}
-              >
+              <table className="table custom-table table-hover">
                 <thead>
                   <tr className="tableHeader">
                     <th
@@ -317,8 +320,10 @@ const Inventory = () => {
                     >
                       Image
                     </th>
-                    <th scope="col">Product</th>
-                    <th scope="col" style={{ width: "  10%" }}>
+                    <th scope="col" style={{ width: "30%" }}>
+                      Product
+                    </th>
+                    <th scope="col" style={{ width: "20%" }}>
                       SKU
                     </th>
                     <th scope="col" style={{ width: "  10%" }}>
@@ -353,15 +358,17 @@ const Inventory = () => {
                           />
                         )}
                       </td>
-                      <td className="productTitle">
-                        <span>{each.product_title}</span>
-                        {each.is_varaints_aval && (
+                      <td>
+                        <span className="productTitle">
+                          {each.product_title}
+                        </span>
+                        {each.is_varaints_aval ? (
                           <p className="variantsOpt">
                             {each.option1 && <span>{each.option1}</span>}
                             {each.option2 && <span>/{each.option2}</span>}
                             {each.option3 && <span>/{each.option1}</span>}
                           </p>
-                        )}
+                        ) : null}
                       </td>
                       <td className="productSku">{each.sku_code}</td>
                       <td style={{ width: "  10%" }}>

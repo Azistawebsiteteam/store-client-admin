@@ -97,10 +97,10 @@ const AdminSideBar = () => {
                     }
                   >
                     {/* <FaFirstOrder className="me-3" /> */}
-                    Orders
+                    Orders Management
                   </li>
                 </Link>
-                <Link className="link" to="/products">
+                {/* <Link className="link" to="/products">
                   <li
                     className={
                       activeTab.startsWith("/product")
@@ -108,9 +108,9 @@ const AdminSideBar = () => {
                         : "linkItem dropdownItems"
                     }
                   >
-                    {/* <MdAssignmentReturned className="me-3" />  */}Returns
+                    Returns
                   </li>
-                </Link>
+                </Link> */}
                 <Link className="link" to="/products">
                   <li
                     className={
