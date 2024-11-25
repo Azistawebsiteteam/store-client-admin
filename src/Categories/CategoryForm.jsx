@@ -1,7 +1,8 @@
 import React from "react";
 import { FaUpload } from "react-icons/fa";
 import { v4 } from "uuid";
-import { AddIcon, RemoveIcon } from "../Components/Icons";
+import { AddIcon } from "../Components/Icons";
+import { RxCross2 } from "react-icons/rx";
 
 const CategoryForm = (props) => {
   const {
@@ -13,15 +14,19 @@ const CategoryForm = (props) => {
     setCategoryData,
     deletedSubCats,
     setDeletedSubCats,
+    categoriesErrorMsg,
+    setCategoriesErrorMsg,
   } = props;
 
   const handleCategoryImage = (e) => {
     const image = e.target.files[0];
     setCategoryImg(image);
+    setCategoriesErrorMsg({ ...categoriesErrorMsg, categoryImg: "" });
   };
 
   const handleBrandInput = (e) => {
     setCategoryData({ ...categoryData, [e.target.id]: e.target.value });
+    setCategoriesErrorMsg({ ...categoriesErrorMsg, [e.target.id]: "" });
   };
 
   const addSubCategories = () => {
@@ -53,6 +58,7 @@ const CategoryForm = (props) => {
       }
     });
     setSubCategories(newSubCategories);
+    setCategoriesErrorMsg({ ...categoriesErrorMsg, subCategoryName: "" });
   };
 
   return (
@@ -70,18 +76,32 @@ const CategoryForm = (props) => {
             className="form-control"
             id="text"
           />
+          {categoriesErrorMsg.text && (
+            <span className="errorValue">{categoriesErrorMsg.text}</span>
+          )}
         </div>
-
+        <div className="col-md-12">
+          <label htmlFor="description" className="form-label">
+            Category Description
+          </label>
+          <textarea
+            type="text"
+            value={categoryData.description}
+            onChange={handleBrandInput}
+            className="form-control"
+            id="description"
+          ></textarea>
+          {categoriesErrorMsg.description && (
+            <span className="errorValue">{categoriesErrorMsg.description}</span>
+          )}
+        </div>
         <div className="col-md-12">
           <label htmlFor="text" className="form-label">
             Sub Category Name
           </label>
-          <div className="d-flex flex-wrap">
+          <div className="d-flex align-items-center flex-wrap">
             {subCategories?.map((each, i) => (
-              <div
-                key={i}
-                className="subCategoryCont d-flex align-items-center m-1"
-              >
+              <div key={i} className="subCategoryCont">
                 <input
                   type="text"
                   value={each.subCategoryName}
@@ -91,34 +111,31 @@ const CategoryForm = (props) => {
                   style={{ width: "90%", height: "fitContent" }}
                 />
                 <div className="dltSubCat">
-                  <RemoveIcon onClick={(e) => removeCategory(each.id)} />
+                  <RxCross2
+                    size={16}
+                    strokeWidth={1}
+                    color="grey"
+                    onClick={(e) => removeCategory(each.id)}
+                  />
                 </div>
               </div>
             ))}
             <AddIcon onClick={addSubCategories} />
           </div>
+          {categoriesErrorMsg.subCategoryName && (
+            <span className="errorValue">
+              {categoriesErrorMsg.subCategoryName}
+            </span>
+          )}
         </div>
-
-        <div className="col-md-12">
-          <label htmlFor="description" className="form-label">
-            Category Description
-          </label>
-          <input
-            type="text"
-            value={categoryData.description}
-            onChange={handleBrandInput}
-            className="form-control"
-            id="description"
-          />
-        </div>
-        <div className="col-12">
+        <div className="col-sm-12 col-md-6">
           <div className="form-group">
             <h6>Image</h6>
-            <div className="drop-zone">
+            <div className="drop-zone" style={{ borderRadius: "0.6rem" }}>
               {categoryImg ? (
                 typeof categoryImg === "string" ? (
                   <img
-                    className="categoryThumbnail"
+                    className="categoryThumbnailInput"
                     src={categoryImg}
                     width={200}
                     height={180}
@@ -126,7 +143,7 @@ const CategoryForm = (props) => {
                   />
                 ) : (
                   <img
-                    className="categoryThumbnail"
+                    className="categoryThumbnailInput"
                     src={URL.createObjectURL(categoryImg)}
                     width={200}
                     height={180}
@@ -134,9 +151,9 @@ const CategoryForm = (props) => {
                   />
                 )
               ) : (
-                <span className="dropZoneOverlay">
+                <label className="dropZoneOverlay">
                   <FaUpload /> Drop file here or click to upload
-                </span>
+                </label>
               )}
               <input
                 type="file"
@@ -145,10 +162,15 @@ const CategoryForm = (props) => {
                 onChange={handleCategoryImage}
               />
             </div>
-            <span>
+            {categoriesErrorMsg.categoryImg && (
+              <span className="errorValue">
+                {categoriesErrorMsg.categoryImg}
+              </span>
+            )}
+            <label className="labelForm">
               <strong>Note:</strong> Shape the image into a circle for a more
               appealing design.
-            </span>
+            </label>
           </div>
         </div>
       </form>

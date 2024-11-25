@@ -28,7 +28,7 @@ function BasicButtonExample() {
   };
 
   return (
-    <div className="dropdown">
+    <div className="dropdown nav_dropdown">
       {showDropdown ? (
         <RiArrowDropUpFill
           size={26}

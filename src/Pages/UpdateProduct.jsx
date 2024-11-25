@@ -1,22 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { v4 } from 'uuid';
-import AddProductForm from './AddProductForm';
-import AdminSideBar from './AdminSideBar';
-import { useParams } from 'react-router-dom';
-import swalErr from './ErrorHandler';
-import { ProductState } from '../Context/ProductContext';
-import BackBtn from '../Components/BackBtn';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import axios from "axios";
+import { v4 } from "uuid";
+import AddProductForm from "./AddProductForm";
+import AdminSideBar from "./AdminSideBar";
+import { useParams } from "react-router-dom";
+import swalErr from "./ErrorHandler";
+import { ProductState } from "../Context/ProductContext";
+import { handleProductPageValidations } from "./ProductPageValidations";
+import BackBtn from "../Components/BackBtn";
 
 const UpdateProduct = () => {
   const [productData, setProductData] = useState({
-    title: '',
-    mainTitle: '',
-    content: '',
+    title: "",
+    mainTitle: "",
+    content: "",
     locInputs: [],
     modal1Show: false,
     modal2Show: false,
@@ -35,33 +36,34 @@ const UpdateProduct = () => {
     images: [],
     categoryItems: [],
     variantsDetails: [],
-    skuInput: { SKU: '', barcode: '' },
-    weight: '0',
-    weightUnit: 'kg',
-    originCountry: '',
-    productStatus: '0',
+    skuInput: { SKU: "", barcode: "" },
+    weight: "0",
+    weightUnit: "kg",
+    originCountry: "",
+    productStatus: "0",
     productCategory: {
-      category: '',
-      productType: '',
-      vendor: '',
-      brand: '',
+      category: "",
+      productType: "",
+      vendor: "",
+      brand: "",
       minCartQty: 0,
       maxCartQty: 0,
     },
     tagValue: [],
     collectionValue: [],
     metaDetails: {
-      metaTitle: '',
-      metaDescription: '',
+      metaTitle: "",
+      metaDescription: "",
       urlHandle: `http://20.235.149.147:5019/product/`,
     },
     modal3Show: false,
   });
   const [variants, setVariant] = useState([]);
-  const [variantGroup, setVariantsGroup] = useState('');
+  const [variantGroup, setVariantsGroup] = useState("");
   const [inventoryIdInfo, setInventoryId] = useState([]);
   const [subVariantsVisibility, setSubVariantsVisibility] = useState({});
   const [variantsThere, setVariants] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
   const baseUrl = process.env.REACT_APP_API_URL;
 
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -70,7 +72,7 @@ const UpdateProduct = () => {
   const { setProductDetails, setVariantsData, setVariantDetails } =
     ProductState();
 
-  const [returnAccept, setReturnAccept] = useState('No');
+  const [returnAccept, setReturnAccept] = useState("No");
   const [returnDays, setReturnDays] = useState(0);
 
   const navigate = useNavigate();
@@ -142,13 +144,12 @@ const UpdateProduct = () => {
       tagValue: JSON.parse(tags),
       collectionValue: JSON.parse(collections),
       productStatus: status,
-      weight: product_weight ? product_weight.split('-')[0] : '0',
-      weightUnit: product_weight ? product_weight.split('-')[1] : 'kg',
-      isShipping: product_weight?.split('-').length > 0,
+      weight: product_weight ? product_weight.split("-")[0] : "0",
+      weightUnit: product_weight ? product_weight.split("-")[1] : "kg",
+      isShipping: product_weight?.split("-").length > 0,
       isSKU: !!(sku_code || sku_bar_code),
       skuInput: { SKU: sku_code, barcode: sku_bar_code },
       handleLoc: { cwos: out_of_stock_sale },
-
       tracker: !JSON.parse(variant_store_order)?.length > 0,
     }));
     setReturnAccept(product_return_accept);
@@ -161,7 +162,7 @@ const UpdateProduct = () => {
     const newVariants = v.map((each) => ({
       id: v4(),
       optionName: each.UOM,
-      optionValue: [...each.values, ''],
+      optionValue: [...each.values, ""],
       isDone: true,
     }));
 
@@ -179,6 +180,7 @@ const UpdateProduct = () => {
       const response = await axios.post(url, body, { headers });
 
       const { productDetails, variants, availableVariants } = response.data;
+      console.log(availableVariants, "availableVariants");
 
       swalErr.onLoadingClose();
       setProductUpdateDetails(productDetails);
@@ -200,21 +202,27 @@ const UpdateProduct = () => {
   }, [id, baseUrl, token, inventoryIdInfo]);
 
   const onSubmitProductDetails = async () => {
+    const validationErrorMessage = handleProductPageValidations(productData);
+    if (Object.keys(validationErrorMessage).length > 0) {
+      window.scrollTo(0, 0);
+      setValidationErrors(validationErrorMessage);
+      return;
+    }
     try {
       if (!productData.title) {
         setProductData((prevData) => ({
           ...prevData,
-          error: 'Title can’t be blank',
+          error: "Title can’t be blank",
         }));
         return;
       } else {
-        setProductData((prevData) => ({ ...prevData, error: '' }));
+        setProductData((prevData) => ({ ...prevData, error: "" }));
       }
 
       const url = `${baseUrl}/product/update-store`;
       const headers = {
         Authorization: `Bearer ${token}`,
-        'Content-type': 'multipart/form-data',
+        "Content-type": "multipart/form-data",
       };
       swalErr.onLoading();
 
@@ -222,89 +230,89 @@ const UpdateProduct = () => {
       const proVariants = [
         ...new Set(variants.map((variant) => variant.optionName)),
       ];
-      const oldImages = productData.images.filter((e) => typeof e === 'string');
+      const oldImages = productData.images.filter((e) => typeof e === "string");
 
       productData.images.forEach((file) => {
-        if (oldImages.length === 1 && typeof file === 'string') {
-          formdata.append('productImages', JSON.stringify([file]));
+        if (oldImages.length === 1 && typeof file === "string") {
+          formdata.append("productImages", JSON.stringify([file]));
         } else {
-          formdata.append('productImages', file);
+          formdata.append("productImages", file);
         }
       });
-      formdata.append('productId', id);
-      formdata.append('productTitle', productData.title);
-      formdata.append('productMainTitle', productData.mainTitle);
-      formdata.append('productInfo', productData.content);
-      formdata.append('variantsThere', variantsThere);
-      formdata.append('metaTitle', productData.metaDetails.metaTitle);
+      formdata.append("productId", id);
+      formdata.append("productTitle", productData.title);
+      formdata.append("productMainTitle", productData.mainTitle);
+      formdata.append("productInfo", productData.content);
+      formdata.append("variantsThere", variantsThere);
+      formdata.append("metaTitle", productData.metaDetails.metaTitle);
       formdata.append(
-        'metaDescription',
+        "metaDescription",
         productData.metaDetails.metaDescription
       );
-      formdata.append('urlHandle', productData.metaDetails.urlHandle);
-      formdata.append('productActiveStatus', productData.productStatus);
-      formdata.append('category', productData.productCategory.category);
-      formdata.append('productType', productData.productCategory.productType);
-      formdata.append('vendor', productData.productCategory.vendor);
-      formdata.append('brand', productData.productCategory.brand);
-      formdata.append('minCartQty', productData.productCategory.minCartQty);
-      formdata.append('maxCartQty', productData.productCategory.maxCartQty);
-      formdata.append('returnAccept', returnAccept);
-      formdata.append('returnDays', returnDays);
+      formdata.append("urlHandle", productData.metaDetails.urlHandle);
+      formdata.append("productActiveStatus", productData.productStatus);
+      formdata.append("category", productData.productCategory.category);
+      formdata.append("productType", productData.productCategory.productType);
+      formdata.append("vendor", productData.productCategory.vendor);
+      formdata.append("brand", productData.productCategory.brand);
+      formdata.append("minCartQty", productData.productCategory.minCartQty);
+      formdata.append("maxCartQty", productData.productCategory.maxCartQty);
+      formdata.append("returnAccept", returnAccept);
+      formdata.append("returnDays", returnDays);
       if (productData.collectionValue.length > 1) {
         productData.collectionValue.forEach((id) => {
-          formdata.append('collections', JSON.stringify(id));
+          formdata.append("collections", JSON.stringify(id));
         });
       } else {
         productData.collectionValue.push(0);
         productData.collectionValue.forEach((id) => {
-          formdata.append('collections', JSON.stringify(id));
+          formdata.append("collections", JSON.stringify(id));
         });
       }
 
-      formdata.append('tags', JSON.stringify(productData.tagValue));
+      formdata.append("tags", JSON.stringify(productData.tagValue));
       const inventory = productData.locInputs.filter(
         (i) => i.inventoryId !== null
       );
       if (variantsThere) {
         productData.variantsDetails.forEach((variant) => {
-          formdata.append('variantImage', variant.main.variantImage);
+          formdata.append("variantImage", variant.main.variantImage);
           variant.sub.forEach((subVariant) =>
-            formdata.append('variantImage', subVariant.variantImage)
+            formdata.append("variantImage", subVariant.variantImage)
           );
         });
-        formdata.append('variantsOrder', JSON.stringify(proVariants));
+        formdata.append("variantsOrder", JSON.stringify(proVariants));
         formdata.append(
-          'variants',
+          "variants",
           JSON.stringify(productData.variantsDetails)
         );
 
-        formdata.append('vInventoryInfo', JSON.stringify(inventoryIdInfo));
+        formdata.append("vInventoryInfo", JSON.stringify(inventoryIdInfo));
       } else {
-        formdata.append('productPrice', productData.productPrices.price);
+        formdata.append("productPrice", productData.productPrices.price);
         formdata.append(
-          'productComparePrice',
+          "productComparePrice",
           productData.productPrices.comparePrice
         );
         formdata.append(
-          'productIsTaxable',
+          "productIsTaxable",
           productData.productPrices.isTaxable
         );
         formdata.append(
-          'productCostPerItem',
+          "productCostPerItem",
           productData.productPrices.costPerItem
         );
-        formdata.append('inventoryInfo', JSON.stringify(inventory));
-        formdata.append('cwos', productData.handleLoc.cwos);
-        formdata.append('skuCode', productData.skuInput.SKU);
-        formdata.append('skuBarcode', productData.skuInput.barcode);
+        formdata.append("inventoryInfo", JSON.stringify(inventory));
+        formdata.append("cwos", productData.handleLoc.cwos);
+        formdata.append("skuCode", productData.skuInput.SKU);
+        formdata.append("skuBarcode", productData.skuInput.barcode);
         formdata.append(
-          'productWeight',
-          productData.weight !== ''
-            ? productData.weight + '-' + productData.weightUnit
-            : ''
+          "productWeight",
+          productData.weight !== ""
+            ? productData.weight + "-" + productData.weightUnit
+            : ""
         );
-        formdata.append('originCountry', productData.originCountry);
+        formdata.append("originCountry", productData.originCountry);
       }
 
       await axios.post(url, formdata, { headers });
@@ -442,22 +450,26 @@ const UpdateProduct = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <AdminSideBar />
-      <div className='commonSec'>
-        <div className='addProductSection'>
-          <div className='container'>
-            <div className='row'>
-              <div className='col-12'>
-                <div className='d-flex align-items-center'>
+      <div className="commonSec">
+        <div className="addProductSection">
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <div className="d-flex align-items-center mb-3">
                   <BackBtn onClick={() => navigate(-1)} />
-                  <h3>{productData.title}</h3>
+                  <h5>{productData.title}</h5>
                 </div>
               </div>
-              <AddProductForm productProps={productProps} />
-              <div className='col-12'>
-                <div className='btnCont'>
-                  <button onClick={onSubmitProductDetails} className='adminBtn'>
+              <AddProductForm
+                productProps={productProps}
+                validationErrors={validationErrors}
+                setValidationErrors={setValidationErrors}
+              />
+              <div className="col-12">
+                <div className="btnCont">
+                  <button onClick={onSubmitProductDetails} className="adminBtn">
                     Save
                   </button>
                 </div>

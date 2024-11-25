@@ -71,10 +71,11 @@ const Collections = () => {
             Create collection
           </Link>
         </div>
-        <div className="tableCont">
+        <div className="tableCont" style={{ maxHeight: "76vh" }}>
           <table className="table table-hover" style={{ minWidth: "1000px" }}>
             <thead>
               <tr>
+                <th scope="col">#</th>
                 <th scope="col">Collection Image</th>
                 <th scope="col">Title</th>
                 <th scope="col">Products</th>
@@ -82,15 +83,17 @@ const Collections = () => {
               </tr>
             </thead>
             <tbody>
-              {collectionData.map((eachCollection, id) => (
-                <tr key={id} className="item">
+              {collectionData.map((eachCollection, i) => (
+                <tr key={i} className="item">
+                  <td>{i + 1}</td>
                   <td>
                     {eachCollection.azst_collection_img ? (
                       <img
                         src={eachCollection.azst_collection_img}
                         width={40}
                         height={40}
-                        alt=""
+                        alt="Collection"
+                        className="collectionImg"
                       />
                     ) : (
                       <div className="imgThumbnail">

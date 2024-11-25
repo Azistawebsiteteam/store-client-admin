@@ -9,12 +9,13 @@ import swalHandle from "./ErrorHandler";
 import AdminSideBar from "./AdminSideBar";
 import Ingredients from "../Components/Ingredients";
 import Features from "../Components/Features";
-import { IoMdArrowRoundBack } from "react-icons/io";
+import BackBtn from "../Components/BackBtn";
 import "../index.css";
 
 const ProductInfo = () => {
   const { id } = useParams();
   const [isChangesOccur, setIsChangesOccur] = useState(false);
+  const [imgError, setImgError] = useState("");
   const [ingredients, setIngredients] = useState([
     {
       id: v4(),
@@ -68,6 +69,11 @@ const ProductInfo = () => {
   }, [getProductInfo]);
 
   const handleSubmitIngs = async () => {
+    const hasError = ingredients.some((ing) => ing.image === "");
+    setImgError(hasError ? "All fields are required" : "");
+
+    if (hasError) alert("Please enter");
+
     try {
       const url = `${baseUrl}/add-info`;
       const headers = {
@@ -123,87 +129,39 @@ const ProductInfo = () => {
       swalHandle.onError(error);
     }
   };
-
-  const goBacktoPage = () => {
-    // here we checking any unsaves changes are registered and giveing alret to user
-    if (isChangesOccur) {
-      const Toast = Swal.mixin({
-        toast: true,
-        position: "top",
-        width: "50%",
-        height: "10%",
-        customClass: {
-          popup: "color-toast",
-          content: "swal-custom-content",
-          confirmButton: "swal-custom-confirm-button",
-          cancelButton: "swal-custom-cancel-button",
-        },
-        timerProgressBar: true,
-        showConfirmButton: false,
-        showCancelButton: false,
-      });
-      // the toast returing the html content in alret to handle actions
-      return Toast.fire({
-        html: `
-          <div class="toast-content ms-auto d-flex align-items-center">
-            <span>Your changes are not saved. Do you want to save them?</span>
-            <button id="save-button" class="swal2-confirm swal2-styled">Save</button>
-            <button id="cancel-button" class="swal2-cancel swal2-styled">Undo</button>
-          </div>
-        `,
-        didOpen: () => {
-          document
-            .getElementById("save-button")
-            .addEventListener("click", () => {
-              // saving changes and send back to server
-              handleSubmitIngs();
-              Swal.close();
-            });
-          document
-            .getElementById("cancel-button")
-            .addEventListener("click", () => {
-              // undo chnages and got to previous page
-              navigate(-1);
-              Swal.close();
-            });
-        },
-      });
-    } else {
-      navigate(-1);
-    }
-  };
-
+  console.log(ingredients);
   return (
     <div className="adminSec">
       <AdminSideBar />
       <div className="commonSec">
-        <div className="d-flex align-items-center">
-          <IoMdArrowRoundBack
-            style={{ fontSize: "30px", cursor: "pointer", marginRight: "4px" }}
-            onClick={goBacktoPage}
-          />{" "}
-          <h3>Product Info</h3>
+        <div className="d-flex align-items-center mb-3">
+          <BackBtn onClick={() => navigate(-1)} />
+          <h4>Product Info</h4>
         </div>
-        <h4>Ingredients</h4>
-        <Ingredients
-          ingredients={ingredients}
-          setIngredients={setIngredients}
-          deleteIngredient={deleteIngredient}
-          setDeletedIngredient={setDeletedIngredient}
-          setIsChangesOccur={setIsChangesOccur}
-        />
-        <h4>Features</h4>
-        <Features
-          features={features}
-          setFeatures={setFeatures}
-          deleteFeatures={deleteFeatures}
-          setDeletedFeatures={setDeletedFeatures}
-          setIsChangesOccur={setIsChangesOccur}
-        />
-        <div className="row mt-3">
-          <div className="col-6">
+        <div className="productInfoCont">
+          <h5 className="mb-4">Ingredients</h5>
+          <Ingredients
+            ingredients={ingredients}
+            setIngredients={setIngredients}
+            deleteIngredient={deleteIngredient}
+            setDeletedIngredient={setDeletedIngredient}
+            setIsChangesOccur={setIsChangesOccur}
+          />
+        </div>
+        <div className="productInfoCont">
+          <h5 className="mb-4">Features</h5>
+          <Features
+            features={features}
+            setFeatures={setFeatures}
+            deleteFeatures={deleteFeatures}
+            setDeletedFeatures={setDeletedFeatures}
+            setIsChangesOccur={setIsChangesOccur}
+          />
+        </div>
+        <div className="row mt-3 mb-5">
+          <div className="col-12 d-flex justify-content-end">
             <button
-              className="btn btn-primary"
+              className="adminBtn"
               disabled={!isChangesOccur}
               onClick={handleSubmitIngs}
             >

@@ -10,18 +10,23 @@ const BrandForm = (props) => {
     setBrandName,
     description,
     setDescription,
+    brandsValidationErrors,
+    setBrandsValidationErrors,
   } = props;
 
   const handleBrandImage = (e) => {
     const image = e.target.files[0];
     setBrandImg(image);
+    setBrandsValidationErrors({ ...brandsValidationErrors, brandImg: "" });
   };
 
   const handleBrandInput = (e) => {
     setBrandName(e.target.value);
+    setBrandsValidationErrors({ ...brandsValidationErrors, brandName: "" });
   };
   const handleBrandDescription = (e) => {
     setDescription(e.target.value);
+    setBrandsValidationErrors({ ...brandsValidationErrors, description: "" });
   };
 
   return (
@@ -37,6 +42,9 @@ const BrandForm = (props) => {
           className="form-control"
           id="name"
         />
+        {brandsValidationErrors.brandName && (
+          <span className="errorValue">{brandsValidationErrors.brandName}</span>
+        )}
       </div>
       <div className="col-md-12">
         <label htmlFor="description" className="form-label">
@@ -49,6 +57,11 @@ const BrandForm = (props) => {
           className="form-control"
           id="description"
         />
+        {brandsValidationErrors.description && (
+          <span className="errorValue">
+            {brandsValidationErrors.description}
+          </span>
+        )}
       </div>
       <div className="col-12">
         <div className="form-group">
@@ -73,9 +86,9 @@ const BrandForm = (props) => {
                 />
               )
             ) : (
-              <span className="dropZoneOverlay">
+              <label className="dropZoneOverlay">
                 <FaUpload /> Drop file here or click to upload
-              </span>
+              </label>
             )}
             <input
               type="file"
@@ -84,6 +97,11 @@ const BrandForm = (props) => {
               onChange={handleBrandImage}
             />
           </div>
+          {brandsValidationErrors.brandImg && (
+            <span className="errorValue">
+              {brandsValidationErrors.brandImg}
+            </span>
+          )}
         </div>
       </div>
     </form>

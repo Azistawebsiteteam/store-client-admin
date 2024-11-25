@@ -21,17 +21,17 @@ import VariantEdit from "./VariantEdit";
 import { FiPlusCircle } from "react-icons/fi";
 import "./Admin.css";
 
-const AddProductForm = ({ productProps }) => {
+const AddProductForm = ({
+  productProps,
+  validationErrors,
+  setValidationErrors,
+}) => {
   const location = useLocation();
   const {
     categoryItems,
     setCategoryItems,
     title,
     mainTitle,
-    error,
-    mainError,
-    setError,
-    setMainError,
     setTitle,
     setMainTitle,
     setMetaDetails,
@@ -364,13 +364,10 @@ const AddProductForm = ({ productProps }) => {
     getProductType();
   }, [productCategory.category]);
 
-  const trackQty = () => {
-    setTracker(!tracker);
-  };
-
   const onSelectCollection = (selectedItem) => {
     setSelectedColletions(selectedItem);
     setCollectionValue(selectedItem.map((each) => each.azst_collection_id));
+    setValidationErrors({ ...validationErrors, collectionValue: "" });
   };
 
   const handleConditions = (e) => {
@@ -492,6 +489,7 @@ const AddProductForm = ({ productProps }) => {
     } else {
       const numericValue = value.replace(/[^0-9]/g, "");
       setProductPrices({ ...productPrices, [id]: numericValue });
+      setValidationErrors({ ...validationErrors, [e.target.id]: "" });
     }
   };
 
@@ -519,6 +517,7 @@ const AddProductForm = ({ productProps }) => {
       setProductCategory({ ...productCategory, [id]: numericValue });
     } else {
       setProductCategory({ ...productCategory, [id]: value });
+      setValidationErrors({ ...validationErrors, [e.target.id]: "" });
     }
   };
 
@@ -530,6 +529,7 @@ const AddProductForm = ({ productProps }) => {
   const onChangeImages = (e) => {
     const newFiles = Array.from(e.target.files);
     setImages([...newFiles, ...images]);
+    setValidationErrors({ ...validationErrors, images: "" });
   };
 
   const handleVariantsImage = (e, vid, type, subId) => {
@@ -566,31 +566,20 @@ const AddProductForm = ({ productProps }) => {
   };
 
   const onChangeMainTitle = (e) => {
-    if (e.target.value.length === 0) {
-      setMainError("Main Title can’t be blank");
-    } else {
-      setMainError("");
-    }
-    if (e.target.value.length <= 200) {
-      setMainTitle(e.target.value);
-    }
+    setMainTitle(e.target.value);
+    setMetaDetails({
+      ...metaDetails,
+      urlHandle: `http://20.235.149.149:5019/product/${e.target.value.replace(
+        / /g,
+        "-"
+      )}`,
+    });
+    setValidationErrors({ ...validationErrors, mainTitle: "" });
   };
 
   const onChangeTitle = (e) => {
-    if (e.target.value.length === 0) {
-      setError("Title can’t be blank");
-    } else {
-      setError("");
-    }
-    if (e.target.value.length <= 200) {
-      setTitle(e.target.value);
-    }
-    setMetaDetails({
-      ...metaDetails,
-      urlHandle: `${
-        window.location.origin
-      }/productItem/${e.target.value.replace(/ /g, "-")}`,
-    });
+    setTitle(e.target.value);
+    setValidationErrors({ ...validationErrors, title: "" });
   };
 
   const onchangeVariantGroupBy = (e) => {
@@ -599,7 +588,16 @@ const AddProductForm = ({ productProps }) => {
   };
 
   const handleMetaDetails = (e) => {
-    setMetaDetails({ ...metaDetails, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+
+    if (id === "urlHandle" && value.length >= 35) {
+      setMetaDetails({
+        ...metaDetails,
+        [id]: value.replace(/ /g, "-"),
+      });
+    } else if (id !== "urlHandle") {
+      setMetaDetails({ ...metaDetails, [id]: value });
+    }
   };
 
   const handleVariantsOutput = (e, vid, type, subId) => {
@@ -724,13 +722,15 @@ const AddProductForm = ({ productProps }) => {
     // onClick={() => setVariantShow(true)}
     // onClick={() => handleVariantClick(va.id)}
     // <Button variant="light">
-    <span className="ms-1">{va.value}</span>
+    <label className="ms-1 text-dark">{va.value}</label>
     // </Button>
   );
 
   const renderVariantLink = (va) => (
     <Link to={`/variant-details/${va.variantId}`}>
-      <span>{va.value}</span>
+      <label className="variantEditor text-dark" style={{ cursor: "pointer" }}>
+        {va.value}
+      </label>
     </Link>
   );
 
@@ -758,6 +758,8 @@ const AddProductForm = ({ productProps }) => {
     }
   };
 
+  // console.log(variants[0].optionValue, "variants");
+
   return (
     <div className="container">
       <div className="row">
@@ -766,7 +768,7 @@ const AddProductForm = ({ productProps }) => {
             <div className="col-12">
               <div className="bgStyle">
                 <form className="editorForm">
-                  <div className="form-group">
+                  <div className="form-group" style={{ marginTop: "0" }}>
                     <label htmlFor="productMainTitle" className="formLabel">
                       Title
                     </label>
@@ -778,7 +780,9 @@ const AddProductForm = ({ productProps }) => {
                       id="productMainTitle"
                       required
                     />
-                    <span className="errorValue">{mainError}</span>
+                    <span className="errorValue">
+                      {validationErrors?.title}
+                    </span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="title" className="formLabel">
@@ -791,7 +795,9 @@ const AddProductForm = ({ productProps }) => {
                       onChange={onChangeTitle}
                       id="title"
                     />
-                    <span className="errorValue">{error}</span>
+                    <span className="errorValue">
+                      {validationErrors.mainTitle}
+                    </span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="description" className="formLabel">
@@ -802,6 +808,9 @@ const AddProductForm = ({ productProps }) => {
                       setContent={setContent}
                       id="description"
                     />
+                    <span className="errorValue">
+                      {validationErrors.content}
+                    </span>
                   </div>
                 </form>
               </div>
@@ -855,6 +864,9 @@ const AddProductForm = ({ productProps }) => {
                         </div>
                       ))}
                     </div>
+                    <span className="errorValue">
+                      {validationErrors.images}
+                    </span>
                   </div>
                 </form>
               </div>
@@ -885,18 +897,20 @@ const AddProductForm = ({ productProps }) => {
                     {variants.map((varient, index) => (
                       <div className="child-div" key={index}>
                         <div className="d-flex justify-content-between">
-                          <div className="variantsDisplay">
-                            <div className="d-flex">
+                          <div className="col-md-11 mb-2">
+                            <div>
                               {varient.isDone ? (
-                                <strong>{varient.optionName}</strong>
+                                <label className="variantName">
+                                  {varient.optionName}
+                                </label>
                               ) : (
-                                <div className="d-flex flex-column">
+                                <div className="d-flex flex-column form-group">
                                   <label htmlFor="optionName">
                                     Option Name
                                   </label>
                                   <select
                                     id="optionName"
-                                    className="your-select-className"
+                                    className="form-control"
                                     aria-label="Default select example"
                                     value={varient.optionName}
                                     onChange={(e) =>
@@ -913,24 +927,28 @@ const AddProductForm = ({ productProps }) => {
                                 </div>
                               )}
                             </div>
-                            <div className="d-flex">
+                            <div>
                               {varient.isDone ? (
                                 varient.optionValue.map((value, i) =>
                                   value !== "" ? (
-                                    <span key={i} className="valueCont">
+                                    <label key={i} className="valueCont">
                                       {value}
-                                    </span>
+                                    </label>
                                   ) : null
                                 )
                               ) : (
-                                <div className="d-flex flex-column">
+                                <div className="d-flex flex-column form-group">
                                   <label htmlFor="optionValue">
                                     Option Value
                                   </label>
                                   {varient.optionValue.map((value, i) => (
-                                    <div key={i} className="d-flex">
+                                    <div
+                                      key={i}
+                                      style={{ position: "relative" }}
+                                    >
                                       <input
                                         id="optionValue"
+                                        className="form-control mb-2"
                                         type="text"
                                         value={value}
                                         autoComplete="off"
@@ -946,7 +964,10 @@ const AddProductForm = ({ productProps }) => {
                                             deleteInput(e, varient.id, i)
                                           }
                                         >
-                                          <RiDeleteBin6Line />
+                                          <RiDeleteBin6Line
+                                            size={16}
+                                            fill="grey"
+                                          />
                                         </button>
                                       )}
                                     </div>
@@ -955,32 +976,36 @@ const AddProductForm = ({ productProps }) => {
                               )}
                             </div>
                           </div>
+                        </div>
+                        <div className="d-flex justify-content-between">
                           <div>
                             {varient.isDone ? (
                               <button
-                                className="variantEditBtn"
+                                className="deleteBtn text-dark"
                                 onClick={(e) => changeOptionMode(e, varient.id)}
                               >
                                 Edit
                               </button>
                             ) : (
                               <button
-                                className="variantDltBtn"
+                                className="deleteBtn"
                                 onClick={(e) => deleteVariant(e, varient.id)}
                               >
-                                <RiDeleteBin6Line />
+                                Delete
                               </button>
                             )}
                           </div>
+                          {!varient.isDone &&
+                            varient?.optionValue.length > 1 && (
+                              <button
+                                className="adminBtn"
+                                style={{ padding: "0.2rem 1rem" }}
+                                onClick={(e) => changeOptionMode(e, varient.id)}
+                              >
+                                Done
+                              </button>
+                            )}
                         </div>
-                        {!varient.isDone && (
-                          <button
-                            className="variantDoneBtn"
-                            onClick={(e) => changeOptionMode(e, varient.id)}
-                          >
-                            Done
-                          </button>
-                        )}
                       </div>
                     ))}
                     {variants.length < 3 && (
@@ -995,10 +1020,11 @@ const AddProductForm = ({ productProps }) => {
                       <div className="variantsOutput">
                         {variants.length > 0 && (
                           <div className="d-flex align-items-center">
-                            Group By
+                            <label style={{}}>Group By</label>
                             <select
                               value={variantGroup}
                               onChange={onchangeVariantGroupBy}
+                              className="form-select custom-form-select ms-2"
                             >
                               {variants.map((variant) => (
                                 <option
@@ -1013,7 +1039,7 @@ const AddProductForm = ({ productProps }) => {
                         )}
                         <div>
                           <select
-                            className="form-select"
+                            className="form-select custom-form-select"
                             aria-label="Default select example"
                             onChange={onChangeInventory}
                             value={inventoryIdInfo}
@@ -1037,9 +1063,9 @@ const AddProductForm = ({ productProps }) => {
                         </div>
                       </div>
                       <div className="variantsOutputTopbar">
-                        <span>Variant</span>
-                        <span>Price</span>
-                        <span>Available</span>
+                        <label>Variant</label>
+                        <label>Price</label>
+                        <label>Available</label>
                       </div>
                       {variantsDetails.map((variant) => (
                         <div key={variant.id}>
@@ -1079,15 +1105,15 @@ const AddProductForm = ({ productProps }) => {
                               />
                               <div className="d-flex flex-column">
                                 {variant.sub.length > 0 ? (
-                                  <span>{variant.main.value}</span>
+                                  <label>{variant.main.value}</label>
                                 ) : (
-                                  <span>
+                                  <label>
                                     {location.pathname === "/product/create"
                                       ? renderVariantButton(variant.main)
                                       : variant.main.variantId !== 0
                                       ? renderVariantLink(variant.main)
                                       : renderVariantButton(variant.main)}
-                                  </span>
+                                  </label>
                                 )}
                                 {modalVariantId === variant.main.id && (
                                   <VariantEdit
@@ -1100,7 +1126,7 @@ const AddProductForm = ({ productProps }) => {
                                 )}
                                 {variant.sub.length > 0 && (
                                   <div>
-                                    <span>{variant.sub.length} Variants</span>
+                                    <label>{variant.sub.length} Variants</label>
                                     <IoMdArrowDropup
                                       onClick={() =>
                                         toggleSubVariantsVisibility(variant.id)
@@ -1113,6 +1139,7 @@ const AddProductForm = ({ productProps }) => {
                             <div>
                               <input
                                 id="offer_price"
+                                className="form-control"
                                 onChange={(e) =>
                                   handleVariantsOutput(e, variant.id, "main", 0)
                                 }
@@ -1125,6 +1152,7 @@ const AddProductForm = ({ productProps }) => {
                             <div>
                               <input
                                 id="quantity"
+                                className="form-control"
                                 onChange={(e) =>
                                   handleVariantsOutput(e, variant.id, "main", 0)
                                 }
@@ -1182,6 +1210,7 @@ const AddProductForm = ({ productProps }) => {
                                 </div>
                                 <div>
                                   <input
+                                    className="form-control"
                                     type="text"
                                     id="offer_price"
                                     placeholder="₹ 0.0"
@@ -1199,6 +1228,7 @@ const AddProductForm = ({ productProps }) => {
                                 </div>
                                 <div>
                                   <input
+                                    className="form-control"
                                     type="text"
                                     id="quantity"
                                     onChange={(e) =>
@@ -1221,35 +1251,50 @@ const AddProductForm = ({ productProps }) => {
                   )}
                 </div>
               ) : (
-                <div className="bgStyle">
-                  <div className="orderDetails">
+                <>
+                  <div className="bgStyle">
                     <form className="priceForm">
                       <div className="row">
-                        <div className="col-md-6">
-                          <label htmlFor="price">Price</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="price"
-                            value={productPrices.price}
-                            onChange={handleProductPrices}
-                            placeholder="0.00"
-                            maxLength={5}
-                          />
+                        <div className="col-md-12">
+                          <label className="formLabel h6">Pricing</label>
                         </div>
                         <div className="col-md-6">
-                          <label htmlFor="comparePrice">Compare-at-price</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id="comparePrice"
-                            value={productPrices.comparePrice}
-                            onChange={handleProductPrices}
-                            placeholder="0.00"
-                            maxLength={5}
-                          />
+                          <div className="form-group">
+                            <label htmlFor="price">Price</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="price"
+                              value={productPrices.price}
+                              onChange={handleProductPrices}
+                              placeholder="0.00"
+                              maxLength={5}
+                            />
+                            <span className="errorValue">
+                              {validationErrors.price}
+                            </span>
+                          </div>
                         </div>
-                        <div className="col-md-12 mt-2">
+                        <div className="col-md-6">
+                          <div className="form-group">
+                            <label htmlFor="comparePrice">
+                              Compare-at-price
+                            </label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id="comparePrice"
+                              value={productPrices.comparePrice}
+                              onChange={handleProductPrices}
+                              placeholder="0.00"
+                              maxLength={5}
+                            />
+                            <span className="errorValue">
+                              {validationErrors.comparePrice}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-md-12">
                           <input
                             className="checkboxInput"
                             type="checkbox"
@@ -1266,27 +1311,31 @@ const AddProductForm = ({ productProps }) => {
                           </label>
                         </div>
                         <div className="col-md-6">
-                          <label htmlFor="costPerItem">Cost per item</label>
-                          <input
-                            type="text"
-                            className="form-control"
-                            value={productPrices.costPerItem}
-                            onChange={handleProductPrices}
-                            id="costPerItem"
-                            placeholder="0.00"
-                            maxLength={5}
-                          />
+                          <div className="form-group">
+                            <label htmlFor="costPerItem">Cost per item</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={productPrices.costPerItem}
+                              onChange={handleProductPrices}
+                              id="costPerItem"
+                              placeholder="0.00"
+                              maxLength={5}
+                            />
+                          </div>
                         </div>
                       </div>
                     </form>
-                    <form className="inventoryForm">
-                      <p>Inventory</p>
+                  </div>
+                  <div className="bgStyle">
+                    <form className="inventoryForm mt-3">
+                      <label className="formLabel h6">Inventory</label>
                       <div className="form-check">
                         <input
                           className="checkboxInput"
                           type="checkbox"
-                          onClick={trackQty}
-                          value={tracker}
+                          onClick={(e) => setTracker(e.target.checked)}
+                          checked={tracker}
                           id="trackQty"
                         />
                         <label className="form-check-label" htmlFor="trackQty">
@@ -1294,7 +1343,7 @@ const AddProductForm = ({ productProps }) => {
                         </label>
                       </div>
                       {tracker ? (
-                        <div className="uy">
+                        <div className="trackerInputs">
                           <div className="form-check">
                             {inventoryLocs.map((inve) => (
                               <div
@@ -1335,21 +1384,23 @@ const AddProductForm = ({ productProps }) => {
                                 )}
                               </div>
                             ))}
-                            <input
-                              className="checkboxInput"
-                              type="checkbox"
-                              checked={Boolean(handleLoc.cwos)}
-                              id="cwos"
-                              onChange={handleConditions}
-                            />
-                            <label className="form-check-label" htmlFor="cwos">
-                              Continue selling when out of stock
-                            </label>
                           </div>
                         </div>
                       ) : (
                         ""
                       )}
+                      <div className="form-check">
+                        <input
+                          className="checkboxInput"
+                          type="checkbox"
+                          checked={Boolean(handleLoc.cwos)}
+                          id="cwos"
+                          onChange={handleConditions}
+                        />
+                        <label className="form-check-label" htmlFor="cwos">
+                          Continue selling when out of stock
+                        </label>
+                      </div>
 
                       <div className="form-check">
                         <input
@@ -1400,9 +1451,13 @@ const AddProductForm = ({ productProps }) => {
                         ""
                       )}
                     </form>
-                    <form className="shippingForm">
-                      <p>Shipping</p>
-                      <label className="d-flex align-items-center">
+                  </div>
+                  <div className="bgStyle">
+                    <form className="shippingForm mt-3">
+                      <div className="col-md-12 mb-2">
+                        <label className="formLabel h6">Shipping</label>
+                      </div>
+                      <label className="d-flex align-items-center mt-2">
                         <input
                           className="checkboxInput"
                           type="checkbox"
@@ -1463,7 +1518,7 @@ const AddProductForm = ({ productProps }) => {
                       )}
                     </form>
                   </div>
-                </div>
+                </>
               )}
               <div className="bgStyle">
                 <h6>Search engine listing</h6>
@@ -1509,7 +1564,7 @@ const AddProductForm = ({ productProps }) => {
                   <input
                     type="text"
                     className="form-control"
-                    id="url"
+                    id="urlHandle"
                     value={metaDetails.urlHandle}
                     onChange={handleMetaDetails}
                     maxLength={150}
@@ -1536,6 +1591,9 @@ const AddProductForm = ({ productProps }) => {
                     <option value="0">InActive</option>
                     <option value="1">Active</option>
                   </select>
+                  <span className="errorValue">
+                    {validationErrors.productStatus}
+                  </span>
                 </form>
               </div>
               {/* <div className="bgStyle">
@@ -1613,13 +1671,16 @@ const AddProductForm = ({ productProps }) => {
                       onChange={handleProductCategorization}
                       id="category"
                     >
-                      <option>Search</option>
+                      <option value={0}>Search</option>
                       {categoryItems.map((item, i) => (
                         <option key={i} value={item.azst_category_id}>
                           {item.azst_category_name}
                         </option>
                       ))}
                     </select>
+                    <span className="errorValue">
+                      {validationErrors.category}
+                    </span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="productType">Product type</label>
@@ -1636,6 +1697,9 @@ const AddProductForm = ({ productProps }) => {
                         </option>
                       ))}
                     </select>
+                    <span className="errorValue">
+                      {validationErrors.productType}
+                    </span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="vendor">Vendor</label>
@@ -1656,6 +1720,9 @@ const AddProductForm = ({ productProps }) => {
                           </option>
                         ))}
                     </select>
+                    <span className="errorValue">
+                      {validationErrors.vendor}
+                    </span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="">Collections</label>
@@ -1666,6 +1733,9 @@ const AddProductForm = ({ productProps }) => {
                       selectedValues={selectedCollection}
                       options={collections}
                     />
+                    <span className="errorValue">
+                      {validationErrors.collectionValue}
+                    </span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="">Tags</label>
@@ -1678,7 +1748,7 @@ const AddProductForm = ({ productProps }) => {
                     />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="category">Brand</label>
+                    <label htmlFor="brand">Brand</label>
                     <select
                       className="form-control"
                       value={productCategory.brand}
@@ -1692,6 +1762,7 @@ const AddProductForm = ({ productProps }) => {
                         </option>
                       ))}
                     </select>
+                    <span className="errorValue">{validationErrors.brand}</span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="minCartQty">Min quantity</label>

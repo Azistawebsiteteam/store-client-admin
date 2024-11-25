@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from "react";
 import AdminSideBar from "./AdminSideBar";
-import { TiArrowLeft } from "react-icons/ti";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useParams, useNavigate } from "react-router-dom";
@@ -9,6 +8,8 @@ import { Link } from "react-router-dom";
 import { ProductState } from "../Context/ProductContext";
 import swalErr from "./ErrorHandler";
 import Swal from "sweetalert2";
+import BackBtn from "../Components/BackBtn";
+import "./Admin.css";
 
 const VariantDetails = () => {
   const [isPhysical, setIsPhysical] = useState(false);
@@ -62,7 +63,6 @@ const VariantDetails = () => {
 
         // Handle successful response
         if (response.status === 200) {
-          console.log(response.data);
           Swal.close();
           const selectedVariantDetails = response.data.variant;
 
@@ -152,7 +152,7 @@ const VariantDetails = () => {
 
   const onUpdateVariants = async () => {
     try {
-      const url = `http://192.168.215.137:5018/api/v1/product/update/variant`;
+      const url = `${baseUrl}/product/update/variant`;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
@@ -195,7 +195,7 @@ const VariantDetails = () => {
       swalErr.onError(error);
     }
   };
-  console.log(inventory.barcode, "inventory.barcode");
+
   const deleteVariant = async () => {
     try {
       const url = `${baseUrl}/product/delete/variant`;
@@ -235,29 +235,45 @@ const VariantDetails = () => {
         <div className="container">
           <div className="row">
             <div className="col-sm-12">
-              <h3 style={{ cursor: "pointer" }}>
-                <TiArrowLeft onClick={() => navigate(-1)} />
-                {selectedVariantDetails.option1 && (
-                  <span>{selectedVariantDetails.option1}</span>
-                )}{" "}
-                {selectedVariantDetails.option2 && (
-                  <span>/ {selectedVariantDetails.option2}</span>
-                )}{" "}
-                {selectedVariantDetails.option3 && (
-                  <span>/ {selectedVariantDetails.option3}</span>
-                )}
-              </h3>
+              <div className="d-flex align-items-center mb-3">
+                <BackBtn onClick={() => navigate(-1)} />
+                <h5 style={{ cursor: "pointer" }}>
+                  {selectedVariantDetails.option1 && (
+                    <span>{selectedVariantDetails.option1}</span>
+                  )}{" "}
+                  {selectedVariantDetails.option2 && (
+                    <span>/ {selectedVariantDetails.option2}</span>
+                  )}{" "}
+                  {selectedVariantDetails.option3 && (
+                    <span>/ {selectedVariantDetails.option3}</span>
+                  )}
+                </h5>
+              </div>
             </div>
             <div className="col-sm-4">
               <div className="bgStyle">
                 <div className="d-flex align-items-center">
-                  <img className="vImg" src={productDetails.image_src} alt="" />
+                  <img
+                    className="vImg mVImg"
+                    src={productDetails.image_src}
+                    alt="variant"
+                  />
                   <div className="" style={{ marginLeft: "6px" }}>
-                    <h5>{productDetails.product_title}</h5>
-                    <span className="d-block">
+                    <p className="variantHeading">
+                      {productDetails.product_title}
+                    </p>
+                    <label
+                      className={
+                        productDetails.status === 1
+                          ? "activeVariant"
+                          : "inActiveVariant"
+                      }
+                    >
                       {productDetails.status === 1 ? "Active" : "Inactive"}
-                    </span>
-                    <span>{variantDetails.length} variants</span>
+                    </label>
+                    <label className="d-block">
+                      {variantDetails.length} variants
+                    </label>
                   </div>
                 </div>
               </div>
@@ -270,12 +286,12 @@ const VariantDetails = () => {
                       <img
                         className="vImg"
                         src={getVariantImgurl(variant.variant_image)}
-                        alt="ghg"
+                        alt="Variant"
                       />
-                      <p style={{ marginBottom: "0", marginLeft: "6px" }}>
-                        {variant.option1 && <span>{variant.option1}</span>}{" "}
-                        {variant.option2 && <span>/ {variant.option2}</span>}{" "}
-                        {variant.option3 && <span>/ {variant.option3}</span>}
+                      <p className="variantEditor">
+                        {variant.option1 && <label>{variant.option1}</label>}
+                        {variant.option2 && <label>/ {variant.option2}</label>}
+                        {variant.option3 && <label>/ {variant.option3}</label>}
                       </p>
                     </div>
                   </Link>
@@ -287,7 +303,7 @@ const VariantDetails = () => {
                 <h6>Options</h6>
                 {variantsData.map((v, i) => (
                   <div className="mb-3">
-                    <label htmlFor="optionName" className="col-form-label">
+                    <label htmlFor="optionName" className="formLabel">
                       {v.UOM}
                     </label>
                     <input
@@ -312,7 +328,9 @@ const VariantDetails = () => {
                     <img className="vImg" src={variantImg} alt="yu" />
                   )}
                   <div className="singleVariantImg">
-                    <label htmlFor="chooseImg">Change</label>
+                    <label htmlFor="chooseImg" style={{ cursor: "pointer" }}>
+                      Upload
+                    </label>
                     <input
                       type="file"
                       id="chooseImg"
@@ -325,8 +343,8 @@ const VariantDetails = () => {
               <div className="bgStyle">
                 <h6>Pricing</h6>
                 <div className="row">
-                  <div className="col">
-                    <label htmlFor="price" className="col-form-label">
+                  <div className="col form-group">
+                    <label htmlFor="price" className="formLabel">
                       Price
                     </label>
                     <input
@@ -339,8 +357,8 @@ const VariantDetails = () => {
                       maxLength={5}
                     />
                   </div>
-                  <div className="col">
-                    <label htmlFor="costperitem" className="col-form-label">
+                  <div className="col form-group">
+                    <label htmlFor="costperitem" className="formLabel">
                       Compare-at-price
                     </label>
                     <input
@@ -356,19 +374,19 @@ const VariantDetails = () => {
                 </div>
                 <div className="form-check">
                   <input
-                    className="form-check-input"
+                    className="checkboxInput"
                     type="checkbox"
                     checked={prices.isTaxable}
                     id="isTaxable"
                     onChange={updatePrice}
                   />
-                  <label className="form-check-label" htmlFor="isTaxable">
+                  <label className="formLabel" htmlFor="isTaxable">
                     Charge tax on this variant
                   </label>
                 </div>
                 <div className="row">
-                  <div className="col">
-                    <label htmlFor="price" className="col-form-label">
+                  <div className="col form-group">
+                    <label htmlFor="price" className="formLabel">
                       Cost per item
                     </label>
                     <input
@@ -386,8 +404,8 @@ const VariantDetails = () => {
               <div className="bgStyle">
                 <h6>Inventory</h6>
                 <div className="row">
-                  <div className="col-sm-6">
-                    <label htmlFor="sku" className="col-form-label">
+                  <div className="col-sm-6 form-group">
+                    <label htmlFor="sku" className="formLabel">
                       SKU (Stock Keeping Unit)
                     </label>
                     <input
@@ -401,8 +419,8 @@ const VariantDetails = () => {
                       maxLength={25}
                     />
                   </div>
-                  <div className="col-sm-6">
-                    <label htmlFor="barcode" className="col-form-label">
+                  <div className="col-sm-6 form-group">
+                    <label htmlFor="barcode" className="formLabel">
                       Barcode (ISBN, UPC, GTIN, etc.)
                     </label>
                     <input
@@ -416,8 +434,8 @@ const VariantDetails = () => {
                       maxLength={25}
                     />
                   </div>
-                  <div className="col-sm-6">
-                    <label htmlFor="hsCode" className="col-form-label">
+                  <div className="col-sm-6 form-group">
+                    <label htmlFor="hsCode" className="formLabel">
                       Harmonized System (HS) code
                     </label>
                     <input
@@ -437,54 +455,62 @@ const VariantDetails = () => {
                 <h6>Shipping</h6>
                 <div className="form-check">
                   <input
-                    className="form-check-input"
+                    className="checkboxInput"
                     checked={isPhysical}
                     onChange={(e) => setIsPhysical(e.target.checked)}
                     type="checkbox"
                     id="physicalProduct"
                   />
-                  <label className="form-check-label" htmlFor="physicalProduct">
+                  <label className="formLabel" htmlFor="physicalProduct">
                     This is a physical product
                   </label>
                   <div className="shippingCont">
                     {isPhysical && (
-                      <div className="d-flex">
-                        <input
-                          type="text"
-                          placeholder="0.0"
-                          value={shippingDetails.weight}
-                          onChange={handleShippingQty}
-                          id="weight"
-                          minLength={1}
-                          maxLength={5}
-                        />
-                        <select
-                          className=""
-                          aria-label="Default select example"
-                          value={shippingDetails.weightUnit}
-                          id="weightUnit"
-                          onChange={handleShippingQty}
-                        >
-                          <option value="kg">Kg</option>
-                          <option value="lb">lb</option>
-                          <option value="oz">oz</option>
-                          <option value="g">g</option>
-                        </select>
+                      <div className="col-md-3">
+                        <div className="d-flex">
+                          <input
+                            type="text"
+                            className="form-control"
+                            placeholder="0.0"
+                            value={shippingDetails.weight}
+                            onChange={handleShippingQty}
+                            id="weight"
+                            minLength={1}
+                            maxLength={5}
+                          />
+                          <select
+                            style={{
+                              border: "1px solid rgb(142, 142, 142)",
+                              borderRadius: "0.8rem",
+                              marginLeft: "0.2rem",
+                              fontSize: "1.2rem",
+                            }}
+                            aria-label="Default select example"
+                            value={shippingDetails.weightUnit}
+                            id="weightUnit"
+                            onChange={handleShippingQty}
+                          >
+                            <option value="kg">Kg</option>
+                            <option value="lb">lb</option>
+                            <option value="oz">oz</option>
+                            <option value="g">g</option>
+                          </select>
+                        </div>
                       </div>
                     )}
                   </div>
                 </div>
               </div>
               <div className="row">
-                <div className="d-flex justify-content-end mt-4">
+                <div className="d-flex justify-content-end mt-5 mb-4">
                   <button
-                    className="dltBtn"
+                    className="deleteBtn deleteBtn1"
                     onClick={deleteVariant}
                     style={{ marginRight: "10px" }}
                   >
                     Delete variant
                   </button>
-                  <button className="saveBtn" onClick={onUpdateVariants}>
+                  <button className="adminBtn" onClick={onUpdateVariants}>
                     Save
                   </button>
                 </div>

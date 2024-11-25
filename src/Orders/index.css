@@ -64,7 +64,10 @@ hr.v1 {
 th,
 td {
   padding: 12px !important;
-  font-size: 14px;
+  font-size: 1.3rem;
+  white-space: nowrap;
+  color: #656161 !important;
+  vertical-align: middle;
 }
 .sticky-column {
   position: sticky;

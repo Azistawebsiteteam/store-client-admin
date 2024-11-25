@@ -81,17 +81,14 @@ const Categories = () => {
       <div className="commonSec">
         <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
           <h4>Categories</h4>
-          <button
-            className="btn bg-success text-light"
-            onClick={handleDownloadExcel}
-          >
+          <button className="exportBtn" onClick={handleDownloadExcel}>
             Export
           </button>
           <Link to="/category/create" className="infoBtn">
             Create category
           </Link>
         </div>
-        <div className="tableCont">
+        <div className="tableCont" style={{ maxHeight: "76vh" }}>
           <table
             className="table table-hover"
             style={{ minWidth: "1000px" }}
@@ -112,7 +109,7 @@ const Categories = () => {
                   <td>{i + 1}</td>
                   <td style={{ width: "20%" }}>
                     <img
-                      className="brandThumbnail"
+                      className="categoryThumbnail"
                       src={each.azst_category_img}
                       alt={each.azst_category_name}
                     />

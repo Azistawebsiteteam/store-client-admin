@@ -8,9 +8,10 @@ import swalHandle from "../Pages/ErrorHandler";
 import CategoryForm from "./CategoryForm";
 import AdminSideBar from "../Pages/AdminSideBar";
 import BackBtn from "../Components/BackBtn";
+import { handleCategoriesValidations } from "./CategoryValidation";
 
 const CategoriesCreate = () => {
-  const [categoryImg, setCategoryImg] = useState();
+  const [categoryImg, setCategoryImg] = useState("");
   const [categoryData, setCategoryData] = useState({
     text: "",
     description: "",
@@ -21,12 +22,28 @@ const CategoriesCreate = () => {
       subCategoryName: "",
     },
   ]);
+  const [categoriesErrorMsg, setCategoriesErrorMsg] = useState({});
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(tokenKey);
   const navigate = useNavigate();
+
+  const categoriesData = {
+    categoryData,
+    subCategories,
+    categoryImg,
+  };
+
   const saveCategory = async () => {
+    const categoriesValidationsErrors =
+      handleCategoriesValidations(categoriesData);
+    console.log(categoriesValidationsErrors);
+    if (Object.keys(categoriesValidationsErrors).length > 0) {
+      window.scrollTo(0, 0);
+      setCategoriesErrorMsg(categoriesValidationsErrors);
+      return;
+    }
     try {
       const url = `${baseUrl}/category/add`;
       const headers = {
@@ -59,7 +76,7 @@ const CategoriesCreate = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h4 className="d-flex">
+                <h4 className="d-flex align-items-center mb-3">
                   <BackBtn />
                   Create Category
                 </h4>
@@ -70,10 +87,12 @@ const CategoriesCreate = () => {
                   setCategoryImg={setCategoryImg}
                   subCategories={subCategories}
                   setSubCategories={setSubCategories}
+                  categoriesErrorMsg={categoriesErrorMsg}
+                  setCategoriesErrorMsg={setCategoriesErrorMsg}
                 />
               </div>
-              <div className="col-12">
-                <button className="saveBtn" onClick={saveCategory}>
+              <div className="col-12 d-flex justify-content-end mt-3 mb-4">
+                <button className="adminBtn" onClick={saveCategory}>
                   Save
                 </button>
               </div>

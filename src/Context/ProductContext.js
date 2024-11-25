@@ -16,7 +16,7 @@ const ProductContextProvider = (props) => {
   const [productsDropdownItems, setProductsDropdownItems] = useState(false);
   const [activeTab, setActiveTab] = useState(location.pathname);
   const [allProducts, setAllProducts] = useState([]);
-
+  const [toggleSidebar, setToggleSidebar] = useState(true);
   useEffect(() => {
     setActiveTab(location.pathname);
   }, [location.pathname]);
@@ -58,6 +58,8 @@ const ProductContextProvider = (props) => {
         setProductsDropdownItems,
         allProducts,
         setAllProducts,
+        toggleSidebar,
+        setToggleSidebar,
       }}
     >
       {children}

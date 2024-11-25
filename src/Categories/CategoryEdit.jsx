@@ -8,6 +8,7 @@ import AdminSideBar from "../Pages/AdminSideBar";
 import CategoryForm from "./CategoryForm";
 import ErrorHandler from "../Pages/ErrorHandler";
 import BackBtn from "../Components/BackBtn";
+import { handleCategoriesValidations } from "./CategoryValidation";
 
 const CategoryEdit = () => {
   const [categoryImg, setCategoryImg] = useState();
@@ -21,7 +22,7 @@ const CategoryEdit = () => {
       subCategoryName: "",
     },
   ]);
-
+  const [categoriesErrorMsg, setCategoriesErrorMsg] = useState({});
   const [deletedSubCats, setDeletedSubCats] = useState([]);
 
   const baseUrl = process.env.REACT_APP_API_URL;
@@ -66,7 +67,21 @@ const CategoryEdit = () => {
     fetchCategories();
   }, [baseUrl, id, token]);
 
+  const categoriesData = {
+    categoryData,
+    subCategories,
+    categoryImg,
+  };
+
   const saveCategory = async () => {
+    const categoriesValidationsErrors =
+      handleCategoriesValidations(categoriesData);
+    console.log(categoriesValidationsErrors);
+    if (Object.keys(categoriesValidationsErrors).length > 0) {
+      window.scrollTo(0, 0);
+      setCategoriesErrorMsg(categoriesValidationsErrors);
+      return;
+    }
     try {
       const url = `${baseUrl}/category`;
       const headers = {
@@ -103,7 +118,7 @@ const CategoryEdit = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h4 className="d-flex">
+                <h4 className="d-flex align-items-center mb-3">
                   <BackBtn />
                   Update Category
                 </h4>
@@ -116,10 +131,12 @@ const CategoryEdit = () => {
                   setSubCategories={setSubCategories}
                   deletedSubCats={deletedSubCats}
                   setDeletedSubCats={setDeletedSubCats}
+                  categoriesErrorMsg={categoriesErrorMsg}
+                  setCategoriesErrorMsg={setCategoriesErrorMsg}
                 />
               </div>
-              <div className="col-12">
-                <button className="saveBtn" onClick={saveCategory}>
+              <div className="col-12 d-flex justify-content-end mt-3 mb-4">
+                <button className="adminBtn" onClick={saveCategory}>
                   Save
                 </button>
               </div>

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { handleProductPageValidations } from "./ProductPageValidations";
 import AddProductForm from "./AddProductForm";
 import AdminSideBar from "./AdminSideBar";
 import SwalErr from "./ErrorHandler";
@@ -36,12 +36,8 @@ const AddProduct = () => {
     isTaxable: false,
     costPerItem: 0,
   });
-  const [countriesList, setCountries] = useState();
   const [categoryItems, setCategoryItems] = useState([]);
-  const [tags, setTags] = useState([]);
   const [images, setImages] = useState([]);
-  const [vendors, setVendors] = useState();
-  const [collections, setCollections] = useState([]);
   const [variants, setVariant] = useState([]);
   // const [isArrowDown, setIsArrowDown] = useState(false);
 
@@ -57,9 +53,9 @@ const AddProduct = () => {
   const [originCountry, setOriginCountry] = useState("");
   const [productStatus, setProductStatus] = useState("0");
   const [productCategory, setProductCategory] = useState({
-    category: "",
-    productType: "",
-    vendor: "",
+    category: "0",
+    productType: "0",
+    vendor: "0",
     brand: "0",
     minCartQty: 1,
     maxCartQty: 100,
@@ -76,37 +72,37 @@ const AddProduct = () => {
     urlHandle: `http://20.235.149.147:5019/productItem`,
   });
   const [inventoryIdInfo, setInventoryId] = useState([]);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(jwtToken);
-  const localUrl = process.env.REACT_APP_LOCAL_URL;
 
   const navigate = useNavigate();
 
+  const details = {
+    title,
+    mainTitle,
+    content,
+    variantsThere,
+    productPrices,
+    images,
+    productCategory,
+    collectionValue,
+  };
   const onSubmitProductDetails = async () => {
+    const validationErrorMessage = handleProductPageValidations(details);
+    if (Object.keys(validationErrorMessage).length > 0) {
+      window.scrollTo(0, 0);
+      setValidationErrors(validationErrorMessage);
+      return;
+    }
     try {
       const url = `${baseUrl}/product/add-store`;
       const headers = {
         Authorization: `Bearer ${token}`,
         "Content-type": "multipart/form-data",
       };
-
-      if (mainTitle === "") {
-        window.scrollTo(0, 0);
-        setMainError("Main Title can’t be blank");
-        return;
-      } else {
-        setMainError("");
-      }
-
-      if (title === "") {
-        setError("Title can’t be blank");
-
-        return;
-      } else {
-        setError("");
-      }
 
       SwalErr.onLoading();
 
@@ -276,7 +272,11 @@ const AddProduct = () => {
                   <h5>Add Product</h5>
                 </div>
               </div>
-              <AddProductForm productProps={productProps} />
+              <AddProductForm
+                productProps={productProps}
+                validationErrors={validationErrors}
+                setValidationErrors={setValidationErrors}
+              />
               <div className="col-12">
                 <div className="btnCont">
                   <button onClick={onSubmitProductDetails} className="adminBtn">

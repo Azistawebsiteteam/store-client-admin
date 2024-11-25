@@ -74,7 +74,7 @@ const Brands = () => {
                   Create brands
                 </Link>
               </div>
-              <div className="tableCont">
+              <div className="tableCont" style={{ maxHeight: "76vh" }}>
                 <table
                   className="table table-hover"
                   style={{ minWidth: "1000px" }}

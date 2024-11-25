@@ -69,8 +69,8 @@ const ProductListing = () => {
                       <th scope="col" style={{ width: "10%" }}>
                         Inventory
                       </th>
-                      <th scope="col">Sales channels</th>
-                      <th scope="col">Markets</th>
+                      {/* <th scope="col">Sales channels</th> */}
+                      {/* <th scope="col">Markets</th> */}
                       <th scope="col">Category</th>
                       <th style={{ width: "  14%" }} scope="col">
                         Vendor
@@ -104,19 +104,44 @@ const ProductListing = () => {
                             <IoMdEye />
                           </a>
                         </td>
-                        <td>{p.status === 1 ? "Active" : "Draft"}</td>
-                        <td style={{ width: "10%" }}>
-                          {p.total_variants === 0 || null
-                            ? `${p.total_variant_quantity} in stock`
-                            : `${p.total_variant_quantity} in stock for ${p.total_variants} variants`}
+                        <td>
+                          {p.status === 1 ? (
+                            <span className="activeProduct">Active</span>
+                          ) : (
+                            <span className="draftProduct">Draft</span>
+                          )}
                         </td>
-                        <td>null</td>
-                        <td>Indian Market</td>
+                        <td style={{ width: "10%" }}>
+                          {p.total_variants === 0 || null ? (
+                            p.total_variant_quantity === "0" ? (
+                              <span style={{ color: "#8e0b21" }}>
+                                {p.total_variant_quantity} in stock
+                              </span>
+                            ) : (
+                              <span>{p.total_variant_quantity} in stock</span>
+                            )
+                          ) : p.total_variant_quantity === "0" ? (
+                            <span style={{ color: "#8e0b21" }}>
+                              {p.total_variant_quantity} in stock for
+                              {p.total_variants} variants
+                            </span>
+                          ) : (
+                            <span>
+                              {p.total_variant_quantity} in stock for{" "}
+                              {p.total_variants} variants
+                            </span>
+                          )}
+                        </td>
+                        {/* <td>null</td> */}
+                        {/* <td>Indian Market</td> */}
                         <td>{p.product_category}</td>
                         <td style={{ width: "14%" }}>{p.azst_vendor_name}</td>
                         <td>
-                          <Link to={`/product/info/${p.product_id}`}>
-                            <input type="button" value="Add Info" />
+                          <Link
+                            to={`/product/info/${p.product_id}`}
+                            className="infoBtn secBtn"
+                          >
+                            Add Info
                           </Link>
                         </td>
                       </tr>

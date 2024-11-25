@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./compont.css";
+import "./component.css";
 
 const Pagination = ({
   logsPerPage,

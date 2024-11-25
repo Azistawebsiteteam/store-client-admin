@@ -3,6 +3,7 @@ import { v4 } from "uuid";
 
 import { FaRegFileImage } from "react-icons/fa";
 import { AddIcon, RemoveIcon } from "./Icons";
+import "./component.css";
 
 const Ingredients = (props) => {
   const {
@@ -51,44 +52,46 @@ const Ingredients = (props) => {
     <>
       <div className="row">
         {ingredients.map((ing) => (
-          <div className="col-6 col-md-4" key={ing.id}>
-            <div className="ingrident-containers">
+          <div className="col-sm-12 col-md-4 mb-4" key={ing.id}>
+            <div className="bgStyle info-container">
               <div className="cross-icon">
                 <RemoveIcon onClick={(e) => removeIngredient(ing.id)} />
               </div>
-              <div className="file-contaner ing-img-container">
-                <div className="img-icon">
-                  {ing.image ? (
-                    typeof ing.image === "string" ? (
-                      <img
-                        src={ing.image}
-                        alt="Banner"
-                        className="feature-img"
-                      />
+              <div style={{ margin: "2rem 0" }}>
+                <div className="file-container">
+                  <div className="img-icon">
+                    {ing.image ? (
+                      typeof ing.image === "string" ? (
+                        <img
+                          src={ing.image}
+                          alt="Banner"
+                          className="feature-img"
+                        />
+                      ) : (
+                        <img
+                          src={URL.createObjectURL(ing.image)}
+                          alt="Banner"
+                          className="feature-img"
+                        />
+                      )
                     ) : (
-                      <img
-                        src={URL.createObjectURL(ing.image)}
-                        alt="Banner"
-                        className="feature-img"
-                      />
-                    )
-                  ) : (
-                    <FaRegFileImage className="feature-img" />
-                  )}
-                </div>
-                <div className="img-input">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleIngrediantValues(e, ing.id)}
-                    className="FileUpload"
-                    id="webBanner"
-                  />
+                      <FaRegFileImage />
+                    )}
+                  </div>
+                  <div className="img-input">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleIngrediantValues(e, ing.id)}
+                      className="FileUpload"
+                      id="webBanner"
+                    />
+                  </div>
                 </div>
               </div>
-              <div className="d-flex align-items-center">
-                <label className="heading" htmlFor="title">
-                  Title :
+              <div className="form-group">
+                <label className="formLabel" htmlFor="title">
+                  Title
                 </label>
                 <input
                   id="title"
@@ -99,14 +102,13 @@ const Ingredients = (props) => {
                   value={ing.title}
                   onChange={(e) => handleIngrediantValues(e, ing.id)}
                 />
-              </div>
-              <>
                 <p className="infoTxt">
                   {ing.title.length} of 50 characters used
                 </p>
-              </>
+              </div>
+
               <div className="form-group">
-                <label className="heading" htmlFor="description">
+                <label className="formLabel" htmlFor="description">
                   Description
                 </label>
                 <textarea
@@ -125,9 +127,11 @@ const Ingredients = (props) => {
             </div>
           </div>
         ))}
-      </div>
-      <div className="col-6 text-end">
-        <AddIcon onClick={addIngredient} />
+        <div className="col-md-4 mb-4">
+          <div className="productInfoBtn">
+            <AddIcon onClick={addIngredient} />
+          </div>
+        </div>
       </div>
     </>
   );

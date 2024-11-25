@@ -1,9 +1,9 @@
 /* eslint-disable import/no-anonymous-default-export */
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const onLoading = (message) => {
   return Swal.fire({
-    text: message ?? 'Loading',
+    text: message ?? "Loading",
     allowOutsideClick: false,
     allowEscapeKey: false,
     didOpen: () => {
@@ -16,29 +16,29 @@ const onLoadingClose = () => Swal.close();
 
 const onSuccess = (message) => {
   return Swal.fire({
-    position: 'center',
-    icon: 'success',
-    title: message ?? 'Your work has been saved',
+    position: "center",
+    icon: "success",
+    title: message ?? "Your work has been saved",
     showConfirmButton: false,
     timer: 2000,
   });
 };
 
 const onError = (error) => {
-  let errorMessage = 'Something went wrong';
+  let errorMessage = "Something went wrong";
 
   if (error.response) {
     if (error.response.data && error.response.data.message) {
       errorMessage = error.response.data.message;
     } else {
-      errorMessage = 'Internal Server Error';
+      errorMessage = "Internal Server Error";
     }
   } else if (error.message) {
     errorMessage = error.message;
   }
 
   return Swal.fire({
-    icon: 'error',
+    icon: "error",
     title: error?.response?.status,
     text: errorMessage,
   });
@@ -47,19 +47,19 @@ const onError = (error) => {
 export const showToast = (message) => {
   const Toast = Swal.mixin({
     toast: true,
-    position: 'top',
-    iconColor: 'white',
+    position: "top",
+    iconColor: "white",
     customClass: {
-      popup: 'color-toast',
+      popup: "color-toast",
     },
     timerProgressBar: true,
     showConfirmButton: false,
     timer: 3000,
   });
   return Toast.fire({
-    icon: 'warning',
+    icon: "warning",
     title: message,
-    color: 'white',
+    color: "white",
   });
 };
 

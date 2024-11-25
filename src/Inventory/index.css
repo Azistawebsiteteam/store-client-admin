@@ -55,3 +55,9 @@
     border-radius: 6px;
     padding: 2px 6px;
 }
+.invSecImg{
+    width: 6rem;
+    height: 6rem;
+    border-radius: 0.6rem;
+    border: 1px dashed grey;
+}

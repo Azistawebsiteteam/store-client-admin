@@ -2,6 +2,8 @@
 import Cookies from "js-cookie";
 import React from "react";
 import { HiMiniUserCircle } from "react-icons/hi2";
+import { HiMiniBars3 } from "react-icons/hi2";
+import { ProductState } from "../Context/ProductContext";
 // import { IoMdSearch } from "react-icons/io";
 
 import { Link } from "react-router-dom";
@@ -15,9 +17,18 @@ const AdminNavbar = () => {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   let token = Cookies.get(adminToken);
 
+  const { toggleSidebar, setToggleSidebar } = ProductState();
+
+  const handleCloseSidebar = () => {
+    setToggleSidebar(!toggleSidebar);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-top adminNavbar">
       <div className="container-fluid adminNavbarInnerSection">
+        <div className="navBars">
+          <HiMiniBars3 fill="white" size={30} onClick={handleCloseSidebar} />
+        </div>
         <div className="navIcon">
           <Link
             className="navbar-brand m-auto mr-md-auto text-light navText d-flex align-items-center"
@@ -42,11 +53,15 @@ const AdminNavbar = () => {
             )}
           </li>
           {token ? (
-            <DropDown />
+            <li>
+              <DropDown />
+            </li>
           ) : (
-            <Link className="adminLoginBtn" to="/adminLoginPage">
-              Login
-            </Link>
+            <li>
+              <Link className="adminLoginBtn" to="/adminLoginPage">
+                Login
+              </Link>
+            </li>
           )}
         </ul>
       </div>

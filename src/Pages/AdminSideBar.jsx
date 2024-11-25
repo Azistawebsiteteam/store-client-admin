@@ -28,6 +28,7 @@ const AdminSideBar = () => {
     setOrdersDropdownItems,
     productsDropdownItems,
     setProductsDropdownItems,
+    toggleSidebar,
   } = ProductState();
 
   const handleProductsDropdownClick = () => {
@@ -54,288 +55,282 @@ const AdminSideBar = () => {
     setProductsDropdownItems(false);
   };
 
-  const handleCloseNavbar = () => {
-    const sidebarContEl = document.getElementById("sidebarCont");
-    if (sidebarContEl) {
-      sidebarContEl.classList.toggle("onClickClose");
-    }
-  };
-
   return (
-    <div className="sidebarCont" id="sidebarCont">
-      <span onClick={handleCloseNavbar} className="navCloseIcon">
-        &times;
-      </span>
-      <ul className="sideBarItems">
-        <Link className="link" to="/">
-          <li
-            className={
-              activeTab === "/"
-                ? "linkItem activeTab"
-                : "linkItem singleLinkItem"
-            }
-            onClick={handleNavbarItemClick}
-          >
-            <FaHome className="me-3" /> Home
-          </li>
-        </Link>
+    <>
+      {toggleSidebar && (
+        <div className="sidebarCont" id="sidebarCont">
+          <ul className="sideBarItems">
+            <Link className="link" to="/">
+              <li
+                className={
+                  activeTab === "/"
+                    ? "linkItem activeTab"
+                    : "linkItem singleLinkItem"
+                }
+                onClick={handleNavbarItemClick}
+              >
+                <FaHome className="me-3" /> Home
+              </li>
+            </Link>
 
-        <button
-          className="dropdown-btn customDropdownButton"
-          id="drobdownBtn"
-          onClick={handleOrdersDropdownClick}
-        >
-          <FaFirstOrder className="me-3" />
-          Orders
-          {ordersDropdownItems ? (
-            <FaAngleUp className="ms-2" />
-          ) : (
-            <FaAngleDown className="ms-2" />
-          )}
-        </button>
-        {ordersDropdownItems && (
-          <div className="childElements">
-            <Link className="link" to="/orders">
+            <button
+              className="dropdown-btn customDropdownButton"
+              id="drobdownBtn"
+              onClick={handleOrdersDropdownClick}
+            >
+              <FaFirstOrder className="me-3" />
+              Orders
+              {ordersDropdownItems ? (
+                <FaAngleUp className="ms-2" />
+              ) : (
+                <FaAngleDown className="ms-2" />
+              )}
+            </button>
+            {ordersDropdownItems && (
+              <div className="childElements">
+                <Link className="link" to="/orders">
+                  <li
+                    className={
+                      activeTab.startsWith("/order")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <FaFirstOrder className="me-3" /> */}
+                    Orders
+                  </li>
+                </Link>
+                <Link className="link" to="/products">
+                  <li
+                    className={
+                      activeTab.startsWith("/product")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <MdAssignmentReturned className="me-3" />  */}Returns
+                  </li>
+                </Link>
+                <Link className="link" to="/products">
+                  <li
+                    className={
+                      activeTab.startsWith("/product")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <FaProductHunt className="me-3" />  */}
+                    Abandoned checkouts
+                  </li>
+                </Link>
+              </div>
+            )}
+            <Link className="link" to="/inventory">
               <li
                 className={
-                  activeTab.startsWith("/order")
+                  activeTab === "/inventory"
                     ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
+                    : "linkItem singleLinkItem"
                 }
+                onClick={(e) => handleNavbarItemClick(false)}
               >
-                {/* <FaFirstOrder className="me-3" /> */}
-                Orders
+                <MdInventory className="me-3" /> Inventory
               </li>
             </Link>
-            <Link className="link" to="/products">
+            <button
+              className="dropdown-btn customDropdownButton"
+              id="drobdownBtn"
+              onClick={handleProductsDropdownClick}
+            >
+              <MdFeaturedPlayList className="me-3" />
+              Products
+              {productsDropdownItems ? (
+                <FaAngleUp className="ms-2" />
+              ) : (
+                <FaAngleDown className="ms-2" />
+              )}
+            </button>
+            {productsDropdownItems && (
+              <div className="childElements">
+                <Link className="link" to="/products">
+                  <li
+                    className={
+                      activeTab.startsWith("/product")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <FaProductHunt className="me-3" />  */}
+                    Products
+                  </li>
+                </Link>
+                <Link className="link" to="/collections">
+                  <li
+                    className={
+                      activeTab.startsWith("/collections")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <MdCollectionsBookmark className="me-3" />  */}
+                    Collections
+                  </li>
+                </Link>
+                <Link className="link" to="/categories">
+                  <li
+                    className={
+                      activeTab.startsWith("/categories")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <BiSolidCategoryAlt className="me-3" />  */}
+                    Categories
+                  </li>
+                </Link>
+                <Link className="link" to="/brands">
+                  <li
+                    className={
+                      activeTab.startsWith("/brands")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <SiBrandfolder className="me-3" />  */}
+                    Brands
+                  </li>
+                </Link>
+              </div>
+            )}
+            <Link className="link" to="/discount">
               <li
                 className={
-                  activeTab.startsWith("/product")
+                  activeTab.startsWith("/discount")
                     ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
+                    : "linkItem singleLinkItem"
                 }
+                onClick={(e) => handleNavbarItemClick(false)}
               >
-                {/* <MdAssignmentReturned className="me-3" />  */}Returns
+                <BiSolidDiscount className="me-3" /> Discounts
               </li>
             </Link>
-            <Link className="link" to="/products">
+            <button
+              className="dropdown-btn customDropdownButton"
+              id="drobdownBtn"
+              onClick={handleFeaturesDropdownClick}
+            >
+              <MdFeaturedPlayList className="me-3" />
+              Features
+              {featureDropdownItems ? (
+                <FaAngleUp className="ms-2" />
+              ) : (
+                <FaAngleDown className="ms-2" />
+              )}
+            </button>
+            {featureDropdownItems && (
+              <div className="childElements">
+                <Link className="link" to="/popup">
+                  <li
+                    className={
+                      activeTab.startsWith("/popup")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <MdCollectionsBookmark className="me-3" /> */}
+                    Popup
+                  </li>
+                </Link>
+                <Link className="link" to="/slider">
+                  <li
+                    className={
+                      activeTab.startsWith("/slider")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <GiKnightBanner className="me-3" /> */}
+                    Slider Banner
+                  </li>
+                </Link>
+                <Link className="link" to="/product-banners">
+                  <li
+                    className={
+                      activeTab.startsWith("/product-banners")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <GiKnightBanner className="me-3" /> */}
+                    Product Banner
+                  </li>
+                </Link>
+                <Link className="link" to="/announcements">
+                  <li
+                    className={
+                      activeTab.startsWith("/announcements")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <TfiAnnouncement className="me-3" />  */}
+                    Announcement Bar
+                  </li>
+                </Link>
+                <Link className="link" to="/blogs">
+                  <li
+                    className={
+                      activeTab.startsWith("/blogs")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <SiBlogger className="me-3" />  */}
+                    Blogs
+                  </li>
+                </Link>
+                <Link className="link" to="/faqs">
+                  <li
+                    className={
+                      activeTab.startsWith("/faqs")
+                        ? "linkItem activeTab"
+                        : "linkItem dropdownItems"
+                    }
+                  >
+                    {/* <FaQuestion className="me-3" /> */}
+                    Faqs
+                  </li>
+                </Link>
+              </div>
+            )}
+            <Link className="link" to="/review-list">
               <li
                 className={
-                  activeTab.startsWith("/product")
+                  activeTab.startsWith("/review")
                     ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
+                    : "linkItem singleLinkItem"
                 }
+                onClick={(e) => handleNavbarItemClick(false)}
               >
-                {/* <FaProductHunt className="me-3" />  */}
-                Abandoned checkouts
+                <MdRateReview className="me-3" /> Manage Reviews
               </li>
             </Link>
-          </div>
-        )}
-        <Link className="link" to="/inventory">
-          <li
-            className={
-              activeTab === "/inventory"
-                ? "linkItem activeTab"
-                : "linkItem singleLinkItem"
-            }
-            onClick={(e) => handleNavbarItemClick(false)}
-          >
-            <MdInventory className="me-3" /> Inventory
-          </li>
-        </Link>
-        <button
-          className="dropdown-btn customDropdownButton"
-          id="drobdownBtn"
-          onClick={handleProductsDropdownClick}
-        >
-          <MdFeaturedPlayList className="me-3" />
-          Products
-          {productsDropdownItems ? (
-            <FaAngleUp className="ms-2" />
-          ) : (
-            <FaAngleDown className="ms-2" />
-          )}
-        </button>
-        {productsDropdownItems && (
-          <div className="childElements">
-            <Link className="link" to="/products">
+            <Link className="link" to="/customers">
               <li
                 className={
-                  activeTab.startsWith("/product")
+                  activeTab.startsWith("/customer")
                     ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
+                    : "linkItem singleLinkItem"
                 }
+                onClick={(e) => handleNavbarItemClick(false)}
               >
-                {/* <FaProductHunt className="me-3" />  */}
-                Products
+                <IoIosPerson className="me-3" /> Customers
               </li>
             </Link>
-            <Link className="link" to="/collections">
-              <li
-                className={
-                  activeTab.startsWith("/collections")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <MdCollectionsBookmark className="me-3" />  */}
-                Collections
-              </li>
-            </Link>
-            <Link className="link" to="/categories">
-              <li
-                className={
-                  activeTab.startsWith("/categories")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <BiSolidCategoryAlt className="me-3" />  */}
-                Categories
-              </li>
-            </Link>
-            <Link className="link" to="/brands">
-              <li
-                className={
-                  activeTab.startsWith("/brands")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <SiBrandfolder className="me-3" />  */}
-                Brands
-              </li>
-            </Link>
-          </div>
-        )}
-        <Link className="link" to="/discount">
-          <li
-            className={
-              activeTab.startsWith("/discount")
-                ? "linkItem activeTab"
-                : "linkItem singleLinkItem"
-            }
-            onClick={(e) => handleNavbarItemClick(false)}
-          >
-            <BiSolidDiscount className="me-3" /> Discounts
-          </li>
-        </Link>
-        <button
-          className="dropdown-btn customDropdownButton"
-          id="drobdownBtn"
-          onClick={handleFeaturesDropdownClick}
-        >
-          <MdFeaturedPlayList className="me-3" />
-          Features
-          {featureDropdownItems ? (
-            <FaAngleUp className="ms-2" />
-          ) : (
-            <FaAngleDown className="ms-2" />
-          )}
-        </button>
-        {featureDropdownItems && (
-          <div className="childElements">
-            <Link className="link" to="/popup">
-              <li
-                className={
-                  activeTab.startsWith("/popup")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <MdCollectionsBookmark className="me-3" /> */}
-                Popup
-              </li>
-            </Link>
-            <Link className="link" to="/slider">
-              <li
-                className={
-                  activeTab.startsWith("/slider")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <GiKnightBanner className="me-3" /> */}
-                Slider Banner
-              </li>
-            </Link>
-            <Link className="link" to="/product-banners">
-              <li
-                className={
-                  activeTab.startsWith("/product-banners")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <GiKnightBanner className="me-3" /> */}
-                Product Banner
-              </li>
-            </Link>
-            <Link className="link" to="/announcements">
-              <li
-                className={
-                  activeTab.startsWith("/announcements")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <TfiAnnouncement className="me-3" />  */}
-                Announcement Bar
-              </li>
-            </Link>
-            <Link className="link" to="/blogs">
-              <li
-                className={
-                  activeTab.startsWith("/blogs")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <SiBlogger className="me-3" />  */}
-                Blogs
-              </li>
-            </Link>
-            <Link className="link" to="/faqs">
-              <li
-                className={
-                  activeTab.startsWith("/faqs")
-                    ? "linkItem activeTab"
-                    : "linkItem dropdownItems"
-                }
-              >
-                {/* <FaQuestion className="me-3" /> */}
-                Faqs
-              </li>
-            </Link>
-          </div>
-        )}
-        <Link className="link" to="/review-list">
-          <li
-            className={
-              activeTab.startsWith("/review")
-                ? "linkItem activeTab"
-                : "linkItem singleLinkItem"
-            }
-            onClick={(e) => handleNavbarItemClick(false)}
-          >
-            <MdRateReview className="me-3" /> Manage Reviews
-          </li>
-        </Link>
-        <Link className="link" to="/customers">
-          <li
-            className={
-              activeTab.startsWith("/customer")
-                ? "linkItem activeTab"
-                : "linkItem singleLinkItem"
-            }
-            onClick={(e) => handleNavbarItemClick(false)}
-          >
-            <IoIosPerson className="me-3" /> Customers
-          </li>
-        </Link>
-      </ul>
-    </div>
+          </ul>
+        </div>
+      )}
+    </>
   );
 };
 

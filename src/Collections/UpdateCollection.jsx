@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import swalErr from "../Pages/ErrorHandler";
-
+import BackBtn from "../Components/BackBtn";
+import AdminSideBar from "../Pages/AdminSideBar";
 import CollectionForm from "./CollectionForm";
+import { handleCollectionValidations } from "./CollectionValidations";
 
 const UpdateCollection = () => {
   const [collectionData, setCollectionData] = useState({
@@ -16,11 +17,14 @@ const UpdateCollection = () => {
     urlHandle: "",
     collectionImg: "",
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(tokenKey);
   const { id } = useParams();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getCollectionDetails = async () => {
@@ -55,6 +59,12 @@ const UpdateCollection = () => {
   }, [id, token, baseUrl]);
 
   const onUpdateCollection = async () => {
+    const validationErrors = handleCollectionValidations(collectionData);
+    if (Object.keys(validationErrors).length > 0) {
+      window.scrollTo(0, 0);
+      setValidationErrors(validationErrors);
+      return;
+    }
     try {
       const url = `${baseUrl}/collections`;
       const headers = {
@@ -96,16 +106,29 @@ const UpdateCollection = () => {
     }
   };
   return (
-    <div>
-      <CollectionForm
-        collectionData={collectionData}
-        setCollectionData={setCollectionData}
-      />
-      <div className="col-sm-12">
-        <div className="btnCont">
-          <button className="adminBtn" onClick={onUpdateCollection}>
-            Update
-          </button>
+    <div className="adminSec">
+      <AdminSideBar />
+      <div className="commonSec">
+        <div className="container">
+          <div className="row">
+            <div className="d-flex align-items-center mb-3">
+              <BackBtn onClick={() => navigate(-1)} />
+              <h5>Edit Collections</h5>
+            </div>
+            <CollectionForm
+              collectionData={collectionData}
+              setCollectionData={setCollectionData}
+              validationErrors={validationErrors}
+              setValidationErrors={setValidationErrors}
+            />
+            <div className="col-sm-12">
+              <div className="btnCont">
+                <button className="adminBtn" onClick={onUpdateCollection}>
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

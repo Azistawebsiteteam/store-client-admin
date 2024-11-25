@@ -8,12 +8,14 @@ import swalHandle from "../Pages/ErrorHandler";
 import Swal from "sweetalert2";
 import { useNavigate, useParams } from "react-router-dom";
 import BackBtn from "../Components/BackBtn";
+import { handleBrandsValidations } from "./BrandsValidation";
 import "../Pages/Admin.css";
 
 const EditBrand = () => {
-  const [brandImg, setBrandImg] = useState();
+  const [brandImg, setBrandImg] = useState("");
   const [brandName, setBrandName] = useState("");
   const [description, setDescription] = useState("");
+  const [brandsValidationErrors, setBrandsValidationErrors] = useState({});
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -49,7 +51,19 @@ const EditBrand = () => {
     apiCallback();
   }, [baseUrl, id, token]);
 
+  const brandsData = {
+    brandImg,
+    brandName,
+    description,
+  };
+
   const saveBrand = async () => {
+    const brandsValidationErrors = handleBrandsValidations(brandsData);
+    if (Object.keys(brandsValidationErrors).length > 0) {
+      window.scrollTo(0, 0);
+      setBrandsValidationErrors(brandsValidationErrors);
+      return;
+    }
     try {
       const url = `${baseUrl}/brands`;
       const headers = {
@@ -81,7 +95,7 @@ const EditBrand = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h4 className="d-flex">
+                <h4 className="d-flex align-items-center mb-3">
                   <BackBtn />
                   Edit Brand
                 </h4>
@@ -93,11 +107,13 @@ const EditBrand = () => {
                     setBrandName={setBrandName}
                     description={description}
                     setDescription={setDescription}
+                    brandsValidationErrors={brandsValidationErrors}
+                    setBrandsValidationErrors={setBrandsValidationErrors}
                   />
                 </div>
               </div>
-              <div className="col-12">
-                <button className="saveBtn" onClick={saveBrand}>
+              <div className="col-12 d-flex justify-content-end mt-3 mb-4">
+                <button className="adminBtn" onClick={saveBrand}>
                   Save
                 </button>
               </div>

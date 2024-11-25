@@ -6,18 +6,33 @@ import AdminSideBar from "../Pages/AdminSideBar";
 import Cookies from "js-cookie";
 import swalErr from "../Pages/ErrorHandler";
 import BackBtn from "../Components/BackBtn";
+import { handleBrandsValidations } from "./BrandsValidation";
 
 const CreateBrand = () => {
-  const [brandImg, setBrandImg] = useState();
+  const [brandImg, setBrandImg] = useState("");
   const [brandName, setBrandName] = useState("");
   const [description, setDescription] = useState("");
+  const [brandsValidationErrors, setBrandsValidationErrors] = useState({});
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(tokenKey);
   const navigate = useNavigate();
 
+  const brandsData = {
+    brandImg,
+    brandName,
+    description,
+  };
+
   const saveBrandBtn = async () => {
+    const brandsValidationErrors = handleBrandsValidations(brandsData);
+    console.log(brandsValidationErrors);
+    if (Object.keys(brandsValidationErrors).length > 0) {
+      window.scrollTo(0, 0);
+      setBrandsValidationErrors(brandsValidationErrors);
+      return;
+    }
     try {
       const url = `${baseUrl}/brands/add`;
       const headers = { Authorization: `Bearer ${token}` };
@@ -30,13 +45,14 @@ const CreateBrand = () => {
       await axios.post(url, formdata, { headers });
       swalErr.onLoadingClose();
       swalErr.onSuccess();
-      navigate("/brands"); // Redirect to brand list
+      navigate("/brands");
     } catch (error) {
-      console.log(error, "brand");
       swalErr.onLoadingClose();
       swalErr.onError(error);
     }
   };
+
+  console.log(brandImg, "brandImg");
 
   return (
     <div className="adminSec">
@@ -46,7 +62,7 @@ const CreateBrand = () => {
           <div className="container">
             <div className="row">
               <div className="col-12">
-                <h4 className="d-flex">
+                <h4 className="d-flex align-items-center mb-3">
                   <BackBtn />
                   Create Brand
                 </h4>
@@ -58,11 +74,13 @@ const CreateBrand = () => {
                     setBrandImg={setBrandImg}
                     brandName={brandName}
                     setBrandName={setBrandName}
+                    brandsValidationErrors={brandsValidationErrors}
+                    setBrandsValidationErrors={setBrandsValidationErrors}
                   />
                 </div>
               </div>
-              <div className="col-12">
-                <button className="saveBtn" onClick={saveBrandBtn}>
+              <div className="col-12 d-flex justify-content-end mt-3 mb-4">
+                <button className="adminBtn" onClick={saveBrandBtn}>
                   Save
                 </button>
               </div>
