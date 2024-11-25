@@ -11,6 +11,7 @@ import { GoArrowUp, GoArrowDown } from "react-icons/go";
 import Pagination from "../Components/Pagination";
 import "./index.css";
 import "./../Pages/Admin.css";
+import { downloadExcel } from "react-export-table-to-excel";
 
 const Inventory = () => {
   const [inventory, setInventory] = useState([]);
@@ -159,6 +160,35 @@ const Inventory = () => {
     setFiltersOrder(txt);
   };
 
+  const header = [
+    "Product Name",
+    "SKU",
+    "Committed Quantity",
+    "Available Quantity",
+    "OnHand Quantity",
+  ];
+
+  function handleDownloadExcel() {
+    downloadExcel({
+      fileName: "inventory",
+      sheet: "quantity-list",
+      tablePayload: {
+        header,
+        body: inventory.map((i) => ({
+          azst_category_name: `${i.product_title} <br/> ${
+            i.is_varaints_aval
+              ? `${i.option1 || ""} / ${i.option2 || ""} / ${i.option3 || ""}`
+              : ""
+          }`,
+          sku_code: i.sku_code,
+          commitedQty: i.azst_ipm_commit_quantity,
+          availableQty: i.azst_ipm_avbl_quantity,
+          onHandQty: i.azst_ipm_onhand_quantity,
+        })),
+      },
+    });
+  }
+
   return (
     <div className="adminSec">
       <div>
@@ -180,6 +210,9 @@ const Inventory = () => {
               ))}
             </Form.Select>
           </div>
+          <button className="exportBtn" onClick={handleDownloadExcel}>
+            Export
+          </button>
           <div className="saveBtnCont">
             {changedInventories.length > 0 && (
               <button className="infoBtn" onClick={saveValues}>
