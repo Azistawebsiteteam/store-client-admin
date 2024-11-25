@@ -1,26 +1,27 @@
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useMemo, useState } from "react";
-import Form from "react-bootstrap/Form";
-import AdminSideBar from "../Pages/AdminSideBar";
-import axios from "axios";
-import { RiArrowUpDownLine } from "react-icons/ri";
-import Table from "react-bootstrap/Table";
-import Cookies from "js-cookie";
-import errorHandle from "../Pages/ErrorHandler";
-import { GoArrowUp, GoArrowDown } from "react-icons/go";
-import Pagination from "../Components/Pagination";
-import "./index.css";
-import "./../Pages/Admin.css";
+import React, { useEffect, useMemo, useState } from 'react';
+import Form from 'react-bootstrap/Form';
+import AdminSideBar from '../Pages/AdminSideBar';
+import axios from 'axios';
+import { RiArrowUpDownLine } from 'react-icons/ri';
+import Table from 'react-bootstrap/Table';
+import Cookies from 'js-cookie';
+import errorHandle from '../Pages/ErrorHandler';
+import { GoArrowUp, GoArrowDown } from 'react-icons/go';
+import Pagination from '../Components/Pagination';
+import './index.css';
+import './../Pages/Admin.css';
+import { downloadExcel } from 'react-export-table-to-excel';
 
 const Inventory = () => {
   const [inventory, setInventory] = useState([]);
-  const [inventoryId, setInventoryId] = useState("");
+  const [inventoryId, setInventoryId] = useState('');
   const [inventoryData, setInventoryData] = useState([]);
   const [totalInventory, setTotalInventory] = useState(0);
   const [displayFilterDropdown, setDisplayFilterDropdown] = useState(false);
   const [changedInventories, setChangedInventories] = useState([]);
-  const [filtersOrder, setFiltersOrder] = useState("DESC");
-  const [filteredVal, setFilteredValue] = useState("productTitle");
+  const [filtersOrder, setFiltersOrder] = useState('DESC');
+  const [filteredVal, setFilteredValue] = useState('productTitle');
   const [filteredInventoryList, setFilteredInventoryList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -65,7 +66,7 @@ const Inventory = () => {
           inventoryId,
           orderbyKey: filteredVal,
           sort: filtersOrder,
-          collection: "",
+          collection: '',
         };
 
         errorHandle.onLoading();
@@ -92,9 +93,9 @@ const Inventory = () => {
 
     // Determine the correct comparison key
     const compareKey =
-      compare === "avbl"
-        ? "azst_ipm_avbl_quantity"
-        : "azst_ipm_onhand_quantity";
+      compare === 'avbl'
+        ? 'azst_ipm_avbl_quantity'
+        : 'azst_ipm_onhand_quantity';
 
     if (!changedInventories.includes(productId)) {
       setChangedInventories([...changedInventories, productId]);
@@ -159,20 +160,48 @@ const Inventory = () => {
     setFiltersOrder(txt);
   };
 
+  const header = [
+    'Product Name',
+    'SKU',
+    'Committed Quantity',
+    'Available Quantity',
+    'OnHand Quantity',
+  ];
+
+  function handleDownloadExcel() {
+    downloadExcel({
+      fileName: 'inventory',
+      sheet: 'quantity-list',
+      tablePayload: {
+        header,
+        body: inventory.map((i) => ({
+          azst_category_name: `${i.product_title} <br/> ${
+            i.is_varaints_aval
+              ? `${i.option1 || ''} / ${i.option2 || ''} / ${i.option3 || ''}`
+              : ''
+          }`,
+          sku_code: i.sku_code,
+          commitedQty: i.azst_ipm_commit_quantity,
+          availableQty: i.azst_ipm_avbl_quantity,
+          onHandQty: i.azst_ipm_onhand_quantity,
+        })),
+      },
+    });
+  }
+
   return (
-    <div className="adminSec">
+    <div className='adminSec'>
       <div>
         <AdminSideBar />
       </div>
-      <div className="commonSec">
-        <div className="actions">
-          <div className="leftSec">
-            <h4 className="d-inline">Inventory:</h4>
+      <div className='commonSec'>
+        <div className='actions'>
+          <div className='leftSec'>
+            <h4 className='d-inline'>Inventory:</h4>
             <Form.Select
-              className="inventoryDropdown"
+              className='inventoryDropdown'
               value={inventoryId}
-              onChange={handleInventory}
-            >
+              onChange={handleInventory}>
               {inventory.map((each, i) => (
                 <option key={i} value={each.inventory_id}>
                   {each.inventory_name}
@@ -180,157 +209,155 @@ const Inventory = () => {
               ))}
             </Form.Select>
           </div>
-          <div className="saveBtnCont">
+          <button className='exportBtn' onClick={handleDownloadExcel}>
+            Export
+          </button>
+          <div className='saveBtnCont'>
             {changedInventories.length > 0 && (
-              <button className="infoBtn" onClick={saveValues}>
+              <button className='infoBtn' onClick={saveValues}>
                 Save
               </button>
             )}
           </div>
           <button
-            className="sortBtn"
-            onClick={() => setDisplayFilterDropdown(!displayFilterDropdown)}
-          >
+            className='sortBtn'
+            onClick={() => setDisplayFilterDropdown(!displayFilterDropdown)}>
             <RiArrowUpDownLine />
           </button>
           {displayFilterDropdown && (
-            <div className="dropDown">
+            <div className='dropDown'>
               <p>Sort by</p>
-              <div className="form-check">
+              <div className='form-check'>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="filterSec"
-                  id="producttitle"
-                  value="producttitle"
+                  className='form-check-input'
+                  type='radio'
+                  name='filterSec'
+                  id='producttitle'
+                  value='producttitle'
                   onChange={handleFilters}
-                  checked={"producttitle" === filteredVal}
+                  checked={'producttitle' === filteredVal}
                 />
-                <label className="form-check-label" htmlFor="producttitle">
+                <label className='form-check-label' htmlFor='producttitle'>
                   Product title
                 </label>
               </div>
-              <div className="form-check">
+              <div className='form-check'>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="filterSec"
-                  id="sku"
-                  value="sku"
+                  className='form-check-input'
+                  type='radio'
+                  name='filterSec'
+                  id='sku'
+                  value='sku'
                   onChange={handleFilters}
-                  checked={"sku" === filteredVal}
+                  checked={'sku' === filteredVal}
                 />
-                <label className="form-check-label" htmlFor="sku">
+                <label className='form-check-label' htmlFor='sku'>
                   SKU
                 </label>
               </div>
-              <div className="form-check">
+              <div className='form-check'>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="filterSec"
-                  id="unavailable"
-                  value="unavailable"
+                  className='form-check-input'
+                  type='radio'
+                  name='filterSec'
+                  id='unavailable'
+                  value='unavailable'
                   onChange={handleFilters}
-                  checked={"unavailable" === filteredVal}
+                  checked={'unavailable' === filteredVal}
                 />
-                <label className="form-check-label" htmlFor="unavailable">
+                <label className='form-check-label' htmlFor='unavailable'>
                   Unavailable
                 </label>
               </div>
-              <div className="form-check">
+              <div className='form-check'>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="filterSec"
-                  id="commited"
-                  value="commited"
+                  className='form-check-input'
+                  type='radio'
+                  name='filterSec'
+                  id='commited'
+                  value='commited'
                   onChange={handleFilters}
-                  checked={"commited" === filteredVal}
+                  checked={'commited' === filteredVal}
                 />
-                <label className="form-check-label" htmlFor="commited">
+                <label className='form-check-label' htmlFor='commited'>
                   Committed
                 </label>
               </div>
-              <div className="form-check">
+              <div className='form-check'>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="filterSec"
-                  id="available"
-                  value="available"
+                  className='form-check-input'
+                  type='radio'
+                  name='filterSec'
+                  id='available'
+                  value='available'
                   onChange={handleFilters}
-                  checked={"available" === filteredVal}
+                  checked={'available' === filteredVal}
                 />
-                <label className="form-check-label" htmlFor="available">
+                <label className='form-check-label' htmlFor='available'>
                   Available
                 </label>
               </div>
-              <div className="form-check">
+              <div className='form-check'>
                 <input
-                  className="form-check-input"
-                  type="radio"
-                  name="filterSec"
-                  id="onhand"
-                  value="onhand"
+                  className='form-check-input'
+                  type='radio'
+                  name='filterSec'
+                  id='onhand'
+                  value='onhand'
                   onChange={handleFilters}
-                  checked={"onhand" === filteredVal}
+                  checked={'onhand' === filteredVal}
                 />
-                <label className="form-check-label" htmlFor="onhand">
+                <label className='form-check-label' htmlFor='onhand'>
                   On hand
                 </label>
               </div>
-              <div className="mt-1">
+              <div className='mt-1'>
                 <GoArrowUp />
                 <small
-                  className={filtersOrder === "ASC" && "active"}
-                  onClick={() => handleFiltersOrder("ASC")}
-                >
+                  className={filtersOrder === 'ASC' && 'active'}
+                  onClick={() => handleFiltersOrder('ASC')}>
                   A - Z
                 </small>
               </div>
-              <div className="mt-1">
+              <div className='mt-1'>
                 <GoArrowDown />
                 <small
-                  className={filtersOrder === "DESC" && "active"}
-                  onClick={() => handleFiltersOrder("DESC")}
-                >
+                  className={filtersOrder === 'DESC' && 'active'}
+                  onClick={() => handleFiltersOrder('DESC')}>
                   Z - A
                 </small>
               </div>
             </div>
           )}
         </div>
-        <div className="middleSec">
+        <div className='middleSec'>
           {filteredInventoryList.length ? (
-            <div className="tableCont">
+            <div className='tableCont'>
               <table
-                className="table table-hover"
-                style={{ minWidth: "1200px" }}
-              >
+                className='table table-hover'
+                style={{ minWidth: '1200px' }}>
                 <thead>
-                  <tr className="tableHeader">
+                  <tr className='tableHeader'>
                     <th
-                      className="sticky-column"
-                      style={{ width: "  10%" }}
-                      scope="col"
-                    >
+                      className='sticky-column'
+                      style={{ width: '  10%' }}
+                      scope='col'>
                       Image
                     </th>
-                    <th scope="col">Product</th>
-                    <th scope="col" style={{ width: "  10%" }}>
+                    <th scope='col'>Product</th>
+                    <th scope='col' style={{ width: '  10%' }}>
                       SKU
                     </th>
-                    <th scope="col" style={{ width: "  10%" }}>
+                    <th scope='col' style={{ width: '  10%' }}>
                       Unavailable
                     </th>
-                    <th scope="col" style={{ width: "  10%" }}>
+                    <th scope='col' style={{ width: '  10%' }}>
                       Committed
                     </th>
-                    <th scope="col" style={{ width: "  10%" }}>
+                    <th scope='col' style={{ width: '  10%' }}>
                       Available
                     </th>
-                    <th scope="col" style={{ width: "  10%" }}>
+                    <th scope='col' style={{ width: '  10%' }}>
                       On hand
                     </th>
                   </tr>
@@ -338,59 +365,59 @@ const Inventory = () => {
                 <tbody>
                   {filteredInventoryList.map((each, i) => (
                     <tr key={each.azst_ipm_id}>
-                      <td className="sticky-column" style={{ width: "  10%" }}>
+                      <td className='sticky-column' style={{ width: '  10%' }}>
                         {each.is_varaints_aval === 1 ? (
                           <img
-                            className="invSecImg"
+                            className='invSecImg'
                             src={each.variant_image}
-                            alt="productImg"
+                            alt='productImg'
                           />
                         ) : (
                           <img
                             src={each.product_image}
-                            alt="productImg"
-                            className="invSecImg"
+                            alt='productImg'
+                            className='invSecImg'
                           />
                         )}
                       </td>
-                      <td className="productTitle">
+                      <td className='productTitle'>
                         <span>{each.product_title}</span>
                         {each.is_varaints_aval && (
-                          <p className="variantsOpt">
+                          <p className='variantsOpt'>
                             {each.option1 && <span>{each.option1}</span>}
                             {each.option2 && <span>/{each.option2}</span>}
                             {each.option3 && <span>/{each.option1}</span>}
                           </p>
                         )}
                       </td>
-                      <td className="productSku">{each.sku_code}</td>
-                      <td style={{ width: "  10%" }}>
+                      <td className='productSku'>{each.sku_code}</td>
+                      <td style={{ width: '  10%' }}>
                         {each.azst_ipm_unavbl_quantity}
                       </td>
-                      <td style={{ width: "  10%" }}>
+                      <td style={{ width: '  10%' }}>
                         {each.azst_ipm_commit_quantity}
                       </td>
 
-                      <td style={{ width: "  10%" }}>
+                      <td style={{ width: '  10%' }}>
                         <input
-                          id="onHandQty"
-                          type="number"
-                          className="inventoryInput"
+                          id='onHandQty'
+                          type='number'
+                          className='inventoryInput'
                           value={each.azst_ipm_avbl_quantity}
                           onInput={(e) =>
-                            handleInventoryInput(e, each.azst_ipm_id, "avbl")
+                            handleInventoryInput(e, each.azst_ipm_id, 'avbl')
                           }
                         />
                       </td>
 
-                      <td className="inventoryInputCont">
+                      <td className='inventoryInputCont'>
                         <input
-                          id="onHandQty"
-                          type="number"
-                          className="inventoryInput"
+                          id='onHandQty'
+                          type='number'
+                          className='inventoryInput'
                           value={each.azst_ipm_onhand_quantity}
                           onInput={(e) =>
-                            handleInventoryInput(e, each.azst_ipm_id, "onhand")
+                            handleInventoryInput(e, each.azst_ipm_id, 'onhand')
                           }
                         />
                       </td>

@@ -1,13 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useState } from "react";
-import AdminSideBar from "../Pages/AdminSideBar";
-import Cookies from "js-cookie";
-import axios from "axios";
-import { MdDelete } from "react-icons/md";
-import { MdModeEditOutline } from "react-icons/md";
-import { Link } from "react-router-dom";
-import swalHandle from "../Pages/ErrorHandler";
-import "../Pages/Admin.css";
+import React, { useEffect, useState } from 'react';
+import AdminSideBar from '../Pages/AdminSideBar';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { downloadExcel } from 'react-export-table-to-excel';
+import { MdDelete } from 'react-icons/md';
+import { MdModeEditOutline } from 'react-icons/md';
+import { Link } from 'react-router-dom';
+import swalHandle from '../Pages/ErrorHandler';
+import '../Pages/Admin.css';
 
 const Brands = () => {
   const [brands, setBrands] = useState([]);
@@ -61,51 +62,70 @@ const Brands = () => {
     }
   };
 
+  const header = ['Brand Name', 'Number of Products'];
+  function handleDownloadExcel() {
+    downloadExcel({
+      fileName: 'brands',
+      sheet: 'brands-list',
+      tablePayload: {
+        header,
+        body: brands.map((b) => ({
+          azst_category_name: b.azst_brand_name,
+          no_products: b.no_products,
+        })),
+      },
+    });
+  }
+
   return (
-    <div className="adminSec">
+    <div className='adminSec'>
       <AdminSideBar />
-      <div className="commonSec">
-        <div className="addProductSection">
-          <div className="container">
-            <div className="row">
-              <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
+      <div className='commonSec'>
+        <div className='addProductSection'>
+          <div className='container'>
+            <div className='row'>
+              <div className='col-12 mt-2 mb-2 d-flex justify-content-between'>
                 <h4>Brands</h4>
-                <Link to="/brands/create" className="infoBtn">
+                <button className='exportBtn' onClick={handleDownloadExcel}>
+                  Export
+                </button>
+                <Link to='/brands/create' className='infoBtn'>
                   Create brands
                 </Link>
               </div>
-              <div className="tableCont" style={{ maxHeight: "76vh" }}>
+              <div className='tableCont' style={{ maxHeight: '76vh' }}>
                 <table
-                  className="table table-hover"
-                  style={{ minWidth: "1000px" }}
-                >
+                  className='table table-hover'
+                  style={{ minWidth: '1000px' }}>
                   <thead>
-                    <tr className="tableHeader">
-                      <th scope="col">#</th>
-                      <th scope="col">Brand Logo</th>
-                      <th scope="col">Brand Name</th>
-                      <th scope="col">Actions</th>
+                    <tr className='tableHeader'>
+                      <th scope='col'>#</th>
+                      <th scope='col'>Brand Logo</th>
+                      <th scope='col'>Brand Name</th>
+                      <th scope='col'>Products</th>
+                      <th scope='col'>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {brands.map((each, i) => (
-                      <tr className="item" key={i}>
+                      <tr className='item' key={i}>
                         <td>{i + 1}</td>
-                        <td style={{ width: "20%" }}>
+                        <td style={{ width: '20%' }}>
                           <img
-                            className="brandThumbnail"
+                            className='brandThumbnail'
                             src={each.azst_brand_logo}
                             alt={each.azst_brand_id}
                           />
                         </td>
                         <td>{each.azst_brand_name}</td>
+                        <td>{each.no_products}</td>
                         <td>
                           <MdDelete
-                            className="icons"
+                            className='icons'
                             onClick={() => deleteBrand(each.azst_brands_id)}
-                          />{" "}
+                          />{' '}
                           <Link to={`/edit-brand/${each.azst_brands_id}`}>
-                            <MdModeEditOutline className="icons" />
+                            <MdModeEditOutline className='icons' />
                           </Link>
                         </td>
                       </tr>
