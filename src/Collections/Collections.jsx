@@ -85,7 +85,7 @@ const Collections = () => {
                   Collection Image
                 </th>
                 <th scope="col" style={{ width: "40%" }}>
-                  Title
+                  Collection Name
                 </th>
                 <th scope="col" style={{ width: "20%" }}>
                   No. Products

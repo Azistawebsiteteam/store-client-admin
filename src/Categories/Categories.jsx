@@ -125,7 +125,7 @@ const Categories = () => {
                     />
                   </td>
                   <td>{each.azst_category_name}</td>
-                  <td style={{ textAlign: "center" }}>{each.no_products}</td>
+                  <td>{each.no_products}</td>
                   <td>
                     <MdDelete
                       className="icons"

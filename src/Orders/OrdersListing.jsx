@@ -306,37 +306,19 @@ const OrdersListing = () => {
                           <th
                             className="sticky-column"
                             scope="col"
-                            style={{ width: "  10%" }}
+                            style={{ width: "10%" }}
                           >
                             Order
                           </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Date
-                          </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Customer
-                          </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Channel
-                          </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Total
-                          </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Payment Status
-                          </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Fulfillment Status
-                          </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Items
-                          </th>
-                          <th scope="col" style={{ width: "  10%" }}>
-                            Delivery Method
-                          </th>
-                          <th scope="col" style={{ width: "10%" }}>
-                            Order status
-                          </th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Customer</th>
+                          <th scope="col">Channel</th>
+                          <th scope="col">Total</th>
+                          <th scope="col">Payment Status</th>
+                          <th scope="col">Fulfillment Status</th>
+                          <th scope="col">Items</th>
+                          <th scope="col">Delivery Method</th>
+                          <th scope="col">Order status</th>
                         </tr>
                       </thead>
                       <tbody>

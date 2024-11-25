@@ -61,13 +61,18 @@ hr.v1 {
 .table {
   margin-bottom: 0 !important;
 }
+th{
+  white-space: nowrap !important;
+}
 th,
 td {
-  padding: 12px !important;
+  padding: 0.8rem !important;
   font-size: 1.3rem;
-  white-space: nowrap;
   color: #656161 !important;
   vertical-align: middle;
+  word-wrap: break-word; 
+  word-break: break-word; 
+  white-space: normal;
 }
 .sticky-column {
   position: sticky;
