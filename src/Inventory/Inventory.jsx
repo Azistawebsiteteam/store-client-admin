@@ -174,10 +174,12 @@ const Inventory = () => {
       sheet: 'quantity-list',
       tablePayload: {
         header,
-        body: inventory.map((i) => ({
-          azst_category_name: `${i.product_title} <br/> ${
+        body: inventoryData.map((i) => ({
+          product_title: `${i.product_title}\n ${
             i.is_varaints_aval
-              ? `${i.option1 || ''} / ${i.option2 || ''} / ${i.option3 || ''}`
+              ? `\n${[i.option1, i.option2, i.option3]
+                  .filter(Boolean)
+                  .join(' / ')}`
               : ''
           }`,
           sku_code: i.sku_code,
