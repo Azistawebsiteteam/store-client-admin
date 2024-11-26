@@ -52,8 +52,6 @@ const CreateBrand = () => {
     }
   };
 
-  console.log(brandImg, "brandImg");
-
   return (
     <div className="adminSec">
       <AdminSideBar />

@@ -72,9 +72,9 @@ const Announcements = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="collectionTopbar">
+        <div className="commonTopSec">
           <h4>Announcements</h4>
-          <Link to="/announcement/create" className="btn bg-dark text-light">
+          <Link to="/announcement/create" className="adminBtn">
             Create Announcement
           </Link>
         </div>

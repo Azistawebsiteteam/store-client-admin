@@ -4,6 +4,8 @@ import Cookies from "js-cookie";
 import swalErr from "../Pages/ErrorHandler";
 import SliderForm from "./SliderForm";
 import { useNavigate } from "react-router-dom";
+import BackBtn from "./../Components/BackBtn";
+import AdminSideBar from "../Pages/AdminSideBar";
 
 const AddSlider = () => {
   const [imgDetails, setImgDetails] = useState({
@@ -65,18 +67,29 @@ const AddSlider = () => {
   };
 
   return (
-    <div>
-      <SliderForm
-        setImgDetails={setImgDetails}
-        imgDetails={imgDetails}
-        setimgValue={setimgValue}
-        imgValue={imgValue}
-      />
-      <div className="col-sm-12">
-        <div className="btnCont">
-          <button className="adminBtn" onClick={onSubmitSliderDetails}>
-            Save
-          </button>
+    <div className="adminSec">
+      <AdminSideBar />
+      <div className="commonSec">
+        <div className="container">
+          <div className="row">
+            <div className="d-flex align-items-center mb-3">
+              <BackBtn />
+              <h5>Add Slider</h5>
+            </div>
+            <SliderForm
+              setImgDetails={setImgDetails}
+              imgDetails={imgDetails}
+              setimgValue={setimgValue}
+              imgValue={imgValue}
+            />
+            <div className="col-sm-12">
+              <div className="btnCont">
+                <button className="adminBtn" onClick={onSubmitSliderDetails}>
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

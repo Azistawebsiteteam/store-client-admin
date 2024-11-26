@@ -65,9 +65,9 @@ const Collections = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="collectionTopbar">
+        <div className="commonTopSec">
           <h4>Collections</h4>
-          <Link to="/collections/create" className="infoBtn">
+          <Link to="/collections/create" className="adminBtn">
             Create collection
           </Link>
         </div>

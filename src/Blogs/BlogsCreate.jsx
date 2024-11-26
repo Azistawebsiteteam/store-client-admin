@@ -56,8 +56,11 @@ const BlogsCreate = () => {
     <div className="adminSec">
       <AdminSideBar />
       <div className="commonSec">
-        <div className="d-flex align-items-center">
-          <BackBtn /> <h3>Create Blog</h3>
+        <div className="d-flex align-items-center mb-3">
+          <div className="BackArrow">
+            <BackBtn />
+          </div>
+          <h5>Create Blog</h5>
         </div>
         <BlogForm
           buttonText={"Save"}

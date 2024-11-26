@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ErrorHandler from "../Pages/ErrorHandler";
+import BackBtn from "./../Components/BackBtn";
+import AdminSideBar from "../Pages/AdminSideBar";
 
 const EditSlider = () => {
   const [bannerDetails, setBannerDetails] = useState({
@@ -106,18 +108,29 @@ const EditSlider = () => {
   };
 
   return (
-    <div>
-      <SliderForm
-        setImgDetails={setBannerDetails}
-        imgDetails={bannerDetails}
-        setimgValue={setimgValue}
-        imgValue={imgValue}
-      />
-      <div className="col-sm-12">
-        <div className="btnCont">
-          <button className="adminBtn" onClick={onUpdateSliderDetails}>
-            Update
-          </button>
+    <div className="adminSec">
+      <AdminSideBar />
+      <div className="commonSec">
+        <div className="container">
+          <div className="row">
+            <div className="d-flex align-items-center mb-3">
+              <BackBtn />
+              <h5>Edit Slider</h5>
+            </div>
+            <SliderForm
+              setImgDetails={setBannerDetails}
+              imgDetails={bannerDetails}
+              setimgValue={setimgValue}
+              imgValue={imgValue}
+            />
+            <div className="col-sm-12">
+              <div className="btnCont">
+                <button className="adminBtn" onClick={onUpdateSliderDetails}>
+                  Update
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

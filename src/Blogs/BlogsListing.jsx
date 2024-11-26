@@ -64,35 +64,51 @@ const BlogsListing = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
+        <div className="col-12 d-flex justify-content-between">
           <h4>Blogs</h4>
-          <Link to="/blogs/create" className="btn bg-dark text-light">
+          <Link to="/blogs/create" className="adminBtn">
             Create Blog
           </Link>
         </div>
         <div className="tableCont">
-          <table className="table table-hover" style={{ minWidth: "1000px" }}>
+          <table className="table custom-table table-hover">
             <thead>
               <tr className="tableHeader">
-                <th scope="col">S.No</th>
-                <th scope="col">Title</th>
-                <th scope="col">Description</th>
-                <th scope="col">Image</th>
-                <th scope="col">Blog Type</th>
-                <th scope="col">Actions</th>
+                <th style={{ width: "8%" }} scope="col">
+                  S.No
+                </th>
+                <th style={{ width: "20%" }} scope="col">
+                  Title
+                </th>
+                <th scope="col" style={{ width: "25%" }}>
+                  Description
+                </th>
+                <th scope="col" style={{ width: "20%" }}>
+                  Image
+                </th>
+                <th scope="col" style={{ width: "15%" }}>
+                  Blog Type
+                </th>
+                <th style={{ width: "10%" }} scope="col">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
               {blogsList?.map((each, i) => (
                 <tr className="item" key={i}>
                   <td>{i + 1}</td>
-                  <td>{truncateText(each.azst_blg_title, 80)}</td>
-                  <td>{truncateText(each.azst_blg_description, 100)}</td>
+                  <td style={{ whiteSpace: "normal" }}>
+                    {truncateText(each.azst_blg_title, 80)}
+                  </td>
+                  <td style={{ whiteSpace: "normal" }}>
+                    {truncateText(each.azst_blg_description, 100)}
+                  </td>
                   <td>
                     <img
-                      style={{ width: "60px" }}
+                      className="blogThumbnailImg"
                       src={each.azst_blg_img}
-                      alt=""
+                      alt="blog"
                     />
                   </td>
                   <td>{each.azst_blg_type}</td>

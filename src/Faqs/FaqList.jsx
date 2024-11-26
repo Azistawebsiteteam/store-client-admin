@@ -147,16 +147,25 @@ const FaqList = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="mt-2 mb-2 d-flex justify-content-between align-items-center">
-          <h4>FAQ's</h4>
+        <div className="commonTopSec">
+          <h4 style={{ marginBottom: "0px" }}>FAQ's</h4>
           <button
-            className="btn btn-success"
+            className="exportBtn"
             disabled={!fullFaqsList.length}
             onClick={handleDownloadExcel}
           >
             Export
           </button>
-          <select value={faqType} onChange={changeFaqType}>
+          <select
+            value={faqType}
+            onChange={changeFaqType}
+            style={{
+              border: "1px solid rgb(142, 142, 142)",
+              borderRadius: "0.6rem",
+              marginLeft: "0.2rem",
+              fontSize: "1.2rem",
+            }}
+          >
             <option value="">All</option>
             {faqTypes.map((faq, index) => (
               <option key={index} value={faq}>
@@ -164,25 +173,31 @@ const FaqList = () => {
               </option>
             ))}
           </select>
-          <Link to="/faqs/create" className="btn bg-dark text-light">
+          <Link to="/faqs/create" className="adminBtn">
             Create FAQ
           </Link>
         </div>
         <div className="middleSec">
           {filteredFaqsList.length ? (
             <div className="tableCont">
-              <table
-                className="table table-hover"
-                style={{ minWidth: "1000px" }}
-                ref={tableRef}
-              >
+              <table className="table custom-table table-hover" ref={tableRef}>
                 <thead>
                   <tr className="tableHeader">
-                    <th scope="col">S.No</th>
-                    <th scope="col">FAQ Question</th>
-                    <th scope="col">FAQ Answer</th>
-                    <th scope="col">FAQ Type</th>
-                    <th scope="col">Actions</th>
+                    <th style={{ width: "8%" }} scope="col">
+                      S.No
+                    </th>
+                    <th scope="col" style={{ width: "30%" }}>
+                      FAQ Question
+                    </th>
+                    <th scope="col" style={{ width: "40%" }}>
+                      FAQ Answer
+                    </th>
+                    <th style={{ width: "12%" }} scope="col">
+                      FAQ Type
+                    </th>
+                    <th style={{ width: "10%" }} scope="col">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

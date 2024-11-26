@@ -62,11 +62,11 @@ const FaqEdit = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="d-flex align-items-center">
-          <BackBtn /> <h3>Update Faq</h3>
+        <div className="d-flex align-items-center mb-3">
+          <BackBtn /> <h4>Update Faq</h4>
         </div>
         <FaqForm inputVlaues={inputVlaues} setInputValues={setInputValues} />
-        <button className="btn btn-primary" onClick={onUpdateFaq}>
+        <button className="adminBtn" onClick={onUpdateFaq}>
           Update
         </button>
       </div>

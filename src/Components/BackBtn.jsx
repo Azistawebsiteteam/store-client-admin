@@ -5,9 +5,9 @@ import { TiArrowLeft } from "react-icons/ti";
 const BackBtn = () => {
   const navigate = useNavigate();
   return (
-    <div>
+    <div className="backArrow">
       <TiArrowLeft
-        style={{ fontSize: "26px", cursor: "pointer", marginRight: "4px" }}
+        style={{ fontSize: "26px", cursor: "pointer" }}
         onClick={() => navigate(-1)}
       />
     </div>

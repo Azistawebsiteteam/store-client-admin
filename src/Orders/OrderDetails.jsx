@@ -1,16 +1,15 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import moment from 'moment';
-import Cookies from 'js-cookie';
-import { useParams, useNavigate } from 'react-router-dom';
-import Dropdown from 'react-bootstrap/Dropdown';
-import Swal from 'sweetalert2';
-
-import { TiArrowLeft } from 'react-icons/ti';
-import { FaRegCopy } from 'react-icons/fa';
-import AdminSideBar from '../Pages/AdminSideBar';
-import errorHandle from '../Pages/ErrorHandler';
+import React from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import moment from "moment";
+import Cookies from "js-cookie";
+import { useParams } from "react-router-dom";
+// import Dropdown from "react-bootstrap/Dropdown";
+import Swal from "sweetalert2";
+import BackBtn from "../Components/BackBtn";
+import { FaRegCopy } from "react-icons/fa";
+import AdminSideBar from "../Pages/AdminSideBar";
+import errorHandle from "../Pages/ErrorHandler";
 
 const OrderDetails = () => {
   const [orderData, setOrderData] = useState({});
@@ -24,7 +23,6 @@ const OrderDetails = () => {
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
 
   let { id } = useParams();
-  let navigate = useNavigate();
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -92,13 +90,13 @@ const OrderDetails = () => {
     shipping
   ) => {
     try {
-      if (orderStatus === '1' && (inventory?.length < 1 || shipping < 1)) {
-        alert('Please select the Inventory');
+      if (orderStatus === "1" && (inventory?.length < 1 || shipping < 1)) {
+        alert("Please select the Inventory");
         return;
       }
 
-      if (orderStatus === '2' && reason?.length < 1) {
-        alert('Please select the Inventory');
+      if (orderStatus === "2" && reason?.length < 1) {
+        alert("Please select the Inventory");
         return;
       }
 
@@ -116,7 +114,7 @@ const OrderDetails = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       const message = `Order ${
-        orderStatus === '1' ? 'Confirmed' : 'Rejected'
+        orderStatus === "1" ? "Confirmed" : "Rejected"
       } successfully `;
       errorHandle.onLoadingClose();
       errorHandle.onSuccess(message);
@@ -128,24 +126,24 @@ const OrderDetails = () => {
 
   const handleOrderRejection = async () => {
     const { value: reason } = await Swal.fire({
-      input: 'textarea',
-      inputLabel: 'Reason',
-      inputPlaceholder: 'Enter your reason (10-500 characters)',
+      input: "textarea",
+      inputLabel: "Reason",
+      inputPlaceholder: "Enter your reason (10-500 characters)",
       inputAttributes: {
         minlength: 10,
         maxlength: 500,
-        'aria-label': 'Type your message here',
+        "aria-label": "Type your message here",
       },
       showCancelButton: true,
-      confirmButtonText: 'Confirm',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: "Confirm",
+      cancelButtonText: "Cancel",
       customClass: {
-        inputLabel: 'swal-custom-label', // Use a custom class for the label
+        inputLabel: "swal-custom-label", // Use a custom class for the label
       },
       preConfirm: (reason) => {
         if (!reason || reason.length < 10 || reason.length > 500) {
           Swal.showValidationMessage(
-            'Reason must be between 10 and 500 characters.'
+            "Reason must be between 10 and 500 characters."
           );
         }
         return reason;
@@ -153,16 +151,16 @@ const OrderDetails = () => {
     });
 
     if (reason) {
-      handleOrderConfirmation('2', reason);
+      handleOrderConfirmation("2", reason);
     }
   };
 
   const shippingMethods = [
-    { id: 1, method: 'ShipRocket' },
-    { id: 2, method: 'Express Shipping' },
-    { id: 3, method: 'Next-Day Delivery' },
-    { id: 4, method: 'Delhivery' },
-    { id: 5, method: 'Postal' },
+    { id: 1, method: "ShipRocket" },
+    { id: 2, method: "Express Shipping" },
+    { id: 3, method: "Next-Day Delivery" },
+    { id: 4, method: "Delhivery" },
+    { id: 5, method: "Postal" },
   ];
 
   const handleOrderConfirm = async () => {
@@ -176,7 +174,7 @@ const OrderDetails = () => {
                (item) =>
                  `<option value="${item.inventory_id}">${item.inventory_name}</option>`
              )
-             .join('')}
+             .join("")}
     </select>
     
     <label for="swal-shipping" style="display:block;margin:10px 0 5px;">Select Shipping Method</label>
@@ -186,27 +184,27 @@ const OrderDetails = () => {
         .map(
           (method) => `<option value="${method.id}">${method.method}</option>`
         )
-        .join('')}
+        .join("")}
     </select>
   `,
       focusConfirm: false,
       showCancelButton: true,
-      confirmButtonText: 'Confirm',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: "Confirm",
+      cancelButtonText: "Cancel",
       customClass: {
-        inputLabel: 'swal-custom-label', // Used a custom class for the label
+        inputLabel: "swal-custom-label", // Used a custom class for the label
       },
       preConfirm: () => {
-        const inventoryValue = document.getElementById('swal-inventory').value;
-        const shippingValue = document.getElementById('swal-shipping').value;
+        const inventoryValue = document.getElementById("swal-inventory").value;
+        const shippingValue = document.getElementById("swal-shipping").value;
 
         if (!inventoryValue) {
-          Swal.showValidationMessage('Please select an inventory item.');
+          Swal.showValidationMessage("Please select an inventory item.");
           return false;
         }
 
         if (!shippingValue) {
-          Swal.showValidationMessage('Please select a shipping method.');
+          Swal.showValidationMessage("Please select a shipping method.");
           return false;
         }
 
@@ -217,7 +215,7 @@ const OrderDetails = () => {
     if (formValues) {
       // Pass selected values to the function
       const [inventory, shipping] = formValues;
-      handleOrderConfirmation('1', '', inventory, shipping);
+      handleOrderConfirmation("1", "", inventory, shipping);
     }
   };
 
@@ -241,36 +239,43 @@ const OrderDetails = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <AdminSideBar />
-      <div className='commonSec'>
-        <div className='topSec'>
-          <div className='detailsSec'>
-            <TiArrowLeft
-              onClick={() => navigate(-1)}
-              style={{ fontSize: '30px' }}
-            />
-            <div className='details' style={{ display: 'inline-block' }}>
-              <h3 className='d-inline'>#{orderData.azst_orders_id}</h3>
-              <small className='status'>
-                {orderData.azst_orders_financial_status
-                  ? 'Paid'
-                  : 'Payment pending'}
-              </small>
-              <small className='status'>
-                {orderData.azst_orders_fulfillment_status
-                  ? 'Fulfilled'
-                  : 'Unfulfilled'}
-              </small>
-              <small>
+      <div className="commonSec">
+        <div className="topSec">
+          <div className="orderDetailsSec">
+            <BackBtn />
+            <div className="details" style={{ display: "inline-block" }}>
+              <h4 className="d-inline mb-0">#{orderData.azst_orders_id}</h4>
+
+              {orderData.azst_orders_financial_status ? (
+                <label className="status orderSecStatusBtn paidStatus">
+                  Paid
+                </label>
+              ) : (
+                <label className="status orderSecStatusBtn unFulfilledStatus">
+                  Payment pending
+                </label>
+              )}
+
+              {orderData.azst_orders_fulfillment_status ? (
+                <label className="status orderSecStatusBtn paidStatus">
+                  Fulfilled
+                </label>
+              ) : (
+                <label className="status orderSecStatusBtn unFulfilledStatus">
+                  Unfulfilled
+                </label>
+              )}
+              <label style={{ whiteSpace: "normal" }}>
                 {moment(
                   orderData.products_details.azst_orders_created_on
-                ).format('D MMMM YYYY [at] h:mm a')}{' '}
+                ).format("D MMMM YYYY [at] h:mm a")}{" "}
                 from Online Store
-              </small>
+              </label>
             </div>
           </div>
-          <div className='actions'>
+          {/* <div className='actions'>
             <Dropdown>
               <Dropdown.Toggle variant='success' id='dropdown-basic'>
                 More Actions
@@ -284,158 +289,173 @@ const OrderDetails = () => {
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
-          </div>
+          </div> */}
         </div>
-        <div className='row'>
-          <div className='col-md-8'>
-            <div className='bgStyle'>
-              <div className='d-md-flex justify-content-md-between'>
-                <small className='status'>
-                  {orderData.azst_orders_fulfillment_status
-                    ? 'Fulfilled'
-                    : 'Unfulfilled'}
-                </small>
+        <div className="row">
+          <div className="col-md-8">
+            <div className="bgStyle">
+              <div className="d-md-flex justify-content-md-between">
+                {orderData.azst_orders_fulfillment_status ? (
+                  <label className="status orderSecStatusBtn paidStatus">
+                    Fulfilled
+                  </label>
+                ) : (
+                  <label className="status orderSecStatusBtn unFulfilledStatus">
+                    Unfulfilled
+                  </label>
+                )}
               </div>
-              <div className='ordersPlaced'>
-                <div className=''>
-                  <div className='d-flex flex-column'>
-                    <small>Location</small>
-                    <small className='mb-1'>
+              <div className="ordersPlaced">
+                <div className="">
+                  <div className="d-flex flex-column">
+                    <label>Location</label>
+                    <label className="mb-1">
                       {shippingLocation.inventory_name}
-                    </small>
+                    </label>
                   </div>
-                  <div className='d-flex flex-column'>
-                    <small>Delivery method</small>
-                    <small>{orderData.azst_orderinfo_shippingtype}</small>
+                  <div className="d-flex flex-column">
+                    <label>Delivery method</label>
+                    <label>{orderData.azst_orderinfo_shippingtype}</label>
                   </div>
                 </div>
                 <span
                   style={{
-                    border: '1px dotted lightgray',
-                    width: '100%',
-                  }}></span>
+                    border: "1px dotted lightgray",
+                    width: "100%",
+                  }}
+                ></span>
                 {orderData.products_details.map((eachProduct, i) => (
-                  <div key={i} className='row mt-3 mb-3'>
-                    <div className='col-md-2'>
+                  <div key={i} className="row mt-3 mb-3">
+                    <div className="col-2">
                       <img
-                        className='cartImg'
+                        className="cartImg"
                         src={eachProduct.product_image}
-                        alt='product'
+                        alt="product"
                       />
                     </div>
-                    <div className='col-md-4'>
+                    <div className="col-4 ps-4">
                       <h6>{eachProduct.product_title}</h6>
                     </div>
-                    <div className='col-md-4'>
-                      {eachProduct.azst_product_price} x{' '}
-                      {eachProduct.azst_order_qty}
+                    <div className="col-4">
+                      <label>
+                        {eachProduct.azst_product_price} x{" "}
+                        {eachProduct.azst_order_qty}
+                      </label>
                     </div>
-                    <div className='col-md-2'>
-                      {parseFloat(eachProduct.azst_product_price) *
-                        parseInt(eachProduct.azst_order_qty)}
+                    <div className="col-2">
+                      <label>
+                        {" "}
+                        {parseFloat(eachProduct.azst_product_price) *
+                          parseInt(eachProduct.azst_order_qty)}
+                      </label>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-            <div className='bgStyle'>
-              <div className='d-md-flex justify-content-md-between'>
-                <small className='status'>
-                  {orderData.azst_orders_financial_status
-                    ? 'Paid'
-                    : 'Payment pending'}
-                </small>
+            <div className="bgStyle">
+              <div className="d-md-flex justify-content-md-between">
+                {orderData.azst_orders_financial_status ? (
+                  <label className="status orderSecStatusBtn paidStatus">
+                    Paid
+                  </label>
+                ) : (
+                  <label className="status orderSecStatusBtn unFulfilledStatus">
+                    Payment pending
+                  </label>
+                )}
               </div>
-              <div className='ordersPlaced'>
-                <div className='row'>
-                  <div className='d-flex justify-content-between'>
-                    <small>Subtotal</small>
-                    <small>{orderData.products_details.length} Items</small>
-                    <small>{orderData.azst_orders_subtotal}/-</small>
+              <div className="ordersPlaced">
+                <div className="row">
+                  <div className="d-flex justify-content-between">
+                    <label>Subtotal</label>
+                    <label>{orderData.products_details.length} Items</label>
+                    <label>{orderData.azst_orders_subtotal}/-</label>
                   </div>
-                  <div className='d-flex justify-content-between'>
-                    <small>Shipping</small>
-                    <small>{orderData.azst_orderinfo_shippingtype}</small>
-                    <small>{orderData.azst_orderinfo_shpping_amount}/-</small>
+                  <div className="d-flex justify-content-between">
+                    <label>Shipping</label>
+                    <label>{orderData.azst_orderinfo_shippingtype}</label>
+                    <label>{orderData.azst_orderinfo_shpping_amount}/-</label>
                   </div>
-                  <div className='d-flex justify-content-between'>
-                    <small>Taxes</small>
-                    <small>IGST (18%) (Included)</small>
-                    <small>{orderData.azst_orders_taxes}/-</small>
+                  <div className="d-flex justify-content-between">
+                    <label>Taxes</label>
+                    <label>IGST (18%) (Included)</label>
+                    <label>{orderData.azst_orders_taxes}/-</label>
                   </div>
-                  <div className='d-flex justify-content-between'>
+                  <div className="d-flex justify-content-between">
                     <strong>Total</strong>
-                    <small>{orderData.azst_orders_total}/-</small>
+                    <label>{orderData.azst_orders_total}/-</label>
                   </div>
                 </div>
                 <span
                   style={{
-                    border: '1px dotted lightgray',
-                    width: '100%',
-                  }}></span>
+                    border: "1px dotted lightgray",
+                    width: "100%",
+                  }}
+                ></span>
 
-                <div className=''>
-                  <div className='d-flex justify-content-between'>
-                    <small>Paid</small>
-                    <small>0/-</small>
+                <div className="">
+                  <div className="d-flex justify-content-between">
+                    <label>Paid</label>
+                    <label>0/-</label>
                   </div>
-                  <div className='d-flex justify-content-between'>
-                    <small>Balance</small>
-                    <small>{orderData.azst_orders_total}/-</small>
+                  <div className="d-flex justify-content-between">
+                    <label>Balance</label>
+                    <label>{orderData.azst_orders_total}/-</label>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className='col-md-4'>
-            <div className='bgStyle'>
+          <div className="col-md-4">
+            <div className="bgStyle">
               <h6>Customer</h6>
-              <p style={{ marginBottom: '4px' }}>
+              <p style={{ marginBottom: "4px" }}>
                 {ShippingDetails.address_fname} {ShippingDetails.address_lname}
               </p>
-              <small>{orderData.products_details.length} orders</small>
+              <label>{orderData.products_details.length} orders</label>
               <h6>Contact information</h6>
-              <small>
+              <label>
                 {ShippingDetails.address_email}
-                <FaRegCopy className='copyIcon' onClick={copyTxt} />
-              </small>
-              <small className='d-block'>
+                <FaRegCopy className="copyIcon" onClick={copyTxt} />
+              </label>
+              <label className="d-block">
                 {ShippingDetails.address_mobile}
-                <FaRegCopy className='copyIcon' onClick={copyNum} />
-              </small>
+                <FaRegCopy className="copyIcon" onClick={copyNum} />
+              </label>
               <br />
               <h6>Shipping address</h6>
               <address>
-                <small>
-                  {ShippingDetails.address_fname}{' '}
+                <label>
+                  {ShippingDetails.address_fname}{" "}
                   {ShippingDetails.address_lname}
-                </small>
+                </label>
                 <br />
-                <small>{ShippingDetails.address_address1}</small>
+                <label>{ShippingDetails.address_address1}</label>
                 <br />
-                <small>
+                <label>
                   {ShippingDetails.address_city}-{ShippingDetails.address_zip}
-                </small>
+                </label>
                 <br />
-                <small>{ShippingDetails.address_mobile}</small>
+                <label>{ShippingDetails.address_mobile}</label>
               </address>
               <br />
               <h6>Billing address</h6>
               {orderData.azst_orderinfo_billing_adrs_issame === 1 ? (
-                <small>Same As Shipping Address </small>
+                <label>Same As Shipping Address </label>
               ) : (
                 <address>
-                  <small>{billingDetails.billing_name}</small>
+                  <label>{billingDetails.billing_name}</label>
                   <br />
-                  <small>{billingDetails.billing_hno}</small>
+                  <label>{billingDetails.billing_hno}</label>
                   <br />
-                  <small>{billingDetails.billing_address1}</small>
+                  <label>{billingDetails.billing_address1}</label>
                   <br />
-                  <small>
+                  <label>
                     {billingDetails.billing_city}-{billingDetails.billing_zip}
-                  </small>
+                  </label>
                   <br />
-                  <small>{billingDetails.billing_mobile}</small>
+                  <label>{billingDetails.billing_mobile}</label>
                 </address>
               )}
               {/*  billing_name billing_address1 : "dfkdjfkdf" billing_address2 : "dfgfhbbf"
@@ -444,45 +464,60 @@ const OrderDetails = () => {
               : "jagital" billing_hno : "234-24/e" billing_landmark : "temple"
               billing_state : "telangana" billing_zip : "505454 */}
             </div>
-            <div className='bgStyle'>
+            <div className="bgStyle">
               <h6>Notes</h6>
-              <small>{orderData.azst_orderinfo_notes}</small>
+              {orderData.azst_orderinfo_notes ? (
+                <label>{orderData.azst_orderinfo_notes}</label>
+              ) : (
+                <>
+                  <textarea
+                    class="form-control"
+                    placeholder="Leave a comment here"
+                    id="floatingTextarea"
+                  ></textarea>
+                  <button className="mt-2 saveBtn">Save</button>
+                </>
+              )}
             </div>
-            <div className='bgStyle'>
-              <div className='deliveryOrderBtn d-flex'>
+            <div className="bgStyle">
+              <div className="deliveryOrderBtn d-flex">
                 <button
-                  type='button'
-                  className='btn btn-primary me-2'
-                  onClick={handleOrderConfirm}>
+                  type="button"
+                  className="adminBtn me-2"
+                  onClick={handleOrderConfirm}
+                >
                   Approve
                 </button>
-                <div className='deliveryOrderBtn'>
+                <div className="deliveryOrderBtn">
                   <button
-                    type='button'
-                    className='btn btn-primary'
-                    onClick={handleOrderRejection}>
-                    Recject
+                    type="button"
+                    className="adminBtn"
+                    onClick={handleOrderRejection}
+                  >
+                    Reject
                   </button>
                 </div>
               </div>
             </div>
-            <div className='bgStyle'>
-              <div className='deliveryOrderBtn d-flex'>
+            <div className="bgStyle">
+              <div className="deliveryOrderBtn d-flex">
                 <button
-                  type='button'
-                  className='btn btn-primary me-2'
+                  type="button"
+                  className="adminBtn me-2"
                   onClick={() =>
-                    updateOrderDeliveryStatus(orderData.azst_orders_id, '1')
-                  }>
+                    updateOrderDeliveryStatus(orderData.azst_orders_id, "1")
+                  }
+                >
                   Out for Delivery
                 </button>
-                <div className='deliveryOrderBtn'>
+                <div className="deliveryOrderBtn">
                   <button
-                    type='button'
-                    className='btn btn-primary'
+                    type="button"
+                    className="adminBtn"
                     onClick={() =>
-                      updateOrderDeliveryStatus(orderData.azst_orders_id, '2')
-                    }>
+                      updateOrderDeliveryStatus(orderData.azst_orders_id, "2")
+                    }
+                  >
                     Confirm Delivery
                   </button>
                 </div>

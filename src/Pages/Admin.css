@@ -273,10 +273,15 @@ ul.dropdownMenu {
   position: fixed;
   height: 100vh;
   top: 6rem;
-  z-index: 3;
+  z-index: 4;
+  left: 0;
+  transition: 0.3s ease-out;
 }
 .sidebarCont:hover{
   overflow: auto;
+}
+.closeSidebar{
+  left: -22rem;
 }
 .searchInputCont {
   background-color: #f1f2f4;
@@ -518,13 +523,6 @@ p.variantHeading {
   padding: 0 !important;
 }
 
-.faq-bgStyle {
-  box-shadow: 0rem 0.125rem 0.25rem #1f21241a, 0rem 0.0625rem 0.375rem #1f21240d;
-  padding: 2% 0%;
-  border-radius: 8px;
-  margin: 8px 0;
-  background-color: #fff;
-}
 .commonSec {
   background-color: #f1f1f1;
   width: 100%;
@@ -534,9 +532,22 @@ p.variantHeading {
   overflow-y: scroll;
   overflow-x: hidden;
 }
+.commonTopSec{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.backArrow {
+  border-radius: 0.5rem;
+  margin-right: 0.6rem;
+  transition: 0.3s;
+}
+.backArrow:hover{
+  background-color: #b9b7b7;
+}
 .middleSec {
   min-height: 68vh;
-  padding-bottom: 4rem;
 }
 tr.tableHeader {
   position: sticky;
@@ -568,10 +579,6 @@ tr.tableHeader {
   display: flex;
   justify-content: end;
 }
-.collectionTopbar {
-  display: flex;
-  justify-content: space-between;
-}
 .collectionsCont {
   border-bottom: 1px solid grey;
   padding: 8px 0;
@@ -587,6 +594,10 @@ tr.tableHeader {
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
+}
+img.blogThumbnailImg {
+  width: 60%;
+  border-radius: 0.4rem;
 }
 /* .collectionsDisplay {
   background-color: #fff;
@@ -625,6 +636,7 @@ tr.tableHeader {
   height: 100%;
   width: 100%;
   cursor: pointer;
+  position: absolute;
 }
 img.bImg {
   max-height: 100%;
@@ -632,37 +644,27 @@ img.bImg {
 }
 
 .bannerThumbnail {
-  width: 100%;
+  width: 80%;
 }
 .adminLoginBtn {
   text-decoration: none;
   color: #000;
 }
-.activeBtn {
-  background-color: rgba(79, 238, 92, 0.919);
-  width: max-content;
-  padding: 2px 14px;
-  border-radius: 25px;
-}
 
 .inactiveBtn {
-  background-color: rgb(242, 75, 9);
   width: max-content;
-  padding: 2px 14px;
-  border-radius: 25px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background-color: #ffeb78;
+  color: #4f4700;
 }
 
-.published {
-  background-color: rgba(79, 238, 92, 0.919);
+.activeBtn {
   width: max-content;
-  padding: 2px 14px;
-  border-radius: 25px;
-}
-.scheduled {
-  background-color: rgb(234, 242, 9);
-  width: max-content;
-  padding: 2px 14px;
-  border-radius: 25px;
+  background-color: rgb(36, 176, 14);
+  padding: 4px 8px;
+  border-radius: 8px;
+  color: rgb(255, 255, 255);
 }
 
 .password-toggle-icon {
@@ -1037,12 +1039,18 @@ input.inventoryInput {
 
 
 @media screen and (max-width: 768px) {
+  h4,.h4{
+    font-size: 1.7rem !important;
+  }
   .navBars{
     display: block;
   }
+  .btnCont {
+    padding: 1rem 0 3rem 0;
+  }
   .commonSec {
     margin-left: 0;
-    padding-top: 12rem;
+    padding-top: 9rem;
   }
   .onClickClose{
     left: -22rem;
@@ -1060,5 +1068,18 @@ input.inventoryInput {
   }
   .table{
     table-layout: inherit;
+  }
+  .commonTopSec{
+    align-items: end;
+  }
+  .paginationCont {
+    width: 86% !important;
+  }
+  .tableCont {
+    min-height: 70vh !important;
+    background-color: #fff;
+  }
+  .announcementBarSec {
+    width: 100%;
   }
 }

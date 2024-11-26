@@ -6,6 +6,8 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ErrorHandler from "../Pages/ErrorHandler";
+import AdminSideBar from "../Pages/AdminSideBar";
+import BackBtn from "../Components/BackBtn";
 
 const EditAnnouncement = () => {
   const [txtColor, setTxtColor] = useState("");
@@ -82,22 +84,35 @@ const EditAnnouncement = () => {
   };
 
   return (
-    <div>
-      <AnnouncementForm
-        txtColor={txtColor}
-        setTxtColor={setTxtColor}
-        bgColor={bgColor}
-        setBgColor={setBgColor}
-        displaySettings={displaySettings}
-        setDisplaySettings={setDisplaySettings}
-        announcementBarContent={announcementBarContent}
-        setAnnouncementBarContent={setAnnouncementBarContent}
-      />
-      <div className="col-sm-12">
-        <div className="btnCont">
-          <button className="adminBtn" onClick={onEditDetails}>
-            Update
-          </button>
+    <div className="adminSec">
+      <AdminSideBar />
+      <div className="commonSec">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="d-flex align-items-center mb-3">
+                <BackBtn />
+                <h4>Announcement Bar</h4>
+              </div>
+              <AnnouncementForm
+                txtColor={txtColor}
+                setTxtColor={setTxtColor}
+                bgColor={bgColor}
+                setBgColor={setBgColor}
+                displaySettings={displaySettings}
+                setDisplaySettings={setDisplaySettings}
+                announcementBarContent={announcementBarContent}
+                setAnnouncementBarContent={setAnnouncementBarContent}
+              />
+              <div className="col-sm-12">
+                <div className="btnCont">
+                  <button className="adminBtn" onClick={onEditDetails}>
+                    Update
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

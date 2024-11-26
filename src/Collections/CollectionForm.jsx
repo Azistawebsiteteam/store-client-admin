@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaUpload } from "react-icons/fa6";
 import "../Pages/Admin.css";
 
@@ -166,6 +166,7 @@ const CollectionForm = (props) => {
               )}
               <input
                 type="file"
+                accept="image/*"
                 className="FileUpload"
                 id="collectionImage"
                 onChange={onChangeCollectionImage}

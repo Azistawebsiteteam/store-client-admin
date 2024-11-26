@@ -78,7 +78,7 @@ const CreateCollections = () => {
         <div className="container">
           <div className="row">
             <div className="d-flex align-items-center mb-3">
-              <BackBtn onClick={() => navigate(-1)} />
+              <BackBtn />
               <h5>Create Collections</h5>
             </div>
             <CollectionForm
