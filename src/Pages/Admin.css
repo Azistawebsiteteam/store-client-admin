@@ -46,12 +46,25 @@ label {
 
 /*table*/
 
+.sortBtn {
+  border: 1px solid lightgray;
+  border-radius: 4px;
+  padding: 0.2rem;
+}
+
+.custom-table{
+  table-layout: fixed;
+  width: 100%;
+}
+
 .productTitle{
   min-width: 5rem; 
   max-width: 5rem; 
-  white-space: nowrap; 
+  white-space: break-spaces; 
   overflow: hidden; 
   text-overflow: ellipsis;
+  color: #3d3b3b;
+  font-weight: 700;
 }
 .productSku{
   min-width: 5rem; 
@@ -1008,9 +1021,12 @@ svg.downArr {
   font-size: 20px;
 }
 input.inventoryInput {
-  width: 70%;
+  width: 8rem;
+  height: 3rem;
+  padding: 0 1rem;
   border-radius: 8px;
   border: 1px solid darkslategray;
+  border-color: darkgrey;
 }
 
 .reset-password-container {
@@ -1041,5 +1057,8 @@ input.inventoryInput {
       position: absolute;
       top: 2rem;
       right: 0.6rem;
+  }
+  .table{
+    table-layout: inherit;
   }
 }

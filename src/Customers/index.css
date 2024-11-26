@@ -39,10 +39,6 @@ input.searchCustomer {
   top: 13rem;
   right: 3rem;
 }
-.sortBtn {
-  border: 1px solid lightgray;
-  border-radius: 4px;
-}
 input#activeUsers {
   border: 1px solid gray;
 }
@@ -108,7 +104,4 @@ img.cartImg {
 .form-check-label{
   font-size: 1.3rem;
   margin-left: 0.6rem;
-}
-button.sortBtn {
-  padding: 0.2rem;
 }

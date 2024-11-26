@@ -315,19 +315,19 @@ const Inventory = () => {
               </div>
               <div className='mt-1'>
                 <GoArrowUp />
-                <small
+                <label
                   className={filtersOrder === 'ASC' && 'active'}
                   onClick={() => handleFiltersOrder('ASC')}>
                   A - Z
-                </small>
+                </label>
               </div>
               <div className='mt-1'>
                 <GoArrowDown />
-                <small
+                <label
                   className={filtersOrder === 'DESC' && 'active'}
                   onClick={() => handleFiltersOrder('DESC')}>
                   Z - A
-                </small>
+                </label>
               </div>
             </div>
           )}
@@ -384,13 +384,13 @@ const Inventory = () => {
                       </td>
                       <td className='productTitle'>
                         <span>{each.product_title}</span>
-                        {each.is_varaints_aval && (
+                        {each.is_varaints_aval ? (
                           <p className='variantsOpt'>
                             {each.option1 && <span>{each.option1}</span>}
                             {each.option2 && <span>/{each.option2}</span>}
                             {each.option3 && <span>/{each.option1}</span>}
                           </p>
-                        )}
+                        ) : null}
                       </td>
                       <td className='productSku'>{each.sku_code}</td>
                       <td style={{ width: '  10%' }}>

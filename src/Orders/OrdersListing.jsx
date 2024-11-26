@@ -296,12 +296,13 @@ const OrdersListing = () => {
                     </div>
                   </div>
                   <div className='tableCont'>
-                    <table
-                      className='table table-hover'
-                      style={{ minWidth: '1200px' }}>
+                    <table className='table table-hover'>
                       <thead>
                         <tr className='tableHeader'>
-                          <th className='sticky-column' scope='col'>
+                          <th
+                            className='sticky-column'
+                            scope='col'
+                            style={{ width: '10%' }}>
                             Order
                           </th>
                           <th scope='col'>Date</th>
@@ -309,14 +310,10 @@ const OrdersListing = () => {
                           <th scope='col'>Channel</th>
                           <th scope='col'>Total</th>
                           <th scope='col'>Payment Status</th>
-                          <th className='text-nowrap' scope='col'>
-                            Fulfillment Status
-                          </th>
+                          <th scope='col'>Fulfillment Status</th>
                           <th scope='col'>Items</th>
                           <th scope='col'>Delivery Method</th>
-                          <th scope='col' style={{ width: '10%' }}>
-                            Order status
-                          </th>
+                          <th scope='col'>Order status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -352,7 +349,7 @@ const OrdersListing = () => {
                             </td>
                             <td className='text-nowrap'>{eachOrder.items}</td>
                             <td className='text-nowrap'>
-                              {eachOrder.azst_order_delivery_method}
+                              {eachOrder.azst_orderinfo_shippingtype}
                             </td>
                             <td
                               style={{ width: '10%' }}
