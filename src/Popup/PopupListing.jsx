@@ -25,6 +25,7 @@ const PopupListing = () => {
       mode: "edit",
     },
   ]);
+  // const [errorMsg, setError] = useState("");
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -45,7 +46,6 @@ const PopupListing = () => {
         const popus = data.map((pop) => ({ ...pop, mode: "normal" }));
         setPopups(popus);
       }
-
       ErrorHandler.onLoadingClose();
     } catch (error) {
       ErrorHandler.onLoadingClose();
@@ -94,6 +94,7 @@ const PopupListing = () => {
     } catch (error) {
       ErrorHandler.onLoadingClose();
       ErrorHandler.onError(error);
+      // setError(error.response?.data?.message);
     }
   };
 
@@ -389,6 +390,7 @@ const PopupListing = () => {
                     </button>
                   </div>
                 </div>
+                {/* {errorMsg && <label>{errorMsg}</label>} */}
               </div>
             ))}
             <div className="popupCard col-sm-3">

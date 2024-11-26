@@ -8,19 +8,21 @@ import { useParams, useNavigate } from "react-router-dom";
 import ErrorHandler from "../Pages/ErrorHandler";
 import AdminSideBar from "../Pages/AdminSideBar";
 import BackBtn from "../Components/BackBtn";
+import { handleValidationError } from "./Validation";
 
 const EditAnnouncement = () => {
   const [txtColor, setTxtColor] = useState("");
   const [bgColor, setBgColor] = useState("");
-  const [displaySettings, setDisplaySettings] = useState({
-    homePage: false,
-    displayBar: false,
-  });
+  // const [displaySettings, setDisplaySettings] = useState({
+  //   homePage: false,
+  //   displayBar: false,
+  // });
   const [announcementBarContent, setAnnouncementBarContent] = useState({
     annoncementBarTxt: "",
     annoncementBarMobTxt: "",
     bgLink: "",
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/announcement`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -42,10 +44,10 @@ const EditAnnouncement = () => {
         const details = response.data;
         setTxtColor(details.announcement_text_color);
         setBgColor(details.announcement_background_color);
-        setDisplaySettings({
-          homePage:
-            details.announcement_show_homepage_only === 1 ? true : false,
-        });
+        // setDisplaySettings({
+        //   homePage:
+        //     details.announcement_show_homepage_only === 1 ? true : false,
+        // });
         setAnnouncementBarContent({
           annoncementBarTxt: details.announcement_web_text,
           annoncementBarMobTxt: details.announcement_mobile_text,
@@ -57,6 +59,12 @@ const EditAnnouncement = () => {
   }, [baseUrl, id, token]);
 
   const onEditDetails = async () => {
+    const validationErrorMsg = handleValidationError(announcementBarContent);
+    if (Object.keys(validationErrorMsg).length > 0) {
+      window.scrollTo(0, 0);
+      setValidationErrors(validationErrorMsg);
+      return;
+    }
     try {
       const url = `${baseUrl}/update`;
       const headers = {
@@ -69,7 +77,7 @@ const EditAnnouncement = () => {
         webLink: announcementBarContent.bgLink,
         textCrl: txtColor,
         backgroundCrl: bgColor,
-        showHomePageOnly: displaySettings.homePage,
+        // showHomePageOnly: displaySettings.homePage,
       };
       ErrorHandler.onLoading();
       const response = await axios.post(url, body, { headers });
@@ -99,10 +107,12 @@ const EditAnnouncement = () => {
                 setTxtColor={setTxtColor}
                 bgColor={bgColor}
                 setBgColor={setBgColor}
-                displaySettings={displaySettings}
-                setDisplaySettings={setDisplaySettings}
+                // displaySettings={displaySettings}
+                // setDisplaySettings={setDisplaySettings}
                 announcementBarContent={announcementBarContent}
                 setAnnouncementBarContent={setAnnouncementBarContent}
+                validationErrors={validationErrors}
+                setValidationErrors={setValidationErrors}
               />
               <div className="col-sm-12">
                 <div className="btnCont">

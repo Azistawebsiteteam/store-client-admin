@@ -3,7 +3,14 @@ import moment from "moment";
 import { FaUpload } from "react-icons/fa";
 
 const SliderForm = (props) => {
-  const { setImgDetails, imgDetails, setimgValue, imgValue } = props;
+  const {
+    setImgDetails,
+    imgDetails,
+    setimgValue,
+    imgValue,
+    validationErrors,
+    setValidationErrors,
+  } = props;
 
   const handleImgDetails = (e) => {
     if (e.target.name === "publish") {
@@ -17,8 +24,10 @@ const SliderForm = (props) => {
       } else {
         setImgDetails({ ...imgDetails, isDefault: 0 });
       }
+      setValidationErrors({ ...validationErrors, [e.target.id]: "" });
     } else {
       setImgDetails({ ...imgDetails, [e.target.id]: e.target.value });
+      setValidationErrors({ ...validationErrors, [e.target.id]: "" });
     }
   };
 
@@ -48,6 +57,7 @@ const SliderForm = (props) => {
           return;
         }
         setimgValue({ ...imgValue, [id]: files[0] });
+        setValidationErrors({ ...validationErrors, [e.target.id]: "" });
       };
     };
   };
@@ -81,6 +91,11 @@ const SliderForm = (props) => {
                 <option value="slider">Slider Banner</option>
                 <option value="product">Product Banner</option>
               </select>
+              {validationErrors.bannerType && (
+                <span className="errorValue">
+                  {validationErrors.bannerType}
+                </span>
+              )}
               <div className="form-group">
                 <label className="heading" htmlFor="title">
                   Title
@@ -93,9 +108,12 @@ const SliderForm = (props) => {
                   value={imgDetails.title}
                   onChange={handleImgDetails}
                 />
-                <p className="infoTxt">
+                <p className="infoTxt mb-0">
                   {imgDetails.title.length} of 70 characters used
                 </p>
+                {validationErrors.title && (
+                  <span className="errorValue">{validationErrors.title}</span>
+                )}
               </div>
               <div className="form-group">
                 <label className="heading" htmlFor="description">
@@ -149,6 +167,11 @@ const SliderForm = (props) => {
                     onChange={handleBannerImg}
                   />
                 </div>
+                {validationErrors.webBanner && (
+                  <span className="errorValue">
+                    {validationErrors.webBanner}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -188,6 +211,11 @@ const SliderForm = (props) => {
                     onChange={handleBannerImg}
                   />
                 </div>
+                {validationErrors.mobileBanner && (
+                  <span className="errorValue">
+                    {validationErrors.mobileBanner}
+                  </span>
+                )}
               </div>
             </div>
 
@@ -254,6 +282,9 @@ const SliderForm = (props) => {
               Schedule Publish
             </label>
           </div>
+          {validationErrors.isDefault && (
+            <span className="errorValue">{validationErrors.isDefault}</span>
+          )}
           <p className="infoTxt mb-3 mt-3">
             In summary, "Publish Now" ensures immediate availability, while
             "Schedule Publish" allows you to plan and release your content at a
@@ -308,6 +339,9 @@ const SliderForm = (props) => {
               id="backgroundUrl"
             />
           </div>
+          {validationErrors.backgroundUrl && (
+            <span className="errorValue">{validationErrors.backgroundUrl}</span>
+          )}
           <p className="infoTxt mt-3">
             In summary "Background Link" refers to url of background images in
             slider section, while "Buttons" refers to buttons which appear on

@@ -636,7 +636,6 @@ img.blogThumbnailImg {
   height: 100%;
   width: 100%;
   cursor: pointer;
-  position: absolute;
 }
 img.bImg {
   max-height: 100%;
@@ -769,11 +768,13 @@ img.bImg {
   width: 100px;
 }
 .wImg {
-  max-width: 380px;
+  max-width: 38rem;
+  max-height: 18rem;
   position: absolute;
 }
 .mImg {
-  max-width: 140px;
+  max-width: 14rem;
+  max-height: 16rem;
   position: absolute;
 }
 .mbImg {
@@ -1081,5 +1082,8 @@ input.inventoryInput {
   }
   .announcementBarSec {
     width: 100%;
+  }
+  .navIcon {
+    margin-left: -4rem;
   }
 }

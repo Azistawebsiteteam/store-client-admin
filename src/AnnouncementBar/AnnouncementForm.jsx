@@ -7,29 +7,33 @@ const AnnouncementFrom = (props) => {
     setTxtColor,
     bgColor,
     setBgColor,
-    displaySettings,
-    setDisplaySettings,
+    // displaySettings,
+    // setDisplaySettings,
     announcementBarContent,
     setAnnouncementBarContent,
+    validationErrors,
+    setValidationErrors,
   } = props;
 
   const handleTxtColor = (e) => {
     setTxtColor(e.target.value);
+    setValidationErrors({ ...validationErrors, [e.target.id]: "" });
   };
 
   const handleBgColor = (e) => {
     setBgColor(e.target.value);
   };
 
-  const handleDisplaySettings = (e) => {
-    setDisplaySettings({ ...displaySettings, [e.target.id]: e.target.checked });
-  };
+  // const handleDisplaySettings = (e) => {
+  //   setDisplaySettings({ ...displaySettings, [e.target.id]: e.target.checked });
+  // };
 
   const handleAnnoncementBarCont = (e) => {
     setAnnouncementBarContent({
       ...announcementBarContent,
       [e.target.id]: e.target.value,
     });
+    setValidationErrors({ ...validationErrors, [e.target.id]: "" });
   };
 
   return (
@@ -57,8 +61,16 @@ const AnnouncementFrom = (props) => {
           onChange={handleAnnoncementBarCont}
           maxLength={120}
         ></textarea>
-        <label>{announcementBarContent.annoncementBarTxt.length}/120</label>
+        {validationErrors.annoncementBarTxt && (
+          <span className="errorValue">
+            {validationErrors.annoncementBarTxt}
+          </span>
+        )}
+        <label className="d-block">
+          {announcementBarContent.annoncementBarTxt.length}/120
+        </label>
       </div>
+
       <div className="form-group spacing">
         <label htmlFor="annoncementBarMobTxt">Text (Mobile)</label>
         <textarea
@@ -69,6 +81,11 @@ const AnnouncementFrom = (props) => {
           onChange={handleAnnoncementBarCont}
           maxLength={120}
         ></textarea>
+        {validationErrors.annoncementBarMobTxt && (
+          <span className="errorValue">
+            {validationErrors.annoncementBarMobTxt}
+          </span>
+        )}
         <label className="d-block">
           {announcementBarContent.annoncementBarMobTxt.length}/120
         </label>
@@ -87,6 +104,9 @@ const AnnouncementFrom = (props) => {
           value={announcementBarContent.bgLink}
           onChange={handleAnnoncementBarCont}
         />
+        {validationErrors.bgLink && (
+          <span className="errorValue">{validationErrors.bgLink}</span>
+        )}
       </div>
       <div className="row spacing">
         <div className="col-sm-2">

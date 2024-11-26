@@ -133,6 +133,7 @@ const BlogForm = (props) => {
                 type="file"
                 accept="image/*"
                 className="FileUpload"
+                style={{ position: "absolute" }}
                 id="blogThumbnailImg"
                 onChange={handleBannerImg}
               />
@@ -169,6 +170,7 @@ const BlogForm = (props) => {
                 type="file"
                 accept="image/*"
                 className="FileUpload"
+                style={{ position: "absolute" }}
                 id="blogImg"
                 onChange={handleBannerImg}
               />

@@ -491,7 +491,7 @@ const OrderDetails = () => {
                 <div className="deliveryOrderBtn">
                   <button
                     type="button"
-                    className="adminBtn"
+                    className="deleteBtn"
                     onClick={handleOrderRejection}
                   >
                     Reject
