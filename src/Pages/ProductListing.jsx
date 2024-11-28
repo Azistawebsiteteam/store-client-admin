@@ -65,7 +65,7 @@ const ProductListing = () => {
       <div className="commonSec">
         <div className="container">
           <div className="row">
-            <div className="productsTopbar">
+            <div className="commonTopSec">
               <h4>Products</h4>
               <button className="exportBtn" onClick={handleDownloadExcel}>
                 Export

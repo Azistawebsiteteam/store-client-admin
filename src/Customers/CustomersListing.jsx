@@ -76,7 +76,7 @@ const CustomersListing = () => {
     <div className="adminSec">
       <AdminSideBar />
       <div className="commonSec">
-        <div className="actions">
+        <div className="commonTopSec">
           <input
             className="searchCustomer"
             type="search"

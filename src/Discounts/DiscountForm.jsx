@@ -468,9 +468,9 @@ const DiscountForm = (props) => {
                 <hr />
                 <div className="mt-2 mb-2">
                   <h6>At a discounted value</h6>
-                  <div className="form-check d-flex align-items-center">
+                  <div className="inputGroup">
                     <input
-                      className="filterInput me-2"
+                      className="form-check-input me-2"
                       onChange={handleDiscountedValues}
                       type="radio"
                       name="atDiscount"
@@ -497,9 +497,9 @@ const DiscountForm = (props) => {
                       </div>
                     )}
                   </div>
-                  <div className="form-check d-flex align-items-start">
+                  <div className="d-flex">
                     <input
-                      className="filterInput me-2"
+                      className="form-check-input me-2"
                       onChange={handleDiscountedValues}
                       checked={discountedValues === "flat"}
                       value="flat"
@@ -539,9 +539,9 @@ const DiscountForm = (props) => {
                       </label>
                     </div>
                   </div>
-                  <div className="form-check d-flex align-items-center">
+                  <div className="inputGroup">
                     <input
-                      className="filterInput"
+                      className="form-check-input"
                       onChange={handleDiscountedValues}
                       checked={discountedValues === "free"}
                       value="free"
@@ -934,50 +934,48 @@ const DiscountForm = (props) => {
             <div className="bgStyle">
               <div className="">
                 <h6>Customer eligibility</h6>
-                <div style={{ marginLeft: "2rem" }}>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input filterInput"
-                      onChange={handleCustomerEligibility}
-                      type="radio"
-                      name="customerEligibility"
-                      checked={custEligibility === "all"}
-                      id="allCustomers"
-                      value="allCustomers"
-                    />
-                    <label className="form-check-label" htmlFor="allCustomers">
-                      All customers
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                      className="form-check-input filterInput"
-                      onChange={handleCustomerEligibility}
-                      type="radio"
-                      name="customerEligibility"
-                      id="specificCustomer"
-                      checked={custEligibility === "specificCustomer"}
-                      value="specificCustomer"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="specificCustomer"
-                    >
-                      Specific customers
-                    </label>
-                    {custEligibility === "specificCustomer" && (
-                      <div className="mt-2">
-                        <Multiselect
-                          displayValue={"azst_customer_name"}
-                          onRemove={onSelectedCustomer}
-                          selectedValues={selectedCustomers}
-                          onSelect={onSelectedCustomer}
-                          options={customersList}
-                          placeholder="Search customers"
-                        />
-                      </div>
-                    )}
-                  </div>
+                <div className="inputGroup">
+                  <input
+                    className="form-check-input"
+                    onChange={handleCustomerEligibility}
+                    type="radio"
+                    name="customerEligibility"
+                    checked={custEligibility === "all"}
+                    id="allCustomers"
+                    value="allCustomers"
+                  />
+                  <label className="form-check-label" htmlFor="allCustomers">
+                    All customers
+                  </label>
+                </div>
+                <div className="inputGroup">
+                  <input
+                    className="form-check-input"
+                    onChange={handleCustomerEligibility}
+                    type="radio"
+                    name="customerEligibility"
+                    id="specificCustomer"
+                    checked={custEligibility === "specificCustomer"}
+                    value="specificCustomer"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="specificCustomer"
+                  >
+                    Specific customers
+                  </label>
+                  {custEligibility === "specificCustomer" && (
+                    <div className="mt-2">
+                      <Multiselect
+                        displayValue={"azst_customer_name"}
+                        onRemove={onSelectedCustomer}
+                        selectedValues={selectedCustomers}
+                        onSelect={onSelectedCustomer}
+                        options={customersList}
+                        placeholder="Search customers"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -985,46 +983,44 @@ const DiscountForm = (props) => {
               <div className="">
                 <h6>Maximum discount uses</h6>
               </div>
-              <div style={{ marginLeft: "2rem" }}>
-                <div className="form-check d-flex align-items-center">
+              <div className="inputGroup">
+                <input
+                  className="form-check-input filterInput"
+                  type="radio"
+                  checked={maxDisUses === "mutipleTimeDiscntUses"}
+                  onChange={handleMaxDisUses}
+                  id="mutipleTimeDiscntUses"
+                  name="discountUses"
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="mutipleTimeDiscntUses"
+                >
+                  Limit number of times this discount can be used in total
+                </label>
+                {maxDisUses === "mutipleTimeDiscntUses" && (
                   <input
-                    className="form-check-input filterInput"
-                    type="radio"
-                    checked={maxDisUses === "mutipleTimeDiscntUses"}
-                    onChange={handleMaxDisUses}
-                    id="mutipleTimeDiscntUses"
-                    name="discountUses"
+                    className="form-control amtInpt d-block"
+                    type="number"
+                    id="usageLimit"
+                    value={usageLimit}
+                    onChange={handleUsageLimit}
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="mutipleTimeDiscntUses"
-                  >
-                    Limit number of times this discount can be used in total
-                  </label>
-                  {maxDisUses === "mutipleTimeDiscntUses" && (
-                    <input
-                      className="form-control amtInpt d-block"
-                      type="number"
-                      id="usageLimit"
-                      value={usageLimit}
-                      onChange={handleUsageLimit}
-                    />
-                  )}
-                </div>
-                <div className="form-check">
-                  <input
-                    className="form-check-input filterInput"
-                    type="radio"
-                    value="1"
-                    id="oneTimeUser"
-                    checked={maxDisUses === "oneTimeUser"}
-                    onChange={handleMaxDisUses}
-                    name="discountUses"
-                  />
-                  <label className="form-check-label" htmlFor="oneTimeUser">
-                    Limit to one use per customer
-                  </label>
-                </div>
+                )}
+              </div>
+              <div className="inputGroup">
+                <input
+                  className="form-check-input filterInput"
+                  type="radio"
+                  value="1"
+                  id="oneTimeUser"
+                  checked={maxDisUses === "oneTimeUser"}
+                  onChange={handleMaxDisUses}
+                  name="discountUses"
+                />
+                <label className="form-check-label" htmlFor="oneTimeUser">
+                  Limit to one use per customer
+                </label>
               </div>
             </div>
 
@@ -1056,7 +1052,7 @@ const DiscountForm = (props) => {
                   />
                 </div>
               </form>
-              <div className="form-check mt-3">
+              <div className="inputGroup">
                 <input
                   className="form-check-input"
                   type="checkbox"

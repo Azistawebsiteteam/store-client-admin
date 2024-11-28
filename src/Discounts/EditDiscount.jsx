@@ -129,6 +129,7 @@ const EditDiscount = () => {
         setCollectionsList(collectionsData.data);
         setCustomersList(customersData.data);
       } catch (error) {
+        console.log(error);
         ErrorHandler.onError(error);
       }
     };
@@ -138,6 +139,10 @@ const EditDiscount = () => {
   const dateFormatter = (value, type) => moment(value).format(type);
 
   const getBuySelectedListItem = (selecteType, selectedItems) => {
+    if (!selecteType || !selectedItems) {
+      return [];
+    }
+    console.log(selecteType, selectedItems);
     const selectedCategoryProducts = [];
     if (selecteType === "product") {
       updatedProductsList.forEach((item) => {
@@ -249,6 +254,7 @@ const EditDiscount = () => {
         ErrorHandler.onLoadingClose();
         // setDiscountOutput(response.data);
       } catch (error) {
+        console.log(error);
         ErrorHandler.onLoadingClose();
         ErrorHandler.onError(error);
       }

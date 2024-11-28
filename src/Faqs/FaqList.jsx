@@ -161,6 +161,7 @@ const FaqList = () => {
               borderRadius: "0.6rem",
               marginLeft: "0.2rem",
               fontSize: "1.2rem",
+              padding: "0.5rem",
             }}
           >
             <option value="">All</option>

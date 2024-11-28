@@ -23,7 +23,7 @@
 }
 
 .filterSec {
-  width: 18rem;
+  width: 20rem;
 }
 input.searchCustomer {
   width: 30%;
@@ -105,7 +105,7 @@ img.cartImg {
 }
 .form-check-label{
   font-size: 1.3rem;
-  margin-left: 0.6rem;
+  padding-bottom: 0 !important;
 }
 .customerInfo{
   display: flex;

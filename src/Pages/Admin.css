@@ -31,6 +31,13 @@ p, .p{
 .form-check-input {
   height: 1.4rem !important;
   width: 1.4rem !important;
+  margin-right: 0.6rem;
+  margin-top: 0 !important;
+}
+.inputGroup{
+  display: flex;
+  align-items: center;
+  margin: 0.4rem 0;
 }
 label {
   font-size: 1.3rem;
@@ -138,9 +145,9 @@ input,select,textarea{
 .trackerInputs {
   margin-left: 2rem;
 }
-.form-check{
+/* .form-check{
   padding-left: 0 !important;
-}
+} */
 .checkboxInput:checked {
   background-color: black !important;
 }
@@ -701,7 +708,7 @@ img.bImg {
   font-weight: 600;
   width: max-content;
   border-radius: 1rem;
-  padding: 0 1.4rem;
+  padding: 0.6rem 1.4rem;
   box-shadow: 0rem -.0625rem 0rem .0625rem rgba(0, 0, 0, .8) inset, 0rem 0rem 0rem .0625rem rgba(48, 48, 48, 1) inset, 0rem .03125rem 0rem .09375rem rgba(255, 255, 255, .25) inset;
   display: flex;
   align-items: center;
@@ -734,7 +741,7 @@ img.bImg {
   background-color: #dfdee2;
   color: #3d3939;
   border: none;
-  padding: 0 0.6rem;
+  padding: 0.6rem;
   border-radius: 0.4rem;
   font-size: 1.3rem;
   font-weight: 500;
@@ -1113,5 +1120,8 @@ input.inventoryInput {
   }
   .methodBtnCont {
     width: 100%;
+  }
+  .variantInput{
+    width: 86% !important
   }
 }

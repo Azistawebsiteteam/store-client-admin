@@ -195,7 +195,7 @@ const Inventory = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="actions">
+        <div className="commonTopSec">
           <div className="leftSec">
             <h4 className="d-inline">Inventory:</h4>
             <Form.Select

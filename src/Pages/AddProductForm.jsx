@@ -1126,9 +1126,10 @@ const AddProductForm = ({
                                   />
                                 )}
                                 {variant.sub.length > 0 && (
-                                  <div>
+                                  <div className="d-flex align-items-center">
                                     <label>{variant.sub.length} Variants</label>
                                     <IoMdArrowDropup
+                                      style={{ cursor: "pointer" }}
                                       onClick={() =>
                                         toggleSubVariantsVisibility(variant.id)
                                       }
@@ -1137,10 +1138,10 @@ const AddProductForm = ({
                                 )}
                               </div>
                             </div>
-                            <div>
+                            <div className="d-flex justify-content-end">
                               <input
                                 id="offer_price"
-                                className="form-control"
+                                className="form-control variantInput"
                                 onChange={(e) =>
                                   handleVariantsOutput(e, variant.id, "main", 0)
                                 }
@@ -1150,10 +1151,10 @@ const AddProductForm = ({
                                 maxLength={5}
                               />
                             </div>
-                            <div>
+                            <div className="d-flex justify-content-end">
                               <input
                                 id="quantity"
-                                className="form-control"
+                                className="form-control variantInput"
                                 onChange={(e) =>
                                   handleVariantsOutput(e, variant.id, "main", 0)
                                 }
@@ -1209,9 +1210,9 @@ const AddProductForm = ({
                                     }
                                   />
                                 </div>
-                                <div>
+                                <div className="d-flex justify-content-end">
                                   <input
-                                    className="form-control"
+                                    className="form-control variantInput"
                                     type="text"
                                     id="offer_price"
                                     placeholder="₹ 0.0"
@@ -1227,9 +1228,9 @@ const AddProductForm = ({
                                     value={va.offer_price}
                                   />
                                 </div>
-                                <div>
+                                <div className="d-flex justify-content-end">
                                   <input
-                                    className="form-control"
+                                    className="form-control variantInput"
                                     type="text"
                                     id="quantity"
                                     onChange={(e) =>
@@ -1296,20 +1297,22 @@ const AddProductForm = ({
                           </div>
                         </div>
                         <div className="col-md-12">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            checked={Boolean(productPrices.isTaxable)}
-                            onChange={handleProductPrices}
-                            id="isTaxable"
-                            placeholder="0.00"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="isTaxable"
-                          >
-                            Charge tax on this product
-                          </label>
+                          <div className="inputGroup">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              checked={Boolean(productPrices.isTaxable)}
+                              onChange={handleProductPrices}
+                              id="isTaxable"
+                              placeholder="0.00"
+                            />
+                            <label
+                              className="form-check-label"
+                              htmlFor="isTaxable"
+                            >
+                              Charge tax on this product
+                            </label>
+                          </div>
                         </div>
                         <div className="col-md-6">
                           <div className="form-group">
@@ -1331,7 +1334,7 @@ const AddProductForm = ({
                   <div className="bgStyle">
                     <form className="inventoryForm mt-3">
                       <label className="formLabel h6">Inventory</label>
-                      <div className="form-check">
+                      <div className="inputGroup">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1345,25 +1348,23 @@ const AddProductForm = ({
                       </div>
                       {tracker ? (
                         <div className="trackerInputs">
-                          <div className="form-check">
+                          <div className="inputGroup d-flex flex-column align-items-start">
                             {inventoryLocs.map((inve) => (
                               <div
-                                className="d-flex align-items-center mb-2"
+                                className="inputGroup mb-2"
                                 key={inve.inventory_id}
                               >
-                                <label>
-                                  <input
-                                    id={inve.inventory_id}
-                                    className="form-check-input"
-                                    type="checkbox"
-                                    checked={locInputs.find(
-                                      (loc) =>
-                                        loc.inventoryId === inve.inventory_id
-                                    )}
-                                    onChange={handleCorporateLoc} // Handle onChange to prevent warning
-                                  />
-                                  {`  ${inve.inventory_name}`}
-                                </label>
+                                <input
+                                  id={inve.inventory_id}
+                                  className="form-check-input"
+                                  type="checkbox"
+                                  checked={locInputs.find(
+                                    (loc) =>
+                                      loc.inventoryId === inve.inventory_id
+                                  )}
+                                  onChange={handleCorporateLoc} // Handle onChange to prevent warning
+                                />
+                                <label>{`  ${inve.inventory_name}`}</label>
                                 {locInputs.find(
                                   (loc) => loc.inventoryId === inve.inventory_id
                                 ) && (
@@ -1391,7 +1392,7 @@ const AddProductForm = ({
                       ) : (
                         ""
                       )}
-                      <div className="form-check">
+                      <div className="inputGroup">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1404,7 +1405,7 @@ const AddProductForm = ({
                         </label>
                       </div>
 
-                      <div className="form-check">
+                      <div className="inputGroup">
                         <input
                           className="form-check-input"
                           type="checkbox"
@@ -1461,7 +1462,7 @@ const AddProductForm = ({
                       <div className="col-md-12 mb-2">
                         <label className="formLabel h6">Shipping</label>
                       </div>
-                      <label className="d-flex align-items-center mt-2">
+                      <label className="inputGroup">
                         <input
                           className="form-check-input"
                           type="checkbox"

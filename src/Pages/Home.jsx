@@ -9,7 +9,7 @@ const Home = () => {
         <div className="homeSection">
           <div className="container">
             <div className="row">
-              <div className="d-flex align-items-center">
+              <div className="d-flex justify-content-center align-items-center">
                 <h1
                   className="text-center"
                   style={{ fontSize: "3rem", fontWeight: "600" }}
