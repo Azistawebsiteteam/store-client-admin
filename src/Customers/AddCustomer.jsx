@@ -36,6 +36,9 @@ const AddCustomer = () => {
     const validationError = {};
     if (!customerData.customerMobileNum.trim()) {
       validationError.customerMobileNum = "Mobile number is required";
+    } else if (customerData.customerMobileNum.length < 10) {
+      validationError.customerMobileNum =
+        "Mobile number should not exceed 10 digits";
     }
     if (!customerData.customerEmail.trim()) {
       validationError.customerEmail = "Email is required";
@@ -54,6 +57,8 @@ const AddCustomer = () => {
     }
     if (!customerData.wtsupNum.trim()) {
       validationError.wtsupNum = "WhatsApp number is required";
+    } else if (customerData.wtsupNum.length < 10) {
+      validationError.wtsupNum = "WhatsApp number should not exceed 10 digits";
     }
     return validationError;
   };
@@ -109,8 +114,8 @@ const AddCustomer = () => {
             errors={errors}
             setErrors={setErrors}
           />
-          <div className="text-end me-3 mt-2">
-            <button onClick={onSubmitCustDetails} className="btn btn-success">
+          <div className="d-flex justify-content-end mb-5">
+            <button onClick={onSubmitCustDetails} className="adminBtn">
               Save
             </button>
           </div>

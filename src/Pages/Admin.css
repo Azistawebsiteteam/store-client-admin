@@ -23,6 +23,15 @@ h6, .h6 {
 p, .p{
   font-size: 1.4rem;
 }
+/* checkbox */
+.form-check-input:checked {
+  background-color: #000 !important;
+  border-color: #000 !important;
+}
+.form-check-input {
+  height: 1.4rem !important;
+  width: 1.4rem !important;
+}
 label {
   font-size: 1.3rem;
   padding-bottom: 0.3rem;
@@ -42,6 +51,12 @@ label {
 }
 .form-group {
   margin: 1.4rem 0;
+}
+
+.homeSection {
+  height: 100%;
+  display: flex;
+  align-items: center;
 }
 
 /*table*/
@@ -119,17 +134,14 @@ input,select,textarea{
 .btn {
   font-size: 0.8rem !important;
 }
-.checkboxInput{
-  width: 2rem !important;
-  box-shadow: none;
-}
+
 .trackerInputs {
   margin-left: 2rem;
 }
 .form-check{
   padding-left: 0 !important;
 }
-.form-check-input:checked {
+.checkboxInput:checked {
   background-color: black !important;
 }
 .navText {
@@ -697,7 +709,10 @@ img.bImg {
   cursor: pointer;
 }
 .adminBtn{
-  padding: 0.4rem 1.4rem;
+  padding: 0.6rem 1.4rem;
+}
+.discardBtn{
+  
 }
 .infoBtn:hover,.adminBtn:hover {
   background-color:#1a1a1a;
@@ -832,6 +847,7 @@ img.bImg {
   background-color: transparent;
   border: none;
   width: 50%;
+  font-size: 1.3rem;
 }
 .methodBtnCont {
   border-radius: 8px;
@@ -878,9 +894,13 @@ input#categoryImage {
 tr.item {
   vertical-align: middle;
 }
+.listPoint{
+  font-size: 1.2rem;
+}
 .generateCodeBtn {
   background-color: transparent;
   border: none;
+  font-size: 1.2rem;
   color: blue;
 }
 .summaryTxt {
@@ -900,19 +920,24 @@ svg.copyIcon {
 }
 .percentageSign {
   position: absolute;
-  top: 12px;
-  right: 4px;
+  top: 1rem;
+  right: 0.4rem;
   color: gray;
+  font-size: 1.6rem;
+}
+.discount-amount-input{
+  padding-left: 1.6rem !important;
 }
 .rupeeSign {
   position: absolute;
-  top: 12px;
-  left: 2px;
+  top: 1rem;
+  left: 0.2rem;
   color: gray;
+  font-size: 1.5rem;
 }
 .amtInpt {
   margin: 6px;
-  width: 20%;
+  width: 20% !important;
 }
 .chip {
   text-wrap: wrap !important;
@@ -1085,5 +1110,8 @@ input.inventoryInput {
   }
   .navIcon {
     margin-left: -4rem;
+  }
+  .methodBtnCont {
+    width: 100%;
   }
 }

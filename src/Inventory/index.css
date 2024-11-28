@@ -3,7 +3,7 @@
     display: inline-block !important;
     background-color: transparent !important;
     border: none !important;
-    font-size: 22px !important;
+    font-size: 2rem !important;
     font-weight: 600 !important;
     text-transform: capitalize !important;
     padding: 0 2.6rem 0 1rem !important;
@@ -69,4 +69,9 @@
     height: 6rem;
     border-radius: 0.6rem;
     border: 1px dashed grey;
+}
+@media screen and (max-width:768px){
+    .inventoryDropdown{
+        font-size: 1.4rem !important;
+    }
 }

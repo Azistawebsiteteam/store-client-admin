@@ -6,14 +6,16 @@ import swalHandle from "../Pages/ErrorHandler";
 import FaqForm from "./FaqForm";
 import { useParams, useNavigate } from "react-router-dom";
 import BackBtn from "../Components/BackBtn";
+import { handleValidationErrors } from "./Validations";
 
 const FaqEdit = () => {
-  const [inputVlaues, setInputValues] = useState({
+  const [inputValues, setInputValues] = useState({
     type: "",
     question: "",
     answer: "",
     productId: 0,
   });
+  const [validationErrors, setValidationErrors] = useState({});
   const { id } = useParams();
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/faqs`;
@@ -40,13 +42,18 @@ const FaqEdit = () => {
   const navigate = useNavigate();
 
   const onUpdateFaq = async (e) => {
+    const validationsMsgs = handleValidationErrors(inputValues);
+    if (Object.keys(validationsMsgs).length > 0) {
+      setValidationErrors(validationsMsgs);
+      return;
+    }
     try {
       const url = baseUrl;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
       swalHandle.onLoading();
-      await axios.put(url, { id, ...inputVlaues }, { headers });
+      await axios.put(url, { id, ...inputValues }, { headers });
       swalHandle.onLoadingClose();
       swalHandle.onSuccess();
       navigate(-1);
@@ -63,9 +70,14 @@ const FaqEdit = () => {
       </div>
       <div className="commonSec">
         <div className="d-flex align-items-center mb-3">
-          <BackBtn /> <h4>Update Faq</h4>
+          <BackBtn /> <h4>Update FAQ</h4>
         </div>
-        <FaqForm inputVlaues={inputVlaues} setInputValues={setInputValues} />
+        <FaqForm
+          inputValues={inputValues}
+          setInputValues={setInputValues}
+          validationErrors={validationErrors}
+          setValidationErrors={setValidationErrors}
+        />
         <button className="adminBtn" onClick={onUpdateFaq}>
           Update
         </button>

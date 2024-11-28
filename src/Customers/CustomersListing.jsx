@@ -10,15 +10,20 @@ import { GoArrowUp, GoArrowDown } from "react-icons/go";
 import { Link } from "react-router-dom";
 import "../Pages/Admin.css";
 import "./index.css";
+import Pagination from "../Components/Pagination";
 import { getStringData } from "../Utils/StringConcat";
 
 const CustomersListing = () => {
-  const [customersData, setCustomersData] = useState([]);
   const [displayFilterDropdown, setDisplayFilterDropdown] = useState(false);
   const [filteredVal, setFilteredValue] = useState("registeredon");
   const [filtersOrder, setFiltersOrder] = useState("DESC");
   const [activeUsers, setActiveUsers] = useState(true);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [totalCustomers, setTotalCustomers] = useState(0); //totalItems
+  const [customersData, setCustomersData] = useState([]); // Store full list listOfItems
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const logsPerPage = 10;
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/users/get`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -41,6 +46,7 @@ const CustomersListing = () => {
         errorHandler.onLoadingClose();
         setCustomersData(response.data);
         setFilteredCustomers(response.data);
+        setTotalCustomers(response.data.length);
       } catch (error) {
         errorHandler.onLoadingClose();
         errorHandler.onError(error);
@@ -66,13 +72,11 @@ const CustomersListing = () => {
     setFilteredCustomers(customers);
   };
 
-  console.log(customersData);
-
   return (
     <div className="adminSec">
       <AdminSideBar />
       <div className="commonSec">
-        <div className="filterSec">
+        <div className="actions">
           <input
             className="searchCustomer"
             type="search"
@@ -92,7 +96,7 @@ const CustomersListing = () => {
               Active users
             </label>
           </div>
-          <Link to={"/add-customer"} className="infoBtn">
+          <Link to={"/add-customer"} className="infoBtn addCustomerBtn">
             Add Customer
           </Link>
           <button
@@ -102,11 +106,11 @@ const CustomersListing = () => {
             <RiArrowUpDownLine color="#878282" strikeWidth={2} size={16} />
           </button>
           {displayFilterDropdown && (
-            <div className="dropDown">
-              <p>Sort by</p>
+            <div className="filterDropdown filterSec">
+              <p style={{ marginLeft: "-1.4rem" }}>Sort by</p>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="totalorder"
@@ -120,7 +124,7 @@ const CustomersListing = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="totalamountspent"
@@ -134,7 +138,7 @@ const CustomersListing = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="lastupdated"
@@ -148,7 +152,7 @@ const CustomersListing = () => {
               </div>
               <div className="form-check">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   name="filterSec"
                   id="registeredon"
@@ -160,23 +164,29 @@ const CustomersListing = () => {
                   Registered on
                 </label>
               </div>
-              <div className="mt-1">
-                <GoArrowUp />
-                <small
+              <div
+                className="mt-1"
+                style={{ marginLeft: "-1.4rem", cursor: "pointer" }}
+              >
+                <GoArrowUp size={14} style={{ marginRight: "0.8rem" }} />
+                <label
                   className={filtersOrder === "ASC" && "active"}
                   onClick={() => handleFiltersOrder("ASC")}
                 >
                   Oldest to newest
-                </small>
+                </label>
               </div>
-              <div className="mt-1">
-                <GoArrowDown />
-                <small
+              <div
+                className="mt-1"
+                style={{ marginLeft: "-1.4rem", cursor: "pointer" }}
+              >
+                <GoArrowDown size={14} style={{ marginRight: "0.8rem" }} />
+                <label
                   className={filtersOrder === "DESC" && "active"}
                   onClick={() => handleFiltersOrder("DESC")}
                 >
                   Newest to oldest
-                </small>
+                </label>
               </div>
             </div>
           )}
@@ -196,7 +206,7 @@ const CustomersListing = () => {
             <tbody>
               {filteredCustomers.map((each, i) => (
                 <tr key={i}>
-                  <td>{i + 1}</td>
+                  <td>{(currentPage - 1) * logsPerPage + i + 1}</td>
                   <td>
                     <Link
                       to={`/customer/${each.azst_customer_id}`}
@@ -208,13 +218,13 @@ const CustomersListing = () => {
                   <td>
                     <span
                       className={
-                        each?.azst_customer_acceptemail_marketing.toLowerCase() ===
+                        each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
                         "yes"
                           ? "subscribed"
                           : "notsubscribed"
                       }
                     >
-                      {each?.azst_customer_acceptemail_marketing.toLowerCase() ===
+                      {each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
                       "yes"
                         ? "Subscribed"
                         : "Not Subscribed"}
@@ -239,6 +249,14 @@ const CustomersListing = () => {
             </tbody>
           </table>
         </div>
+        <Pagination
+          logsPerPage={logsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalItems={totalCustomers}
+          listOfItems={customersData}
+          setFilteredItemsList={setFilteredCustomers}
+        />
       </div>
     </div>
   );

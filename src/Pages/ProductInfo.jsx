@@ -3,8 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { v4 } from "uuid";
 import Cookies from "js-cookie";
 import axios from "axios";
-import Swal from "sweetalert2";
-
 import swalHandle from "./ErrorHandler";
 import AdminSideBar from "./AdminSideBar";
 import Ingredients from "../Components/Ingredients";
@@ -15,7 +13,6 @@ import "../index.css";
 const ProductInfo = () => {
   const { id } = useParams();
   const [isChangesOccur, setIsChangesOccur] = useState(false);
-  const [imgError, setImgError] = useState("");
   const [ingredients, setIngredients] = useState([
     {
       id: v4(),
@@ -69,11 +66,6 @@ const ProductInfo = () => {
   }, [getProductInfo]);
 
   const handleSubmitIngs = async () => {
-    const hasError = ingredients.some((ing) => ing.image === "");
-    setImgError(hasError ? "All fields are required" : "");
-
-    if (hasError) alert("Please enter");
-
     try {
       const url = `${baseUrl}/add-info`;
       const headers = {
@@ -129,7 +121,7 @@ const ProductInfo = () => {
       swalHandle.onError(error);
     }
   };
-  console.log(ingredients);
+
   return (
     <div className="adminSec">
       <AdminSideBar />

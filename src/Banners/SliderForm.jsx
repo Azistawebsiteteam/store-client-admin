@@ -259,6 +259,7 @@ const SliderForm = (props) => {
           <div className="d-flex align-items-center">
             <input
               type="radio"
+              className="form-check-input filterInput"
               id="publishNow"
               name="publish"
               value={1}
@@ -273,6 +274,7 @@ const SliderForm = (props) => {
             <input
               type="radio"
               id="schedulePublish"
+              className="form-check-input filterInput"
               name="publish"
               value={0}
               checked={imgDetails.isDefault === 0}

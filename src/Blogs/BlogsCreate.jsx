@@ -7,9 +7,10 @@ import swalHandle from "../Pages/ErrorHandler";
 import AdminSideBar from "../Pages/AdminSideBar";
 import BlogForm from "./BlogForm";
 import BackBtn from "../Components/BackBtn";
+import { handleValidationErrors } from "./Validations";
 
 const BlogsCreate = () => {
-  const [inputVlaues, setInputValues] = useState({
+  const [inputValues, setInputValues] = useState({
     title: "",
     description: "",
     content: "",
@@ -18,6 +19,7 @@ const BlogsCreate = () => {
     blogImg: "",
     blogThumbnailImg: "",
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   const navigate = useNavigate();
   const baseUrl = `${process.env.REACT_APP_API_URL}/blogs`;
@@ -25,6 +27,11 @@ const BlogsCreate = () => {
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
 
   const handleSubmit = async (e) => {
+    const validationsMsgs = handleValidationErrors(inputValues);
+    if (Object.keys(validationsMsgs).length > 0) {
+      setValidationErrors(validationsMsgs);
+      return;
+    }
     try {
       const url = baseUrl;
 
@@ -32,13 +39,13 @@ const BlogsCreate = () => {
         Authorization: `Bearer ${token}`,
       };
       const formdata = new FormData();
-      formdata.append("blogImg", inputVlaues.blogImg);
-      formdata.append("blogThumbnailImg", inputVlaues.blogThumbnailImg);
-      formdata.append("type", inputVlaues.type);
-      formdata.append("title", inputVlaues.title);
-      formdata.append("description", inputVlaues.description);
-      formdata.append("content", inputVlaues.content);
-      formdata.append("product", inputVlaues.product);
+      formdata.append("blogImg", inputValues.blogImg);
+      formdata.append("blogThumbnailImg", inputValues.blogThumbnailImg);
+      formdata.append("type", inputValues.type);
+      formdata.append("title", inputValues.title);
+      formdata.append("description", inputValues.description);
+      formdata.append("content", inputValues.content);
+      formdata.append("product", inputValues.product);
       swalHandle.onLoading();
       await axios.post(url, formdata, { headers });
       swalHandle.onLoadingClose();
@@ -64,9 +71,11 @@ const BlogsCreate = () => {
         </div>
         <BlogForm
           buttonText={"Save"}
-          inputVlaues={inputVlaues}
+          inputValues={inputValues}
           setInputValues={setInputValues}
           handleSubmit={handleSubmit}
+          validationErrors={validationErrors}
+          setValidationErrors={setValidationErrors}
         />
       </div>
     </div>

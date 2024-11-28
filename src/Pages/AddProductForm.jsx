@@ -758,8 +758,6 @@ const AddProductForm = ({
     }
   };
 
-  // console.log(variants[0].optionValue, "variants");
-
   return (
     <div className="container">
       <div className="row">
@@ -876,7 +874,7 @@ const AddProductForm = ({
                 <form className="areVariantsForm">
                   <div className="d-flex align-items-center">
                     <input
-                      className="checkboxInput"
+                      className="form-check-input"
                       type="checkbox"
                       id="isVariants"
                       checked={Boolean(variantsThere)}
@@ -1299,7 +1297,7 @@ const AddProductForm = ({
                         </div>
                         <div className="col-md-12">
                           <input
-                            className="checkboxInput"
+                            className="form-check-input"
                             type="checkbox"
                             checked={Boolean(productPrices.isTaxable)}
                             onChange={handleProductPrices}
@@ -1335,7 +1333,7 @@ const AddProductForm = ({
                       <label className="formLabel h6">Inventory</label>
                       <div className="form-check">
                         <input
-                          className="checkboxInput"
+                          className="form-check-input"
                           type="checkbox"
                           onClick={(e) => setTracker(e.target.checked)}
                           checked={tracker}
@@ -1356,7 +1354,7 @@ const AddProductForm = ({
                                 <label>
                                   <input
                                     id={inve.inventory_id}
-                                    className="checkboxInput"
+                                    className="form-check-input"
                                     type="checkbox"
                                     checked={locInputs.find(
                                       (loc) =>
@@ -1395,7 +1393,7 @@ const AddProductForm = ({
                       )}
                       <div className="form-check">
                         <input
-                          className="checkboxInput"
+                          className="form-check-input"
                           type="checkbox"
                           checked={Boolean(handleLoc.cwos)}
                           id="cwos"
@@ -1408,7 +1406,7 @@ const AddProductForm = ({
 
                       <div className="form-check">
                         <input
-                          className="checkboxInput"
+                          className="form-check-input"
                           type="checkbox"
                           checked={Boolean(isSKU)}
                           id="hasSKU"
@@ -1432,7 +1430,7 @@ const AddProductForm = ({
                                 value={skuInput.SKU}
                                 onChange={handleSkuInput}
                                 placeholder=""
-                                maxLength="50"
+                                maxLength="15"
                               />
                             </div>
                           </div>
@@ -1465,7 +1463,7 @@ const AddProductForm = ({
                       </div>
                       <label className="d-flex align-items-center mt-2">
                         <input
-                          className="checkboxInput"
+                          className="form-check-input"
                           type="checkbox"
                           checked={Boolean(isShipping)}
                           value={isShipping}

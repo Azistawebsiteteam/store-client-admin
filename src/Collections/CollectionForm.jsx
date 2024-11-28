@@ -63,7 +63,7 @@ const CollectionForm = (props) => {
                   placeholder="e.g. Summer collections, under $100, Staff Picks"
                 />
                 {validationErrors.title && (
-                  <span className="errorValue">{validationErrors.title}</span>
+                  <label className="errorValue">{validationErrors.title}</label>
                 )}
               </div>
               <div className="form-group d-flex flex-column mt-2">
@@ -79,7 +79,9 @@ const CollectionForm = (props) => {
                   className="form-control"
                 ></textarea>
                 {validationErrors.content && (
-                  <span className="errorValue">{validationErrors.content}</span>
+                  <label className="errorValue">
+                    {validationErrors.content}
+                  </label>
                 )}
               </div>
             </div>
@@ -91,7 +93,7 @@ const CollectionForm = (props) => {
               </p>
               <div className="form-group">
                 <label className="heading" htmlFor="metaTitle">
-                  Seo title
+                  Meta title
                 </label>
                 <input
                   type="text"
@@ -173,9 +175,12 @@ const CollectionForm = (props) => {
               />
             </div>
             {validationErrors.collectionImg && (
-              <span className="errorvalue">
+              <label
+                className="errorvalue"
+                style={{ color: "red", fontSize: "1.2rem" }}
+              >
                 {validationErrors.collectionImg}
-              </span>
+              </label>
             )}
             <label style={{ whiteSpace: "normal", marginTop: "1rem" }}>
               <strong>Note:- </strong>Kindly use an image with dimensions 310 x

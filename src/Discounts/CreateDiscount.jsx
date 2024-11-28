@@ -201,27 +201,29 @@ const CreateDiscount = () => {
           <div className="row">
             <div className="col-sm-12">
               <div className="mb-4">
-                <h3 className="d-flex">
+                <h4 className="d-flex align-items-center mb-3">
                   <BackBtn />
                   Create product discount
-                </h3>
+                </h4>
               </div>
             </div>
             <div className="col-sm-12">
               <div className="bgStyle">
-                <h5>Select discount type</h5>
-                <select
-                  className="form-select"
-                  value={selectedDiscount}
-                  onChange={handleDiscountsTab}
-                >
-                  <option>Select discount type</option>
-                  <option value="Discount on Products">
-                    Discount on Products
-                  </option>
-                  <option value="Buy X get Y">Buy X get Y</option>
-                  <option value="Order value">Order value</option>
-                </select>
+                <div className="form-group">
+                  <h5 className="mb-2">Select discount type</h5>
+                  <select
+                    className="form-select"
+                    value={selectedDiscount}
+                    onChange={handleDiscountsTab}
+                  >
+                    <option>Select discount type</option>
+                    <option value="Discount on Products">
+                      Discount on Products
+                    </option>
+                    <option value="Buy X get Y">Buy X get Y</option>
+                    <option value="Order value">Order value</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -231,16 +233,16 @@ const CreateDiscount = () => {
               key={count}
               discountProps={discountProps}
             />
-            <div className="col-md-12 d-flex justify-content-end mt-4">
+            <div className="col-md-12 d-flex justify-content-end mt-4 mb-4">
               <button
-                className="dltBtn"
+                className="deleteBtn deleteBtn1"
                 onClick={() => navigate(-1)}
                 style={{ marginRight: "10px" }}
               >
                 Discard
               </button>
-              <button className="saveBtn" onClick={handleSubmitButton}>
-                Save discount
+              <button className="adminBtn" onClick={handleSubmitButton}>
+                Save
               </button>
             </div>
           </div>

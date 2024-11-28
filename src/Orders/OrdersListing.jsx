@@ -176,8 +176,6 @@ const OrdersListing = () => {
     );
   };
 
-  console.log(filteredOrdersList);
-
   return (
     <div className="adminSec">
       <AdminSideBar />

@@ -101,7 +101,7 @@ const Discounts = () => {
                           <td>
                             {moment(each.created_on).format("DD MMM, YYYY")}
                           </td>
-                          <td>{each.status}</td>
+                          <td>{each.status === 1 ? "Active" : "In Active"}</td>
                           <td>
                             <MdEdit
                               style={{ cursor: "pointer" }}

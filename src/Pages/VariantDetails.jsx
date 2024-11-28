@@ -416,7 +416,7 @@ const VariantDetails = () => {
                       placeholder=""
                       onChange={handleInventory}
                       minLength={1}
-                      maxLength={25}
+                      maxLength={15}
                     />
                   </div>
                   <div className="col-sm-6 form-group">
@@ -446,7 +446,7 @@ const VariantDetails = () => {
                       placeholder=""
                       onChange={handleInventory}
                       minLength={1}
-                      maxLength={25}
+                      maxLength={8}
                     />
                   </div>
                 </div>

@@ -2,7 +2,8 @@ import React from "react";
 import { ProductState } from "../Context/ProductContext";
 
 const FaqForm = (props) => {
-  const { inputVlaues, setInputValues } = props;
+  const { inputValues, setInputValues, validationErrors, setValidationErrors } =
+    props;
   const { allProducts } = ProductState();
   const faqTypes = [
     "General",
@@ -16,12 +17,13 @@ const FaqForm = (props) => {
   const handleinputVlaues = (e) => {
     const { id, value } = e.target;
 
-    setInputValues({ ...inputVlaues, [id]: value });
+    setInputValues({ ...inputValues, [id]: value });
+    setValidationErrors({ ...validationErrors, [id]: "" });
   };
 
   return (
     <div className="row faq-bgStyle">
-      <div className="col-sm-12 col-md-6">
+      <div className="form-group col-sm-12 col-md-6">
         <label className="heading" htmlFor="type">
           Faq Type
         </label>
@@ -29,7 +31,7 @@ const FaqForm = (props) => {
           id="type"
           className="form-select"
           aria-label="Default select example"
-          value={inputVlaues.type}
+          value={inputValues.type}
           onChange={handleinputVlaues}
         >
           <option value="">Select Faq type</option>
@@ -39,9 +41,12 @@ const FaqForm = (props) => {
             </option>
           ))}
         </select>
+        {validationErrors.type && (
+          <span className="errorValue">{validationErrors.type}</span>
+        )}
       </div>
-      {inputVlaues.type === "Product" && (
-        <div className="col-sm-12 col-md-6">
+      {inputValues.type === "Product" && (
+        <div className="form-group col-sm-12 col-md-6">
           <label className="heading" htmlFor="productId">
             Select Product
           </label>
@@ -49,7 +54,7 @@ const FaqForm = (props) => {
             id="productId"
             className="form-select"
             aria-label="Default select example"
-            value={inputVlaues.productId}
+            value={inputValues.productId}
             onChange={handleinputVlaues}
           >
             <option value={0}>Select Product</option>
@@ -59,9 +64,12 @@ const FaqForm = (props) => {
               </option>
             ))}
           </select>
+          {validationErrors.productId && (
+            <span className="errorValue">{validationErrors.productId}</span>
+          )}
         </div>
       )}
-      <div className="col-sm-12 form-group">
+      <div className="form-group col-sm-12 form-group">
         <label className="heading" htmlFor="question">
           Question
         </label>
@@ -70,11 +78,14 @@ const FaqForm = (props) => {
           className="form-control"
           id="question"
           maxLength="100"
-          value={inputVlaues.question}
+          value={inputValues.question}
           onChange={handleinputVlaues}
         />
+        {validationErrors.question && (
+          <span className="errorValue">{validationErrors.question}</span>
+        )}
         <p className="infoTxt">
-          {inputVlaues.question.length} of 100 characters used
+          {inputValues.question.length} of 100 characters used
         </p>
       </div>
       <div className="col-sm-12 form-group">
@@ -88,10 +99,13 @@ const FaqForm = (props) => {
           rows="8"
           maxLength="1000"
           onChange={handleinputVlaues}
-          value={inputVlaues.answer}
+          value={inputValues.answer}
         ></textarea>
+        {validationErrors.answer && (
+          <span className="errorValue">{validationErrors.answer}</span>
+        )}
         <p className="infoTxt">
-          {inputVlaues.answer.length} of 1000 characters used
+          {inputValues.answer.length} of 1000 characters used
         </p>
       </div>
     </div>

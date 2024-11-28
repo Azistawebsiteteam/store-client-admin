@@ -471,7 +471,7 @@ const OrderDetails = () => {
               ) : (
                 <>
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     placeholder="Leave a comment here"
                     id="floatingTextarea"
                   ></textarea>
@@ -491,7 +491,7 @@ const OrderDetails = () => {
                 <div className="deliveryOrderBtn">
                   <button
                     type="button"
-                    className="deleteBtn"
+                    className="adminBtn"
                     onClick={handleOrderRejection}
                   >
                     Reject

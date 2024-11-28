@@ -29,3 +29,19 @@
   font-size: 15px;
   margin-left: 14px;
 }
+
+.reviewBtn{
+  font-size: 1.3rem;
+  border: none;
+  border-radius: 0.6rem;
+  width: max-content;
+  padding: 0.4rem 1rem;
+  margin: 0 0.6rem;
+  color: #fff;
+}
+.publishReviewBtn{
+  background-color: #28a745;
+}
+.hideReviewBtn{
+  background-color: #007bff;
+}
