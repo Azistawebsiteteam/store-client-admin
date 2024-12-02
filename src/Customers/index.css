@@ -1,23 +1,29 @@
 .subscribed {
-  background-color: #62db62 !important;
-  border-radius: 16px;
-  height: 32px !important;
-  width: fit-content;
-  padding: 4px 10px;
-  display: block;
+  background-color: #affebf;
+  color: #22612e;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 25px;
+  margin: 2px;
+  width: max-content;
+}
+.bootstrapBtn{
+  background-color: transparent !important;
+  border: none !important;
+  font-size: 1.2rem !important;
 }
 .notsubscribed {
-  background-color: #c0c1c0;
-  border-radius: 16px;
-  height: 32px !important;
-  width: fit-content;
-  padding: 4px 10px;
-  display: block;
+  background-color: #e6e5e2;
+  color: #323131;
+  padding: 2px 8px;
+  font-size: 12px;
+  border-radius: 25px;
+  margin: 2px;
+  width: max-content;
 }
 
 .filterSec {
-  display: flex;
-  justify-content: space-between;
+  width: 20rem;
 }
 input.searchCustomer {
   width: 30%;
@@ -58,6 +64,8 @@ input#activeUsers {
 .topSec {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 .noOrdersImg {
   width: 100%;
@@ -71,16 +79,10 @@ input#activeUsers {
 .itemCont {
   display: flex;
   align-items: center;
+  padding: 0.6rem;
 }
 img.cartImg {
   width: 50px;
-}
-.status {
-  background-color: #c0c1c0;
-  padding: 2px 8px;
-  font-size: 12px;
-  border-radius: 25px;
-  margin: 2px;
 }
 .viewAllOrders {
   text-decoration: none;
@@ -103,5 +105,53 @@ img.cartImg {
 }
 .form-check-label{
   font-size: 1.3rem;
-  margin-left: 0.6rem;
+  padding-bottom: 0 !important;
+}
+.customerInfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.customerInfoHeading{
+  text-decoration: underline;
+  text-decoration-color: gray;
+  text-decoration-style: dashed;
+  padding-bottom: 0.6rem;
+}
+.demarcatedLine {
+  border-left: 1px solid lightgray;
+  height: 6rem;
+}
+.customerStatus{
+  width: max-content;
+  padding: 0.1rem 0.8rem;
+  border-radius: 0.8rem;
+}
+.unPaidStatus{
+  background-color: #ffd6a4;
+  color: #5e4200;
+}
+.unFullfilledStatus{
+  background-color: #ffeb78;
+  color: #4f4700;
+}
+.orderId{
+  font-weight: 600;
+  color: rgb(0, 102, 255);
+}
+
+@media screen and (max-width: 768px) {
+  .topSec {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: start;
+    margin-bottom: 2rem;
+  }
+  .addCustomerBtn{
+    display: none;
+  }
+  .form-check-label{
+    white-space: normal;
+  }
 }

@@ -53,6 +53,7 @@ const EditDiscount = () => {
   const [updatedProductsList, setUpdatedProductsList] = useState([]);
   const [collectionsList, setCollectionsList] = useState([]);
   const [productDisTypeValue, setProductDisTypeValue] = useState("");
+  const [discountStatus, SetDiscountStatus] = useState(0);
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -128,6 +129,7 @@ const EditDiscount = () => {
         setCollectionsList(collectionsData.data);
         setCustomersList(customersData.data);
       } catch (error) {
+        console.log(error);
         ErrorHandler.onError(error);
       }
     };
@@ -137,6 +139,10 @@ const EditDiscount = () => {
   const dateFormatter = (value, type) => moment(value).format(type);
 
   const getBuySelectedListItem = (selecteType, selectedItems) => {
+    if (!selecteType || !selectedItems) {
+      return [];
+    }
+    console.log(selecteType, selectedItems);
     const selectedCategoryProducts = [];
     if (selecteType === "product") {
       updatedProductsList.forEach((item) => {
@@ -187,7 +193,8 @@ const EditDiscount = () => {
 
         if (response.status === 200) {
           const details = response.data;
-
+          console.log(details);
+          SetDiscountStatus(details.status);
           setMaxUses(details.usage_count);
           setDiscount(renderDiscountValue(details.scope));
           setDisTitle(details.title);
@@ -247,6 +254,7 @@ const EditDiscount = () => {
         ErrorHandler.onLoadingClose();
         // setDiscountOutput(response.data);
       } catch (error) {
+        console.log(error);
         ErrorHandler.onLoadingClose();
         ErrorHandler.onError(error);
       }
@@ -322,6 +330,7 @@ const EditDiscount = () => {
   };
 
   const discountProps = {
+    discountStatus,
     disCode,
     setDisCode,
     disTitle,
@@ -374,10 +383,10 @@ const EditDiscount = () => {
           <div className="row">
             <div className="col-sm-12">
               <div className="mb-4">
-                <h3 className="d-flex">
+                <h4 className="d-flex align-items-center mb-3">
                   <BackBtn />
                   Edit product discount
-                </h3>
+                </h4>
               </div>
             </div>
             <div className="col-sm-12">

@@ -372,9 +372,9 @@ const VariantDetails = () => {
                     />
                   </div>
                 </div>
-                <div className="form-check">
+                <div className="inputGroup">
                   <input
-                    className="checkboxInput"
+                    className="form-check-input"
                     type="checkbox"
                     checked={prices.isTaxable}
                     id="isTaxable"
@@ -416,7 +416,7 @@ const VariantDetails = () => {
                       placeholder=""
                       onChange={handleInventory}
                       minLength={1}
-                      maxLength={25}
+                      maxLength={15}
                     />
                   </div>
                   <div className="col-sm-6 form-group">
@@ -446,27 +446,27 @@ const VariantDetails = () => {
                       placeholder=""
                       onChange={handleInventory}
                       minLength={1}
-                      maxLength={25}
+                      maxLength={8}
                     />
                   </div>
                 </div>
               </div>
               <div className="bgStyle">
                 <h6>Shipping</h6>
-                <div className="form-check">
+                <div className="inputGroup">
                   <input
-                    className="checkboxInput"
+                    className="form-check-input"
                     checked={isPhysical}
                     onChange={(e) => setIsPhysical(e.target.checked)}
                     type="checkbox"
                     id="physicalProduct"
                   />
-                  <label className="formLabel" htmlFor="physicalProduct">
+                  <label className="formLabel me-2" htmlFor="physicalProduct">
                     This is a physical product
                   </label>
                   <div className="shippingCont">
                     {isPhysical && (
-                      <div className="col-md-3">
+                      <div className="col-md-6">
                         <div className="d-flex">
                           <input
                             type="text"

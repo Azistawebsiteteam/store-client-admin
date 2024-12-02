@@ -7,18 +7,20 @@ import ErrorHandler from "../Pages/ErrorHandler";
 import { useNavigate } from "react-router-dom";
 import AdminSideBar from "../Pages/AdminSideBar";
 import BackBtn from "../Components/BackBtn";
+import { handleValidationError } from "./Validation";
 
 const CreateAnnouncement = () => {
   const [txtColor, setTxtColor] = useState("");
   const [bgColor, setBgColor] = useState("");
-  const [displaySettings, setDisplaySettings] = useState({
-    homePage: false,
-  });
+  // const [displaySettings, setDisplaySettings] = useState({
+  //   homePage: false,
+  // });
   const [announcementBarContent, setAnnouncementBarContent] = useState({
     annoncementBarTxt: "",
     annoncementBarMobTxt: "",
     bgLink: "",
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -26,6 +28,12 @@ const CreateAnnouncement = () => {
   const navigate = useNavigate();
 
   const onSubmitDetails = async () => {
+    const validationErrorMsg = handleValidationError(announcementBarContent);
+    if (Object.keys(validationErrorMsg).length > 0) {
+      window.scrollTo(0, 0);
+      setValidationErrors(validationErrorMsg);
+      return;
+    }
     try {
       const url = `${baseUrl}/announcement/add`;
       const headers = {
@@ -37,7 +45,7 @@ const CreateAnnouncement = () => {
         webLink: announcementBarContent.bgLink,
         textCrl: txtColor,
         backgroundCrl: bgColor,
-        showHomePageOnly: displaySettings.homePage,
+        // showHomePageOnly: displaySettings.homePage,
       };
       ErrorHandler.onLoading();
       const response = await axios.post(url, body, { headers });
@@ -68,10 +76,12 @@ const CreateAnnouncement = () => {
                 setTxtColor={setTxtColor}
                 bgColor={bgColor}
                 setBgColor={setBgColor}
-                displaySettings={displaySettings}
-                setDisplaySettings={setDisplaySettings}
+                // displaySettings={displaySettings}
+                // setDisplaySettings={setDisplaySettings}
                 announcementBarContent={announcementBarContent}
                 setAnnouncementBarContent={setAnnouncementBarContent}
+                validationErrors={validationErrors}
+                setValidationErrors={setValidationErrors}
               />
               <div className="col-sm-12">
                 <div className="btnCont">

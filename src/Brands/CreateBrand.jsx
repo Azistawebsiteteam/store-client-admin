@@ -27,7 +27,6 @@ const CreateBrand = () => {
 
   const saveBrandBtn = async () => {
     const brandsValidationErrors = handleBrandsValidations(brandsData);
-    console.log(brandsValidationErrors);
     if (Object.keys(brandsValidationErrors).length > 0) {
       window.scrollTo(0, 0);
       setBrandsValidationErrors(brandsValidationErrors);

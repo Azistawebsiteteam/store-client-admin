@@ -7,20 +7,30 @@ import TextEditor from "../Pages/TextEditor";
 //import { ProductState } from '../Context/ProductContext';
 
 const BlogForm = (props) => {
-  const { buttonText, inputVlaues, setInputValues, handleSubmit } = props;
+  const {
+    buttonText,
+    inputValues,
+    setInputValues,
+    handleSubmit,
+    validationErrors,
+    setValidationErrors,
+  } = props;
   //const { allProducts } = ProductState();
 
   const handleinputVlaues = (e) => {
     const { id, value } = e.target;
-    setInputValues({ ...inputVlaues, [id]: value });
+    setInputValues({ ...inputValues, [id]: value });
+    setValidationErrors({ ...validationErrors, [e.target.id]: "" });
   };
 
   const handleBannerImg = (e) => {
-    setInputValues({ ...inputVlaues, [e.target.id]: e.target.files[0] });
+    setInputValues({ ...inputValues, [e.target.id]: e.target.files[0] });
+    setValidationErrors({ ...validationErrors, [e.target.id]: "" });
   };
 
   const setContent = (content) => {
-    setInputValues({ ...inputVlaues, content: content });
+    setInputValues({ ...inputValues, content: content });
+    setValidationErrors({ ...validationErrors, content: "" });
   };
 
   const onSubmitBlog = () => {
@@ -41,10 +51,14 @@ const BlogForm = (props) => {
                   type="text"
                   className="form-control"
                   id="type"
-                  value={inputVlaues.type}
+                  value={inputValues.type}
                   onChange={handleinputVlaues}
                   placeholder="Enter Blog Type"
+                  maxLength="40"
                 />
+                {validationErrors.type && (
+                  <span className="errorValue">{validationErrors.type}</span>
+                )}
               </div>
 
               <div className="col-sm-12 col-md-6 form-group">
@@ -56,11 +70,14 @@ const BlogForm = (props) => {
                   className="form-control"
                   id="title"
                   maxLength="50"
-                  value={inputVlaues.title}
+                  value={inputValues.title}
                   onChange={handleinputVlaues}
                 />
+                {validationErrors.title && (
+                  <span className="errorValue">{validationErrors.title}</span>
+                )}
                 <p className="infoTxt">
-                  {inputVlaues.title.length} of 50 characters used
+                  {inputValues.title.length} of 50 characters used
                 </p>
               </div>
               <div className="col-sm-12 form-group">
@@ -74,17 +91,25 @@ const BlogForm = (props) => {
                   rows="2"
                   maxLength="200"
                   onChange={handleinputVlaues}
-                  value={inputVlaues.description}
+                  value={inputValues.description}
                 ></textarea>
+                {validationErrors.description && (
+                  <span className="errorValue">
+                    {validationErrors.description}
+                  </span>
+                )}
                 <p className="infoTxt">
-                  {inputVlaues.description.length} of 200 characters used
+                  {inputValues.description.length} of 200 characters used
                 </p>
               </div>
               <div className="col-sm-12 form-group">
                 <TextEditor
-                  content={inputVlaues.content}
+                  content={inputValues.content}
                   setContent={setContent}
                 />
+                {validationErrors.content && (
+                  <span className="errorValue">{validationErrors.content}</span>
+                )}
               </div>
             </div>
           </div>
@@ -100,26 +125,30 @@ const BlogForm = (props) => {
               type="text"
               className="form-control"
               id="product"
-              value={inputVlaues.product}
+              value={inputValues.product}
               onChange={handleinputVlaues}
               placeholder="Enter Product Name"
+              maxLength="50"
             />
+            {validationErrors.product && (
+              <span className="errorValue">{validationErrors.product}</span>
+            )}
           </div>
         </div>
         <div className="bgStyle">
           <div className="form-group mt-2">
             <label className="heading">Blog Thumbnail</label>
             <div className="drop-zone">
-              {inputVlaues.blogThumbnailImg ? (
-                typeof inputVlaues.blogThumbnailImg === "string" ? (
+              {inputValues.blogThumbnailImg ? (
+                typeof inputValues.blogThumbnailImg === "string" ? (
                   <img
-                    src={inputVlaues.blogThumbnailImg}
+                    src={inputValues.blogThumbnailImg}
                     alt="thumbnail"
                     className="bImg"
                   />
                 ) : (
                   <img
-                    src={URL.createObjectURL(inputVlaues.blogThumbnailImg)}
+                    src={URL.createObjectURL(inputValues.blogThumbnailImg)}
                     alt="thumbnail"
                     className="bImg"
                   />
@@ -133,10 +162,16 @@ const BlogForm = (props) => {
                 type="file"
                 accept="image/*"
                 className="FileUpload"
+                style={{ position: "absolute" }}
                 id="blogThumbnailImg"
                 onChange={handleBannerImg}
               />
             </div>
+            {validationErrors.blogThumbnailImg && (
+              <span className="errorValue">
+                {validationErrors.blogThumbnailImg}
+              </span>
+            )}
             <label className="mt-1" style={{ whiteSpace: "normal" }}>
               <strong>Note:-</strong> Image dimensions must be in 855*982 pixels
             </label>
@@ -146,16 +181,16 @@ const BlogForm = (props) => {
           <div className="form-group mt-2">
             <label className="heading">Blog Image</label>
             <div className="drop-zone">
-              {inputVlaues.blogImg ? (
-                typeof inputVlaues.blogImg === "string" ? (
+              {inputValues.blogImg ? (
+                typeof inputValues.blogImg === "string" ? (
                   <img
-                    src={inputVlaues.blogImg}
+                    src={inputValues.blogImg}
                     alt="Banner"
                     className="bImg"
                   />
                 ) : (
                   <img
-                    src={URL.createObjectURL(inputVlaues.blogImg)}
+                    src={URL.createObjectURL(inputValues.blogImg)}
                     alt="Banner"
                     className="bImg"
                   />
@@ -169,10 +204,14 @@ const BlogForm = (props) => {
                 type="file"
                 accept="image/*"
                 className="FileUpload"
+                style={{ position: "absolute" }}
                 id="blogImg"
                 onChange={handleBannerImg}
               />
             </div>
+            {validationErrors.type && (
+              <span className="errorValue">{validationErrors.blogImg}</span>
+            )}
             <label className="mt-1" style={{ whiteSpace: "normal" }}>
               <strong>Note:-</strong> Image dimensions must be in 1220*550
               pixels

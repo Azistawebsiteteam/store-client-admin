@@ -79,14 +79,16 @@ const Categories = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="col-12 mt-2 mb-2 d-flex justify-content-between">
-          <h4>Categories</h4>
-          <button className="exportBtn" onClick={handleDownloadExcel}>
-            Export
-          </button>
-          <Link to="/category/create" className="infoBtn">
-            Create category
-          </Link>
+        <div className="col-12">
+          <div className="commonTopSec">
+            <h4>Categories</h4>
+            <button className="exportBtn" onClick={handleDownloadExcel}>
+              Export
+            </button>
+            <Link to="/category/create" className="infoBtn">
+              Create category
+            </Link>
+          </div>
         </div>
         <div className="tableCont" style={{ maxHeight: "76vh" }}>
           <table

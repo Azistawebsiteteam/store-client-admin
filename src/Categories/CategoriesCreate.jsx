@@ -38,7 +38,6 @@ const CategoriesCreate = () => {
   const saveCategory = async () => {
     const categoriesValidationsErrors =
       handleCategoriesValidations(categoriesData);
-    console.log(categoriesValidationsErrors);
     if (Object.keys(categoriesValidationsErrors).length > 0) {
       window.scrollTo(0, 0);
       setCategoriesErrorMsg(categoriesValidationsErrors);

@@ -1,4 +1,5 @@
 import React from "react";
+import BackBtn from "../Components/BackBtn";
 
 const CustomerForm = (props) => {
   const {
@@ -43,7 +44,13 @@ const CustomerForm = (props) => {
   return (
     <div className="container">
       <div className="row">
-        <div className="col-8">
+        <div className="col-12">
+          <div className="d-flex align-items-center mb-3">
+            <BackBtn />
+            <h5>New Customer</h5>
+          </div>
+        </div>
+        <div className="col-12 col-md-8">
           <div className="row">
             <div className="col-12">
               <div className="bgStyle">
@@ -59,9 +66,12 @@ const CustomerForm = (props) => {
                       id="customerFirstName"
                       onChange={handleCustomerData}
                       value={customerData.customerFirstName}
+                      maxLength={50}
                     />
                     {errors.customerFirstName && (
-                      <span className="error">{errors.customerFirstName}</span>
+                      <label className="errorValue">
+                        {errors.customerFirstName}
+                      </label>
                     )}
                   </div>
                   <div className="col-md-6">
@@ -74,9 +84,12 @@ const CustomerForm = (props) => {
                       id="customerLastName"
                       onChange={handleCustomerData}
                       value={customerData.customerLastName}
+                      maxLength={50}
                     />
                     {errors.customerLastName && (
-                      <span className="error">{errors.customerLastName}</span>
+                      <label className="errorValue">
+                        {errors.customerLastName}
+                      </label>
                     )}
                   </div>
                   <div className="col-md-6">
@@ -89,9 +102,12 @@ const CustomerForm = (props) => {
                       id="customerEmail"
                       onChange={handleCustomerData}
                       value={customerData.customerEmail}
+                      maxLength={50}
                     />
                     {errors.customerEmail && (
-                      <span className="error">{errors.customerEmail}</span>
+                      <label className="errorValue">
+                        {errors.customerEmail}
+                      </label>
                     )}
                   </div>
                   <div className="col-md-6">
@@ -104,20 +120,23 @@ const CustomerForm = (props) => {
                       id="customerMobileNum"
                       onChange={handleCustomerData}
                       value={customerData.customerMobileNum}
+                      maxLength={10}
                     />
                     {errors.customerMobileNum && (
-                      <span className="error">{errors.customerMobileNum}</span>
+                      <label className="errorValue">
+                        {errors.customerMobileNum}
+                      </label>
                     )}
-                    <div className="form-check">
+                    <div className="d-flex align-items-center mt-1">
                       <input
-                        className="form-check-input"
                         type="checkbox"
+                        className="form-check-input filterInput"
                         id="sameForWhatsapp"
                         onChange={handleCheckbox}
                         checked={permissions.sameForWhatsapp}
                       />
                       <label
-                        className="form-check-label"
+                        className="form-check-label pb-0"
                         htmlFor="sameForWhatsapp"
                       >
                         Same for WhatsApp.
@@ -139,9 +158,10 @@ const CustomerForm = (props) => {
                             ? customerData.customerMobileNum
                             : customerData.wtsupNum
                         }
+                        maxLength={10}
                       />
                       {errors.wtsupNum && (
-                        <span className="error">{errors.wtsupNum}</span>
+                        <label className="errorValue">{errors.wtsupNum}</label>
                       )}
                     </div>
                   )}
@@ -168,7 +188,9 @@ const CustomerForm = (props) => {
                       id="DOB"
                       value={customerData.DOB}
                     />
-                    {errors.DOB && <span className="error">{errors.DOB}</span>}
+                    {errors.DOB && (
+                      <label className="errorValue">{errors.DOB}</label>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <label htmlFor="gender" className="form-label">
@@ -186,13 +208,13 @@ const CustomerForm = (props) => {
                       <option value="Female">Female</option>
                     </select>
                     {errors.gender && (
-                      <span className="error">{errors.gender}</span>
+                      <label className="errorValue">{errors.gender}</label>
                     )}
                   </div>
                   <div className="col-12">
-                    <div className="form-check">
+                    <div className="form-check ms-4">
                       <input
-                        className="form-check-input"
+                        className="form-check-input me-2"
                         type="checkbox"
                         id="emailMarketing"
                         onChange={handleCheckbox}
@@ -201,46 +223,40 @@ const CustomerForm = (props) => {
                         }
                         checked={permissions.emailMarketing}
                       />
-                      <label
-                        className="form-check-label"
-                        htmlFor="emailMarketing"
-                      >
+                      <label className="formLabel" htmlFor="emailMarketing">
                         Customer agreed to receive marketing emails.
                       </label>
                     </div>
                   </div>
                   <div className="col-12">
-                    <div className="form-check">
+                    <div className="form-check ms-4">
                       <input
-                        className="form-check-input"
+                        className="form-check-input me-2"
                         type="checkbox"
                         id="smsMarketing"
                         onChange={handleCheckbox}
                         disabled={
-                          customerData.customerMobileNum.length >= 10
-                            ? false
-                            : true
+                          customerData.customerMobileNum.length < 10
+                            ? true
+                            : false
                         }
                         checked={permissions.smsMarketing}
                       />
-                      <label
-                        className="form-check-label"
-                        htmlFor="smsMarketing"
-                      >
+                      <label className="formLabel" htmlFor="smsMarketing">
                         Customer agreed to receive SMS marketing text messages.
                       </label>
                     </div>
                   </div>
-                  <span>
+                  <label>
                     You should ask your customers for permission before you
                     subscribe them to your marketing emails or SMS.
-                  </span>
+                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="col-4">
+        <div className="col-12 col-md-4">
           <div className="row">
             <div className="col-12">
               <div className="bgStyle">

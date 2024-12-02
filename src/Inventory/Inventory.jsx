@@ -196,10 +196,17 @@ const Inventory = () => {
       <div>
         <AdminSideBar />
       </div>
+<<<<<<< HEAD
       <div className='commonSec'>
         <div className='actions'>
           <div className='leftSec'>
             <h4 className='d-inline'>Inventory:</h4>
+=======
+      <div className="commonSec">
+        <div className="commonTopSec">
+          <div className="leftSec">
+            <h4 className="d-inline">Inventory:</h4>
+>>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
             <Form.Select
               className='inventoryDropdown'
               value={inventoryId}

@@ -9,6 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import ErrorHandler from "../Pages/ErrorHandler";
 import BackBtn from "./../Components/BackBtn";
 import AdminSideBar from "../Pages/AdminSideBar";
+import { handleValidationError } from "./Validation";
 
 const EditSlider = () => {
   const [bannerDetails, setBannerDetails] = useState({
@@ -19,13 +20,14 @@ const EditSlider = () => {
     endTime: "",
     altText: "",
     backgroundUrl: "",
-    isDefault: "1",
+    isDefault: 1,
   });
 
   const [imgValue, setimgValue] = useState({
     webBanner: "",
     mobileBanner: "",
   });
+  const [validationErrors, setValidationErrors] = useState({});
 
   const baseUrl = `${process.env.REACT_APP_API_URL}/banners`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -67,14 +69,13 @@ const EditSlider = () => {
   }, [id, baseUrl, token]);
 
   const onUpdateSliderDetails = async () => {
+    const validationErrorMsg = handleValidationError(bannerDetails, imgValue);
+    if (Object.keys(validationErrorMsg).length > 0) {
+      window.scrollTo(0, 0);
+      setValidationErrors(validationErrorMsg);
+      return;
+    }
     try {
-      if (
-        bannerDetails.isDefault === "0" &&
-        (bannerDetails.startTime === "" || bannerDetails.endTime === "")
-      ) {
-        return alert("please select date");
-      }
-      swalErr.onLoading();
       const url = `${baseUrl}/update`;
       const headers = {
         Authorization: `Bearer ${token}`,
@@ -82,7 +83,7 @@ const EditSlider = () => {
       };
 
       const formdata = new FormData();
-
+      swalErr.onLoading();
       formdata.append("bannerId", id);
       formdata.append("bannerType", bannerDetails.bannerType);
       formdata.append("title", bannerDetails.title);
@@ -122,6 +123,8 @@ const EditSlider = () => {
               imgDetails={bannerDetails}
               setimgValue={setimgValue}
               imgValue={imgValue}
+              validationErrors={validationErrors}
+              setValidationErrors={setValidationErrors}
             />
             <div className="col-sm-12">
               <div className="btnCont">

@@ -64,11 +64,13 @@ const BlogsListing = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="col-12 d-flex justify-content-between">
-          <h4>Blogs</h4>
-          <Link to="/blogs/create" className="adminBtn">
-            Create Blog
-          </Link>
+        <div className="col-12">
+          <div className="commonTopSec">
+            <h4>Blogs</h4>
+            <Link to="/blogs/create" className="adminBtn">
+              Create Blog
+            </Link>
+          </div>
         </div>
         <div className="tableCont">
           <table className="table custom-table table-hover">

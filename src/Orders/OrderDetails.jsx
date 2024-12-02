@@ -471,7 +471,7 @@ const OrderDetails = () => {
               ) : (
                 <>
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     placeholder="Leave a comment here"
                     id="floatingTextarea"
                   ></textarea>

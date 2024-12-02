@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import Cookies from "js-cookie";
 
-import AdminSideBar from '../Pages/AdminSideBar';
-import BackBtn from '../Components/BackBtn';
-import ErrorHandler from '../Pages/ErrorHandler';
-import Rating from '@mui/material/Rating';
+import AdminSideBar from "../Pages/AdminSideBar";
+import BackBtn from "../Components/BackBtn";
+import ErrorHandler from "../Pages/ErrorHandler";
+import Rating from "@mui/material/Rating";
 
-import './review.css';
-import { onStatusUpdate } from './ReviwFun';
+import "./review.css";
+import { onStatusUpdate } from "./ReviwFun";
 
 const ReviewDetails = () => {
   const [review, setReviewData] = useState({});
@@ -51,105 +51,128 @@ const ReviewDetails = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <AdminSideBar />
-      <div className='commonSec'>
-        <div className='detailsSec'>
+      <div className="commonSec pb-5">
+        <div className="d-flex align-items-center mb-3">
           <BackBtn />
-          <div className='details'>
-            <h3 className='profile-name'>Review Details</h3>
-          </div>
+          <h4>Review Details</h4>
         </div>
         {Object.keys(review).length && (
-          <div className='row m-3'>
-            <div className='col-md-7'>
-              <div>
-                <div className='d-flex'>
+          <div className="row">
+            <div className="col-md-7">
+              <div className="bgStyle">
+                <div className="d-flex form-group">
                   <img
                     src={review.product_image}
-                    className='product-image'
-                    alt='productImage'
+                    className="product-image"
+                    alt="productImage"
                   />
                   <div>
                     <a
                       href={review.url_handle}
-                      target='__blank'
-                      className='product-link'>
+                      target="__blank"
+                      className="product-link"
+                    >
                       <p>{review.product_title}</p>
                     </a>
 
                     <Rating
-                      name='read-only'
+                      name="read-only"
                       value={review.review_points}
                       precision={0.5}
                       readOnly
+                      style={{ fontSize: "3rem" }}
                     />
                   </div>
                 </div>
-                <div className='my-3'>
+                <div className="form-group">
+                  <label>
+                    <strong>Title</strong>
+                  </label>
+                  <p>{review.review_title}</p>
+
+                  <label>
+                    <strong>Description</strong>
+                  </label>
+                  <p> {review.review_content}</p>
                   <p>
-                    <strong>Title : </strong>
-                    {review.review_title}
+                    <strong>Review Images</strong>
                   </p>
-                  <p className='truncate'>
-                    <strong>Description : </strong> {review.review_content}
-                  </p>
+                  <div className="displayIeviewImgsCont my-3">
+                    {review.review_images.map((img, i) => (
+                      <img
+                        key={i}
+                        className="displayIeviewImg"
+                        src={img}
+                        alt="reviewImg"
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className='col-md-5'>
-              <strong>Review Images</strong>
-              <div className='displayIeviewImgsCont my-3'>
-                {review.review_images.map((img, i) => (
-                  <img
-                    key={i}
-                    className='displayIeviewImg'
-                    src={img}
-                    alt='reviewImg'
-                  />
-                ))}
+
+            <div className="col-md-5">
+              <div className="bgStyle">
+                <p>
+                  <strong> Created By :</strong> {review.azst_customer_fname}{" "}
+                  {review.azst_customer_lname}
+                </p>
+                <p>
+                  <strong> Reviewed on :</strong> {review.created_on}
+                </p>
+                <div className="d-flex align-items-center">
+                  <p className="mb-0">
+                    <strong>Action : </strong>
+                  </p>
+                  <button
+                    className="reviewBtn hideReviewBtn"
+                    style={
+                      review.review_approval_status === 0
+                        ? { opacity: "0.4" }
+                        : { opacity: "0.8" }
+                    }
+                    disabled={review.review_approval_status === 0}
+                    onClick={updateReviewStatus}
+                  >
+                    Hide
+                  </button>
+                  <button
+                    className="reviewBtn publishReviewBtn"
+                    style={
+                      review.review_approval_status === 1
+                        ? { opacity: "0.4" }
+                        : { opacity: "1" }
+                    }
+                    disabled={review.review_approval_status === 1}
+                    onClick={updateReviewStatus}
+                  >
+                    Publilsh
+                  </button>
+                </div>
+                <p></p>
+                <p>
+                  <strong>
+                    {" "}
+                    {review.review_approval_status === 1
+                      ? "Published"
+                      : "Hidden"}{" "}
+                    By :
+                  </strong>{" "}
+                  {review.approve_by}
+                </p>
+                <p>
+                  <strong>
+                    {" "}
+                    {review.review_approval_status === 1
+                      ? "Published"
+                      : "Hidden"}{" "}
+                    On :
+                  </strong>{" "}
+                  {review.approve_on}
+                </p>
               </div>
-              <p>
-                <strong> Created By :</strong> {review.azst_customer_fname}{' '}
-                {review.azst_customer_lname}
-              </p>
-              <p>
-                <strong> Reviewed on :</strong> {review.created_on}
-              </p>
-              <strong>Action : </strong>
-              <button
-                className='btn btn-primary mx-2'
-                disabled={review.review_approval_status === 0}
-                onClick={updateReviewStatus}>
-                Hide
-              </button>
-              <button
-                className='btn btn-success mx-2'
-                disabled={review.review_approval_status === 1}
-                onClick={updateReviewStatus}>
-                Publilsh
-              </button>
-              <p></p>
-              <p>
-                <strong>
-                  {' '}
-                  {review.review_approval_status === 1
-                    ? 'Published'
-                    : 'Hidden'}{' '}
-                  By :
-                </strong>{' '}
-                {review.approve_by}
-              </p>
-              <p>
-                <strong>
-                  {' '}
-                  {review.review_approval_status === 1
-                    ? 'Published'
-                    : 'Hidden'}{' '}
-                  On :
-                </strong>{' '}
-                {review.approve_on}
-              </p>
             </div>
           </div>
         )}

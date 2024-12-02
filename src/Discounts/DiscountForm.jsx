@@ -28,6 +28,7 @@ const DiscountForm = (props) => {
   const token = Cookies.get(jwtToken);
 
   const {
+    discountStatus,
     disCode,
     setDisCode,
     disTitle,
@@ -71,6 +72,13 @@ const DiscountForm = (props) => {
     productDisTypeValue,
     setProductDisTypeValue,
   } = discountProps;
+
+  useEffect(() => {
+    if (method === "Automatic") {
+      generateRandomCode();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [method]);
 
   useEffect(() => {
     const productDetails = async () => {
@@ -216,18 +224,20 @@ const DiscountForm = (props) => {
     setProductDisTypeValue(e.target.value);
   };
 
+  console.log(method, "method");
+
   return (
     <div>
       <div className="col-sm-12">
-        <div className="d-flex justify-content-between mb-4">
-          <h3>Selected Discount</h3>
+        <div className="d-flex justify-content-between mt-4 mb-2">
+          <h5>Selected Discount</h5>
         </div>
       </div>
       <div className="col-sm-12">
         <div className="row">
           <div className="col-md-8">
             <div className="bgStyle">
-              <div className="mb-2">
+              <div className="form-group">
                 <h6 className="">Discount Title</h6>
                 <input
                   type="text"
@@ -247,92 +257,80 @@ const DiscountForm = (props) => {
               </div>
 
               {(selectedDiscount === "Discount on Products" ||
-                selectedDiscount === "Buy X get Y") && (
+                selectedDiscount === "Order value") && (
                 <>
-                  <p className="form-label">Method - Automatic</p>
-                  <div className="">
-                    <label htmlFor="disDode" className="form-label">
-                      Discount code
+                  <div className="form-group">
+                    <label htmlFor="" className="form-label">
+                      Method
                     </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="disDode"
-                      value={disCode}
-                      onChange={handleDisCode}
-                    />
-                    <span>
-                      Customers will see this in their cart and at checkout.
-                    </span>
+                    <div className="methodBtnCont">
+                      <button
+                        className={`methodBtn ${
+                          method === "Manual" && "active"
+                        }`}
+                        onClick={() => handleMethodTab("Manual")}
+                      >
+                        Discount code
+                      </button>
+                      <button
+                        className={`methodBtn ${
+                          method === "Automatic" && "active"
+                        }`}
+                        onClick={() => handleMethodTab("Automatic")}
+                      >
+                        Automatic discount
+                      </button>
+                    </div>
                   </div>
+                  {method === "Automatic" && (
+                    <div className="">
+                      <label style={{ whiteSpace: "normal" }}>
+                        Customers will see this in their cart and at checkout.
+                      </label>
+                    </div>
+                  )}
+                  {method === "Manual" && (
+                    <div className="">
+                      <div className="d-flex justify-content-between">
+                        <label htmlFor="" className="form-label">
+                          Discount code
+                        </label>
+                        <button
+                          className="generateCodeBtn"
+                          onClick={generateRandomCode}
+                        >
+                          Generate random code
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        value={disCode}
+                        onChange={handleDisCode}
+                        className="form-control"
+                      />
+                      <label>Customers must enter this code at checkout.</label>
+                    </div>
+                  )}{" "}
                 </>
               )}
 
               {selectedDiscount !== "Discount on Products" &&
-                selectedDiscount !== "Buy X get Y" && (
+                selectedDiscount !== "Order value" && (
                   <>
-                    <div className="">
-                      <label htmlFor="" className="form-label">
-                        Method
+                    <label className="form-label">Method - Automatic</label>
+                    {/* <label htmlFor="disDode" className="form-label">
+                        Discount code
                       </label>
-                      <div className="methodBtnCont">
-                        <button
-                          className={`methodBtn ${
-                            method === "Manual" && "active"
-                          }`}
-                          onClick={() => handleMethodTab("Manual")}
-                        >
-                          Discount code
-                        </button>
-                        <button
-                          className={`methodBtn ${
-                            method === "Automatic" && "active"
-                          }`}
-                          onClick={() => handleMethodTab("Automatic")}
-                        >
-                          Automatic discount
-                        </button>
-                      </div>
-                    </div>
-                    {method === "Automatic" && (
-                      <div className="">
-                        <label htmlFor="title" className="form-label">
-                          Discount code
-                        </label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id="title"
-                          value={disCode}
-                          onChange={handleDisCode}
-                        />
-                        <span>
-                          Customers will see this in their cart and at checkout.
-                        </span>
-                      </div>
-                    )}
-                    {method === "Manual" && (
-                      <div className="">
-                        <div className="d-flex justify-content-between">
-                          <label htmlFor="" className="form-label">
-                            Discount code
-                          </label>
-                          <button
-                            className="generateCodeBtn"
-                            onClick={generateRandomCode}
-                          >
-                            Generate random code
-                          </button>
-                        </div>
-                        <input
-                          type="text"
-                          value={disCode}
-                          onChange={handleDisCode}
-                          className="form-control"
-                        />
-                        <span>Customers must enter this code at checkout.</span>
-                      </div>
-                    )}{" "}
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="disDode"
+                        value={disCode}
+                        onChange={handleDisCode}
+                      /> */}
+                    <label className="d-block">
+                      Customers will see this in their cart and at checkout.
+                    </label>
                   </>
                 )}
             </div>
@@ -468,11 +466,11 @@ const DiscountForm = (props) => {
                   </div>
                 </div>
                 <hr />
-                <div className="">
+                <div className="mt-2 mb-2">
                   <h6>At a discounted value</h6>
-                  <div className="form-check">
+                  <div className="inputGroup">
                     <input
-                      className="form-check-input"
+                      className="form-check-input me-2"
                       onChange={handleDiscountedValues}
                       type="radio"
                       name="atDiscount"
@@ -481,7 +479,7 @@ const DiscountForm = (props) => {
                       id="atDiscountPercentage"
                     />
                     <label
-                      className="form-check-label"
+                      className="form-check-label me-2"
                       htmlFor="atDiscountPercentage"
                     >
                       Percentage
@@ -499,9 +497,9 @@ const DiscountForm = (props) => {
                       </div>
                     )}
                   </div>
-                  <div className="form-check">
+                  <div className="d-flex">
                     <input
-                      className="form-check-input"
+                      className="form-check-input me-2"
                       onChange={handleDiscountedValues}
                       checked={discountedValues === "flat"}
                       value="flat"
@@ -509,32 +507,39 @@ const DiscountForm = (props) => {
                       name="atDiscount"
                       id="atDiscountAmount"
                     />
-                    <label
-                      className="form-check-label"
-                      htmlFor="atDiscountAmount"
-                    >
-                      Amount off each
-                    </label>
-                    {discountedValues === "flat" && (
-                      <>
-                        <div className="discountBlock">
-                          <input
-                            value={discountVal}
-                            type="text"
-                            className="form-control"
-                            onChange={handleDiscountBlock}
-                            placeholder=" 0.00"
-                          />
-                          <MdCurrencyRupee className="rupeeSign" />
+                    <div className="d-flex flex-column">
+                      <div className="d-flex align-items-start">
+                        <label
+                          className="form-check-label me-2"
+                          htmlFor="atDiscountAmount"
+                        >
+                          Amount off each
+                        </label>
+                        <div className="">
+                          {discountedValues === "flat" && (
+                            <div className="d-flex flex-column">
+                              <div className="discountBlock">
+                                <input
+                                  value={discountVal}
+                                  type="text"
+                                  className="form-control discount-amount-input"
+                                  onChange={handleDiscountBlock}
+                                  placeholder="0.00"
+                                  style={{ paddingLeft: "1rem" }}
+                                />
+                                <MdCurrencyRupee className="rupeeSign" />
+                              </div>
+                            </div>
+                          )}
                         </div>
-                        <span>
-                          For multiple quantities, the discount amount will be
-                          taken off each Y item.
-                        </span>
-                      </>
-                    )}
+                      </div>
+                      <label className="form-check-label">
+                        For multiple quantities, the discount amount will be
+                        taken off each Y item.
+                      </label>
+                    </div>
                   </div>
-                  <div className="form-check">
+                  <div className="inputGroup">
                     <input
                       className="form-check-input"
                       onChange={handleDiscountedValues}
@@ -544,7 +549,10 @@ const DiscountForm = (props) => {
                       name="atDiscount"
                       id="fullDiscount"
                     />
-                    <label className="form-check-label" htmlFor="fullDiscount">
+                    <label
+                      className="form-check-label me-2"
+                      htmlFor="fullDiscount"
+                    >
                       Free
                     </label>
                   </div>
@@ -564,8 +572,8 @@ const DiscountForm = (props) => {
                   </label>
                   {maxUses && (
                     <input
-                      className="form-input amtInpt d-block"
-                      type="number"
+                      className="form-control amtInpt d-block"
+                      type="text"
                       id="usageLimit"
                       value={usageLimit}
                       onChange={handleUsageLimit}
@@ -579,7 +587,7 @@ const DiscountForm = (props) => {
             {selectedDiscount === "Discount on Products" ? (
               <div className="bgStyle">
                 <h6>Discount Value</h6>
-                <div className="row">
+                <div className="row g-3">
                   <div className="col-md-8">
                     <select
                       className="form-select"
@@ -598,7 +606,7 @@ const DiscountForm = (props) => {
                           type="text"
                           value={discountVal}
                           onChange={handleDiscountBlock}
-                          className="form-control"
+                          className="form-control discount-amount-input"
                         />
                         <LiaPercentSolid className="percentageSign" />
                       </div>
@@ -607,7 +615,8 @@ const DiscountForm = (props) => {
                         <input
                           value={discountVal}
                           type="text"
-                          className="form-control"
+                          style={{ paddingLeft: "1.6rem" }}
+                          className="form-control discount-amount-input"
                           onChange={handleDiscountBlock}
                           placeholder=" 0.00"
                         />
@@ -617,7 +626,7 @@ const DiscountForm = (props) => {
                   </div>
                 </div>
                 <h6 className="mt-2">Applies to</h6>
-                <div className="row">
+                <div className="row g-3">
                   <div className="col-md-3">
                     <input
                       type="text"
@@ -721,9 +730,9 @@ const DiscountForm = (props) => {
                           <input
                             value={discountVal}
                             type="text"
-                            className="form-control"
+                            className="form-control discount-amount-input"
                             onChange={handleDiscountBlock}
-                            placeholder=" 0.00"
+                            placeholder="0.00"
                           />
                           <MdCurrencyRupee className="rupeeSign" />
                         </div>
@@ -802,11 +811,11 @@ const DiscountForm = (props) => {
                           </div>
                         </div>
                         <hr />
-                        <div className="">
+                        <div className="mt-2 mb-2">
                           <h6>At a discounted value</h6>
-                          <div className="form-check">
+                          <div className="form-check d-flex align-items-center">
                             <input
-                              className="form-check-input"
+                              className="filterInput me-2"
                               onChange={handleProductDisTypeValues}
                               type="radio"
                               name="productDisType"
@@ -815,7 +824,7 @@ const DiscountForm = (props) => {
                               id="atDiscountPercentage"
                             />
                             <label
-                              className="form-check-label"
+                              className="form-check-label me-2"
                               htmlFor="atDiscountPercentage"
                             >
                               Percentage
@@ -832,9 +841,9 @@ const DiscountForm = (props) => {
                               </div>
                             )}
                           </div>
-                          <div className="form-check">
+                          <div className="form-check d-flex align-items-start">
                             <input
-                              className="form-check-input"
+                              className="filterInput me-2"
                               onChange={handleProductDisTypeValues}
                               checked={productDisTypeValue === "flat"}
                               value="flat"
@@ -842,34 +851,38 @@ const DiscountForm = (props) => {
                               name="productDisType"
                               id="atDiscountAmount"
                             />
-                            <label
-                              className="form-check-label"
-                              htmlFor="atDiscountAmount"
-                            >
-                              Amount off each
-                            </label>
-                            {productDisTypeValue === "flat" && (
-                              <>
-                                <div className="discountBlock">
-                                  <input
-                                    value={discountVal}
-                                    type="text"
-                                    className="form-control"
-                                    onChange={handleDiscountBlock}
-                                    placeholder=" 0.00"
-                                  />
-                                  <MdCurrencyRupee className="rupeeSign" />
-                                </div>
-                                <span>
-                                  For multiple quantities, the discount amount
-                                  will be taken off each Y item.
-                                </span>
-                              </>
-                            )}
+                            <div className="d-flex flex-column">
+                              <div className="d-flex align-items-start">
+                                <label
+                                  className="form-check-label me-2"
+                                  htmlFor="atDiscountAmount"
+                                >
+                                  Amount off each
+                                </label>
+                                {productDisTypeValue === "flat" && (
+                                  <>
+                                    <div className="discountBlock">
+                                      <input
+                                        value={discountVal}
+                                        type="text"
+                                        className="form-control discount-amount-input"
+                                        onChange={handleDiscountBlock}
+                                        placeholder=" 0.00"
+                                      />
+                                      <MdCurrencyRupee className="rupeeSign" />
+                                    </div>
+                                  </>
+                                )}
+                              </div>
+                              <label class="form-check-label">
+                                For multiple quantities, the discount amount
+                                will be taken off each Y item.
+                              </label>
+                            </div>
                           </div>
-                          <div className="form-check">
+                          <div className="form-check d-flex align-items-center">
                             <input
-                              className="form-check-input"
+                              className="filterInput me-2"
                               onChange={handleProductDisTypeValues}
                               type="radio"
                               checked={productDisTypeValue === "free"}
@@ -903,8 +916,8 @@ const DiscountForm = (props) => {
                           </label>
                           {maxUses && (
                             <input
-                              className="form-input amtInpt d-block"
-                              type="number"
+                              className="form-control amtInpt d-block"
+                              type="text"
                               id="usageLimit"
                               value={usageLimit}
                               onChange={handleUsageLimit}
@@ -921,7 +934,7 @@ const DiscountForm = (props) => {
             <div className="bgStyle">
               <div className="">
                 <h6>Customer eligibility</h6>
-                <div className="form-check">
+                <div className="inputGroup">
                   <input
                     className="form-check-input"
                     onChange={handleCustomerEligibility}
@@ -935,23 +948,7 @@ const DiscountForm = (props) => {
                     All customers
                   </label>
                 </div>
-                {/* <div className="form-check">
-                                    <input className="form-check-input" onChange={customerEligibility} type="radio" name="customerEligibility" id="specificCustomerSegments" value="specificCustomerSegments" />
-                                    <label className="form-check-label" htmlFor="specificCustomerSegments">
-                                        Specific customer segments
-                                    </label>
-                                    {custEligibility === "specificCustomerSegments" && <div className="mt-2">
-                                        <Multiselect
-                                            displayValue={discountAppliedValue === "products" ? 'product_title' : 'azst_collection_name'}
-                                            onRemove={onSelectedValue}
-                                            selectedValues={selectedListItem}
-                                            onSelect={onSelectedValue}
-                                            options={discountAppliedValue === "products" ? productsList : collectionsList}
-                                            placeholder='Search customer segments'
-                                        />
-                                    </div>}
-                                </div> */}
-                <div className="form-check">
+                <div className="inputGroup">
                   <input
                     className="form-check-input"
                     onChange={handleCustomerEligibility}
@@ -986,9 +983,9 @@ const DiscountForm = (props) => {
               <div className="">
                 <h6>Maximum discount uses</h6>
               </div>
-              <div className="form-check">
+              <div className="inputGroup">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   checked={maxDisUses === "mutipleTimeDiscntUses"}
                   onChange={handleMaxDisUses}
@@ -1003,7 +1000,7 @@ const DiscountForm = (props) => {
                 </label>
                 {maxDisUses === "mutipleTimeDiscntUses" && (
                   <input
-                    className="form-input amtInpt d-block"
+                    className="form-control amtInpt d-block"
                     type="number"
                     id="usageLimit"
                     value={usageLimit}
@@ -1011,9 +1008,9 @@ const DiscountForm = (props) => {
                   />
                 )}
               </div>
-              <div className="form-check">
+              <div className="inputGroup">
                 <input
-                  className="form-check-input"
+                  className="form-check-input filterInput"
                   type="radio"
                   value="1"
                   id="oneTimeUser"
@@ -1055,7 +1052,7 @@ const DiscountForm = (props) => {
                   />
                 </div>
               </form>
-              <div className="form-check">
+              <div className="inputGroup">
                 <input
                   className="form-check-input"
                   type="checkbox"
@@ -1063,7 +1060,7 @@ const DiscountForm = (props) => {
                   onChange={handleEndDate}
                   id="setEndDate"
                 />
-                <label className="form-check-label" htmlFor="setEndDate">
+                <label className="formLabel" htmlFor="setEndDate">
                   Set end date
                 </label>
               </div>
@@ -1099,39 +1096,47 @@ const DiscountForm = (props) => {
           </div>
           <div className="col-md-4">
             <div className="bgStyle">
-              <h6>Summary</h6>
+              <h6 className="mb-3">Summary</h6>
               {method === "Manual" ? (
                 disCode.length === 0 ? (
-                  <p className="summaryTxt">No discount code yet</p>
+                  <label className="summaryTxt">No discount code yet</label>
                 ) : (
-                  <p className="summaryTxt">
+                  <label className="summaryTxt">
                     {disCode}
                     <FaRegCopy className="copyIcon" onClick={copyTxt} />
-                  </p>
+                  </label>
                 )
               ) : disCode.length === 0 ? (
-                <p className="summaryTxt">No title yet</p>
+                <label className="summaryTxt">No title yet</label>
               ) : (
-                <p className="summaryTxt">{disCode}</p>
+                <label className="summaryTxt">{disCode}</label>
               )}
               <h6>Type and method</h6>
               <ul>
-                <li>{selectedDiscount}</li>
-                <li>{method}</li>
+                <li className="listPoint">{selectedDiscount}</li>
+                <li className="listPoint">
+                  {selectedDiscount === "Buy X get Y"
+                    ? "Manual"
+                    : "Automatic & Manual"}
+                </li>
               </ul>
               <h6>Details</h6>
-              {(disCode.length === 0) & (disCode.length === 0) ? (
-                <p>Can’t combine with other discounts</p>
+              {disCode.length === 0 ? (
+                <label className="mb-2">
+                  Can’t combine with other discounts
+                </label>
               ) : (
                 ""
               )}
-              {(disCode.length !== 0) & (disCode.length === 0) ? (
-                <ul>
-                  <li>For Online Store</li>
-                  <li>All customers</li>
-                  <li>No usage limits</li>
-                  <li>Can’t combine with other discounts</li>
-                  <li>Active from today</li>
+              {disCode.length !== 0 ? (
+                <ul className="mb-2">
+                  <li className="listPoint">For Online Store</li>
+                  <li className="listPoint">All customers</li>
+                  <li className="listPoint">No usage limits</li>
+                  <li className="listPoint">
+                    Can’t combine with other discounts
+                  </li>
+                  <li className="listPoint">Active from today</li>
                 </ul>
               ) : (
                 ""
@@ -1146,7 +1151,11 @@ const DiscountForm = (props) => {
                 ""
               )}
               <h6>Performance</h6>
-              <p>Discount is not active yet</p>
+              <label>
+                {discountStatus
+                  ? "Discount is active."
+                  : "Discount is not active yet"}
+              </label>
             </div>
             {method === "Manual" && (
               <div className="bgStyle">
