@@ -71,54 +71,62 @@ const Discounts = () => {
                 </div>
               </div>
               <div className="col-sm-12">
-                <div className="tableCont">
-                  <table
-                    className="table table-hover"
-                    style={{ minWidth: "1000px" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">S.No</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Discount Code</th>
+                {discounts?.length > 0 ? (
+                  <div className="tableCont">
+                    <table
+                      className="table table-hover"
+                      style={{ minWidth: "1000px" }}
+                    >
+                      <thead>
+                        <tr>
+                          <th scope="col">S.No</th>
+                          <th scope="col">Title</th>
+                          <th scope="col">Discount Code</th>
 
-                        <th scope="col">Method</th>
-                        <th scope="col">Type</th>
-                        <th scope="col">Created On</th>
-                        <th scope="col">Status</th>
-                        <th scope="col"></th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {discounts.map((each, i) => (
-                        <tr key={i}>
-                          <th scope="row">{i + 1}</th>
-                          <td>{each.title}</td>
-                          <td>{each.code}</td>
-
-                          <td>{each.method}</td>
-                          <td>{each.scope}</td>
-                          <td>
-                            {moment(each.created_on).format("DD MMM, YYYY")}
-                          </td>
-                          <td>{each.status === 1 ? "Active" : "In Active"}</td>
-                          <td>
-                            <MdEdit
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                navigate(`/discounts-edit/${each.dsc_id}`);
-                              }}
-                            />
-                            <MdDelete
-                              style={{ cursor: "pointer", marginLeft: "4px" }}
-                              onClick={() => deleteDiscount(each.dsc_id)}
-                            />
-                          </td>
+                          <th scope="col">Method</th>
+                          <th scope="col">Type</th>
+                          <th scope="col">Created On</th>
+                          <th scope="col">Status</th>
+                          <th scope="col"></th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+                      </thead>
+                      <tbody>
+                        {discounts.map((each, i) => (
+                          <tr key={i}>
+                            <th scope="row">{i + 1}</th>
+                            <td>{each.title}</td>
+                            <td>{each.code}</td>
+
+                            <td>{each.method}</td>
+                            <td>{each.scope}</td>
+                            <td>
+                              {moment(each.created_on).format("DD MMM, YYYY")}
+                            </td>
+                            <td>
+                              {each.status === 1 ? "Active" : "In Active"}
+                            </td>
+                            <td>
+                              <MdEdit
+                                style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                  navigate(`/discounts-edit/${each.dsc_id}`);
+                                }}
+                              />
+                              <MdDelete
+                                style={{ cursor: "pointer", marginLeft: "4px" }}
+                                onClick={() => deleteDiscount(each.dsc_id)}
+                              />
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="noContentSec">
+                    <h6>No Discounts Available</h6>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -11,8 +11,12 @@ import ErrorHandler from "./../Pages/ErrorHandler";
 import "../Pages/Admin.css";
 
 const DiscountForm = (props) => {
-  const { selectedDiscount, discountProps } = props;
-
+  const {
+    selectedDiscount,
+    discountProps,
+    validationErrors,
+    setValidationErrors,
+  } = props;
   const [customersList, setCustomersList] = useState([]);
   const [updatedProductsList, setUpdatedProductsList] = useState([]);
   const [collectionsList, setCollectionsList] = useState([]);
@@ -49,6 +53,8 @@ const DiscountForm = (props) => {
     setMaxDisUses,
     usageLimit,
     setUsageLimit,
+    // custUsageLimit,
+    // setCustUsageLimit,
     custEligibility,
     setCustEligibility,
     selectedCustomers,
@@ -67,8 +73,8 @@ const DiscountForm = (props) => {
     setCustomerGetsItems,
     endDate,
     setEndDate,
-    maxUses,
-    setMaxUses,
+    // maxUses,
+    // setMaxUses,
     productDisTypeValue,
     setProductDisTypeValue,
   } = discountProps;
@@ -134,6 +140,7 @@ const DiscountForm = (props) => {
   };
   const handleDisCode = (e) => {
     setDisCode(e.target.value.toUpperCase());
+    setValidationErrors({ ...validationErrors, disCode: "" });
   };
   const copyTxt = () => {
     navigator.clipboard.writeText(disCode);
@@ -146,7 +153,12 @@ const DiscountForm = (props) => {
     if (discountedValues === "free" || productDisTypeValue === "free") {
       setDiscountVal("100");
     } else {
-      setDiscountVal(e.target.value);
+      let { value } = e.target;
+      value = value.replace(/[^0-9]/g, "");
+      setDiscountVal(value);
+      if (!isNaN(value) && value !== "") {
+        setValidationErrors({ ...validationErrors, discountVal: "" });
+      }
     }
   };
 
@@ -156,30 +168,60 @@ const DiscountForm = (props) => {
 
   const onSelectedCustomer = (selectedItem) => {
     setSelectedCustomers(selectedItem);
+    setValidationErrors({ ...validationErrors, selectedCustomers: "" });
   };
 
   const onSelectedCustomerSpendsValue = (selectedItem) => {
     setCustomerSpendsSelectedListItem(selectedItem);
+    setValidationErrors({
+      ...validationErrors,
+      customerSpendsSelectedListItem: "",
+    });
   };
   const onSelectedCustomerGetsValue = (selectedItem) => {
     setCustomerGetsSelectedListItem(selectedItem);
+    setValidationErrors({
+      ...validationErrors,
+      customerGetsSelectedListItem: "",
+    });
   };
   // const handleDiscountAppliedTo = (e) => {
   //   setDiscountAppliedValue(e.target.value);
   // };
 
+  const handleDiscountTitle = (e) => {
+    setDisTitle(e.target.value);
+    setValidationErrors({ ...validationErrors, disTitle: "" });
+  };
+
   const handleCustomerEligibility = (e) => {
     const value = e.target.value === "allCustomers" ? "all" : e.target.value;
     setCustEligibility(value);
+    setValidationErrors({ ...validationErrors, selectedCustomers: "" });
   };
 
   const handleMaxDisUses = (e) => {
     setMaxDisUses(e.target.id);
+    setValidationErrors({ ...validationErrors, usageLimit: "" });
   };
 
   const handleUsageLimit = (e) => {
-    setUsageLimit(e.target.value);
+    let { value } = e.target;
+    value = value.replace(/[^0-9]/g, "");
+    setUsageLimit(value);
+    if (!isNaN(usageLimit) && usageLimit !== "") {
+      setValidationErrors({ ...validationErrors, usageLimit: "" });
+    }
   };
+
+  // const handleCustUsageLimit = (e) => {
+  //   let { value } = e.target;
+  //   value = value.replace(/[^0-9]/g, "");
+  //   setCustUsageLimit(value);
+  //   if (!isNaN(value) && custUsageLimit !== "") {
+  //     setValidationErrors({ ...validationErrors, custUsageLimit: "" });
+  //   }
+  // };
 
   const handleEndDate = (e) => {
     setEndDate(e.target.checked);
@@ -206,25 +248,40 @@ const DiscountForm = (props) => {
     setCustomerGetsSelectedListItem();
   };
   const handleCustGetsQuant = (e) => {
-    setCustOrderQuant({ ...custOrderQuant, [e.target.id]: e.target.value });
+    let { id, value } = e.target;
+    value = value.replace(/[^0-9]/g, ""); // Allow only numbers
+    setCustOrderQuant({ ...custOrderQuant, [id]: value });
+
+    if (!isNaN(value) && value !== "") {
+      setValidationErrors({
+        ...validationErrors,
+        [id]: "", // Dynamically clear errors based on `id`
+      });
+    }
   };
   const handleMinCartValue = (e) => {
-    setMinCartVal(e.target.value);
+    let { value } = e.target;
+    value = value.replace(/[^0-9]/g, "");
+    setMinCartVal(value);
+    setValidationErrors({ ...validationErrors, minCartVal: "" });
   };
 
   const handleDiscountedValues = (e) => {
     setDiscountedValues(e.target.value);
   };
 
-  const handleMaxUses = (e) => {
-    setMaxUses(e.target.checked);
-  };
+  // const handleMaxUses = (e) => {
+  //   setMaxUses(e.target.checked);
+  // };
 
   const handleProductDisTypeValues = (e) => {
     setProductDisTypeValue(e.target.value);
   };
 
-  console.log(method, "method");
+  const today = new Date().toISOString().slice(0, 10);
+  const minEndDate = new Date(new Date().setDate(new Date().getDate() + 1))
+    .toISOString()
+    .slice(0, 10);
 
   return (
     <div>
@@ -241,15 +298,16 @@ const DiscountForm = (props) => {
                 <h6 className="">Discount Title</h6>
                 <input
                   type="text"
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    if (value.length <= 50) {
-                      setDisTitle(value);
-                    }
-                  }}
+                  onChange={handleDiscountTitle}
                   value={disTitle}
                   className="form-control"
+                  maxLength={50}
                 />
+                {validationErrors.disTitle && (
+                  <span className="errorValue">
+                    {validationErrors.disTitle}
+                  </span>
+                )}
               </div>
               <div className="d-flex justify-content-between">
                 <h6>{selectedDiscount}</h6>
@@ -307,8 +365,16 @@ const DiscountForm = (props) => {
                         value={disCode}
                         onChange={handleDisCode}
                         className="form-control"
+                        maxLength={30}
                       />
-                      <label>Customers must enter this code at checkout.</label>
+                      {validationErrors.disCode && (
+                        <span className="errorValue">
+                          {validationErrors.disCode}
+                        </span>
+                      )}
+                      <label className="d-block">
+                        Customers must enter this code at checkout.
+                      </label>
                     </div>
                   )}{" "}
                 </>
@@ -356,6 +422,11 @@ const DiscountForm = (props) => {
                         value={custOrderQuant.minBuyQty}
                         onChange={handleCustGetsQuant}
                       />
+                      {validationErrors.minBuyQty && (
+                        <span className="errorValue">
+                          {validationErrors.minBuyQty}
+                        </span>
+                      )}
                     </div>
                     <div className="col-md-8">
                       <label
@@ -397,6 +468,11 @@ const DiscountForm = (props) => {
                           : "Select collections"
                       }
                     />
+                    {validationErrors.customerSpendsSelectedListItem && (
+                      <span className="errorValue">
+                        {validationErrors.customerSpendsSelectedListItem}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <hr />
@@ -422,6 +498,11 @@ const DiscountForm = (props) => {
                         id="maxGetYQty"
                         placeholder="Max Quantity"
                       />
+                      {validationErrors.maxGetYQty && (
+                        <span className="errorValue">
+                          {validationErrors.maxGetYQty}
+                        </span>
+                      )}
                     </div>
                     <div className="col-md-8">
                       <label
@@ -463,6 +544,11 @@ const DiscountForm = (props) => {
                           : "Search collections"
                       }
                     />
+                    {validationErrors.customerGetsSelectedListItem && (
+                      <span className="errorValue">
+                        {validationErrors.customerGetsSelectedListItem}
+                      </span>
+                    )}
                   </div>
                 </div>
                 <hr />
@@ -485,15 +571,22 @@ const DiscountForm = (props) => {
                       Percentage
                     </label>
                     {discountedValues === "percentage" && (
-                      <div className="discountBlock">
-                        <input
-                          type="text"
-                          value={discountVal}
-                          onChange={handleDiscountBlock}
-                          className="form-control"
-                          id=""
-                        />
-                        <LiaPercentSolid className="percentageSign" />
+                      <div>
+                        <div className="discountBlock">
+                          <input
+                            type="text"
+                            value={discountVal}
+                            onChange={handleDiscountBlock}
+                            className="form-control"
+                            id=""
+                          />
+                          <LiaPercentSolid className="percentageSign" />
+                        </div>
+                        {validationErrors.discountVal && (
+                          <span className="errorValue">
+                            {validationErrors.discountVal}
+                          </span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -529,6 +622,11 @@ const DiscountForm = (props) => {
                                 />
                                 <MdCurrencyRupee className="rupeeSign" />
                               </div>
+                              {validationErrors.discountVal && (
+                                <span className="errorValue">
+                                  {validationErrors.discountVal}
+                                </span>
+                              )}
                             </div>
                           )}
                         </div>
@@ -558,7 +656,7 @@ const DiscountForm = (props) => {
                   </div>
                 </div>
                 <hr />
-                <div className="form-check">
+                {/* <div className="form-check">
                   <input
                     className="form-check-input"
                     type="checkbox"
@@ -571,15 +669,23 @@ const DiscountForm = (props) => {
                     Set a maximum number of uses.
                   </label>
                   {maxUses && (
-                    <input
-                      className="form-control amtInpt d-block"
-                      type="text"
-                      id="usageLimit"
-                      value={usageLimit}
-                      onChange={handleUsageLimit}
-                    />
+                    <>
+                      <input
+                        className="form-control amtInpt d-block"
+                        type="text"
+                        id="custUsageLimit"
+                        value={custUsageLimit}
+                        onChange={handleCustUsageLimit}
+                        maxLength={3}
+                      />
+                      {validationErrors.custUsageLimit && (
+                        <span className="errorValue">
+                          {validationErrors.custUsageLimit}
+                        </span>
+                      )}
+                    </>
                   )}
-                </div>
+                </div> */}
               </div>
             ) : (
               ""
@@ -595,33 +701,49 @@ const DiscountForm = (props) => {
                       onChange={handleAmountOfProductsDiscounts}
                       aria-label="Default select example"
                     >
-                      <option value="percentage">Percentage</option>
                       <option value="flat">Fixed Amount</option>
+                      <option value="percentage">Percentage</option>
                     </select>
                   </div>
                   <div className="col-md-4">
                     {amtOfPrdctsDscntVal === "percentage" ? (
-                      <div className="discountBlock">
-                        <input
-                          type="text"
-                          value={discountVal}
-                          onChange={handleDiscountBlock}
-                          className="form-control discount-amount-input"
-                        />
-                        <LiaPercentSolid className="percentageSign" />
-                      </div>
+                      <>
+                        <div className="discountBlock">
+                          <input
+                            type="text"
+                            value={discountVal}
+                            onChange={handleDiscountBlock}
+                            className="form-control discount-amount-input"
+                            maxLength={5}
+                          />
+                          <LiaPercentSolid className="percentageSign" />
+                        </div>
+                        {validationErrors.discountVal && (
+                          <span className="errorValue">
+                            {validationErrors.discountVal}
+                          </span>
+                        )}
+                      </>
                     ) : (
-                      <div className="discountBlock">
-                        <input
-                          value={discountVal}
-                          type="text"
-                          style={{ paddingLeft: "1.6rem" }}
-                          className="form-control discount-amount-input"
-                          onChange={handleDiscountBlock}
-                          placeholder=" 0.00"
-                        />
-                        <MdCurrencyRupee className="rupeeSign" />
-                      </div>
+                      <>
+                        <div className="discountBlock">
+                          <input
+                            value={discountVal}
+                            type="text"
+                            style={{ paddingLeft: "1.6rem" }}
+                            className="form-control discount-amount-input"
+                            onChange={handleDiscountBlock}
+                            maxLength={5}
+                            placeholder=" 0.00"
+                          />
+                          <MdCurrencyRupee className="rupeeSign" />
+                        </div>
+                        {validationErrors.discountVal && (
+                          <span className="errorValue">
+                            {validationErrors.discountVal}
+                          </span>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
@@ -632,10 +754,16 @@ const DiscountForm = (props) => {
                       type="text"
                       value={custOrderQuant.minBuyQty}
                       onChange={handleCustGetsQuant}
+                      maxLength={3}
                       placeholder="Min Quantity"
                       className="form-control"
                       id="minBuyQty"
                     />
+                    {validationErrors.minBuyQty && (
+                      <span className="errorValue">
+                        {validationErrors.minBuyQty}
+                      </span>
+                    )}
                   </div>
                   <div className="col-md-3">
                     <input
@@ -643,9 +771,15 @@ const DiscountForm = (props) => {
                       value={custOrderQuant.maxGetYQty}
                       onChange={handleCustGetsQuant}
                       placeholder="Max Quantity"
+                      maxLength={3}
                       className="form-control"
                       id="maxGetYQty"
                     />
+                    {validationErrors.maxGetYQty && (
+                      <span className="errorValue">
+                        {validationErrors.maxGetYQty}
+                      </span>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <select
@@ -681,6 +815,11 @@ const DiscountForm = (props) => {
                         : "Select collections"
                     }
                   />
+                  {validationErrors.customerSpendsSelectedListItem && (
+                    <span className="errorValue">
+                      {validationErrors.customerSpendsSelectedListItem}
+                    </span>
+                  )}
                 </div>
               </div>
             ) : (
@@ -700,6 +839,11 @@ const DiscountForm = (props) => {
                       id="minimumCartValue"
                       placeholder="Min Cart Value"
                     />
+                    {validationErrors.minCartVal && (
+                      <span className="errorValue">
+                        {validationErrors.minCartVal}
+                      </span>
+                    )}
                   </div>
                   <div className="col-md-4">
                     <select
@@ -716,26 +860,40 @@ const DiscountForm = (props) => {
                   {amtOfPrdctsDscntVal !== "product" ? (
                     <div className="col-md-4">
                       {amtOfPrdctsDscntVal === "percentage" ? (
-                        <div className="discountBlock">
-                          <input
-                            type="text"
-                            value={discountVal}
-                            onChange={handleDiscountBlock}
-                            className="form-control"
-                          />
-                          <LiaPercentSolid className="percentageSign" />
-                        </div>
+                        <>
+                          <div className="discountBlock">
+                            <input
+                              type="text"
+                              value={discountVal}
+                              onChange={handleDiscountBlock}
+                              className="form-control"
+                            />
+                            <LiaPercentSolid className="percentageSign" />
+                          </div>
+                          {validationErrors.discountVal && (
+                            <span className="errorValue">
+                              {validationErrors.discountVal}
+                            </span>
+                          )}
+                        </>
                       ) : (
-                        <div className="discountBlock">
-                          <input
-                            value={discountVal}
-                            type="text"
-                            className="form-control discount-amount-input"
-                            onChange={handleDiscountBlock}
-                            placeholder="0.00"
-                          />
-                          <MdCurrencyRupee className="rupeeSign" />
-                        </div>
+                        <>
+                          <div className="discountBlock">
+                            <input
+                              value={discountVal}
+                              type="text"
+                              className="form-control discount-amount-input"
+                              onChange={handleDiscountBlock}
+                              placeholder="0.00"
+                            />
+                            <MdCurrencyRupee className="rupeeSign" />
+                          </div>
+                          {validationErrors.discountVal && (
+                            <span className="errorValue">
+                              {validationErrors.discountVal}
+                            </span>
+                          )}
+                        </>
                       )}
                     </div>
                   ) : (
@@ -763,6 +921,11 @@ const DiscountForm = (props) => {
                                 id="maxGetYQty"
                                 placeholder="Max Quantity"
                               />
+                              {validationErrors.maxGetYQty && (
+                                <span className="errorValue">
+                                  {validationErrors.maxGetYQty}
+                                </span>
+                              )}
                             </div>
                             <div className="col-md-8">
                               <label
@@ -808,14 +971,19 @@ const DiscountForm = (props) => {
                                   : "Search collections"
                               }
                             />
+                            {validationErrors.customerGetsSelectedListItem && (
+                              <span className="errorValue">
+                                {validationErrors.customerGetsSelectedListItem}
+                              </span>
+                            )}
                           </div>
                         </div>
                         <hr />
                         <div className="mt-2 mb-2">
                           <h6>At a discounted value</h6>
-                          <div className="form-check d-flex align-items-center">
+                          <div className="d-flex align-items-start">
                             <input
-                              className="filterInput me-2"
+                              className="form-check-input me-2"
                               onChange={handleProductDisTypeValues}
                               type="radio"
                               name="productDisType"
@@ -830,20 +998,27 @@ const DiscountForm = (props) => {
                               Percentage
                             </label>
                             {productDisTypeValue === "percentage" && (
-                              <div className="discountBlock">
-                                <input
-                                  type="text"
-                                  value={discountVal}
-                                  onChange={handleDiscountBlock}
-                                  className="form-control"
-                                />
-                                <LiaPercentSolid className="percentageSign" />
+                              <div>
+                                <div className="discountBlock">
+                                  <input
+                                    type="text"
+                                    value={discountVal}
+                                    onChange={handleDiscountBlock}
+                                    className="form-control"
+                                  />
+                                  <LiaPercentSolid className="percentageSign" />
+                                </div>
+                                {validationErrors.discountVal && (
+                                  <span className="errorValue">
+                                    {validationErrors.discountVal}
+                                  </span>
+                                )}
                               </div>
                             )}
                           </div>
-                          <div className="form-check d-flex align-items-start">
+                          <div className="inputGroup d-flex align-items-start">
                             <input
-                              className="filterInput me-2"
+                              className="form-check-input me-2"
                               onChange={handleProductDisTypeValues}
                               checked={productDisTypeValue === "flat"}
                               value="flat"
@@ -860,7 +1035,7 @@ const DiscountForm = (props) => {
                                   Amount off each
                                 </label>
                                 {productDisTypeValue === "flat" && (
-                                  <>
+                                  <div>
                                     <div className="discountBlock">
                                       <input
                                         value={discountVal}
@@ -871,18 +1046,23 @@ const DiscountForm = (props) => {
                                       />
                                       <MdCurrencyRupee className="rupeeSign" />
                                     </div>
-                                  </>
+                                    {validationErrors.discountVal && (
+                                      <span className="errorValue">
+                                        {validationErrors.discountVal}
+                                      </span>
+                                    )}
+                                  </div>
                                 )}
                               </div>
-                              <label class="form-check-label">
+                              <label className="form-check-label">
                                 For multiple quantities, the discount amount
                                 will be taken off each Y item.
                               </label>
                             </div>
                           </div>
-                          <div className="form-check d-flex align-items-center">
+                          <div className="inputGroup">
                             <input
-                              className="filterInput me-2"
+                              className="form-check-input me-2"
                               onChange={handleProductDisTypeValues}
                               type="radio"
                               checked={productDisTypeValue === "free"}
@@ -899,7 +1079,7 @@ const DiscountForm = (props) => {
                           </div>
                         </div>
                         <hr />
-                        <div className="form-check">
+                        {/* <div className="inputGroup">
                           <input
                             className="form-check-input"
                             type="checkbox"
@@ -915,15 +1095,23 @@ const DiscountForm = (props) => {
                             Set a maximum number of uses.
                           </label>
                           {maxUses && (
-                            <input
-                              className="form-control amtInpt d-block"
-                              type="text"
-                              id="usageLimit"
-                              value={usageLimit}
-                              onChange={handleUsageLimit}
-                            />
+                            <>
+                              <input
+                                className="form-control amtInpt d-block"
+                                type="text"
+                                id="custUsageLimit"
+                                value={custUsageLimit}
+                                onChange={handleCustUsageLimit}
+                                maxLength={3}
+                              />
+                              {validationErrors.custUsageLimit && (
+                                <span className="errorValue">
+                                  {validationErrors.custUsageLimit}
+                                </span>
+                              )}
+                            </>
                           )}
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   )}
@@ -965,7 +1153,7 @@ const DiscountForm = (props) => {
                     Specific customers
                   </label>
                   {custEligibility === "specificCustomer" && (
-                    <div className="mt-2">
+                    <div className="ms-2" style={{ width: "100%" }}>
                       <Multiselect
                         displayValue={"azst_customer_name"}
                         onRemove={onSelectedCustomer}
@@ -977,6 +1165,11 @@ const DiscountForm = (props) => {
                     </div>
                   )}
                 </div>
+                {validationErrors.selectedCustomers && (
+                  <span className="errorValue">
+                    {validationErrors.selectedCustomers}
+                  </span>
+                )}
               </div>
             </div>
             <div className="bgStyle">
@@ -985,7 +1178,21 @@ const DiscountForm = (props) => {
               </div>
               <div className="inputGroup">
                 <input
-                  className="form-check-input filterInput"
+                  className="form-check-input"
+                  type="radio"
+                  value="1"
+                  id="oneTimeUser"
+                  checked={maxDisUses === "oneTimeUser"}
+                  onChange={handleMaxDisUses}
+                  name="discountUses"
+                />
+                <label className="form-check-label" htmlFor="oneTimeUser">
+                  Limit to one use per customer
+                </label>
+              </div>
+              <div className="inputGroup">
+                <input
+                  className="form-check-input"
                   type="radio"
                   checked={maxDisUses === "mutipleTimeDiscntUses"}
                   onChange={handleMaxDisUses}
@@ -1000,32 +1207,25 @@ const DiscountForm = (props) => {
                 </label>
                 {maxDisUses === "mutipleTimeDiscntUses" && (
                   <input
-                    className="form-control amtInpt d-block"
-                    type="number"
+                    className="form-control amtInpt d-block ms-2"
+                    type="text"
+                    maxLength={3}
                     id="usageLimit"
                     value={usageLimit}
                     onChange={handleUsageLimit}
                   />
                 )}
               </div>
-              <div className="inputGroup">
-                <input
-                  className="form-check-input filterInput"
-                  type="radio"
-                  value="1"
-                  id="oneTimeUser"
-                  checked={maxDisUses === "oneTimeUser"}
-                  onChange={handleMaxDisUses}
-                  name="discountUses"
-                />
-                <label className="form-check-label" htmlFor="oneTimeUser">
-                  Limit to one use per customer
-                </label>
-              </div>
+              {validationErrors.usageLimit && (
+                <span className="errorValue">
+                  {validationErrors.usageLimit}
+                </span>
+              )}
             </div>
 
             <div className="bgStyle">
               <h6>Active dates</h6>
+
               <form className="row g-3">
                 <div className="col-md-6">
                   <label htmlFor="startDate" className="form-label">
@@ -1035,6 +1235,7 @@ const DiscountForm = (props) => {
                     type="date"
                     className="form-control"
                     id="startDate"
+                    min={today}
                     value={startTimings.startDate}
                     onChange={handleStartTimings}
                   />
@@ -1060,8 +1261,15 @@ const DiscountForm = (props) => {
                   onChange={handleEndDate}
                   id="setEndDate"
                 />
-                <label className="formLabel" htmlFor="setEndDate">
-                  Set end date
+                <label
+                  className="formLabel"
+                  style={{ paddingBottom: "0" }}
+                  htmlFor="setEndDate"
+                >
+                  Set end date{" "}
+                  <span>
+                    ( Note: The time difference will default to 10 days. )
+                  </span>
                 </label>
               </div>
               {endDate && (
@@ -1072,6 +1280,7 @@ const DiscountForm = (props) => {
                     </label>
                     <input
                       type="date"
+                      min={minEndDate}
                       className="form-control"
                       id="endDate"
                       value={endTimings.endDate}
