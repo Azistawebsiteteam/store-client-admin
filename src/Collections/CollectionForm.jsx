@@ -9,6 +9,7 @@ const CollectionForm = (props) => {
     validationErrors,
     setValidationErrors,
   } = props;
+
   const {
     title,
     content,

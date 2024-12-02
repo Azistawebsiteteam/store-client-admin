@@ -183,21 +183,12 @@ const Discounts = () => {
   return (
     <div className='adminSec'>
       <AdminSideBar />
-<<<<<<< HEAD
       <div className='commonSec'>
         <div className='container'>
           <div className='row'>
             <div className='col-sm-12'>
               <div className='col-sm-12'>
-                <div className='d-flex justify-content-between'>
-=======
-      <div className="commonSec">
-        <div className="container">
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="col-sm-12">
-                <div className="commonTopSec">
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
+                <div className='commonTopSec'>
                   <h4>List of Discounts</h4>
                   <DownloadTableExcel
                     filename='Discounts'
@@ -239,11 +230,7 @@ const Discounts = () => {
                           <td>
                             {moment(each.created_on).format('DD MMM, YYYY')}
                           </td>
-<<<<<<< HEAD
-                          <td>{each.status === 1 ? 'Active' : 'Draft'}</td>
-=======
-                          <td>{each.status === 1 ? "Active" : "In Active"}</td>
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
+                          <td>{each.status === 1 ? 'Active' : 'In Active'}</td>
                           <td>
                             <MdEdit
                               style={{ cursor: 'pointer' }}

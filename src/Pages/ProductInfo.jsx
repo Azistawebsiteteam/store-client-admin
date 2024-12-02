@@ -1,37 +1,18 @@
-<<<<<<< HEAD
 import React, { useEffect, useCallback, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { v4 } from 'uuid';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-
 import swalHandle from './ErrorHandler';
 import AdminSideBar from './AdminSideBar';
 import Ingredients from '../Components/Ingredients';
 import Features from '../Components/Features';
 import BackBtn from '../Components/BackBtn';
 import '../index.css';
-=======
-import React, { useEffect, useCallback, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { v4 } from "uuid";
-import Cookies from "js-cookie";
-import axios from "axios";
-import swalHandle from "./ErrorHandler";
-import AdminSideBar from "./AdminSideBar";
-import Ingredients from "../Components/Ingredients";
-import Features from "../Components/Features";
-import BackBtn from "../Components/BackBtn";
-import "../index.css";
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
 
 const ProductInfo = () => {
   const { id } = useParams();
   const [isChangesOccur, setIsChangesOccur] = useState(false);
-<<<<<<< HEAD
-  const [imgError, setImgError] = useState('');
-=======
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
   const [ingredients, setIngredients] = useState([
     {
       id: v4(),
@@ -85,14 +66,6 @@ const ProductInfo = () => {
   }, [getProductInfo]);
 
   const handleSubmitIngs = async () => {
-<<<<<<< HEAD
-    const hasError = ingredients.some((ing) => ing.image === '');
-    setImgError(hasError ? 'All fields are required' : '');
-
-    if (hasError) alert('Please enter');
-
-=======
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
     try {
       const url = `${baseUrl}/add-info`;
       const headers = {

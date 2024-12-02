@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useRef } from 'react';
 import AdminSideBar from '../Pages/AdminSideBar';
 import { useState, useEffect } from 'react';
@@ -8,27 +7,12 @@ import axios from 'axios';
 import { BiRupee } from 'react-icons/bi';
 import { RiArrowUpDownLine } from 'react-icons/ri';
 import { GoArrowUp, GoArrowDown } from 'react-icons/go';
+import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { Link } from 'react-router-dom';
 import '../Pages/Admin.css';
 import './index.css';
+import Pagination from '../Components/Pagination';
 import { getStringData } from '../Utils/StringConcat';
-import { DownloadTableExcel } from 'react-export-table-to-excel';
-=======
-import React from "react";
-import AdminSideBar from "../Pages/AdminSideBar";
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-import errorHandler from "../Pages/ErrorHandler";
-import axios from "axios";
-import { BiRupee } from "react-icons/bi";
-import { RiArrowUpDownLine } from "react-icons/ri";
-import { GoArrowUp, GoArrowDown } from "react-icons/go";
-import { Link } from "react-router-dom";
-import "../Pages/Admin.css";
-import "./index.css";
-import Pagination from "../Components/Pagination";
-import { getStringData } from "../Utils/StringConcat";
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
 
 const CustomersListing = () => {
   const [displayFilterDropdown, setDisplayFilterDropdown] = useState(false);
@@ -36,16 +20,13 @@ const CustomersListing = () => {
   const [filtersOrder, setFiltersOrder] = useState('DESC');
   const [activeUsers, setActiveUsers] = useState(true);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
-<<<<<<< HEAD
   const tableRef = useRef();
-=======
   const [totalCustomers, setTotalCustomers] = useState(0); //totalItems
   const [customersData, setCustomersData] = useState([]); // Store full list listOfItems
   const [currentPage, setCurrentPage] = useState(1);
 
   const logsPerPage = 10;
 
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
   const baseUrl = `${process.env.REACT_APP_API_URL}/users/get`;
   const token = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
 
@@ -96,13 +77,8 @@ const CustomersListing = () => {
   return (
     <div className='adminSec'>
       <AdminSideBar />
-<<<<<<< HEAD
       <div className='commonSec'>
-        <div className='filterSec'>
-=======
-      <div className="commonSec">
-        <div className="commonTopSec">
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
+        <div className='commonTopSec'>
           <input
             className='searchCustomer'
             type='search'
@@ -122,7 +98,6 @@ const CustomersListing = () => {
               Active users
             </label>
           </div>
-<<<<<<< HEAD
           <DownloadTableExcel
             filename='Customers'
             sheet='Customers-list'
@@ -130,9 +105,6 @@ const CustomersListing = () => {
             <button className='exportBtn'> Export</button>
           </DownloadTableExcel>
           <Link to={'/add-customer'} className='infoBtn'>
-=======
-          <Link to={"/add-customer"} className="infoBtn addCustomerBtn">
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
             Add Customer
           </Link>
           <button
@@ -141,27 +113,15 @@ const CustomersListing = () => {
             <RiArrowUpDownLine color='#878282' strikeWidth={2} size={16} />
           </button>
           {displayFilterDropdown && (
-<<<<<<< HEAD
-            <div className='dropDown'>
-              <p>Sort by</p>
+            <div className='filterDropdown filterSec'>
+              <p style={{ marginLeft: '-1.4rem' }}>Sort by</p>
               <div className='form-check'>
                 <input
-                  className='form-check-input'
+                  className='form-check-input filterInput'
                   type='radio'
                   name='filterSec'
                   id='totalorder'
                   value='totalorder'
-=======
-            <div className="filterDropdown filterSec">
-              <p style={{ marginLeft: "-1.4rem" }}>Sort by</p>
-              <div className="form-check">
-                <input
-                  className="form-check-input filterInput"
-                  type="radio"
-                  name="filterSec"
-                  id="totalorder"
-                  value="totalorder"
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
                   onChange={handleFilters}
                   checked={'totalorder' === filteredVal}
                 />
@@ -171,19 +131,11 @@ const CustomersListing = () => {
               </div>
               <div className='form-check'>
                 <input
-<<<<<<< HEAD
-                  className='form-check-input'
+                  className='form-check-input filterInput'
                   type='radio'
                   name='filterSec'
                   id='totalamountspent'
                   value='totalamountspent'
-=======
-                  className="form-check-input filterInput"
-                  type="radio"
-                  name="filterSec"
-                  id="totalamountspent"
-                  value="totalamountspent"
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
                   onChange={handleFilters}
                   checked={'totalamountspent' === filteredVal}
                 />
@@ -193,19 +145,11 @@ const CustomersListing = () => {
               </div>
               <div className='form-check'>
                 <input
-<<<<<<< HEAD
-                  className='form-check-input'
+                  className='form-check-input filterInput'
                   type='radio'
                   name='filterSec'
                   id='lastupdated'
                   value='lastupdated'
-=======
-                  className="form-check-input filterInput"
-                  type="radio"
-                  name="filterSec"
-                  id="lastupdated"
-                  value="lastupdated"
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
                   onChange={handleFilters}
                   checked={'lastupdated' === filteredVal}
                 />
@@ -215,19 +159,11 @@ const CustomersListing = () => {
               </div>
               <div className='form-check'>
                 <input
-<<<<<<< HEAD
-                  className='form-check-input'
+                  className='form-check-input filterInput'
                   type='radio'
                   name='filterSec'
                   id='registeredon'
                   value='registeredon'
-=======
-                  className="form-check-input filterInput"
-                  type="radio"
-                  name="filterSec"
-                  id="registeredon"
-                  value="registeredon"
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
                   onChange={handleFilters}
                   checked={'registeredon' === filteredVal}
                 />
@@ -235,43 +171,23 @@ const CustomersListing = () => {
                   Registered on
                 </label>
               </div>
-<<<<<<< HEAD
-              <div className='mt-1'>
-                <GoArrowUp />
-                <small
+              <div
+                className='mt-1'
+                style={{ marginLeft: '-1.4rem', cursor: 'pointer' }}>
+                <GoArrowUp size={14} style={{ marginRight: '0.8rem' }} />
+                <label
                   className={filtersOrder === 'ASC' && 'active'}
                   onClick={() => handleFiltersOrder('ASC')}>
-=======
-              <div
-                className="mt-1"
-                style={{ marginLeft: "-1.4rem", cursor: "pointer" }}
-              >
-                <GoArrowUp size={14} style={{ marginRight: "0.8rem" }} />
-                <label
-                  className={filtersOrder === "ASC" && "active"}
-                  onClick={() => handleFiltersOrder("ASC")}
-                >
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
                   Oldest to newest
                 </label>
               </div>
-<<<<<<< HEAD
-              <div className='mt-1'>
-                <GoArrowDown />
-                <small
+              <div
+                className='mt-1'
+                style={{ marginLeft: '-1.4rem', cursor: 'pointer' }}>
+                <GoArrowDown size={14} style={{ marginRight: '0.8rem' }} />
+                <label
                   className={filtersOrder === 'DESC' && 'active'}
                   onClick={() => handleFiltersOrder('DESC')}>
-=======
-              <div
-                className="mt-1"
-                style={{ marginLeft: "-1.4rem", cursor: "pointer" }}
-              >
-                <GoArrowDown size={14} style={{ marginRight: "0.8rem" }} />
-                <label
-                  className={filtersOrder === "DESC" && "active"}
-                  onClick={() => handleFiltersOrder("DESC")}
-                >
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
                   Newest to oldest
                 </label>
               </div>
@@ -307,28 +223,15 @@ const CustomersListing = () => {
                   <td>
                     <span
                       className={
-<<<<<<< HEAD
-                        each?.azst_customer_acceptemail_marketing.toLowerCase() ===
+                        each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
                         'yes'
                           ? 'subscribed'
                           : 'notsubscribed'
                       }>
-                      {each?.azst_customer_acceptemail_marketing.toLowerCase() ===
+                      {each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
                       'yes'
                         ? 'Subscribed'
                         : 'Not Subscribed'}
-=======
-                        each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
-                        "yes"
-                          ? "subscribed"
-                          : "notsubscribed"
-                      }
-                    >
-                      {each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
-                      "yes"
-                        ? "Subscribed"
-                        : "Not Subscribed"}
->>>>>>> 2c04beee565efeca35c604812ce70cb2020556d6
                     </span>
                   </td>
                   <td>
