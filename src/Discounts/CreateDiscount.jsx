@@ -8,29 +8,44 @@ import BackBtn from "../Components/BackBtn";
 import "../Pages/Admin.css";
 import ErrorHandler from "../Pages/ErrorHandler";
 import { useNavigate } from "react-router-dom";
+import { handleValidationsErrors } from "./Validations";
 
 const CreateDiscount = () => {
+  //const productDiscountValidations = [disCode]
+
   const [selectedDiscount, setDiscount] = useState("Discount on Products");
   const [count, setCount] = useState(0);
-  const [maxUses, setMaxUses] = useState(false);
+  // const [maxUses, setMaxUses] = useState(false);
   const [disCode, setDisCode] = useState("");
   const [disTitle, setDisTitle] = useState("");
   const [method, setMethodTab] = useState("Automatic");
   const [amtOfPrdctsDscntVal, setAmtOfPrdctsDscntVal] = useState("");
-  const [discountedValues, setDiscountedValues] = useState("");
+  const [discountedValues, setDiscountedValues] = useState("percentage");
   const [discountVal, setDiscountVal] = useState("");
   const [startTimings, setStartTimings] = useState({
-    startDate: "",
-    startTime: "",
+    startDate: new Date().toISOString().slice(0, 10),
+    startTime: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }),
   });
   const [endDate, setEndDate] = useState(false);
   const [endTimings, setEndTimings] = useState({
-    endDate: "",
-    endTime: "",
+    endDate: new Date(new Date().setDate(new Date().getDate() + 10))
+      .toISOString()
+      .slice(0, 10),
+    endTime: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }),
   });
-  const [maxDisUses, setMaxDisUses] = useState("");
+
+  const [maxDisUses, setMaxDisUses] = useState("oneTimeUser");
   const [usageLimit, setUsageLimit] = useState("");
-  const [custEligibility, setCustEligibility] = useState("");
+  const [custUsageLimit, setCustUsageLimit] = useState("");
+  const [custEligibility, setCustEligibility] = useState("all");
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [minCartVal, setMinCartVal] = useState("");
   const [customerBuyItems, setCustomerBuyItems] = useState("collection");
@@ -43,10 +58,11 @@ const CreateDiscount = () => {
     maxGetYQty: null,
   });
   const [customerGetsItems, setCustomerGetsItems] = useState("collection");
-  const [productDisTypeValue, setProductDisTypeValue] = useState("");
+  const [productDisTypeValue, setProductDisTypeValue] = useState("percentage");
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const navigate = useNavigate();
 
@@ -82,6 +98,30 @@ const CreateDiscount = () => {
   const handleDiscountsTab = (e) => {
     setDiscount(e.target.value);
     setCount(count + 1);
+
+    // Reset all form states
+    setDisCode("");
+    setDisTitle("");
+    setMethodTab("Automatic");
+    setAmtOfPrdctsDscntVal("");
+    // setDiscountedValues("");
+    setDiscountVal("");
+    // setStartTimings({ startDate: "", startTime: "" });
+    // setEndTimings({ endDate: "", endTime: "" });
+    // setMaxDisUses("");
+    setUsageLimit("");
+    setCustUsageLimit("");
+    // setCustEligibility("");
+    setSelectedCustomers([]);
+    setMinCartVal("");
+    setCustomerBuyItems("collection");
+    setCustomerSpendsSelectedListItem([]);
+    setCustomerGetsSelectedListItem([]);
+    setCustOrderQuant({ minBuyQty: null, maxGetYQty: null });
+    setCustomerGetsItems("collection");
+    // setProductDisTypeValue("");
+    // setEndDate(false);
+    // setMaxUses(false);
   };
 
   const discountProps = {
@@ -104,6 +144,8 @@ const CreateDiscount = () => {
     maxDisUses,
     setMaxDisUses,
     usageLimit,
+    custUsageLimit,
+    setCustUsageLimit,
     setUsageLimit,
     custEligibility,
     setCustEligibility,
@@ -123,13 +165,40 @@ const CreateDiscount = () => {
     setCustomerGetsItems,
     endDate,
     setEndDate,
-    maxUses,
-    setMaxUses,
+    // maxUses,
+    // setMaxUses,
     productDisTypeValue,
     setProductDisTypeValue,
   };
 
+  const commonFields = {
+    disTitle,
+    custEligibility,
+    selectedCustomers,
+    maxDisUses,
+    // maxUses,
+    usageLimit,
+    custUsageLimit,
+    selectedDiscount,
+    disCode,
+    method,
+    amtOfPrdctsDscntVal,
+    discountedValues,
+    productDisTypeValue,
+    discountVal,
+    custOrderQuant,
+    minCartVal,
+    customerSpendsSelectedListItem,
+    customerGetsSelectedListItem,
+  };
+
   const handleSubmitButton = async () => {
+    const validationResult = handleValidationsErrors(commonFields);
+    console.log(validationResult, "validationResult");
+    if (Object.keys(validationResult).length > 0) {
+      setValidationErrors(validationResult);
+      return;
+    }
     try {
       const url = `${baseUrl}/discount/create`;
       const headers = {
@@ -188,6 +257,7 @@ const CreateDiscount = () => {
       ErrorHandler.onLoadingClose();
       ErrorHandler.onSuccess();
     } catch (error) {
+      console.log(error);
       ErrorHandler.onLoadingClose();
       ErrorHandler.onError(error);
     }
@@ -229,9 +299,11 @@ const CreateDiscount = () => {
           </div>
           <div className="row">
             <DiscountForm
-              selectedDiscount={selectedDiscount}
               key={count}
+              selectedDiscount={selectedDiscount}
               discountProps={discountProps}
+              validationErrors={validationErrors}
+              setValidationErrors={setValidationErrors}
             />
             <div className="col-md-12 d-flex justify-content-end mt-4 mb-4">
               <button

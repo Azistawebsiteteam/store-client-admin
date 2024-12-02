@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import BackBtn from "../Components/BackBtn";
 import "../Pages/Admin.css";
 import ErrorHandler from "../Pages/ErrorHandler";
+import { handleValidationsErrors } from "./Validations";
 
 const EditDiscount = () => {
   const [selectedDiscount, setDiscount] = useState("Discount on Products");
@@ -17,7 +18,7 @@ const EditDiscount = () => {
   // const [discountOutput, setDiscountOutput] = useState();
 
   const navigate = useNavigate();
-  const [maxUses, setMaxUses] = useState(false);
+  // const [maxUses, setMaxUses] = useState(false);
   const [disCode, setDisCode] = useState("");
   const [disTitle, setDisTitle] = useState("");
   const [method, setMethodTab] = useState("Automatic");
@@ -35,6 +36,7 @@ const EditDiscount = () => {
   });
   const [maxDisUses, setMaxDisUses] = useState("");
   const [usageLimit, setUsageLimit] = useState("");
+  const [custUsageLimit, setCustUsageLimit] = useState("");
   const [custEligibility, setCustEligibility] = useState("");
   const [selectedCustomers, setSelectedCustomers] = useState([]);
   const [minCartVal, setMinCartVal] = useState("");
@@ -54,6 +56,7 @@ const EditDiscount = () => {
   const [collectionsList, setCollectionsList] = useState([]);
   const [productDisTypeValue, setProductDisTypeValue] = useState("");
   const [discountStatus, SetDiscountStatus] = useState(0);
+  const [validationErrors, setValidationErrors] = useState({});
 
   const baseUrl = process.env.REACT_APP_API_URL;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
@@ -138,13 +141,13 @@ const EditDiscount = () => {
 
   const dateFormatter = (value, type) => moment(value).format(type);
 
-  const getBuySelectedListItem = (selecteType, selectedItems) => {
-    if (!selecteType || !selectedItems) {
+  const getBuySelectedListItem = (selectedType, selectedItems) => {
+    if (!selectedType || !selectedItems) {
       return [];
     }
-    console.log(selecteType, selectedItems);
+    console.log(selectedType, selectedItems);
     const selectedCategoryProducts = [];
-    if (selecteType === "product") {
+    if (selectedType === "product") {
       updatedProductsList.forEach((item) => {
         const selectedP = JSON.parse(selectedItems).find(
           (p) =>
@@ -190,12 +193,12 @@ const EditDiscount = () => {
         };
         ErrorHandler.onLoading();
         const response = await axios.post(url, { discountId: id }, { headers });
+        console.log(response, "response");
 
         if (response.status === 200) {
           const details = response.data;
-          console.log(details);
           SetDiscountStatus(details.status);
-          setMaxUses(details.usage_count);
+          // setMaxUses(details.usage_count);
           setDiscount(renderDiscountValue(details.scope));
           setDisTitle(details.title);
           setDisCode(details.code);
@@ -267,7 +270,34 @@ const EditDiscount = () => {
     setCount(count + 1);
   };
 
+  const commonFields = {
+    disTitle,
+    custEligibility,
+    selectedCustomers,
+    maxDisUses,
+    // maxUses,
+    usageLimit,
+    custUsageLimit,
+    selectedDiscount,
+    disCode,
+    method,
+    amtOfPrdctsDscntVal,
+    discountedValues,
+    productDisTypeValue,
+    discountVal,
+    custOrderQuant,
+    minCartVal,
+    customerSpendsSelectedListItem,
+    customerGetsSelectedListItem,
+  };
+
   const editDiscount = async () => {
+    const validationResult = handleValidationsErrors(commonFields);
+    console.log(validationResult, "validationResult");
+    if (Object.keys(validationResult).length > 0) {
+      setValidationErrors(validationResult);
+      return;
+    }
     try {
       const url = `${baseUrl}/discount`;
       const headers = {
@@ -330,6 +360,8 @@ const EditDiscount = () => {
   };
 
   const discountProps = {
+    custUsageLimit,
+    setCustUsageLimit,
     discountStatus,
     disCode,
     setDisCode,
@@ -369,8 +401,8 @@ const EditDiscount = () => {
     setCustomerGetsItems,
     endDate,
     setEndDate,
-    maxUses,
-    setMaxUses,
+    // maxUses,
+    // setMaxUses,
     productDisTypeValue,
     setProductDisTypeValue,
   };
@@ -391,7 +423,7 @@ const EditDiscount = () => {
             </div>
             <div className="col-sm-12">
               <div className="bgStyle">
-                <h5>Select discount type</h5>
+                <h5 className="mb-2">Select discount type</h5>
                 <select
                   className="form-select"
                   value={selectedDiscount}
@@ -412,16 +444,18 @@ const EditDiscount = () => {
               selectedDiscount={selectedDiscount}
               key={count}
               discountProps={discountProps}
+              validationErrors={validationErrors}
+              setValidationErrors={setValidationErrors}
             />
-            <div className="col-md-12 d-flex justify-content-end mt-4">
+            <div className="col-md-12 d-flex justify-content-end mt-4 mb-4">
               <button
-                className="dltBtn"
+                className="deleteBtn deleteBtn1"
                 onClick={() => navigate(-1)}
                 style={{ marginRight: "10px" }}
               >
                 Discard
               </button>
-              <button className="saveBtn" onClick={editDiscount}>
+              <button className="adminBtn" onClick={editDiscount}>
                 Save discount
               </button>
             </div>

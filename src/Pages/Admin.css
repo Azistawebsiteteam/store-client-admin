@@ -850,6 +850,13 @@ img.bImg {
 
 /* Discounts page */
 
+.noContentSec {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+}
+
 .methodBtn {
   background-color: transparent;
   border: none;
