@@ -5,6 +5,8 @@ import { useState } from "react";
 import axios from "axios";
 import ErrorHandler from "../Pages/ErrorHandler";
 import { useNavigate } from "react-router-dom";
+import AdminSideBar from "../Pages/AdminSideBar";
+import BackBtn from "../Components/BackBtn";
 
 const CreateAnnouncement = () => {
   const [txtColor, setTxtColor] = useState("");
@@ -51,22 +53,35 @@ const CreateAnnouncement = () => {
   };
 
   return (
-    <div>
-      <AnnouncementForm
-        txtColor={txtColor}
-        setTxtColor={setTxtColor}
-        bgColor={bgColor}
-        setBgColor={setBgColor}
-        displaySettings={displaySettings}
-        setDisplaySettings={setDisplaySettings}
-        announcementBarContent={announcementBarContent}
-        setAnnouncementBarContent={setAnnouncementBarContent}
-      />
-      <div className="col-sm-12">
-        <div className="btnCont">
-          <button className="adminBtn" onClick={onSubmitDetails}>
-            Submit
-          </button>
+    <div className="adminSec">
+      <AdminSideBar />
+      <div className="commonSec">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12">
+              <div className="d-flex align-items-center mb-3">
+                <BackBtn />
+                <h4>Announcement Bar</h4>
+              </div>
+              <AnnouncementForm
+                txtColor={txtColor}
+                setTxtColor={setTxtColor}
+                bgColor={bgColor}
+                setBgColor={setBgColor}
+                displaySettings={displaySettings}
+                setDisplaySettings={setDisplaySettings}
+                announcementBarContent={announcementBarContent}
+                setAnnouncementBarContent={setAnnouncementBarContent}
+              />
+              <div className="col-sm-12">
+                <div className="btnCont">
+                  <button className="adminBtn" onClick={onSubmitDetails}>
+                    Submit
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

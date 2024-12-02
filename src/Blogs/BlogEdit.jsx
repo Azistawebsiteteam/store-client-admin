@@ -99,8 +99,11 @@ const BlogEdit = () => {
     <div className="adminSec">
       <AdminSideBar />
       <div className="commonSec">
-        <div className="d-flex align-items-center">
-          <BackBtn /> <h3>Update Blog</h3>
+        <div className="d-flex align-items-center mb-3">
+          <div className="BackArrow">
+            <BackBtn />
+          </div>
+          <h5>Update Blog</h5>
         </div>
         <BlogForm
           buttonText={"Update"}

@@ -39,6 +39,7 @@ const BrandForm = (props) => {
           type="text"
           value={brandName}
           onChange={handleBrandInput}
+          maxLength="50"
           className="form-control"
           id="name"
         />
@@ -55,6 +56,7 @@ const BrandForm = (props) => {
           value={description}
           onChange={handleBrandDescription}
           className="form-control"
+          maxLength="500"
           id="description"
         />
         {brandsValidationErrors.description && (
@@ -92,6 +94,7 @@ const BrandForm = (props) => {
             )}
             <input
               type="file"
+              accept="image/*"
               className="FileUpload"
               id="collectionImage"
               onChange={handleBrandImage}

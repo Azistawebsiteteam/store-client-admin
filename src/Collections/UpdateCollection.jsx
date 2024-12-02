@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
 import swalErr from "../Pages/ErrorHandler";
@@ -23,8 +23,6 @@ const UpdateCollection = () => {
   const tokenKey = process.env.REACT_APP_ADMIN_JWT_TOKEN;
   const token = Cookies.get(tokenKey);
   const { id } = useParams();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     const getCollectionDetails = async () => {
@@ -112,7 +110,7 @@ const UpdateCollection = () => {
         <div className="container">
           <div className="row">
             <div className="d-flex align-items-center mb-3">
-              <BackBtn onClick={() => navigate(-1)} />
+              <BackBtn />
               <h5>Edit Collections</h5>
             </div>
             <CollectionForm

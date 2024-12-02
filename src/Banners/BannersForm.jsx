@@ -78,85 +78,103 @@ const BannersForm = (props) => {
     <div className="container">
       <div className="row">
         <div className="col-sm-12">
-          <div className="d-flex justify-content-between mb-4">
+          <div className="commonTopSec">
             <h4>{mainTitle}</h4>
-            <Link to="/slider/create" className="btn bg-dark text-light">
+            <Link to="/slider/create" className="adminBtn">
               Create {linkTitle}
             </Link>
           </div>
         </div>
         <div className="col-sm-12">
-          <div className="row mb-4">
-            <div className="col-sm-2 d-flex justify-content-center">
-              <strong>Thumbnail</strong>
-            </div>
-            <div className="col-sm-4 d-flex justify-content-center">
-              <strong>Title</strong>
-            </div>
-            <div className="col-sm-2 d-flex justify-content-center">
-              <strong> Visibility status</strong>
-            </div>
-            <div className="col-sm-2 d-flex justify-content-center">
-              <strong> Status</strong>
-            </div>
-            <div className="col-sm-2 d-flex justify-content-center">
-              <strong>Banner Visibility</strong>
-            </div>
+          <div className="tableCont" style={{ maxHeight: "76vh" }}>
+            <table
+              className="table custom-table table-hover"
+              style={{ minWidth: "1000px" }}
+            >
+              <thead>
+                <tr>
+                  <th scope="col" style={{ width: "5%" }}>
+                    #
+                  </th>
+                  <th scope="col" style={{ width: "20%" }}>
+                    Thumbnail
+                  </th>
+                  <th scope="col" style={{ width: "30%" }}>
+                    Title
+                  </th>
+                  <th scope="col" style={{ width: "12%" }}>
+                    Visibility status
+                  </th>
+                  <th scope="col" style={{ width: "12%" }}>
+                    Status
+                  </th>
+                  <th scope="col" style={{ width: "12%" }}>
+                    Banner Visibility
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {sliders.map((slider, i) => (
+                  <tr key={i} className="item">
+                    <td>{i + 1}</td>
+                    <td>
+                      <img
+                        className="bannerThumbnail"
+                        src={slider.azst_web_image}
+                        alt={slider.azst_alt_text}
+                      />
+                    </td>
+                    <td>
+                      {" "}
+                      <h6>{slider.azst_banner_title}</h6>
+                      <span className="d-block">{`Publication date ${slider.start_date}`}</span>
+                      <span className="d-block">{`End date ${slider.end_date}`}</span>
+                    </td>
+                    <td>
+                      <p
+                      // className={
+                      //   slider.is_default === 1 ? "published" : "scheduled"
+                      // }
+                      >
+                        {slider.is_default === 1 ? "Published" : "Scheduled"}
+                      </p>
+                    </td>
+                    <td>
+                      {" "}
+                      <p
+                        className={
+                          slider.status === 1 ? "activeBtn" : "inactiveBtn"
+                        }
+                      >
+                        {slider.status === 1 ? "Active" : "Inactive"}
+                      </p>
+                    </td>
+                    <td>
+                      <span
+                        className="password-toggle-icon"
+                        onClick={() =>
+                          hideBanner(slider.banner_id, slider.status)
+                        }
+                      >
+                        {slider.status === 1 ? <IoMdEye /> : <IoIosEyeOff />}
+                      </span>
+                      <span
+                        className="password-toggle-icon"
+                        onClick={() => deleteBanner(slider.banner_id)}
+                      >
+                        <RiDeleteBin6Fill />
+                      </span>
+                      <span className="password-toggle-icon">
+                        <Link to={`/edit/slider/${slider.banner_id}`}>
+                          <MdModeEditOutline />
+                        </Link>
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          {sliders.map((slider, i) => (
-            <div className="row mb-4" key={i}>
-              <div className="col-sm-2 d-flex justify-content-center align-items-center">
-                <img
-                  className="bannerThumbnail"
-                  src={slider.azst_web_image}
-                  alt={slider.azst_alt_text}
-                />
-              </div>
-              <div className="col-sm-4">
-                <h6>{slider.azst_banner_title}</h6>
-                {/* <span className="d-block">
-                          {slider.azst_banner_description}
-                        </span> */}
-                <span className="d-block">{`Publication date ${slider.start_date}`}</span>
-                <span className="d-block">{`End date ${slider.end_date}`}</span>
-              </div>
-              <div className="col-sm-2 d-flex justify-content-center align-items-center">
-                <p
-                  className={
-                    slider.is_default === 1 ? "published" : "scheduled"
-                  }
-                >
-                  {slider.is_default === 1 ? "published" : "Scheduled"}
-                </p>
-              </div>
-              <div className="col-sm-2 d-flex justify-content-center align-items-center">
-                <p
-                  className={slider.status === 1 ? "activeBtn" : "inactiveBtn"}
-                >
-                  {slider.status === 1 ? "Active" : "Inactive"}
-                </p>
-              </div>
-              <div className="col-sm-2 d-flex justify-content-center align-items-center">
-                <span
-                  className="password-toggle-icon"
-                  onClick={() => hideBanner(slider.banner_id, slider.status)}
-                >
-                  {slider.status === 1 ? <IoMdEye /> : <IoIosEyeOff />}
-                </span>
-                <span
-                  className="password-toggle-icon"
-                  onClick={() => deleteBanner(slider.banner_id)}
-                >
-                  <RiDeleteBin6Fill />
-                </span>
-                <span className="password-toggle-icon">
-                  <Link to={`/edit/slider/${slider.banner_id}`}>
-                    <MdModeEditOutline />
-                  </Link>
-                </span>
-              </div>
-            </div>
-          ))}
         </div>
       </div>
     </div>

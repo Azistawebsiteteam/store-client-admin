@@ -45,11 +45,11 @@ const FaqCreate = () => {
         <AdminSideBar />
       </div>
       <div className="commonSec">
-        <div className="d-flex align-items-center">
-          <BackBtn /> <h3>Create Faq</h3>
+        <div className="d-flex align-items-center mb-3">
+          <BackBtn /> <h4>Create Faq</h4>
         </div>
         <FaqForm inputVlaues={inputVlaues} setInputValues={setInputValues} />
-        <button className="btn btn-primary" onClick={onSubmitFaq}>
+        <button className="adminBtn" onClick={onSubmitFaq}>
           Save
         </button>
       </div>

@@ -90,6 +90,7 @@ const CategoryForm = (props) => {
             onChange={handleBrandInput}
             className="form-control"
             id="description"
+            maxLength="500"
           ></textarea>
           {categoriesErrorMsg.description && (
             <span className="errorValue">{categoriesErrorMsg.description}</span>
@@ -108,6 +109,7 @@ const CategoryForm = (props) => {
                   onChange={(e) => handleSubCategoryInput(e, each.id)}
                   className="form-control"
                   id="text"
+                  maxLength="50"
                   style={{ width: "90%", height: "fitContent" }}
                 />
                 <div className="dltSubCat">
@@ -139,7 +141,7 @@ const CategoryForm = (props) => {
                     src={categoryImg}
                     width={200}
                     height={180}
-                    alt=""
+                    alt="category"
                   />
                 ) : (
                   <img
@@ -147,7 +149,7 @@ const CategoryForm = (props) => {
                     src={URL.createObjectURL(categoryImg)}
                     width={200}
                     height={180}
-                    alt=""
+                    alt="category"
                   />
                 )
               ) : (
@@ -157,6 +159,7 @@ const CategoryForm = (props) => {
               )}
               <input
                 type="file"
+                accept="image/*"
                 className="FileUpload categoryImgUpload"
                 id="categoryImage"
                 onChange={handleCategoryImage}

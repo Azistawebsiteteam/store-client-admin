@@ -268,7 +268,7 @@ const AddProduct = () => {
             <div className="row">
               <div className="col-12">
                 <div className="d-flex align-items-center mb-3">
-                  <BackBtn onClick={() => navigate(-1)} />
+                  <BackBtn />
                   <h5>Add Product</h5>
                 </div>
               </div>

@@ -163,7 +163,7 @@ const CollectionForm = (props) => {
                 </label>
               )}
               <input
-                type='file'
+                accept='image/*'
                 className='FileUpload'
                 id='collectionImage'
                 onChange={onChangeCollectionImage}

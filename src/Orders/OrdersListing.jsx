@@ -137,7 +137,7 @@ const OrdersListing = () => {
         text: 'Out for Delivery',
         style: getStatusStyle('#1ba8fa'),
       },
-      2: { text: 'Delivered', style: getStatusStyle('#0783f0') },
+      2: { text: 'Delivered', style: getStatusStyle('#24b00e') },
     };
     return statuses[status] ? (
       <span style={statuses[status].style}>{statuses[status].text}</span>
@@ -176,6 +176,8 @@ const OrdersListing = () => {
     );
   };
 
+  console.log(filteredOrdersList);
+
   return (
     <div className='adminSec'>
       <AdminSideBar />
@@ -187,21 +189,27 @@ const OrdersListing = () => {
               {filteredOrdersList.length ? (
                 <div className='tableSec'>
                   <div className='orders-info-cont'>
-                    <div className='orders-info-duration-cont'>
+                    <div className='orders-info-duration-cont ordersTab'>
                       <button
                         onClick={handleOnClickDuration}
-                        style={{ border: 'none', background: 'transparent' }}
+                        style={{
+                          border: 'none',
+                          background: 'transparent',
+                          cursor: 'pointer',
+                        }}
                         className='d-flex align-items-center'>
                         <CiCalendarDate size={20} strokeWidth={1} />
-                        <span className='ms-1'>
+                        <label
+                          className='ms-2 pb-0'
+                          style={{ cursor: 'pointer' }}>
                           {displayDuration(duration)}
-                        </span>
+                        </label>
                       </button>
                       {onClickDuration && (
                         <div className='orders-info-duration'>
                           <div className='form-check'>
                             <input
-                              className='form-check-input'
+                              className='form-check-input filterInput'
                               type='radio'
                               name='date-range'
                               id='1'
@@ -210,17 +218,17 @@ const OrdersListing = () => {
                               onChange={handleDateRange}
                             />
                             <label
-                              className='form-check-label'
+                              className='form-check-label pb-0'
                               htmlFor='flexRadioDefault1'>
                               Today
-                              <small className='d-block'>
+                              <small className='d-block mt-1'>
                                 Compared to yesterday upto current hour
                               </small>
                             </label>
                           </div>
-                          <div className='form-check'>
+                          <div className='form-check mt-2'>
                             <input
-                              className='form-check-input'
+                              className='form-check-input filterInput'
                               type='radio'
                               name='date-range'
                               id='7'
@@ -232,14 +240,14 @@ const OrdersListing = () => {
                               className='form-check-label'
                               htmlFor='flexRadioDefault2'>
                               Last 7 Days
-                              <small className='d-block'>
+                              <small className='d-block mt-1'>
                                 Compared to previous 7 days
                               </small>
                             </label>
                           </div>
-                          <div className='form-check'>
+                          <div className='form-check mt-2'>
                             <input
-                              className='form-check-input'
+                              className='form-check-input filterInput'
                               type='radio'
                               name='date-range'
                               id='30'
@@ -251,7 +259,7 @@ const OrdersListing = () => {
                               className='form-check-label'
                               htmlFor='flexRadioDefault2'>
                               Last 30 Days
-                              <small className='d-block'>
+                              <small className='d-block mt-1'>
                                 Compared to previous 30 days
                               </small>
                             </label>
@@ -260,39 +268,59 @@ const OrdersListing = () => {
                       )}
                     </div>
                     <hr className='v1' />
-                    <div className=''>
-                      <span style={{ borderBottom: '2px dotted #dee2e6' }}>
+                    <div className='ordersTab'>
+                      <label
+                        className='pb-0'
+                        style={{ borderBottom: '2px dotted #dee2e6' }}>
                         Total orders
-                      </span>
-                      <div className=''>{statisticsData.TotalOrders}</div>
+                      </label>
+                      <div className='mt-2'>
+                        <label>{statisticsData.TotalOrders}</label>
+                      </div>
                     </div>
                     <hr className='v1' />
-                    <div className=''>
-                      <span style={{ borderBottom: '2px dotted grey' }}>
+                    <div className='ordersTab'>
+                      <label
+                        className='pb-0'
+                        style={{ borderBottom: '2px dotted grey' }}>
                         Ordered items over time
-                      </span>
-                      <div className=''>{statisticsData.TotalItems}</div>
+                      </label>
+                      <div className='mt-2'>
+                        <label>{statisticsData.TotalItems}</label>
+                      </div>
                     </div>
                     <hr className='v1' />
-                    <div className=''>
-                      <span style={{ borderBottom: '2px dotted grey' }}>
+                    <div className='ordersTab'>
+                      <label
+                        className='pb-0'
+                        style={{ borderBottom: '2px dotted grey' }}>
                         Returns
-                      </span>
-                      <div className=''>{statisticsData.ReturnItems}</div>
+                      </label>
+                      <div className='mt-2'>
+                        <label>{statisticsData.ReturnItems}</label>
+                      </div>
                     </div>
                     <hr className='v1' />
-                    <div className=''>
-                      <span style={{ borderBottom: '2px dotted grey' }}>
+                    <div className='ordersTab'>
+                      <label
+                        className='pb-0'
+                        style={{ borderBottom: '2px dotted grey' }}>
                         Fulfilled orders over time
-                      </span>
-                      <div className=''>{statisticsData.FullFilOrders}</div>
+                      </label>
+                      <div className='mt-2'>
+                        <label>{statisticsData.FullFilOrders}</label>
+                      </div>
                     </div>
                     <hr className='v1' />
-                    <div className=''>
-                      <span style={{ borderBottom: '2px dotted grey' }}>
+                    <div className='ordersTab'>
+                      <label
+                        className='pb-0'
+                        style={{ borderBottom: '2px dotted grey' }}>
                         Delivered orders over time
-                      </span>
-                      <div className=''>{statisticsData.deliveryOrders}</div>
+                      </label>
+                      <div className='mt-2'>
+                        <label>{statisticsData.deliveryOrders}</label>
+                      </div>
                     </div>
                   </div>
                   <div className='tableCont'>
@@ -303,6 +331,12 @@ const OrdersListing = () => {
                             className='sticky-column'
                             scope='col'
                             style={{ width: '10%' }}>
+                            <input
+                              className='form-check-input me-2'
+                              type='checkbox'
+                              value=''
+                              id='flexCheckDefault'
+                            />
                             Order
                           </th>
                           <th scope='col'>Date</th>
@@ -325,6 +359,13 @@ const OrdersListing = () => {
                               handleCustOrder(eachOrder.azst_orders_id)
                             }>
                             <th className='sticky-column text-nowrap'>
+                              <input
+                                className='form-check-input me-2'
+                                type='checkbox'
+                                value=''
+                                id='flexCheckDefault'
+                                onClick={(e) => e.stopPropagation()}
+                              />
                               {eachOrder.azst_orders_id}
                             </th>
                             <td className='text-nowrap'>
@@ -338,14 +379,28 @@ const OrdersListing = () => {
                               {eachOrder.azst_orders_total}
                             </td>
                             <td className='text-nowrap'>
-                              {eachOrder.azst_orders_financial_status === '1'
-                                ? 'Paid'
-                                : 'Payment pending'}
+                              {eachOrder.azst_orders_financial_status ===
+                              '1' ? (
+                                <label className='orderSecStatusBtn paidStatus'>
+                                  Paid
+                                </label>
+                              ) : (
+                                <label className='orderSecStatusBtn pendingStatus'>
+                                  Payment pending
+                                </label>
+                              )}
                             </td>
                             <td className='text-nowrap'>
-                              {eachOrder.azst_orders_fulfillment_status === '1'
-                                ? 'Fullfilled'
-                                : 'Unfulfilled'}
+                              {eachOrder.azst_orders_fulfillment_status ===
+                              '1' ? (
+                                <label className='orderSecStatusBtn fulfilledStatus'>
+                                  Fullfilled
+                                </label>
+                              ) : (
+                                <label className='orderSecStatusBtn unFulfilledStatus'>
+                                  Unfulfilled
+                                </label>
+                              )}
                             </td>
                             <td className='text-nowrap'>{eachOrder.items}</td>
                             <td className='text-nowrap'>

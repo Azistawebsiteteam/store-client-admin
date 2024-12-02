@@ -775,6 +775,7 @@ const AddProductForm = ({
                     <input
                       type="text"
                       className="form-control"
+                      maxLength="200"
                       value={mainTitle}
                       onChange={onChangeMainTitle}
                       id="productMainTitle"
@@ -790,6 +791,7 @@ const AddProductForm = ({
                     </label>
                     <input
                       type="text"
+                      maxLength="200"
                       className="form-control"
                       value={title}
                       onChange={onChangeTitle}
@@ -950,6 +952,7 @@ const AddProductForm = ({
                                         id="optionValue"
                                         className="form-control mb-2"
                                         type="text"
+                                        maxLength="100"
                                         value={value}
                                         autoComplete="off"
                                         placeholder="Add Another Option"
@@ -1096,12 +1099,12 @@ const AddProductForm = ({
                               )}
                               <input
                                 type="file"
+                                accept="image/*"
                                 id="variantImage"
                                 className="variantImgInput"
                                 onChange={(e) =>
                                   handleVariantsImage(e, variant.id, "main", 0)
                                 }
-                                accept="image/*"
                               />
                               <div className="d-flex flex-column">
                                 {variant.sub.length > 0 ? (
@@ -1379,6 +1382,7 @@ const AddProductForm = ({
                                         ).qty ?? 0
                                       }
                                       onChange={handleLocationInputs}
+                                      maxLength="5"
                                     />
                                   </div>
                                 )}
@@ -1428,6 +1432,7 @@ const AddProductForm = ({
                                 value={skuInput.SKU}
                                 onChange={handleSkuInput}
                                 placeholder=""
+                                maxLength="50"
                               />
                             </div>
                           </div>
@@ -1442,7 +1447,8 @@ const AddProductForm = ({
                                 id="barcode"
                                 value={skuInput.barcode}
                                 onChange={handleSkuInput}
-                                placeholder=""
+                                placeholder="barcode"
+                                maxLength="50"
                               />
                             </div>
                           </div>
