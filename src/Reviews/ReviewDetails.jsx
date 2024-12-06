@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import Cookies from "js-cookie";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import moment from 'moment';
 
-import AdminSideBar from "../Pages/AdminSideBar";
-import BackBtn from "../Components/BackBtn";
-import ErrorHandler from "../Pages/ErrorHandler";
-import Rating from "@mui/material/Rating";
+import AdminSideBar from '../Pages/AdminSideBar';
+import BackBtn from '../Components/BackBtn';
+import ErrorHandler from '../Pages/ErrorHandler';
+import Rating from '@mui/material/Rating';
 
-import "./review.css";
-import { onStatusUpdate } from "./ReviwFun";
+import './review.css';
+import { onStatusUpdate } from './ReviwFun';
 
 const ReviewDetails = () => {
   const [review, setReviewData] = useState({});
@@ -45,48 +46,51 @@ const ReviewDetails = () => {
     const status = review.review_approval_status === 0 ? 1 : 0;
     const response = await onStatusUpdate(reviewId, status);
     if (response.status === 200) {
-      const updatedReview = { ...review, review_approval_status: status };
+      const updatedReview = {
+        ...review,
+        review_approval_status: status,
+        approve_on: moment().format('YYYY-MM-DD HH:mm:ss'),
+      };
       setReviewData(updatedReview);
     }
   };
 
   return (
-    <div className="adminSec">
+    <div className='adminSec'>
       <AdminSideBar />
-      <div className="commonSec pb-5">
-        <div className="d-flex align-items-center mb-3">
+      <div className='commonSec pb-5'>
+        <div className='d-flex align-items-center mb-3'>
           <BackBtn />
           <h4>Review Details</h4>
         </div>
         {Object.keys(review).length && (
-          <div className="row">
-            <div className="col-md-7">
-              <div className="bgStyle">
-                <div className="d-flex form-group">
+          <div className='row'>
+            <div className='col-md-7'>
+              <div className='bgStyle'>
+                <div className='d-flex form-group'>
                   <img
                     src={review.product_image}
-                    className="product-image"
-                    alt="productImage"
+                    className='product-image'
+                    alt='productImage'
                   />
                   <div>
                     <a
                       href={review.url_handle}
-                      target="__blank"
-                      className="product-link"
-                    >
+                      target='__blank'
+                      className='product-link'>
                       <p>{review.product_title}</p>
                     </a>
 
                     <Rating
-                      name="read-only"
+                      name='read-only'
                       value={review.review_points}
                       precision={0.5}
                       readOnly
-                      style={{ fontSize: "3rem" }}
+                      style={{ fontSize: '3rem' }}
                     />
                   </div>
                 </div>
-                <div className="form-group">
+                <div className='form-group'>
                   <label>
                     <strong>Title</strong>
                   </label>
@@ -99,13 +103,13 @@ const ReviewDetails = () => {
                   <p>
                     <strong>Review Images</strong>
                   </p>
-                  <div className="displayIeviewImgsCont my-3">
+                  <div className='displayIeviewImgsCont my-3'>
                     {review.review_images.map((img, i) => (
                       <img
                         key={i}
-                        className="displayIeviewImg"
+                        className='displayIeviewImg'
                         src={img}
-                        alt="reviewImg"
+                        alt='reviewImg'
                       />
                     ))}
                   </div>
@@ -113,63 +117,61 @@ const ReviewDetails = () => {
               </div>
             </div>
 
-            <div className="col-md-5">
-              <div className="bgStyle">
+            <div className='col-md-5'>
+              <div className='bgStyle'>
                 <p>
-                  <strong> Created By :</strong> {review.azst_customer_fname}{" "}
+                  <strong> Created By :</strong> {review.azst_customer_fname}{' '}
                   {review.azst_customer_lname}
                 </p>
                 <p>
                   <strong> Reviewed on :</strong> {review.created_on}
                 </p>
-                <div className="d-flex align-items-center">
-                  <p className="mb-0">
+                <div className='d-flex align-items-center'>
+                  <p className='mb-0'>
                     <strong>Action : </strong>
                   </p>
                   <button
-                    className="reviewBtn hideReviewBtn"
+                    className='reviewBtn hideReviewBtn'
                     style={
                       review.review_approval_status === 0
-                        ? { opacity: "0.4" }
-                        : { opacity: "0.8" }
+                        ? { opacity: '0.4' }
+                        : { opacity: '0.8' }
                     }
                     disabled={review.review_approval_status === 0}
-                    onClick={updateReviewStatus}
-                  >
+                    onClick={updateReviewStatus}>
                     Hide
                   </button>
                   <button
-                    className="reviewBtn publishReviewBtn"
+                    className='reviewBtn publishReviewBtn'
                     style={
                       review.review_approval_status === 1
-                        ? { opacity: "0.4" }
-                        : { opacity: "1" }
+                        ? { opacity: '0.4' }
+                        : { opacity: '1' }
                     }
                     disabled={review.review_approval_status === 1}
-                    onClick={updateReviewStatus}
-                  >
+                    onClick={updateReviewStatus}>
                     Publilsh
                   </button>
                 </div>
                 <p></p>
                 <p>
                   <strong>
-                    {" "}
+                    {' '}
                     {review.review_approval_status === 1
-                      ? "Published"
-                      : "Hidden"}{" "}
+                      ? 'Published'
+                      : 'Hidden'}{' '}
                     By :
-                  </strong>{" "}
+                  </strong>{' '}
                   {review.approve_by}
                 </p>
                 <p>
                   <strong>
-                    {" "}
+                    {' '}
                     {review.review_approval_status === 1
-                      ? "Published"
-                      : "Hidden"}{" "}
+                      ? 'Published'
+                      : 'Hidden'}{' '}
                     On :
-                  </strong>{" "}
+                  </strong>{' '}
                   {review.approve_on}
                 </p>
               </div>

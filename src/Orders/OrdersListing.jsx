@@ -416,7 +416,7 @@ const OrdersListing = () => {
                   </div>
                 </div>
               ) : (
-                <p>No Products in the Inventory</p>
+                <p>No Orders Found </p>
               )}
             </div>
             <Pagination
