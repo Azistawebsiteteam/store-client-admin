@@ -22,7 +22,7 @@ const Checkouts = () => {
   useEffect(() => {
     const abandonmentCheckouts = async () => {
       try {
-        const url = `http://192.168.214.16:5018/api/v1/cart/abandonment`;
+        const url = `${baseUrl}/cart/abandonment`;
         ErrorHandler.onLoading();
         const headers = {
           Authorization: `Bearer ${token}`,
@@ -123,7 +123,7 @@ const Checkouts = () => {
                         <td style={{ width: '360px' }}>
                           <Link
                             className='productLink'
-                            to={`http://20.235.149.147:5021/product/${p.product_url_title}`}
+                            to={`https://www.azistastore.com//product/${p.product_url_title}`}
                             target='__blank'>
                             <span>{p.product_main_title}</span>
                             {p.is_varaints_aval ? (

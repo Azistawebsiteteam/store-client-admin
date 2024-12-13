@@ -58,6 +58,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './Pages/Admin.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import './Pages/Admin.css';
+import InventoryLocations from './Inventory/InventoryLocations';
+import InventoryAdd from './Inventory/InventoryAdd';
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -141,6 +143,14 @@ function App() {
         <Route
           path='/inventory'
           element={<ProtectedRoute element={Inventory} />}
+        />
+        <Route
+          path='/inventory/create'
+          element={<ProtectedRoute element={InventoryAdd} />}
+        />
+        <Route
+          path='/inv/locations'
+          element={<ProtectedRoute element={InventoryLocations} />}
         />
         <Route
           path='/discount'

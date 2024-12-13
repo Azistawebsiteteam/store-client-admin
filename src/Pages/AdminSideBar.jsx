@@ -1,58 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome } from 'react-icons/fa';
+import { FaHome, FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { FaFirstOrder } from 'react-icons/fa6';
-import { MdInventory } from 'react-icons/md';
-// import { FaProductHunt } from "react-icons/fa";
-// import { MdCollectionsBookmark } from "react-icons/md";
-// import { GiKnightBanner } from "react-icons/gi";
-import { ProductState } from '../Context/ProductContext';
-// import { MdAssignmentReturned } from "react-icons/md";
+import { MdInventory, MdFeaturedPlayList, MdRateReview } from 'react-icons/md';
 import { BiSolidDiscount } from 'react-icons/bi';
-// import { SiBrandfolder } from "react-icons/si";
-import { MdRateReview } from 'react-icons/md';
-// import { TfiAnnouncement } from "react-icons/tfi";
-import { FaAngleDown, FaAngleUp } from 'react-icons/fa';
 import { IoIosPerson } from 'react-icons/io';
-// import { SiBlogger } from "react-icons/si";
-// import { FaQuestion } from "react-icons/fa";
-import { MdFeaturedPlayList } from 'react-icons/md';
-// import { BiSolidCategoryAlt } from "react-icons/bi";
+import { ProductState } from '../Context/ProductContext';
+import './Admin.css';
 
 const AdminSideBar = () => {
   const {
     activeTab,
-    featureDropdownItems,
-    setFeatureDropdownItems,
-    ordersDropdownItems,
-    setOrdersDropdownItems,
-    productsDropdownItems,
-    setProductsDropdownItems,
     toggleSidebar,
+    setToggleSidebar,
+    dropdowns,
+    setDropdowns,
   } = ProductState();
 
-  const handleProductsDropdownClick = () => {
-    setProductsDropdownItems(!productsDropdownItems);
-    setFeatureDropdownItems(false);
-    setOrdersDropdownItems(false);
+  const handleDropdowns = (e) => {
+    const { name } = e.target;
+    setDropdowns((prevDropdowns) => ({
+      ...Object.fromEntries(
+        Object.keys(prevDropdowns).map((key) => [key, false])
+      ),
+      [name]: !prevDropdowns[name],
+    }));
   };
 
-  const handleOrdersDropdownClick = () => {
-    setOrdersDropdownItems(!ordersDropdownItems);
-    setFeatureDropdownItems(false);
-    setProductsDropdownItems(false);
-  };
-
-  const handleFeaturesDropdownClick = () => {
-    setFeatureDropdownItems(!featureDropdownItems);
-    setOrdersDropdownItems(false);
-    setProductsDropdownItems(false);
-  };
-
-  const handleNavbarItemClick = () => {
-    setFeatureDropdownItems(false);
-    setOrdersDropdownItems(false);
-    setProductsDropdownItems(false);
+  const toggleSidebars = (e, close) => {
+    const isMobileOrTablet = window.innerWidth <= 1024;
+    if (close) handleDropdowns(e);
+    if (isMobileOrTablet) {
+      setToggleSidebar(true);
+    }
   };
 
   return (
@@ -67,7 +47,7 @@ const AdminSideBar = () => {
                 ? 'linkItem activeTab'
                 : 'linkItem singleLinkItem'
             }
-            onClick={handleNavbarItemClick}>
+            onClick={(e) => toggleSidebars(e, true)}>
             <FaHome className='me-3' /> Home
           </li>
         </Link>
@@ -75,40 +55,36 @@ const AdminSideBar = () => {
         <button
           className='dropdown-btn customDropdownButton'
           id='drobdownBtn'
-          onClick={handleOrdersDropdownClick}>
+          onClick={handleDropdowns}
+          name='orders'>
           <FaFirstOrder className='me-3' />
           Orders
-          {ordersDropdownItems ? (
+          {dropdowns.orders ? (
             <FaAngleUp className='ms-2' />
           ) : (
             <FaAngleDown className='ms-2' />
           )}
         </button>
-        {ordersDropdownItems && (
+        <br />
+        {dropdowns.orders && (
           <div className='childElements'>
-            <Link className='link' to='/orders'>
+            <Link
+              className='link'
+              to='/orders'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/order')
                     ? 'linkItem activeTab'
                     : 'linkItem dropdownItems'
                 }>
-                {/* <FaFirstOrder className="me-3" /> */}
                 Orders Log
               </li>
             </Link>
-            {/* <Link className="link" to="/products">
-                  <li
-                    className={
-                      activeTab.startsWith("/product")
-                        ? "linkItem activeTab"
-                        : "linkItem dropdownItems"
-                    }
-                  >
-                    Returns
-                  </li>
-                </Link> */}
-            <Link className='link' to='/checkouts'>
+            <Link
+              className='link'
+              to='/checkouts'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/checkouts')
@@ -120,32 +96,72 @@ const AdminSideBar = () => {
             </Link>
           </div>
         )}
-        <Link className='link' to='/inventory'>
-          <li
-            className={
-              activeTab === '/inventory'
-                ? 'linkItem activeTab'
-                : 'linkItem singleLinkItem'
-            }
-            onClick={(e) => handleNavbarItemClick(false)}>
-            <MdInventory className='me-3' /> Inventory
-          </li>
-        </Link>
+
         <button
           className='dropdown-btn customDropdownButton'
           id='drobdownBtn'
-          onClick={handleProductsDropdownClick}>
-          <MdFeaturedPlayList className='me-3' />
-          Products
-          {productsDropdownItems ? (
+          onClick={handleDropdowns}
+          name='inventory'>
+          <MdInventory className='me-3' />
+          Inventory
+          {dropdowns.inventory ? (
             <FaAngleUp className='ms-2' />
           ) : (
             <FaAngleDown className='ms-2' />
           )}
         </button>
-        {productsDropdownItems && (
+        <br />
+        {dropdowns.inventory && (
           <div className='childElements'>
-            <Link className='link' to='/products'>
+            <Link
+              className='link'
+              to='/inventory'
+              onClick={(e) => toggleSidebars(e, false)}>
+              <li
+                className={
+                  activeTab === '/inventory'
+                    ? 'linkItem activeTab'
+                    : 'linkItem singleLinkItem'
+                }>
+                {/* <MdInventory className='me-3' /> Inventory */} Inventory
+              </li>
+            </Link>
+            <Link
+              className='link'
+              to='/inv/locations'
+              onClick={(e) => toggleSidebars(e, false)}>
+              <li
+                className={
+                  activeTab.startsWith('/inv/locations')
+                    ? 'linkItem activeTab'
+                    : 'linkItem dropdownItems'
+                }>
+                Locations
+              </li>
+            </Link>
+          </div>
+        )}
+
+        <button
+          className='dropdown-btn customDropdownButton'
+          id='drobdownBtn'
+          onClick={handleDropdowns}
+          name='products'>
+          <MdFeaturedPlayList className='me-3' />
+          Products
+          {dropdowns.products ? (
+            <FaAngleUp className='ms-2' />
+          ) : (
+            <FaAngleDown className='ms-2' />
+          )}
+        </button>
+        <br />
+        {dropdowns.products && (
+          <div className='childElements'>
+            <Link
+              className='link'
+              to='/products'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/product')
@@ -156,7 +172,10 @@ const AdminSideBar = () => {
                 Products
               </li>
             </Link>
-            <Link className='link' to='/collections'>
+            <Link
+              className='link'
+              to='/collections'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/collections')
@@ -167,7 +186,10 @@ const AdminSideBar = () => {
                 Collections
               </li>
             </Link>
-            <Link className='link' to='/categories'>
+            <Link
+              className='link'
+              to='/categories'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/categories')
@@ -178,7 +200,10 @@ const AdminSideBar = () => {
                 Categories
               </li>
             </Link>
-            <Link className='link' to='/brands'>
+            <Link
+              className='link'
+              to='/brands'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/brands')
@@ -191,6 +216,7 @@ const AdminSideBar = () => {
             </Link>
           </div>
         )}
+
         <Link className='link' to='/discount'>
           <li
             className={
@@ -198,25 +224,30 @@ const AdminSideBar = () => {
                 ? 'linkItem activeTab'
                 : 'linkItem singleLinkItem'
             }
-            onClick={(e) => handleNavbarItemClick(false)}>
+            onClick={(e) => toggleSidebars(e, true)}>
             <BiSolidDiscount className='me-3' /> Discounts
           </li>
         </Link>
         <button
           className='dropdown-btn customDropdownButton'
           id='drobdownBtn'
-          onClick={handleFeaturesDropdownClick}>
+          onClick={handleDropdowns}
+          name='features'>
           <MdFeaturedPlayList className='me-3' />
           Features
-          {featureDropdownItems ? (
+          {dropdowns.features ? (
             <FaAngleUp className='ms-2' />
           ) : (
             <FaAngleDown className='ms-2' />
           )}
         </button>
-        {featureDropdownItems && (
+        <br />
+        {dropdowns.features && (
           <div className='childElements'>
-            <Link className='link' to='/popup'>
+            <Link
+              className='link'
+              to='/popup'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/popup')
@@ -227,7 +258,10 @@ const AdminSideBar = () => {
                 Popup
               </li>
             </Link>
-            <Link className='link' to='/slider'>
+            <Link
+              className='link'
+              to='/slider'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/slider')
@@ -238,7 +272,10 @@ const AdminSideBar = () => {
                 Slider Banner
               </li>
             </Link>
-            <Link className='link' to='/product-banners'>
+            <Link
+              className='link'
+              to='/product-banners'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/product-banners')
@@ -249,7 +286,10 @@ const AdminSideBar = () => {
                 Product Banner
               </li>
             </Link>
-            <Link className='link' to='/announcements'>
+            <Link
+              className='link'
+              to='/announcements'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/announcements')
@@ -260,7 +300,10 @@ const AdminSideBar = () => {
                 Announcement Bar
               </li>
             </Link>
-            <Link className='link' to='/blogs'>
+            <Link
+              className='link'
+              to='/blogs'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/blogs')
@@ -271,7 +314,10 @@ const AdminSideBar = () => {
                 Blogs
               </li>
             </Link>
-            <Link className='link' to='/faqs'>
+            <Link
+              className='link'
+              to='/faqs'
+              onClick={(e) => toggleSidebars(e, false)}>
               <li
                 className={
                   activeTab.startsWith('/faqs')
@@ -284,25 +330,31 @@ const AdminSideBar = () => {
             </Link>
           </div>
         )}
-        <Link className='link' to='/review-list'>
+        <Link
+          className='link'
+          to='/review-list'
+          onClick={(e) => toggleSidebars(e, true)}>
           <li
             className={
               activeTab.startsWith('/review')
                 ? 'linkItem activeTab'
                 : 'linkItem singleLinkItem'
             }
-            onClick={(e) => handleNavbarItemClick(false)}>
+            onClick={handleDropdowns}>
             <MdRateReview className='me-3' /> Manage Reviews
           </li>
         </Link>
-        <Link className='link' to='/customers'>
+        <Link
+          className='link'
+          to='/customers'
+          onClick={(e) => toggleSidebars(e, true)}>
           <li
             className={
               activeTab.startsWith('/customer')
                 ? 'linkItem activeTab'
                 : 'linkItem singleLinkItem'
             }
-            onClick={(e) => handleNavbarItemClick(false)}>
+            onClick={handleDropdowns}>
             <IoIosPerson className='me-3' /> Customers
           </li>
         </Link>

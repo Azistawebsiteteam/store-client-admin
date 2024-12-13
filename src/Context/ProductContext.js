@@ -1,7 +1,7 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-import Cookies from "js-cookie";
-import axios from "axios";
-import { useLocation } from "react-router-dom";
+import React, { createContext, useState, useEffect, useContext } from 'react';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 const ProductContext = createContext();
 
@@ -11,9 +11,12 @@ const ProductContextProvider = (props) => {
   const [productDetails, setProductDetails] = useState({});
   const [variantsData, setVariantsData] = useState([]);
   const [variantDetails, setVariantDetails] = useState([]);
-  const [featureDropdownItems, setFeatureDropdownItems] = useState(false);
-  const [ordersDropdownItems, setOrdersDropdownItems] = useState(false);
-  const [productsDropdownItems, setProductsDropdownItems] = useState(false);
+  const [dropdowns, setDropdowns] = useState({
+    features: false,
+    orders: false,
+    products: false,
+    inventory: false,
+  });
   const [activeTab, setActiveTab] = useState(location.pathname);
   const [allProducts, setAllProducts] = useState([]);
   const [toggleSidebar, setToggleSidebar] = useState(false);
@@ -50,18 +53,13 @@ const ProductContextProvider = (props) => {
         setVariantDetails,
         activeTab,
         setActiveTab,
-        featureDropdownItems,
-        setFeatureDropdownItems,
-        ordersDropdownItems,
-        setOrdersDropdownItems,
-        productsDropdownItems,
-        setProductsDropdownItems,
         allProducts,
         setAllProducts,
+        dropdowns,
+        setDropdowns,
         toggleSidebar,
         setToggleSidebar,
-      }}
-    >
+      }}>
       {children}
     </ProductContext.Provider>
   );

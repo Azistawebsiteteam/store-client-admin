@@ -1,26 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 
-html { 
+html {
   font-size: 62.5%;
-} 
+}
 body {
   font-family: 'Inter', sans-serif !important;
 }
 
-h4, .h4 {
+h4,
+.h4 {
   font-size: 2.3rem !important;
   font-weight: 600 !important;
 }
-h5, .h5{
+h5,
+.h5 {
   font-size: 2rem !important;
   font-weight: 600 !important;
   margin-bottom: 0 !important;
 }
-h6, .h6 {
+h6,
+.h6 {
   font-size: 1.4rem !important;
   font-weight: 600 !important;
 }
-p, .p{
+p,
+.p {
   font-size: 1.4rem;
 }
 /* checkbox */
@@ -34,7 +38,7 @@ p, .p{
   margin-right: 0.6rem;
   margin-top: 0 !important;
 }
-.inputGroup{
+.inputGroup {
   display: flex;
   align-items: center;
   margin: 0.4rem 0;
@@ -44,16 +48,18 @@ label {
   padding-bottom: 0.3rem;
   white-space: nowrap;
 }
-.labelForm{
+.labelForm {
   white-space: normal;
 }
-.form-select,.form-control,.searchWrapper{
+.form-select,
+.form-control,
+.searchWrapper {
   padding: 0.6rem 2.25rem 0.6rem 0.75rem !important;
   border: 1px solid #8e8e8e !important;
   border-radius: 0.8rem !important;
   font-size: 1.3rem !important;
 }
-.custom-form-select{
+.custom-form-select {
   padding: 0.3rem 2.25rem 0.3rem 0.4rem !important;
 }
 .form-group {
@@ -74,34 +80,36 @@ label {
   padding: 0.2rem;
 }
 
-.custom-table{
+.custom-table {
   table-layout: fixed;
   width: 100%;
 }
 
-.productTitle{
-  min-width: 5rem; 
-  max-width: 5rem; 
-  white-space: break-spaces; 
-  overflow: hidden; 
+.productTitle {
+  min-width: 5rem;
+  max-width: 5rem;
+  white-space: break-spaces;
+  overflow: hidden;
   text-overflow: ellipsis;
   color: #3d3b3b;
   font-weight: 700;
 }
-.productSku{
-  min-width: 5rem; 
-  max-width: 5rem; 
-  white-space: nowrap; 
-  overflow: hidden; 
+.productSku {
+  min-width: 5rem;
+  max-width: 5rem;
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
 }
-input,select,textarea{
+input,
+select,
+textarea {
   box-shadow: none !important;
 }
-.inventoryDropdown>option{
+.inventoryDropdown > option {
   font-size: 1.6rem !important;
 }
-.activeProduct{
+.activeProduct {
   background-color: #affebf;
   color: #22612e;
   font-weight: 500;
@@ -112,7 +120,7 @@ input,select,textarea{
   min-width: 5rem !important;
   display: inline-block;
 }
-.draftProduct{
+.draftProduct {
   background-color: #d5ebff;
   color: #003a5a;
   font-weight: 500;
@@ -125,7 +133,7 @@ input,select,textarea{
 
 /* navbar */
 
-.navBars{
+.navBars {
   display: none;
 }
 
@@ -166,7 +174,7 @@ ul.dropdownMenu {
   top: 5rem;
   list-style-type: none;
   padding: 1rem;
-  line-height:3rem;
+  line-height: 3rem;
   border-radius: 6px;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
@@ -200,8 +208,8 @@ ul.dropdownMenu {
 .jodit-workplace {
   max-height: 300px !important;
 }
-.jodit-add-new-line{
-  display: none !important;;
+.jodit-add-new-line {
+  display: none !important;
 }
 .jodit-container:not(.jodit_inline) {
   background-color: #f5f5f6;
@@ -212,7 +220,7 @@ ul.dropdownMenu {
 .jodit-toolbar__box:not(:empty):not(:empty) {
   border-radius: 0.8rem;
 }
-.jodit-workplace+.jodit-status-bar:not(:empty) {
+.jodit-workplace + .jodit-status-bar:not(:empty) {
   border-radius: 0.8rem;
 }
 .ql-editor {
@@ -296,10 +304,10 @@ ul.dropdownMenu {
   left: 0;
   transition: 0.3s ease-out;
 }
-.sidebarCont:hover{
+.sidebarCont:hover {
   overflow: auto;
 }
-.closeSidebar{
+.closeSidebar {
   left: -22rem;
 }
 .searchInputCont {
@@ -369,7 +377,7 @@ ul.dropdownMenu {
   text-align: center;
   margin: 2px;
 }
-.variantName{
+.variantName {
   font-weight: 700;
   margin-bottom: 0.6rem;
 }
@@ -440,16 +448,16 @@ ul.dropdownMenu {
   left: -8px;
   width: 68px;
 }
-.variantEditor{
+.variantEditor {
   color: #303030;
   text-decoration: none;
   cursor: pointer;
-  margin:0rem 0.4rem;
-  }
-.variantEditor:hover{
+  margin: 0rem 0.4rem;
+}
+.variantEditor:hover {
   color: #0d6efd !important;
 }
-.inActiveVariant{
+.inActiveVariant {
   background-color: gray;
   color: #303030;
   font-weight: 500;
@@ -460,7 +468,7 @@ p.variantHeading {
   margin-bottom: 0;
   font-size: 1.6rem;
 }
-.activeVariant{
+.activeVariant {
   background-color: #affebf;
   color: #22612e;
   font-weight: 500;
@@ -491,6 +499,8 @@ p.variantHeading {
   font-weight: 600;
   color: #403f3f;
   font-size: 1.3rem;
+  border: none;
+  background: none;
 }
 .linkItem {
   text-decoration: none;
@@ -502,7 +512,7 @@ p.variantHeading {
   padding: 6px 10px;
   font-size: 1.3rem;
 }
-.singleLinkItem{
+.singleLinkItem {
   color: #403f3f;
 }
 .activeTab {
@@ -551,7 +561,7 @@ p.variantHeading {
   overflow-y: scroll;
   overflow-x: hidden;
 }
-.commonTopSec{
+.commonTopSec {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -562,7 +572,7 @@ p.variantHeading {
   margin-right: 0.6rem;
   transition: 0.3s;
 }
-.backArrow:hover{
+.backArrow:hover {
   background-color: #b9b7b7;
 }
 .middleSec {
@@ -581,7 +591,7 @@ tr.tableHeader {
   z-index: 3;
   min-height: 62px;
 }
-.Page.navigation{
+.Page.navigation {
   height: 10rem;
 }
 .infoTxt {
@@ -633,11 +643,11 @@ img.blogThumbnailImg {
   left: 24px;
   cursor: pointer;
 } */
- .collectionImg{
-    width: 6rem;
-    height: 6rem;
-    border-radius: 0.4rem;
- }
+.collectionImg {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 0.4rem;
+}
 .radioBtnStylings {
   padding-left: 4px;
 }
@@ -700,7 +710,8 @@ img.bImg {
   display: flex;
   justify-content: space-between;
 }
-.infoBtn, .adminBtn {
+.infoBtn,
+.adminBtn {
   background-color: #303030;
   text-decoration: none !important;
   color: rgba(255, 255, 255, 1);
@@ -709,23 +720,25 @@ img.bImg {
   width: max-content;
   border-radius: 1rem;
   padding: 0.6rem 1.4rem;
-  box-shadow: 0rem -.0625rem 0rem .0625rem rgba(0, 0, 0, .8) inset, 0rem 0rem 0rem .0625rem rgba(48, 48, 48, 1) inset, 0rem .03125rem 0rem .09375rem rgba(255, 255, 255, .25) inset;
+  box-shadow: 0rem -0.0625rem 0rem 0.0625rem rgba(0, 0, 0, 0.8) inset,
+    0rem 0rem 0rem 0.0625rem rgba(48, 48, 48, 1) inset,
+    0rem 0.03125rem 0rem 0.09375rem rgba(255, 255, 255, 0.25) inset;
   display: flex;
   align-items: center;
   transition: 0.2s;
   cursor: pointer;
 }
-.adminBtn{
+.adminBtn {
   padding: 0.6rem 1.4rem;
 }
-.discardBtn{
-  
+.discardBtn {
 }
-.infoBtn:hover,.adminBtn:hover {
-  background-color:#1a1a1a;
+.infoBtn:hover,
+.adminBtn:hover {
+  background-color: #1a1a1a;
   color: #fff !important;
 }
-.secBtn{
+.secBtn {
   background-color: #dfdee2;
   color: #3d3939;
   border: none;
@@ -737,7 +750,7 @@ img.bImg {
   border-radius: 0.8rem !important;
   transition: 0.3s all;
 }
-.exportBtn{
+.exportBtn {
   background-color: #dfdee2;
   color: #3d3939;
   border: none;
@@ -749,11 +762,11 @@ img.bImg {
   border-radius: 0.8rem !important;
   transition: 0.3s all;
 }
-.exportBtn:hover{
+.exportBtn:hover {
   background-color: #cccbcf;
   color: #353333;
 }
-.deleteBtn{
+.deleteBtn {
   background-color: transparent;
   text-decoration: none;
   color: #8e0b21;
@@ -766,24 +779,25 @@ img.bImg {
   display: flex;
   cursor: pointer;
   align-items: center;
-  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
-.deleteBtn1{
+.deleteBtn1 {
   background-color: #c70a24;
   color: #fff;
   transition: 0.3s;
   cursor: pointer;
 }
-.deleteBtn1:hover{
+.deleteBtn1:hover {
   background-color: #8e0b21;
 }
 .productThumbnail {
-    max-width: 5rem;
-    min-width: 5rem;
-    max-height: 5rem;
-    min-height: 5rem;
-    border-radius: 0.6rem;
-    border: 1px solid lightgrey;
+  max-width: 5rem;
+  min-width: 5rem;
+  max-height: 5rem;
+  min-height: 5rem;
+  border-radius: 0.6rem;
+  border: 1px solid lightgrey;
 }
 
 .variantInput {
@@ -877,7 +891,7 @@ img.bImg {
 .brandThumbnail {
   width: 10rem;
 }
-.categoryThumbnail{
+.categoryThumbnail {
   width: 6rem;
   height: 6rem;
   border-radius: 50%;
@@ -885,13 +899,13 @@ img.bImg {
 input#categoryImage {
   position: absolute;
 }
-.categoryThumbnailInput{
+.categoryThumbnailInput {
   min-width: 16rem;
   max-width: 16rem;
-  min-height:16rem; 
-  max-height:16rem;
+  min-height: 16rem;
+  max-height: 16rem;
 }
-.subCategoryCont{
+.subCategoryCont {
   display: flex;
   align-items: center;
   position: relative;
@@ -908,7 +922,7 @@ input#categoryImage {
 tr.item {
   vertical-align: middle;
 }
-.listPoint{
+.listPoint {
   font-size: 1.2rem;
 }
 .generateCodeBtn {
@@ -939,7 +953,7 @@ svg.copyIcon {
   color: gray;
   font-size: 1.6rem;
 }
-.discount-amount-input{
+.discount-amount-input {
   padding-left: 1.6rem !important;
 }
 .rupeeSign {
@@ -1077,12 +1091,12 @@ input.inventoryInput {
   align-items: flex-start;
 }
 
-
 @media screen and (max-width: 768px) {
-  h4,.h4{
+  h4,
+  .h4 {
     font-size: 1.7rem !important;
   }
-  .navBars{
+  .navBars {
     display: block;
   }
   .btnCont {
@@ -1092,7 +1106,7 @@ input.inventoryInput {
     margin-left: 0;
     padding-top: 9rem;
   }
-  .onClickClose{
+  .onClickClose {
     left: -22rem;
   }
   .sideBarItems {
@@ -1102,14 +1116,14 @@ input.inventoryInput {
     margin-left: -8rem;
   }
   .dropdown.nav_dropdown {
-      position: absolute;
-      top: 2rem;
-      right: 0.6rem;
+    position: absolute;
+    top: 2rem;
+    right: 0.6rem;
   }
-  .table{
+  .table {
     table-layout: inherit;
   }
-  .commonTopSec{
+  .commonTopSec {
     align-items: end;
   }
   .paginationCont {
@@ -1128,7 +1142,7 @@ input.inventoryInput {
   .methodBtnCont {
     width: 100%;
   }
-  .variantInput{
-    width: 86% !important
+  .variantInput {
+    width: 86% !important;
   }
 }
