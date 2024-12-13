@@ -1,26 +1,26 @@
 export const getOptons = (key1, key2, key3) => {
   if (key1 || key2 || key3) {
-    let dataString = '';
+    let dataString = "";
     const values = [key1, key2, key3].filter(Boolean);
     if (values.length > 0) {
-      dataString += values.join(' / ');
+      dataString += values.join(" / ");
     }
     return dataString.trim();
   } else {
-    return '';
+    return "";
   }
 };
 
 export const getStringData = (values) => {
-  let dataString = '';
+  let dataString = "";
   const stringArry = values.filter(Boolean);
   if (stringArry.length > 0) {
-    dataString += stringArry.join(' , ') + ' , ';
+    dataString += stringArry.join(" , ") + " , ";
   }
   return dataString.trim();
 };
 
-export const truncateText = (content, size) => {
-  const text = content.length > size ? content.slice(0, size) + '...' : content;
+export const truncateText = (content, size = 30) => {
+  const text = content.length > size ? content.slice(0, size) + "..." : content;
   return text;
 };
