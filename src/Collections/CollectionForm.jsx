@@ -1,6 +1,6 @@
-import React from 'react';
-import { FaUpload } from 'react-icons/fa6';
-import '../Pages/Admin.css';
+import React from "react";
+import { FaUpload } from "react-icons/fa6";
+import "../Pages/Admin.css";
 
 const CollectionForm = (props) => {
   const {
@@ -25,9 +25,9 @@ const CollectionForm = (props) => {
       title: e.target.value,
       urlHandle: `${
         window.location.origin
-      }/collections/${e.target.value.replace(/ /g, '-')}`,
+      }/collections/${e.target.value.replace(/ /g, "-")}`,
     });
-    setValidationErrors({ ...validationErrors, title: '' });
+    setValidationErrors({ ...validationErrors, title: "" });
   };
 
   const handleMetaDetails = (e) => {
@@ -36,99 +36,101 @@ const CollectionForm = (props) => {
 
   const setCollectionContent = (e) => {
     setCollectionData({ ...collectionData, content: e.target.value });
-    setValidationErrors({ ...validationErrors, content: '' });
+    setValidationErrors({ ...validationErrors, content: "" });
   };
 
   const onChangeCollectionImage = (e) => {
     const collectionImg = e.target.files[0];
     setCollectionData({ ...collectionData, collectionImg: collectionImg });
-    setValidationErrors({ ...validationErrors, collectionImg: '' });
+    setValidationErrors({ ...validationErrors, collectionImg: "" });
   };
 
   return (
     <>
-      <div className='col-sm-8'>
-        <div className='row'>
-          <div className='col-sm-12'>
-            <div className='bgStyle'>
-              <div className='form-group'>
-                <label className='heading' htmlFor='title'>
+      <div className="col-sm-8">
+        <div className="row">
+          <div className="col-sm-12">
+            <div className="bgStyle">
+              <div className="form-group">
+                <label className="heading" htmlFor="title">
                   Title
                 </label>
                 <input
-                  type='text'
-                  className='form-control'
-                  id='title'
+                  type="text"
+                  className="form-control"
+                  id="title"
                   value={title}
                   onChange={handleCollectionsTitle}
-                  placeholder='e.g. Summer collections, under $100, Staff Picks'
+                  placeholder="e.g. Summer collections, under $100, Staff Picks"
                 />
                 {validationErrors.title && (
-                  <label className='errorValue'>{validationErrors.title}</label>
+                  <label className="errorValue">{validationErrors.title}</label>
                 )}
               </div>
-              <div className='form-group d-flex flex-column mt-2'>
-                <label className='heading' htmlFor='content'>
+              <div className="form-group d-flex flex-column mt-2">
+                <label className="heading" htmlFor="content">
                   Description
                 </label>
                 <textarea
-                  id='content'
+                  id="content"
                   value={content}
                   onChange={setCollectionContent}
                   cols={50}
                   rows={4}
-                  className='form-control'></textarea>
+                  className="form-control"
+                ></textarea>
                 {validationErrors.content && (
-                  <label className='errorValue'>
+                  <label className="errorValue">
                     {validationErrors.content}
                   </label>
                 )}
               </div>
             </div>
-            <div className='bgStyle'>
+            <div className="bgStyle">
               <h6>Search engine listing</h6>
               <p>
                 Add a title and description to see how this product might appear
                 in a search engine listing
               </p>
-              <div className='form-group'>
-                <label className='heading' htmlFor='metaTitle'>
+              <div className="form-group">
+                <label className="heading" htmlFor="metaTitle">
                   Meta title
                 </label>
                 <input
-                  type='text'
-                  className='form-control'
-                  id='metaTitle'
-                  maxLength='200'
+                  type="text"
+                  className="form-control"
+                  id="metaTitle"
+                  maxLength="200"
                   value={metaTitle}
                   onChange={handleMetaDetails}
                 />
-                <p className='infoTxt'>
+                <p className="infoTxt">
                   {metaTitle.length} of 200 characters used
                 </p>
               </div>
-              <div className='form-group'>
-                <label className='heading' htmlFor='metaDescription'>
+              <div className="form-group">
+                <label className="heading" htmlFor="metaDescription">
                   Meta description
                 </label>
                 <textarea
-                  id='metaDescription'
-                  className='form-control'
-                  maxLength='320'
+                  id="metaDescription"
+                  className="form-control"
+                  maxLength="320"
                   onChange={handleMetaDetails}
-                  value={metaDescription}></textarea>
-                <p className='infoTxt'>
+                  value={metaDescription}
+                ></textarea>
+                <p className="infoTxt">
                   {metaDescription.length} of 320 characters used
                 </p>
               </div>
-              <div className='form-group'>
-                <label className='heading' htmlFor='urlHandle'>
+              <div className="form-group">
+                <label className="heading" htmlFor="urlHandle">
                   URL handle
                 </label>
                 <input
-                  type='text'
-                  className='form-control'
-                  id='urlHandle'
+                  type="text"
+                  className="form-control"
+                  id="urlHandle"
                   value={urlHandle}
                   onChange={handleMetaDetails}
                 />
@@ -137,49 +139,51 @@ const CollectionForm = (props) => {
           </div>
         </div>
       </div>
-      <div className='col-sm-4'>
-        <div className='bgStyle'>
-          <div className='form-group'>
+      <div className="col-sm-4">
+        <div className="bgStyle">
+          <div className="form-group">
             <h6>Image</h6>
-            <div className='drop-zone'>
+            <div className="drop-zone">
               {collectionImg ? (
-                typeof collectionImg === 'string' ? (
+                typeof collectionImg === "string" ? (
                   <img
-                    className='CollectionsThumbnail'
+                    className="CollectionsThumbnail"
                     src={collectionImg}
                     width={200}
                     height={180}
-                    alt=''
+                    alt=""
                   />
                 ) : (
                   <img
-                    className='CollectionsThumbnail'
+                    className="CollectionsThumbnail"
                     src={URL.createObjectURL(collectionImg)}
                     width={200}
                     height={180}
-                    alt=''
+                    alt=""
                   />
                 )
               ) : (
-                <label className='dropZoneOverlay'>
+                <label className="dropZoneOverlay">
                   <FaUpload /> Drop file here or click to upload
                 </label>
               )}
               <input
-                accept='image/*'
-                className='FileUpload'
-                id='collectionImage'
+                accept="image/*"
+                type="file"
+                className="FileUpload"
+                id="collectionImage"
                 onChange={onChangeCollectionImage}
               />
             </div>
             {validationErrors.collectionImg && (
               <label
-                className='errorvalue'
-                style={{ color: 'red', fontSize: '1.2rem' }}>
+                className="errorvalue"
+                style={{ color: "red", fontSize: "1.2rem" }}
+              >
                 {validationErrors.collectionImg}
               </label>
             )}
-            <label style={{ whiteSpace: 'normal', marginTop: '1rem' }}>
+            <label style={{ whiteSpace: "normal", marginTop: "1rem" }}>
               <strong>Note:- </strong>Kindly use an image with dimensions 310 x
               380 pixels for better appeal.
             </label>

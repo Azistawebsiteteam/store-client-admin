@@ -165,7 +165,7 @@ const AddProduct = () => {
         formdata.append("cwos", handleLoc.cwos);
         formdata.append("skuCode", skuInput.SKU);
         formdata.append("skuBarcode", skuInput.barcode);
-        formdata.append("productWeight", weight + " " + weightUnit);
+        formdata.append("productWeight", weight + "-" + weightUnit);
         formdata.append("originCountry", originCountry);
       }
       await axios.post(url, formdata, { headers });

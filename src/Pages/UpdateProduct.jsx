@@ -145,6 +145,7 @@ const UpdateProduct = () => {
       collectionValue: JSON.parse(collections),
       productStatus: status,
       weight: product_weight ? product_weight.split("-")[0] : "0",
+
       weightUnit: product_weight ? product_weight.split("-")[1] : "kg",
       isShipping: product_weight?.split("-").length > 0,
       isSKU: !!(sku_code || sku_bar_code),
@@ -180,7 +181,6 @@ const UpdateProduct = () => {
       const response = await axios.post(url, body, { headers });
 
       const { productDetails, variants, availableVariants } = response.data;
-      console.log(availableVariants, "availableVariants");
 
       swalErr.onLoadingClose();
       setProductUpdateDetails(productDetails);
