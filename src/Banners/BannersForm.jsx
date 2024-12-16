@@ -8,6 +8,7 @@ import { IoIosEyeOff } from "react-icons/io";
 import { MdModeEditOutline } from "react-icons/md";
 import swalHandle from "../Pages/ErrorHandler";
 import Swal from "sweetalert2";
+import "./banner.css";
 
 const BannersForm = (props) => {
   const { sliders, mainTitle, linkTitle, sliderDetails } = props;
@@ -30,23 +31,31 @@ const BannersForm = (props) => {
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
         confirmButtonText: "Yes, delete it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          swalHandle.onLoading();
-          const response = await axios.delete(url, { headers, data: body });
-          Swal.close();
-          if (response.status === 200) {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success",
-            });
-            sliderDetails();
+        cancelButtonText: "No, keep it",
+        customClass: {
+          cancelButton: "swal-custom-cancel-btn",
+        },
+      })
+        .then(async (result) => {
+          if (result.isConfirmed) {
+            swalHandle.onLoading();
+            const response = await axios.delete(url, { headers, data: body });
+            Swal.close();
+            if (response.status === 200) {
+              Swal.fire({
+                title: "Deleted!",
+                text: "Your file has been deleted.",
+                icon: "success",
+              });
+              sliderDetails();
+            }
           }
-        }
-      });
+        })
+        .catch((error) => {
+          Swal.close();
+          swalHandle.onError(error);
+        });
     } catch (error) {
       Swal.close();
       swalHandle.onError(error);
