@@ -1091,7 +1091,47 @@ input.inventoryInput {
   align-items: flex-start;
 }
 
+/* manageAcc */
+
+.profilePicPanel {
+  display: flex;
+}
+.profilePicInputCont {
+  position: relative;
+  margin-left: 1rem;
+}
+.profilePicUploadBtn{
+  width: max-content;
+  padding: 0.4rem 1rem;
+  font-size: 1.3rem;
+  border-radius: 0.6rem;
+  border: 1px solid gray;
+  background-color: transparent;
+}
+.profilePicRemoveBtn{
+  position: relative;
+  width: max-content;
+  padding: 0.4rem 1rem;
+  font-size: 1.3rem;
+  border-radius: 0.6rem;
+  border: 1px solid gray;
+  background-color: transparent;
+  margin-left: 1rem;
+}
+
 @media screen and (max-width: 768px) {
+  .navbarProfilePic{
+    margin-left: -8rem;
+  }
+  .profilePicPanel {
+    flex-direction: column;
+    align-items: center;
+  }
+  img.userProfile.userProfileManageAcc {
+    margin: 1rem 0;
+    width: 6rem;
+    height: 6rem;
+  }
   h4,
   .h4 {
     font-size: 1.7rem !important;
@@ -1111,9 +1151,6 @@ input.inventoryInput {
   }
   .sideBarItems {
     padding: 6rem 1rem;
-  }
-  img.userProfile {
-    margin-left: -8rem;
   }
   .dropdown.nav_dropdown {
     position: absolute;

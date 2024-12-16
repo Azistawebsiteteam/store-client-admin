@@ -47,7 +47,11 @@ const AdminNavbar = () => {
         <ul className="navbar-nav d-flex align-items-center">
           <li className="nav-item d-flex justify-content-center align-items-center">
             {profilePic && token ? (
-              <img src={profilePic} className="userProfile" alt="userProfile" />
+              <img
+                src={profilePic}
+                className="userProfile navbarProfilePic"
+                alt="userProfile"
+              />
             ) : (
               <HiMiniUserCircle className="nav_social_icon" />
             )}

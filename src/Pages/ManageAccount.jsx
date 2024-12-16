@@ -72,7 +72,24 @@ const ManageAccount = () => {
 
       // eslint-disable-next-line no-unused-vars
       const response = await axios.post(url, formData, { headers });
+      const { admin_details } = response.data;
+      localStorage.setItem("adminDetails", JSON.stringify(admin_details));
       window.location.reload();
+    } catch (error) {
+      ErrorHandler.onError(error);
+    }
+  };
+
+  const handleRemoveProfilePic = async () => {
+    try {
+      let url = `${baseUrl}/adminauth/remove/pic`;
+      let headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      let data = await axios.post(url, {}, { headers });
+      if (data.status === 200) {
+        ErrorHandler.onSuccess("Removed successfully");
+      }
     } catch (error) {
       ErrorHandler.onError(error);
     }
@@ -90,24 +107,50 @@ const ManageAccount = () => {
               </div>
               <div className="col-12">
                 <div className="bgStyle">
-                  {inputValues.profilePic ? (
-                    <img
-                      className="userProfile"
-                      src={inputValues.profilePic}
-                      alt="Profile Pic"
-                    />
-                  ) : (
-                    ""
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    id="profilePic"
-                    onChange={handleUserInfo}
-                  />
+                  <div className="profilePicPanel">
+                    {typeof inputValues.profilePic === "string" ? (
+                      <img
+                        className="userProfile userProfileManageAcc"
+                        src={inputValues.profilePic}
+                        alt="Profile Pic"
+                      />
+                    ) : (
+                      <img
+                        className="userProfile userProfileManageAcc"
+                        src={URL.createObjectURL(inputValues.profilePic)}
+                        alt="Profile Pic"
+                      />
+                    )}
+                    <div className="d-flex align-items-center">
+                      <div className="profilePicInputCont">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="profilePic"
+                          onChange={handleUserInfo}
+                          style={{
+                            position: "absolute",
+                            zIndex: "1",
+                            height: "3rem",
+                            width: "10rem",
+                            opacity: "0",
+                          }}
+                        />
+                        <button className="profilePicUploadBtn">
+                          Upload photo
+                        </button>
+                      </div>
+                      <div
+                        className="profilePicRemoveBtn"
+                        onClick={handleRemoveProfilePic}
+                      >
+                        Remove photo
+                      </div>
+                    </div>
+                  </div>
                   <hr />
                   <div className="row">
-                    <div className="col">
+                    <div className="col-md-6 form-group">
                       <label htmlFor="fullName">Full name</label>
                       <input
                         type="text"
@@ -118,7 +161,7 @@ const ManageAccount = () => {
                         placeholder="Full name"
                       />
                     </div>
-                    <div className="col">
+                    <div className="col-md-6 form-group">
                       <label htmlFor="userName">User name</label>
                       <input
                         type="text"
@@ -129,14 +172,14 @@ const ManageAccount = () => {
                         disabled
                       />
                     </div>
-                    <p>
+                    <span>
                       <strong>Note:</strong> Use your first and last name as
                       they appear on your government-issued ID.
-                    </p>
+                    </span>
                   </div>
                   <hr />
                   <div className="row">
-                    <div className="col">
+                    <div className="col-md-6 form-group">
                       <label htmlFor="email">Email</label>
                       <input
                         type="email"
@@ -147,10 +190,8 @@ const ManageAccount = () => {
                         placeholder="Email"
                       />
                     </div>
-                  </div>
-                  <hr />
-                  <div className="row">
-                    <div className="col">
+
+                    <div className="col-md-6 form-group">
                       <label htmlFor="mobileNumber">Phone</label>
                       <input
                         type="text"
@@ -162,7 +203,7 @@ const ManageAccount = () => {
                       />
                     </div>
                   </div>
-                  <div className="text-end mt-3">
+                  <div className="d-flex justify-content-end mt-3">
                     <button className="adminBtn" onClick={onSaveDetails}>
                       Save Details
                     </button>

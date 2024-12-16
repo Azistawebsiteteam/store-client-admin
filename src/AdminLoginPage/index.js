@@ -116,7 +116,11 @@ const AdminLoginPage = () => {
                       style={{ width: 100, margin: "3px" }}
                     />
                   </Box>
-                  <Box component="form" onSubmit={handleLoginSubmit}>
+                  <Box
+                    style={{ marginTop: "24%" }}
+                    component="form"
+                    onSubmit={handleLoginSubmit}
+                  >
                     <FormControl
                       fullWidth
                       required
