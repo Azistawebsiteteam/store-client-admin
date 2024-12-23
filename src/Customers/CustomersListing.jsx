@@ -1,23 +1,23 @@
-import React, { useRef } from 'react';
-import AdminSideBar from '../Pages/AdminSideBar';
-import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
-import errorHandler from '../Pages/ErrorHandler';
-import axios from 'axios';
-import { BiRupee } from 'react-icons/bi';
-import { RiArrowUpDownLine } from 'react-icons/ri';
-import { GoArrowUp, GoArrowDown } from 'react-icons/go';
-import { DownloadTableExcel } from 'react-export-table-to-excel';
-import { Link } from 'react-router-dom';
-import '../Pages/Admin.css';
-import './index.css';
-import Pagination from '../Components/Pagination';
-import { getStringData } from '../Utils/StringConcat';
+import React, { useRef } from "react";
+import AdminSideBar from "../Pages/AdminSideBar";
+import { useState, useEffect } from "react";
+import Cookies from "js-cookie";
+import errorHandler from "../Pages/ErrorHandler";
+import axios from "axios";
+import { BiRupee } from "react-icons/bi";
+import { RiArrowUpDownLine } from "react-icons/ri";
+import { GoArrowUp, GoArrowDown } from "react-icons/go";
+import { DownloadTableExcel } from "react-export-table-to-excel";
+import { Link } from "react-router-dom";
+import "../Pages/Admin.css";
+import "./index.css";
+import Pagination from "../Components/Pagination";
+import { getStringData } from "../Utils/StringConcat";
 
 const CustomersListing = () => {
   const [displayFilterDropdown, setDisplayFilterDropdown] = useState(false);
-  const [filteredVal, setFilteredValue] = useState('registeredon');
-  const [filtersOrder, setFiltersOrder] = useState('DESC');
+  const [filteredVal, setFilteredValue] = useState("registeredon");
+  const [filtersOrder, setFiltersOrder] = useState("DESC");
   const [activeUsers, setActiveUsers] = useState(true);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const tableRef = useRef();
@@ -75,130 +75,131 @@ const CustomersListing = () => {
   };
 
   return (
-    <div className='adminSec'>
+    <div className="adminSec">
       <AdminSideBar />
-      <div className='commonSec'>
-        <div className='commonTopSec'>
+      <div className="commonSec">
+        <div className="commonTopSec">
           <input
-            className='searchCustomer'
-            type='search'
-            placeholder='Search Customers'
+            className="searchCustomer"
+            type="search"
+            placeholder="Search Customers"
             onChange={filterCustomers}
           />
-          <div className='form-check form-switch'>
+          <div className="form-check form-switch">
             <input
-              className='form-check-input'
-              type='checkbox'
-              role='switch'
+              className="form-check-input"
+              type="checkbox"
+              role="switch"
               checked={activeUsers}
-              id='activeUsers'
+              id="activeUsers"
               onChange={() => setActiveUsers(!activeUsers)}
             />
-            <label className='form-check-label' htmlFor='activeUsers'>
+            <label className="form-check-label" htmlFor="activeUsers">
               Active users
             </label>
           </div>
           <DownloadTableExcel
-            filename='Customers'
-            sheet='Customers-list'
-            currentTableRef={tableRef.current}>
-            <button className='exportBtn'> Export</button>
+            filename="Customers"
+            sheet="Customers-list"
+            currentTableRef={tableRef.current}
+          >
+            <button className="exportBtn"> Export</button>
           </DownloadTableExcel>
-          <Link to={'/add-customer'} className='infoBtn'>
+          <Link to={"/add-customer"} className="infoBtn">
             Add Customer
           </Link>
           <button
-            className='sortBtn'
-            onClick={() => setDisplayFilterDropdown(!displayFilterDropdown)}>
-            <RiArrowUpDownLine color='#878282' strikeWidth={2} size={16} />
+            className="sortBtn"
+            onClick={() => setDisplayFilterDropdown(!displayFilterDropdown)}
+          >
+            <RiArrowUpDownLine color="#878282" strikeWidth={2} size={16} />
           </button>
           {displayFilterDropdown && (
-            <div className='filterDropdown filterSec'>
-              <p style={{ marginLeft: '-1.4rem' }}>Sort by</p>
-              <div className='form-check'>
+            <div className="filterDropdown filterSec">
+              <p style={{ marginLeft: "-1.4rem" }}>Sort by</p>
+              <div className="form-check">
                 <input
-                  className='form-check-input filterInput'
-                  type='radio'
-                  name='filterSec'
-                  id='totalorder'
-                  value='totalorder'
+                  className="form-check-input filterInput"
+                  type="radio"
+                  name="filterSec"
+                  id="totalorder"
+                  value="totalorder"
                   onChange={handleFilters}
-                  checked={'totalorder' === filteredVal}
+                  checked={"totalorder" === filteredVal}
                 />
-                <label className='form-check-label' htmlFor='totalorder'>
+                <label className="form-check-label" htmlFor="totalorder">
                   Total Order
                 </label>
               </div>
-              <div className='form-check'>
+              <div className="form-check">
                 <input
-                  className='form-check-input filterInput'
-                  type='radio'
-                  name='filterSec'
-                  id='totalamountspent'
-                  value='totalamountspent'
+                  className="form-check-input filterInput"
+                  type="radio"
+                  name="filterSec"
+                  id="totalamountspent"
+                  value="totalamountspent"
                   onChange={handleFilters}
-                  checked={'totalamountspent' === filteredVal}
+                  checked={"totalamountspent" === filteredVal}
                 />
-                <label className='form-check-label' htmlFor='totalamountspent'>
+                <label className="form-check-label" htmlFor="totalamountspent">
                   Total Amount Spent
                 </label>
               </div>
-              <div className='form-check'>
+              <div className="form-check">
                 <input
-                  className='form-check-input filterInput'
-                  type='radio'
-                  name='filterSec'
-                  id='lastupdated'
-                  value='lastupdated'
+                  className="form-check-input filterInput"
+                  type="radio"
+                  name="filterSec"
+                  id="lastupdated"
+                  value="lastupdated"
                   onChange={handleFilters}
-                  checked={'lastupdated' === filteredVal}
+                  checked={"lastupdated" === filteredVal}
                 />
-                <label className='form-check-label' htmlFor='lastupdated'>
+                <label className="form-check-label" htmlFor="lastupdated">
                   Last updated
                 </label>
               </div>
-              <div className='form-check'>
+              <div className="form-check">
                 <input
-                  className='form-check-input filterInput'
-                  type='radio'
-                  name='filterSec'
-                  id='registeredon'
-                  value='registeredon'
+                  className="form-check-input filterInput"
+                  type="radio"
+                  name="filterSec"
+                  id="registeredon"
+                  value="registeredon"
                   onChange={handleFilters}
-                  checked={'registeredon' === filteredVal}
+                  checked={"registeredon" === filteredVal}
                 />
-                <label className='form-check-label' htmlFor='registeredon'>
+                <label className="form-check-label" htmlFor="registeredon">
                   Registered on
                 </label>
               </div>
-              <div
-                className='mt-1'
-                style={{ marginLeft: '-1.4rem', cursor: 'pointer' }}>
-                <GoArrowUp size={14} style={{ marginRight: '0.8rem' }} />
+              <div className="mt-1" style={{ cursor: "pointer" }}>
+                <GoArrowUp size={14} style={{ marginRight: "0.8rem" }} />
                 <label
-                  className={filtersOrder === 'ASC' && 'active'}
-                  onClick={() => handleFiltersOrder('ASC')}>
+                  className={filtersOrder === "ASC" && "active"}
+                  onClick={() => handleFiltersOrder("ASC")}
+                >
                   Oldest to newest
                 </label>
               </div>
-              <div
-                className='mt-1'
-                style={{ marginLeft: '-1.4rem', cursor: 'pointer' }}>
-                <GoArrowDown size={14} style={{ marginRight: '0.8rem' }} />
+              <div className="mt-1" style={{ cursor: "pointer" }}>
+                <GoArrowDown size={14} style={{ marginRight: "0.8rem" }} />
                 <label
-                  className={filtersOrder === 'DESC' && 'active'}
-                  onClick={() => handleFiltersOrder('DESC')}>
+                  className={filtersOrder === "DESC" && "active"}
+                  onClick={() => handleFiltersOrder("DESC")}
+                >
                   Newest to oldest
                 </label>
               </div>
             </div>
           )}
         </div>
-        <div className='tableCont'>
+        <div className="tableCont">
           <table
             ref={tableRef}
-            className='table table-hover'
-            style={{ minWidth: '1000px' }}>
+            className="table table-hover"
+            style={{ minWidth: "1000px" }}
+          >
             <thead>
               <tr>
                 <th>S.No</th>
@@ -216,7 +217,8 @@ const CustomersListing = () => {
                   <td>
                     <Link
                       to={`/customer/${each.azst_customer_id}`}
-                      style={{ textDecoration: 'none' }}>
+                      style={{ textDecoration: "none" }}
+                    >
                       {each.azst_customer_name}
                     </Link>
                   </td>
@@ -224,14 +226,15 @@ const CustomersListing = () => {
                     <span
                       className={
                         each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
-                        'yes'
-                          ? 'subscribed'
-                          : 'notsubscribed'
-                      }>
+                        "yes"
+                          ? "subscribed"
+                          : "notsubscribed"
+                      }
+                    >
                       {each?.azst_customer_acceptemail_marketing?.toLowerCase() ===
-                      'yes'
-                        ? 'Subscribed'
-                        : 'Not Subscribed'}
+                      "yes"
+                        ? "Subscribed"
+                        : "Not Subscribed"}
                     </span>
                   </td>
                   <td>

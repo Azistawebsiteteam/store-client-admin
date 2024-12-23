@@ -167,12 +167,14 @@ const BannersForm = (props) => {
                       >
                         {slider.status === 1 ? <IoMdEye /> : <IoIosEyeOff />}
                       </span>
-                      <span
-                        className="password-toggle-icon"
-                        onClick={() => deleteBanner(slider.banner_id)}
-                      >
-                        <RiDeleteBin6Fill />
-                      </span>
+                      {slider.status === 1 && (
+                        <span
+                          className="password-toggle-icon"
+                          onClick={() => deleteBanner(slider.banner_id)}
+                        >
+                          <RiDeleteBin6Fill />
+                        </span>
+                      )}
                       <span className="password-toggle-icon">
                         <Link to={`/edit/slider/${slider.banner_id}`}>
                           <MdModeEditOutline />

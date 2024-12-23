@@ -780,7 +780,7 @@ const AddProductForm = ({
                       required
                     />
                     <span className="errorValue">
-                      {validationErrors?.title}
+                      {validationErrors?.mainTitle}
                     </span>
                   </div>
                   <div className="form-group">
@@ -795,9 +795,7 @@ const AddProductForm = ({
                       onChange={onChangeTitle}
                       id="title"
                     />
-                    <span className="errorValue">
-                      {validationErrors.mainTitle}
-                    </span>
+                    <span className="errorValue">{validationErrors.title}</span>
                   </div>
                   <div className="form-group">
                     <label htmlFor="description" className="formLabel">

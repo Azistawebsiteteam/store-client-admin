@@ -130,7 +130,7 @@ const AdminSideBar = () => {
                 className={
                   activeTab === "/inventory"
                     ? "linkItem activeTab"
-                    : "linkItem singleLinkItem"
+                    : "linkItem dropdownItems"
                 }
               >
                 {/* <MdInventory className='me-3' /> Inventory */} Inventory

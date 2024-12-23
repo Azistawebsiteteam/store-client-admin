@@ -44,6 +44,7 @@ input.searchCustomer {
   padding: 14px;
   top: 13rem;
   right: 3rem;
+  z-index: 3;
 }
 input#activeUsers {
   border: 1px solid gray;

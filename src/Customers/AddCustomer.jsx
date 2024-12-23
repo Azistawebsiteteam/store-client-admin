@@ -91,10 +91,11 @@ const AddCustomer = () => {
       }
       ErrorHandler.onLoading();
       const response = await axios.post(url, body, { headers });
-      if (response.status === 200) {
+
+      ErrorHandler.onLoadingClose();
+      if (response.status === 201) {
         navigate(-1);
       }
-      ErrorHandler.onLoadingClose();
     } catch (error) {
       ErrorHandler.onLoadingClose();
       ErrorHandler.onError(error);

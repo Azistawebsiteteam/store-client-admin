@@ -11,7 +11,7 @@ export const handleValidationErrors = (inputValues) => {
   if (!inputValues.answer) {
     validationsMsgs.answer = "Enter the Answer";
   }
-  if (!inputValues.productId) {
+  if (inputValues.type === "Product" && !inputValues.productId) {
     validationsMsgs.productId = "Choose the Product";
   }
   return validationsMsgs;

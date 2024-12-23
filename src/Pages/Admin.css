@@ -1162,6 +1162,9 @@ input.inventoryInput {
   }
   .commonTopSec {
     align-items: end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
   .paginationCont {
     width: 86% !important;
