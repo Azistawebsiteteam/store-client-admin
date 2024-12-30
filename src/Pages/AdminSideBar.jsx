@@ -397,6 +397,28 @@ const AdminSideBar = () => {
             <IoIosPerson className="me-3" /> Customers
           </li>
         </Link>
+        <Link
+          className="link"
+          to="/shipcharges"
+          onClick={(e) => toggleSidebars(e, true)}
+        >
+          <li
+            className={
+              activeTab.startsWith("/shipcharges")
+                ? "linkItem activeTab"
+                : "linkItem singleLinkItem"
+            }
+            onClick={handleDropdowns}
+          >
+            <img
+              src={`${process.env.PUBLIC_URL}/shipping-charges.png`}
+              alt="shippingCharges"
+              style={{ width: "1.6rem" }}
+              className="me-3 shippingChargesIcon"
+            />
+            Shipping Charges
+          </li>
+        </Link>
       </ul>
     </div>
   );

@@ -36,7 +36,8 @@ const InventoryAdd = () => {
         Authorization: `Bearer ${token}`,
       };
       ErrorHandler.onLoading();
-      await axios.post(url, locationData, { headers });
+      const response = await axios.post(url, locationData, { headers });
+      console.log(response);
       ErrorHandler.onSuccess("Added Successfully");
       ErrorHandler.onLoadingClose();
     } catch (error) {

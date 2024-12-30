@@ -1,5 +1,4 @@
 export const handleValidationErrors = (inputValues) => {
-  console.log(inputValues);
   const validationsMsgs = {};
   if (!inputValues.inventoryId) {
     validationsMsgs.inventoryId = "Enter the Inventory Id";

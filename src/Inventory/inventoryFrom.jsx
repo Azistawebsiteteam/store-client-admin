@@ -11,7 +11,7 @@ const InventoryForm = (props) => {
 
   const handleChangeInput = (e) => {
     let { id, value } = e.target;
-    if (id === "inventoryPhone" || id === "pinCode") {
+    if (id === "inventoryId" || id === "inventoryPhone" || id === "pinCode") {
       value = value.replace(/[^0-9]/g, "");
     }
     setLocationData({ ...locationData, [id]: value });

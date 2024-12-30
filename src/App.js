@@ -57,6 +57,7 @@ import InventoryLocations from "./Inventory/InventoryLocations";
 import InventoryAdd from "./Inventory/InventoryAdd";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Pages/Admin.css";
+import Chargeslist from "./ShippingCharges/Chargeslist";
 
 function App() {
   const adminToken = process.env.REACT_APP_ADMIN_JWT_TOKEN;
@@ -255,6 +256,10 @@ function App() {
         <Route
           path="/features"
           element={<ProtectedRoute element={FeaturesT} />}
+        />
+        <Route
+          path="/shipcharges"
+          element={<ProtectedRoute element={Chargeslist} />}
         />
         <Route
           path="/checkouts"
