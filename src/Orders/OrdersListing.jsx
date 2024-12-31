@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+
 import { useLocation, useNavigate } from 'react-router-dom';
 import AdminSideBar from '../Pages/AdminSideBar';
 import errorHandle from '../Pages/ErrorHandler';
@@ -14,6 +15,7 @@ import './index.css';
 import ErrorHandler from '../Pages/ErrorHandler';
 import Pagination from '../Components/Pagination';
 import Swal from 'sweetalert2';
+import { downloadExcel } from 'react-export-table-to-excel';
 
 const OrdersListing = () => {
   const [orders, setOrders] = useState([]);
@@ -24,6 +26,7 @@ const OrdersListing = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalOrders, setTotalOrders] = useState(0);
   const [filteredOrdersList, setFilteredOrdersList] = useState([]);
+  const [checkAllOrders, setCheckAllOrders] = useState(false);
 
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -33,7 +36,7 @@ const OrdersListing = () => {
   const baseUrl = `${process.env.REACT_APP_API_URL}/orders/admin`;
   const jwtToken = Cookies.get(process.env.REACT_APP_ADMIN_JWT_TOKEN);
 
-  const logsPerPage = 10;
+  const logsPerPage = 7;
 
   const getOrders = useCallback(async () => {
     try {
@@ -64,6 +67,10 @@ const OrdersListing = () => {
   useEffect(() => {
     getOrders();
   }, [getOrders]);
+
+  // useEffect(() => {
+  //   setCheckAllOrders(false);
+  // }, [currentPage]);
 
   const displayDuration = (duration) => {
     switch (duration) {
@@ -176,13 +183,119 @@ const OrdersListing = () => {
     );
   };
 
+  const onChangeCheckAllOrdrs = (e) => {
+    setCheckAllOrders(e.target.checked);
+    const updateChecks = orders.map((item) => ({
+      ...item,
+      isChecked: e.target.checked,
+    }));
+    setFilteredOrdersList(updateChecks);
+    setOrders(updateChecks);
+  };
+
+  const onCheckOrder = (e, id) => {
+    e.stopPropagation();
+    const updateChecks = orders.map((item) => {
+      if (item.azst_orders_id === id) {
+        return {
+          ...item,
+          isChecked: e.target.checked,
+        };
+      } else {
+        return item;
+      }
+    });
+    setFilteredOrdersList(updateChecks);
+    setOrders(updateChecks);
+  };
+
+  function handleDownloadExcel() {
+    const header = [
+      'Order Id',
+      'Date',
+      'Customer',
+      'channel',
+      'total',
+      'payment status',
+      'fullfilment status',
+      'items',
+      'Delivery Method',
+      'Order Status',
+    ];
+
+    const diveryText = (status) => {
+      const statuses = {
+        0: 'Shipped',
+        1: 'Out for Delivery',
+        2: 'Delivered',
+      };
+      return statuses[status];
+    };
+
+    const confirmStatusText = (status, delivery) => {
+      const statuses = {
+        0: 'Confirm Pending',
+        1: diveryText(delivery),
+        2: 'Rejected',
+      };
+      return statuses[status];
+    };
+
+    const getOrderStatusText = (order) => {
+      const statuses = {
+        0: 'Cancelled',
+        1: confirmStatusText(
+          order.azst_orders_confirm_status,
+          order.azst_orders_delivery_status
+        ),
+      };
+      return statuses[order.azst_orders_status];
+    };
+
+    const ischecked = filteredOrdersList.find((o) => o.isChecked);
+
+    let downloadOrders = orders;
+
+    if (ischecked) {
+      downloadOrders = orders.filter((o) => o.isChecked); // Only include checked items
+    }
+
+    const body = downloadOrders.map((o) => ({
+      azst_orders_id: o.azst_orders_id,
+      Date: date(o.azst_orders_created_on),
+      Customer: o.customer_name,
+      channel: o.azst_orders_source,
+      total: o.azst_orders_total,
+      'payment status': o.azst_orders_financial_status,
+      'fullfilment status': o.azst_orders_fulfillment_status,
+      items: o.items,
+      'Delivery Method': o.azst_orderinfo_shippingtype,
+      'Order Status': getOrderStatusText(o),
+    }));
+
+    downloadExcel({
+      fileName: 'orders',
+      sheet: 'orders-list',
+      tablePayload: {
+        header,
+        body,
+      },
+    });
+  }
+
   return (
     <div className='adminSec'>
       <AdminSideBar />
       <div className='commonSec'>
         <div className='container'>
           <div className='row'>
-            <h4>Orders</h4>
+            <div className='commonTopSec'>
+              <h4>Orders</h4>
+              <button className='exportBtn' onClick={handleDownloadExcel}>
+                Export
+              </button>
+            </div>
+
             <div className='middleSec'>
               {filteredOrdersList.length ? (
                 <div className='tableSec'>
@@ -332,8 +445,9 @@ const OrdersListing = () => {
                             <input
                               className='form-check-input me-2'
                               type='checkbox'
-                              value=''
+                              checked={checkAllOrders}
                               id='flexCheckDefault'
+                              onChange={onChangeCheckAllOrdrs}
                             />
                             Order
                           </th>
@@ -360,9 +474,11 @@ const OrdersListing = () => {
                               <input
                                 className='form-check-input me-2'
                                 type='checkbox'
-                                value=''
+                                checked={eachOrder.isChecked}
                                 id='flexCheckDefault'
-                                onClick={(e) => e.stopPropagation()}
+                                onClick={(e) =>
+                                  onCheckOrder(e, eachOrder.azst_orders_id)
+                                }
                               />
                               {eachOrder.azst_orders_id}
                             </th>

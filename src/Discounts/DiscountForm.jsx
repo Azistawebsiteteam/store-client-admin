@@ -202,7 +202,7 @@ const DiscountForm = (props) => {
 
   // Effect to update selected items for "Gets" list
   useEffect(() => {
-   // console.log('calling XITMES effect');
+    // console.log('calling XITMES effect');
     if (customerBuyType === 'product') {
       const getXitems = getBuySelectedListItem(
         customerBuyType,
@@ -219,7 +219,7 @@ const DiscountForm = (props) => {
   }, [customerBuyType]);
 
   useEffect(() => {
- //   console.log('calling YITMES effect');
+    //   console.log('calling YITMES effect');
     if (customerGetType === 'product') {
       const getYitems = getBuySelectedListItem(
         customerGetType,
@@ -364,15 +364,6 @@ const DiscountForm = (props) => {
       setValidationErrors({ ...validationErrors, usageLimit: '' });
     }
   };
-
-  // const handleCustUsageLimit = (e) => {
-  //   let { value } = e.target;
-  //   value = value.replace(/[^0-9]/g, "");
-  //   setCustUsageLimit(value);
-  //   if (!isNaN(value) && custUsageLimit !== "") {
-  //     setValidationErrors({ ...validationErrors, custUsageLimit: "" });
-  //   }
-  // };
 
   const handleEndDate = (e) => {
     setEndDate(e.target.checked);

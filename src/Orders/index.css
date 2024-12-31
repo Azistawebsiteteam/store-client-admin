@@ -1,10 +1,10 @@
 .order {
   cursor: pointer;
 }
-.status{
+.status {
   margin: 0.4rem 0.4rem;
 }
-.orderDetailsSec{
+.orderDetailsSec {
   display: flex;
   align-items: center;
 }
@@ -56,13 +56,13 @@ hr.v1 {
   border: 1px solid #dee2e6;
   padding: 0 !important;
   margin-top: 1rem;
-  max-height: 66vh;
+  max-height: 67vh;
   overflow: auto;
 }
 .table {
   margin-bottom: 0 !important;
 }
-th{
+th {
   white-space: nowrap !important;
 }
 th,
@@ -71,8 +71,8 @@ td {
   font-size: 1.3rem;
   color: #656161 !important;
   vertical-align: middle;
-  word-wrap: break-word; 
-  word-break: break-word; 
+  word-wrap: break-word;
+  word-break: break-word;
   white-space: normal;
 }
 .sticky-column {
@@ -107,28 +107,29 @@ div::-webkit-scrollbar-thumb:hover {
   font-size: 2rem;
 }
 
-.orderSecStatusBtn{
+.orderSecStatusBtn {
   width: max-content;
   padding: 0.1rem 0.8rem;
   border-radius: 0.8rem;
 }
-.paidStatus,.fulfilledStatus{
-  background-color: #d7dad7;;
+.paidStatus,
+.fulfilledStatus {
+  background-color: #d7dad7;
   color: #646464;
 }
-.pendingStatus{
+.pendingStatus {
   background-color: #ffd6a4;
   color: #5e4200;
 }
-.unFulfilledStatus{
+.unFulfilledStatus {
   background-color: #ffeb78;
   color: #4f4700;
 }
-@media (max-width: 768px){
-  .ordersTab{
-    margin:0 1rem;
+@media (max-width: 768px) {
+  .ordersTab {
+    margin: 0 1rem;
   }
-  .orders-info-cont{
+  .orders-info-cont {
     overflow-x: scroll;
     overflow-y: hidden;
   }
