@@ -139,10 +139,11 @@ const DiscountForm = (props) => {
   // Function to process selected items
 
   const getBuySelectedListItem = (selectedType, selectedItems) => {
+    console.log('in products fun', selectedType, selectedItems);
     if (!selectedType || !selectedItems.length) {
       return [];
     }
-
+    console.log(updatedProductsList);
     const selectedCategoryProducts = [];
     if (selectedType === 'product') {
       selectedItems.forEach((item) => {
@@ -202,7 +203,8 @@ const DiscountForm = (props) => {
 
   // Effect to update selected items for "Gets" list
   useEffect(() => {
-    // console.log('calling XITMES effect');
+    console.log('calling XITMES effect', customerBuyType, customerBuyProducts);
+
     if (customerBuyType === 'product') {
       const getXitems = getBuySelectedListItem(
         customerBuyType,

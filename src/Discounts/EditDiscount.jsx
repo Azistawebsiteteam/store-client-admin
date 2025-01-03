@@ -90,7 +90,7 @@ const EditDiscount = () => {
     }
   };
   const typeValue = () => {
-    if (amtOfPrdctsDscntVal) {
+    if (amtOfPrdctsDscntVal && selectedDiscount === 'Order value') {
       return amtOfPrdctsDscntVal;
     } else {
       if (discountedValues === 'free') {
@@ -117,7 +117,6 @@ const EditDiscount = () => {
 
         if (response.status === 200) {
           const details = response.data;
-        //  console.log(details, 'discount data');
           SetDiscountStatus(details.status);
           setDiscount(renderDiscountValue(details.scope));
           setDisTitle(details.title);
